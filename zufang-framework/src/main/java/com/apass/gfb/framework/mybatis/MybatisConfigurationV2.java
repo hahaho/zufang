@@ -23,7 +23,7 @@ public class MybatisConfigurationV2 {
     try {
       SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
       sessionFactory.setDataSource(mysqlDataSource);
-      sessionFactory.setTypeAliasesPackage("com.apass.esp.domain.entity");
+      sessionFactory.setTypeAliasesPackage("com.apass.zufang.domain.entity");
       sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/**/*.xml"));
       return sessionFactory.getObject();
     } catch (Exception e) {
@@ -34,7 +34,7 @@ public class MybatisConfigurationV2 {
   @Bean(name = "mysqlMapperScannerConfigurer")
   public MapperScannerConfigurer mysqlMapperScannerConfigurer() {
     MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-    mapperScannerConfigurer.setBasePackage("com.apass.esp.mapper");
+    mapperScannerConfigurer.setBasePackage("com.apass.zufang.mapper");
     mapperScannerConfigurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
     return mapperScannerConfigurer;
   }
