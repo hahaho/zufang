@@ -1,27 +1,23 @@
-package com.apass.esp.inteceptor;
+package com.apass.zufang.inteceptor;
 
-import com.apass.esp.common.code.BusinessErrorCode;
-import com.apass.esp.common.code.ErrorCode;
-import com.apass.esp.domain.enums.StatusCode;
-import com.apass.esp.domain.enums.YesNo;
 import com.apass.gfb.framework.cache.CacheManager;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
+import com.apass.zufang.common.code.BusinessErrorCode;
+import com.apass.zufang.common.code.ErrorCode;
+import com.apass.zufang.domain.enums.StatusCode;
+import com.apass.zufang.domain.enums.YesNo;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -73,7 +69,7 @@ public class RepeatRequestAspect {
 			String exists = cacheManager.get(uniquekey);
 			if (StringUtils.equals(exists, YesNo.YES.getCode())) {
 				LOG.info("Request key ->" + uniquekey);
-				throw new BusinessException("您的请求过快, 先休息一下吧",BusinessErrorCode.OPERATION_FREQUENTLY);
+				throw new BusinessException("您的请求过快, 先休息一下吧",BusinessErrorCode.OPERATION_FREQUENTLY.getCode().toString());
 			}
 		} catch (BusinessException e) {
 			LOG.error("您的请求失败", e);

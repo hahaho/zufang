@@ -1,6 +1,6 @@
-package com.apass.esp.common.result;
+package com.apass.zufang.common.result;
 
-import com.apass.esp.common.code.ErrorCode;
+import com.apass.zufang.common.code.ErrorCode;
 
 /**
  * Created by jie.xu on 17/6/2.

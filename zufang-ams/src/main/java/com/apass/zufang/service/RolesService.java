@@ -1,29 +1,25 @@
-package com.apass.esp.service;
+package com.apass.zufang.service;
 
-import java.util.List;
-import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.apass.esp.domain.entity.rbac.MenusSettingDO;
-import com.apass.esp.domain.entity.rbac.PermissionsDO;
-import com.apass.esp.domain.entity.rbac.RoleMenuDO;
-import com.apass.esp.domain.entity.rbac.RolePermissionDO;
-import com.apass.esp.domain.entity.rbac.RolesDO;
-import com.apass.esp.repository.rbac.RolesRepository;
-import com.apass.esp.utils.PaginationManage;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.common.ListeningCollectionUtils;
 import com.apass.gfb.framework.mybatis.page.Page;
 import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.security.userdetails.ListeningCustomSecurityUserDetails;
+import com.apass.zufang.domain.entity.rbac.*;
+import com.apass.zufang.repository.rbac.RolesRepository;
+import com.apass.zufang.utils.PaginationManage;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 

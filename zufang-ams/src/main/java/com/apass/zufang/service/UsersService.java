@@ -1,7 +1,13 @@
-package com.apass.esp.service;
+package com.apass.zufang.service;
 import java.util.List;
 import java.util.Set;
 
+import com.apass.gfb.framework.mybatis.page.Pagination;
+import com.apass.zufang.domain.entity.rbac.RolesDO;
+import com.apass.zufang.domain.entity.rbac.UserRoleDO;
+import com.apass.zufang.domain.entity.rbac.UsersDO;
+import com.apass.zufang.repository.rbac.UsersRepository;
+import com.apass.zufang.utils.PaginationManage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.apass.esp.domain.entity.rbac.RolesDO;
-import com.apass.esp.domain.entity.rbac.UserRoleDO;
-import com.apass.esp.domain.entity.rbac.UsersDO;
-import com.apass.esp.repository.rbac.UsersRepository;
-import com.apass.esp.utils.PaginationManage;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.common.ListeningCollectionUtils;
 import com.apass.gfb.framework.mybatis.page.Page;
-import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 /**
  * 
@@ -33,7 +33,6 @@ public class UsersService {
 	 */
 	@Autowired
 	private UsersRepository usersRepository;
-
 	/**
 	 * Users List
 	 */

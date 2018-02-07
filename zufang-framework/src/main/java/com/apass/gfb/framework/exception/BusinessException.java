@@ -1,6 +1,7 @@
 package com.apass.gfb.framework.exception;
 
-import com.apass.esp.common.code.BusinessErrorCode;
+
+import com.apass.zufang.common.code.BusinessErrorCode;
 
 /**
  * 业务异常

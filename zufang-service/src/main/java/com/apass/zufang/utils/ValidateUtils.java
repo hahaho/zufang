@@ -1,12 +1,12 @@
-package com.apass.esp.utils;
+package com.apass.zufang.utils;
 
+import com.apass.gfb.framework.exception.BusinessException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.apass.esp.common.code.BusinessErrorCode;
-import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.RegExpUtils;
 
 /**
@@ -39,7 +39,7 @@ public class ValidateUtils {
 	public static void isNotBlank(String value,String message,BusinessErrorCode code) throws BusinessException{
 		if(StringUtils.isBlank(value)){
 			logger.error("isNotBlank error value:"+value);
-			throw new BusinessException(message,code);
+			throw new BusinessException(message,code.getCode().toString());
 		}
 	}
 	
@@ -65,7 +65,7 @@ public class ValidateUtils {
 	public static void isNullObject(Object obj,String message,BusinessErrorCode code) throws BusinessException{
 		if(null == obj){
 			logger.error("isNullObject error obj:"+JSON.toJSONString(obj));
-			throw new BusinessException(message,code);
+			throw new BusinessException(message,code.getCode().toString());
 		}
 	}
 	/**
@@ -79,7 +79,7 @@ public class ValidateUtils {
 	public static void checkLength(String value,int min,int max,String message,BusinessErrorCode code) throws BusinessException{
 		if((StringUtils.length(value) < min) || (StringUtils.length(value) > max)){
 			logger.error("checkLength value:"+value);
-			throw new BusinessException(message,code);
+			throw new BusinessException(message,code.getCode().toString());
 		}
 	}
 	

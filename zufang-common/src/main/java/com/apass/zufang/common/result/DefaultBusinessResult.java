@@ -1,12 +1,12 @@
-package com.apass.esp.common.result;
+package com.apass.zufang.common.result;
 
-import com.apass.esp.common.code.BusinessErrorCode;
-import com.apass.esp.common.code.ErrorCode;
+import com.apass.zufang.common.code.BusinessErrorCode;
+import com.apass.zufang.common.code.ErrorCode;
 
 /**
  * Created by jie.xu on 17/6/2.
  */
-public class DefaultBusinessResult<T> implements IResult{
+public class DefaultBusinessResult<T> implements IResult {
   private boolean status;
   private String message;
   private T data;

@@ -1,19 +1,11 @@
-package com.apass.esp.utils;
+package com.apass.zufang.utils;
 
-import com.apass.esp.domain.entity.FileContent;
-import com.apass.esp.domain.entity.FileEntitis;
-import com.apass.gfb.framework.utils.GsonUtils;
-import com.google.common.collect.Lists;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.jexl2.UnifiedJEXL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
