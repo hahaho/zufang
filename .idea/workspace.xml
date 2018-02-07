@@ -45,8 +45,8 @@
       <file leaf-file-name="MybatisAutoConfiguration.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/MybatisAutoConfiguration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="64" column="30" selection-start-line="64" selection-start-column="30" selection-end-line="64" selection-end-column="30" />
+            <state relative-caret-position="836">
+              <caret line="67" column="61" selection-start-line="67" selection-start-column="61" selection-end-line="67" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -639,8 +639,8 @@
       <recent name="D:\git-workspace6\zufang\zufang-service\src\main\java\com\apass\zufang\repository" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Application">
-    <configuration default="false" name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.zufang-ams">
+    <configuration default="false" name="zufang-ams" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="com.apass.zufang.*" />
@@ -648,9 +648,9 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="com.apass.zufang.Application" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="VM_PARAMETERS" value="-Dspring.profiles.active=dev,Schedule" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -1068,11 +1068,11 @@
       <method />
     </configuration>
     <list size="1">
-      <item index="0" class="java.lang.String" itemvalue="Application.Application" />
+      <item index="0" class="java.lang.String" itemvalue="Application.zufang-ams" />
     </list>
     <recent_temporary>
       <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Application.Application" />
+        <item index="0" class="java.lang.String" itemvalue="Application.zufang-ams" />
       </list>
     </recent_temporary>
   </component>
@@ -1086,16 +1086,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1517972728748</updated>
-      <workItem from="1517972732700" duration="8388000" />
+      <workItem from="1517972732700" duration="9089000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8388000" />
+    <option name="totallyTimeSpent" value="9089000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1120,7 +1120,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15831988" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6219709" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1568,6 +1568,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/DataBaseConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/Application.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -1578,18 +1586,54 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/DataBaseConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
-          <folding />
+    <entry file="uml://SpringLocalModels/module=zufang-framework">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>SpringLocalModels</ID>
+          <OriginalElement>module=zufang-framework</OriginalElement>
+          <nodes>
+            <node x="" y="">module=zufang-framework</node>
+            <node x="" y="">fileset=zufang-framework/Spring Application Context</node>
+            <node x="" y="">filePath=D:/git-workspace6/zufang/zufang-framework/src/main/resources/spring/webservice/webservice-config.xml</node>
+            <node x="" y="">fileset=zufang-framework/BootApplication</node>
+            <node x="" y="">com.apass.gfb.framework.BootApplication</node>
+            <node x="" y="">com.apass.gfb.framework.security.SpringSecurityCustomConfiguration.AuthenticationSecurity</node>
+            <node x="" y="">org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity</node>
+            <node x="" y="">com.apass.gfb.framework.security.SpringSecurityBasicConfiguration.IgnoredPathsWebSecurityConfigurerAdapter</node>
+            <node x="" y="">com.apass.gfb.framework.security.SpringSecurityBasicConfiguration.WebserviceResourceSecurityConfigurationAdapter</node>
+            <node x="" y="">com.apass.gfb.framework.security.SpringSecurityBasicConfiguration.DispatcherServletResourceSecurityConfigurationAdapter</node>
+            <node x="" y="">com.apass.gfb.framework.mybatis.DataBaseConfiguration</node>
+            <node x="" y="">com.apass.gfb.framework.template.ListeningFreeMarkerConfiguration</node>
+            <node x="" y="">org.springframework.boot.context.properties.EnableConfigurationProperties</node>
+            <node x="" y="">com.apass.gfb.framework.logstash.LogstashConfiguration</node>
+            <node x="" y="">com.apass.gfb.framework.mybatis.MybatisConfigurationV2</node>
+            <node x="" y="">com.apass.gfb.framework.mybatis.MybatisAutoConfiguration</node>
+            <node x="" y="">org.mybatis.spring.annotation.MapperScan</node>
+            <node x="" y="">com.apass.gfb.framework.security.SpringSecurityBasicConfiguration</node>
+            <node x="" y="">com.apass.gfb.framework.security.SpringSecurityCustomConfiguration</node>
+            <node x="" y="">com.apass.gfb.framework.mq.MqConnectionFactoryConfiguration</node>
+            <node x="" y="">com.apass.gfb.framework.exception.ListeningExceptionMapping</node>
+            <node x="" y="">com.apass.gfb.framework.webmvc.ListeningWebMvcConfigurerAdapter</node>
+            <node x="" y="">com.apass.gfb.framework.cxf.CxfAutoConfiguration</node>
+            <node x="" y="">filePath=D:/dev/library/apache-maven-3.3.3/repository/org/apache/cxf/cxf-core/3.0.3/cxf-core-3.0.3.jar!/META-INF/cxf/cxf.xml</node>
+            <node x="" y="">filePath=D:/dev/library/apache-maven-3.3.3/repository/org/apache/cxf/cxf-rt-transports-http/3.0.3/cxf-rt-transports-http-3.0.3.jar!/META-INF/cxf/cxf-servlet.xml</node>
+            <node x="" y="">filePath=D:/dev/library/apache-maven-3.3.3/repository/org/apache/cxf/cxf-rt-frontend-jaxws/3.0.3/cxf-rt-frontend-jaxws-3.0.3.jar!/META-INF/cxf/cxf-extension-jaxws.xml</node>
+            <node x="" y="">org.springframework.boot.autoconfigure.SpringBootApplication</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="0.43336439888164024" x="741.5" y="526.5" />
+          <SelectedNodes />
+          <Categories>
+            <Category>Show filesets as groups</Category>
+          </Categories>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/MybatisAutoConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="64" column="30" selection-start-line="64" selection-start-column="30" selection-end-line="64" selection-end-column="30" />
+        <state relative-caret-position="836">
+          <caret line="67" column="61" selection-start-line="67" selection-start-column="61" selection-end-line="67" selection-end-column="61" />
           <folding />
         </state>
       </provider>
