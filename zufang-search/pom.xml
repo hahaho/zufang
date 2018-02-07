@@ -3,24 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>esp-parent</artifactId>
-        <groupId>com.apass.esp</groupId>
+        <artifactId>zufang-parent</artifactId>
+        <groupId>com.apass.zufang</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>esp-search</artifactId>
-    <name>ESP - ES - 搜索</name>
+    <artifactId>zufang-search</artifactId>
+    <name>ZUFANG- ES - 搜索</name>
     <dependencies>
         <dependency>
-            <groupId>com.apass.esp</groupId>
-            <artifactId>esp-domain</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>com.apass.zufang</groupId>
+            <artifactId>zufang-domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.apass.esp</groupId>
-            <artifactId>esp-common</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>com.apass.zufang</groupId>
+            <artifactId>zufang-common</artifactId>
         </dependency>
         <!-- elasticsearch -->
         <dependency>

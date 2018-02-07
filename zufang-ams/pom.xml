@@ -3,21 +3,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.apass.esp</groupId>
-        <artifactId>esp-parent</artifactId>
+        <groupId>com.apass.zufang</groupId>
+        <artifactId>zufang-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>esp-ams</artifactId>
+    <artifactId>zufang-ams</artifactId>
     <packaging>war</packaging>
-    <name>ESP - APP - MANAGE - SYSTEM - 电商后台管理平台</name>
+    <name>租房后台管理平台</name>
 
     <dependencies>
-        <!-- Apass Service -->
         <dependency>
-            <groupId>com.apass.esp</groupId>
-            <artifactId>esp-service</artifactId>
+            <groupId>com.apass.zufang</groupId>
+            <artifactId>zufang-service</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,13 +52,6 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
-        <!-- <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.4</version>
-            <classifier>jdk15</classifier>
-        </dependency> -->
         <!-- mail-->
         <dependency>
             <groupId>javax.mail</groupId>

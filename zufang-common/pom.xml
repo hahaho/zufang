@@ -3,15 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>esp-parent</artifactId>
-        <groupId>com.apass.esp</groupId>
+        <artifactId>zufang-parent</artifactId>
+        <groupId>com.apass.zufang</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>esp-common</artifactId>
+    <artifactId>zufang-common</artifactId>
     <packaging>jar</packaging>
-    <name>ESP - COMMON - 公共包</name>
+    <name>ZUFANG - COMMON - 公共包</name>
 
 
     <build>

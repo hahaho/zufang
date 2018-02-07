@@ -3,15 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.apass.esp</groupId>
-		<artifactId>esp-parent</artifactId>
+		<groupId>com.apass.zufang</groupId>
+		<artifactId>zufang-parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>esp-service</artifactId>
+	<artifactId>zufang-service</artifactId>
 	<packaging>jar</packaging>
-	<name>esp - SERVICE - 服务</name>
+	<name>ZUFANG - SERVICE - 服务</name>
 
 	<dependencies>
 		<dependency>
@@ -20,14 +20,10 @@
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.apass.esp</groupId>
-			<artifactId>esp-search</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<groupId>com.apass.zufang</groupId>
+			<artifactId>zufang-search</artifactId>
 		</dependency>
-		<!--<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>-->
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -42,12 +38,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.apass.esp</groupId>
-			<artifactId>esp-domain</artifactId>
+			<groupId>com.apass.zufang</groupId>
+			<artifactId>zufang-domain</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.apass.esp</groupId>
-			<artifactId>esp-framework</artifactId>
+			<groupId>com.apass.zufang</groupId>
+			<artifactId>zufang-framework</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
