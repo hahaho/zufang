@@ -1,12 +1,13 @@
-package com.apass.esp.search.enums;
+package com.apass.zufang.search.enums;
 
 /**
  * Created by Administrator on 2017/5/23.
  */
 
-import com.apass.esp.search.entity.Goods;
-import com.apass.esp.search.entity.IdAble;
-import com.apass.esp.search.entity.UpdatedObject;
+
+import com.apass.zufang.search.entity.Goods;
+import com.apass.zufang.search.entity.IdAble;
+import com.apass.zufang.search.entity.UpdatedObject;
 
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TransferQueue;

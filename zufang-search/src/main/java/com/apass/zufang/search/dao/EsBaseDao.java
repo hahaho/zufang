@@ -1,4 +1,4 @@
-package com.apass.esp.search.dao;
+package com.apass.zufang.search.dao;
 
 /**
  * type: interface

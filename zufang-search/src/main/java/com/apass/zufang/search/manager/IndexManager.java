@@ -30,13 +30,13 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.apass.esp.search.condition.GoodsSearchCondition;
-import com.apass.esp.search.entity.IdAble;
-import com.apass.esp.search.enums.IndexType;
-import com.apass.esp.search.utils.ESDataUtil;
-import com.apass.esp.search.utils.Esprop;
-import com.apass.esp.search.utils.Pinyin4jUtil;
-import com.apass.esp.search.utils.PropertiesUtils;
+import com.apass.zufang.search.condition.GoodsSearchCondition;
+import com.apass.zufang.search.entity.IdAble;
+import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.search.utils.ESDataUtil;
+import com.apass.zufang.search.utils.Esprop;
+import com.apass.zufang.search.utils.Pinyin4jUtil;
+import com.apass.zufang.search.utils.PropertiesUtils;
 import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.fasterxml.jackson.core.JsonProcessingException;
 

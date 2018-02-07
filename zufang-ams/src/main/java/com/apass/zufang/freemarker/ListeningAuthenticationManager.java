@@ -1,4 +1,4 @@
-package com.apass.esp.freemarker;
+package com.apass.zufang.freemarker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

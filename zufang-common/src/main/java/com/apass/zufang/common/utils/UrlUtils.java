@@ -1,4 +1,4 @@
-package com.apass.esp.common.utils;
+package com.apass.zufang.common.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

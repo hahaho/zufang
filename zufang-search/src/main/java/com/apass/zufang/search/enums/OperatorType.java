@@ -1,7 +1,7 @@
-package com.apass.esp.search.enums;
+package com.apass.zufang.search.enums;
 
-import com.apass.esp.search.entity.IdAble;
-import com.apass.esp.search.manager.IndexManager;
+import com.apass.zufang.search.entity.IdAble;
+import com.apass.zufang.search.manager.IndexManager;
 
 /**
  * type: enum

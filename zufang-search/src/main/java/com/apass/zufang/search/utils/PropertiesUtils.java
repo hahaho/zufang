@@ -1,4 +1,4 @@
-package com.apass.esp.search.utils;
+package com.apass.zufang.search.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

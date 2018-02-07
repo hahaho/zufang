@@ -1,6 +1,4 @@
-package com.apass.esp.utils;
-
-import java.math.BigDecimal;
+package com.apass.zufang.utils;
 
 /**
  * type: class

@@ -1,4 +1,4 @@
-package com.apass.esp.search.utils;
+package com.apass.zufang.search.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

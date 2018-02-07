@@ -1,4 +1,4 @@
-package com.apass.esp.search.utils;
+package com.apass.zufang.search.utils;
 
 import java.util.HashSet;  
 import java.util.Set;  

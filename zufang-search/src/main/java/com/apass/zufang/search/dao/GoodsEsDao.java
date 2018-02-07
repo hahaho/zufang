@@ -1,9 +1,9 @@
-package com.apass.esp.search.dao;
+package com.apass.zufang.search.dao;
 
-import com.apass.esp.search.entity.Goods;
-import com.apass.esp.search.entity.UpdatedObject;
-import com.apass.esp.search.enums.IndexType;
-import com.apass.esp.search.enums.OperatorType;
+import com.apass.zufang.search.entity.Goods;
+import com.apass.zufang.search.entity.UpdatedObject;
+import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.search.enums.OperatorType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
