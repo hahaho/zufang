@@ -1,44 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b16b486c-8dfe-4a04-a4b9-24fea246e396" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/MenusDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/MenusSettingDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/PermissionsDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/RoleMenuDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/RolePermissionDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/RolesDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/UserRoleDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/UsersDO.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-domain/src/main/java/com/apass/zufang/domain/entity/rbac/domain/SecurityMenusModel.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/repository/rbac/MenusRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/repository/rbac/PermissionsRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/repository/rbac/RolesRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/repository/rbac/UsersRepository.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zufang-appweb/src/test/java/com/apass/esp/service/common/CommonServiceTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zufang-appweb/src/test/java/com/apass/esp/service/contract/ContractServiceTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zufang-appweb/src/test/java/com/apass/esp/service/logistics/LogisticsHttpClientTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zufang-appweb/src/test/java/com/apass/esp/service/order/OrderServiceTest.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/inteceptor/RepeatRequestAspect.java" afterPath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/inteceptor/RepeatRequestAspect.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/MenusService.java" afterPath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/MenusService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/PermissionsService.java" afterPath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/PermissionsService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/RolesService.java" afterPath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/RolesService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/UsersService.java" afterPath="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/UsersService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-dev.properties" afterPath="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-dev.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-production.properties" afterPath="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-production.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-uat.properties" afterPath="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-uat.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-appweb/src/main/java/com/apass/zufang/inteceptor/RepeatRequestAspect.java" afterPath="$PROJECT_DIR$/zufang-appweb/src/main/java/com/apass/zufang/inteceptor/RepeatRequestAspect.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-dev.properties" afterPath="$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-dev.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-production.properties" afterPath="$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-production.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-uat.properties" afterPath="$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-uat.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-common/pom.xml" afterPath="$PROJECT_DIR$/zufang-common/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-common/src/main/java/com/apass/zufang/common/result/DefaultBusinessResult.java" afterPath="$PROJECT_DIR$/zufang-common/src/main/java/com/apass/zufang/common/result/DefaultBusinessResult.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-common/src/main/java/com/apass/zufang/common/result/IResult.java" afterPath="$PROJECT_DIR$/zufang-common/src/main/java/com/apass/zufang/common/result/IResult.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/exception/BusinessException.java" afterPath="$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/exception/BusinessException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/utils/PaginationManage.java" afterPath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/utils/PaginationManage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/utils/ValidateUtils.java" afterPath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/utils/ValidateUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/utils/ZipUtil.java" afterPath="$PROJECT_DIR$/zufang-service/src/main/java/com/apass/zufang/utils/ZipUtil.java" />
-    </list>
+    <list default="true" id="b16b486c-8dfe-4a04-a4b9-24fea246e396" name="Default" comment="" />
     <ignored path="zufang-parent.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/zufang-appweb/target/" />
@@ -67,107 +30,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PermissionsService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/PermissionsService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1240#1255#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MenusService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/service/MenusService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="45" column="18" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1440#1449#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RepeatRequestAspect.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/inteceptor/RepeatRequestAspect.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application-dev.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-dev.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application-production.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-production.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application-uat.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-uat.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application-dev.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-dev.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application-production.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-production.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application-uat.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-uat.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Application.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Application.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/Application.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <state relative-caret-position="154">
+              <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MybatisAutoConfiguration.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/MybatisAutoConfiguration.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="64" column="30" selection-start-line="64" selection-start-column="30" selection-end-line="64" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataBaseConfiguration.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/DataBaseConfiguration.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="214">
+              <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -217,6 +106,7 @@
         <option value="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-dev.properties" />
         <option value="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-production.properties" />
         <option value="$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-uat.properties" />
+        <option value="$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/Application.java" />
       </list>
     </option>
   </component>
@@ -232,6 +122,9 @@
         <option name="mavenHome" value="Bundled (Maven 3)" />
       </MavenGeneralSettings>
     </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState />
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
@@ -738,6 +631,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js-jscs-nodeInterpreter" value="D:\software\nodejs\node.exe" />
+    <property name="ignore_missing_gitignore" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -1192,16 +1086,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1517972728748</updated>
-      <workItem from="1517972732700" duration="2881000" />
+      <workItem from="1517972732700" duration="8388000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2881000" />
+    <option name="totallyTimeSpent" value="8388000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1210,7 +1104,7 @@
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930514" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -1221,16 +1115,16 @@
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3990307" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15831988" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -1239,7 +1133,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930514" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="combo" />
@@ -1247,21 +1141,21 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.62520194" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33279485" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -1274,7 +1168,12 @@
     </ignored-roots>
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="antWorkspaceConfiguration">
@@ -1327,7 +1226,7 @@
         <state relative-caret-position="158">
           <caret line="81" column="43" selection-start-line="81" selection-start-column="43" selection-end-line="81" selection-end-column="43" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1345,12 +1244,12 @@
         <state relative-caret-position="176">
           <caret line="19" column="21" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
           <folding>
-            <element signature="e#450#451#0" expanded="true" />
-            <element signature="e#490#491#0" expanded="true" />
-            <element signature="e#975#976#0" expanded="true" />
-            <element signature="e#1021#1022#0" expanded="true" />
-            <element signature="e#2021#2022#0" expanded="true" />
-            <element signature="e#2053#2054#0" expanded="true" />
+            <element signature="e#450#451#0" expanded="false" />
+            <element signature="e#490#491#0" expanded="false" />
+            <element signature="e#975#976#0" expanded="false" />
+            <element signature="e#1021#1022#0" expanded="false" />
+            <element signature="e#2021#2022#0" expanded="false" />
+            <element signature="e#2053#2054#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1360,7 +1259,7 @@
         <state relative-caret-position="118">
           <caret line="69" column="46" selection-start-line="69" selection-start-column="46" selection-end-line="69" selection-end-column="46" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1472,7 +1371,7 @@
         <state relative-caret-position="-388">
           <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1482,7 +1381,7 @@
         <state relative-caret-position="-26">
           <caret line="16" column="62" selection-start-line="16" selection-start-column="62" selection-end-line="16" selection-end-column="62" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1508,8 +1407,8 @@
         <state relative-caret-position="128">
           <caret line="184" column="18" selection-start-line="184" selection-start-column="18" selection-end-line="184" selection-end-column="18" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1455#1464#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1455#1464#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1519,7 +1418,7 @@
         <state relative-caret-position="678">
           <caret line="98" column="47" selection-start-line="98" selection-start-column="47" selection-end-line="98" selection-end-column="47" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1529,9 +1428,9 @@
         <state relative-caret-position="198">
           <caret line="18" column="28" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="28" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1392#1393#0" expanded="true" />
-            <element signature="e#1468#1469#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1392#1393#0" expanded="false" />
+            <element signature="e#1468#1469#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1541,10 +1440,10 @@
         <state relative-caret-position="206">
           <caret line="74" column="49" selection-start-line="74" selection-start-column="49" selection-end-line="74" selection-end-column="49" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1416#1425#0" expanded="true" />
-            <element signature="e#1769#1770#0" expanded="true" />
-            <element signature="e#1825#1826#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1416#1425#0" expanded="false" />
+            <element signature="e#1769#1770#0" expanded="false" />
+            <element signature="e#1825#1826#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1554,8 +1453,8 @@
         <state relative-caret-position="228">
           <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1240#1255#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1240#1255#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1565,32 +1464,58 @@
         <state relative-caret-position="162">
           <caret line="45" column="18" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1440#1449#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1440#1449#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/inteceptor/RepeatRequestAspect.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/aspectj/aspectjweaver/1.8.8/aspectjweaver-1.8.8-sources.jar!/org/aspectj/util/Reflection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+        <state relative-caret-position="227">
+          <caret line="180" column="0" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-dev.properties">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-config/4.0.3.RELEASE/spring-security-config-4.0.3.RELEASE.jar!/org/springframework/security/config/annotation/authentication/builders/AuthenticationManagerBuilder.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="16" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="16" />
-          <folding />
+        <state relative-caret-position="-660">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#5840#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-production.properties">
+    <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-uat.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
           <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_11/src.zip!/javax/management/ReflectionException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-production.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
           <folding />
         </state>
       </provider>
@@ -1603,6 +1528,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-production.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zufang-appweb/src/main/resources/config/application-dev.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/inteceptor/RepeatRequestAspect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-dev.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -1611,26 +1560,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-production.properties">
+    <entry file="file://$PROJECT_DIR$/zufang-ams/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="16" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/resources/config/application-uat.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+        <state relative-caret-position="-462">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/zufang-ams/src/main/java/com/apass/zufang/Application.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+        <state relative-caret-position="154">
+          <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/DataBaseConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zufang-framework/src/main/java/com/apass/gfb/framework/mybatis/MybatisAutoConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="64" column="30" selection-start-line="64" selection-start-column="30" selection-end-line="64" selection-end-column="30" />
           <folding />
         </state>
       </provider>
