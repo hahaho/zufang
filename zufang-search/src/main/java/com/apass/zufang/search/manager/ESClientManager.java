@@ -1,4 +1,4 @@
-package com.apass.esp.search.manager;
+package com.apass.zufang.search.manager;
 
 
 import com.apass.esp.search.enums.IndexType;
