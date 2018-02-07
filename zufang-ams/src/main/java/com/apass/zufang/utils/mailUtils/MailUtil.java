@@ -1,4 +1,4 @@
-package com.apass.esp.utils.mailUtils;
+package com.apass.zufang.utils.mailUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

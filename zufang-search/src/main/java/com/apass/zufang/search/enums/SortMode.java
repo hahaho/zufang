@@ -1,4 +1,4 @@
-package com.apass.esp.search.enums;
+package com.apass.zufang.search.enums;
 
 import java.io.Serializable;
 

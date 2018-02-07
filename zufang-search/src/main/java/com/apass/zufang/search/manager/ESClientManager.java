@@ -1,9 +1,9 @@
-package com.apass.esp.search.manager;
+package com.apass.zufang.search.manager;
 
 
-import com.apass.esp.search.enums.IndexType;
-import com.apass.esp.search.utils.Esprop;
-import com.apass.esp.search.utils.PropertiesUtils;
+import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.search.utils.Esprop;
+import com.apass.zufang.search.utils.PropertiesUtils;
 import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;

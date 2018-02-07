@@ -1,4 +1,4 @@
-package com.apass.esp.freemarker;
+package com.apass.zufang.freemarker;
 
 import java.io.IOException;
 import java.util.Map;

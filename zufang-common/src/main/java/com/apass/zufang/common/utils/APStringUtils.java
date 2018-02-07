@@ -1,4 +1,4 @@
-package com.apass.esp.common.utils;
+package com.apass.zufang.common.utils;
 
 /**
  * Created by jie.xu on 17/11/2.

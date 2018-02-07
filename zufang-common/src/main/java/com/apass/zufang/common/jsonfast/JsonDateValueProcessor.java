@@ -1,4 +1,4 @@
-package com.apass.esp.common.jsonfast;
+package com.apass.zufang.common.jsonfast;
 
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;

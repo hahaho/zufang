@@ -1,4 +1,4 @@
-package com.apass.esp.utils.mailUtils;
+package com.apass.zufang.utils.mailUtils;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;

@@ -1,4 +1,4 @@
-package com.apass.esp.common.model;
+package com.apass.zufang.common.model;
 
 /**
  * Created by jie.xu on 17/4/21.

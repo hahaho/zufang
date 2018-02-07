@@ -1,6 +1,7 @@
-package com.apass.esp.search.entity;
+package com.apass.zufang.search.entity;
 
-import com.apass.esp.search.enums.OperatorType;
+
+import com.apass.zufang.search.enums.OperatorType;
 
 /**
  * type: class

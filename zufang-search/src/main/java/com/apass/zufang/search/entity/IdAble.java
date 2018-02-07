@@ -1,4 +1,4 @@
-package com.apass.esp.search.entity;
+package com.apass.zufang.search.entity;
 
 /**
  * Created by xianzhi.wang on 2017/5/23.
