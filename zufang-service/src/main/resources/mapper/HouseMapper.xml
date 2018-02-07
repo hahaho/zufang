@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.apass.zufang.mapper.HouseMapper" >
+<mapper namespace="com.apass.zufang.mapper.zfang.HouseMapper" >
   <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.House" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="code" property="code" jdbcType="VARCHAR" />
