@@ -18,17 +18,7 @@ public class House {
 
     private String communityName;
 
-    private String province;
-
-    private String city;
-
-    private String area;
-
     private BigDecimal acreage;
-
-    private String district;
-
-    private String detailAddr;
 
     private Integer room;
 
@@ -69,6 +59,8 @@ public class House {
     private String createdUser;
 
     private String updatedUser;
+
+    private String isDelete;
 
     public Long getId() {
         return id;
@@ -126,52 +118,12 @@ public class House {
         this.communityName = communityName;
     }
 
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
     public BigDecimal getAcreage() {
         return acreage;
     }
 
     public void setAcreage(BigDecimal acreage) {
         this.acreage = acreage;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getDetailAddr() {
-        return detailAddr;
-    }
-
-    public void setDetailAddr(String detailAddr) {
-        this.detailAddr = detailAddr;
     }
 
     public Integer getRoom() {
@@ -332,5 +284,13 @@ public class House {
 
     public void setUpdatedUser(String updatedUser) {
         this.updatedUser = updatedUser;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 }
