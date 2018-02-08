@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
-import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.service.ApartmentService;
@@ -40,10 +39,7 @@ public class ApartmentController {
     public ResponsePageBody<Apartment> getApartmentList(Apartment entity) {
         ResponsePageBody<Apartment> respBody = new ResponsePageBody<Apartment>();
         try {
-            ResponsePageBody<Apartment> pagination = apartmentService.getApartmentList(entity);
-            respBody.setTotal(pagination.getTotal());
-            respBody.setRows(pagination.getRows());
-            respBody.setStatus(CommonCode.SUCCESS_CODE);
+        	respBody = apartmentService.getApartmentList(entity);
         } catch (Exception e) {
             LOGGER.error("公寓信息列表查询失败", e);
             respBody.setMsg("公寓信息列表查询失败");

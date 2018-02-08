@@ -1,8 +1,6 @@
 package com.apass.zufang.domain.entity;
-
-import java.util.Date;
-
-public class Apartment {
+import com.apass.zufang.common.model.CreatedUser;
+public class Apartment extends CreatedUser{
     private Long id;
 
     private String code;
@@ -20,15 +18,7 @@ public class Apartment {
     private String bankName;
 
     private String bankCard;
-
-    private Date createdTime;
-
-    private Date updatedTime;
-
-    private String createdUser;
-
-    private String updatedUser;
-
+    private String isDelete;
     public Long getId() {
         return id;
     }
@@ -100,36 +90,10 @@ public class Apartment {
     public void setBankCard(String bankCard) {
         this.bankCard = bankCard;
     }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
-    }
-
-    public String getCreatedUser() {
-        return createdUser;
-    }
-
-    public void setCreatedUser(String createdUser) {
-        this.createdUser = createdUser;
-    }
-
-    public String getUpdatedUser() {
-        return updatedUser;
-    }
-
-    public void setUpdatedUser(String updatedUser) {
-        this.updatedUser = updatedUser;
-    }
+	public String getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
+	}
 }
