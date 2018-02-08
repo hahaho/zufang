@@ -31,7 +31,7 @@ public class ApartmentController {
         return "apartment/apartmentManagement";
     }
     /**
-     * 限时购活动商品列表查询
+     * 公寓信息列表查询
      * @param request
      * @return
      */
@@ -45,8 +45,8 @@ public class ApartmentController {
             respBody.setRows(pagination.getRows());
             respBody.setStatus(CommonCode.SUCCESS_CODE);
         } catch (Exception e) {
-            LOGGER.error("限时购活动列表查询失败", e);
-            respBody.setMsg("限时购活动列表查询失败");
+            LOGGER.error("公寓信息列表查询失败", e);
+            respBody.setMsg("公寓信息列表查询失败");
         }
         return respBody;
     }
