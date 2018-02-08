@@ -1,4 +1,4 @@
-package com.apass.zufang.service;
+package com.apass.zufang.service.apartment;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
@@ -40,8 +41,12 @@ public class ApartmentService {
 	public Integer deleteEntity(Long id){
 		return apartmentMapper.deleteByPrimaryKey(id);
 	}
+	/**
+	 * 公寓信息列表查询
+	 * @param entity
+	 * @return
+	 */
 	public ResponsePageBody<Apartment> getApartmentList(Apartment entity) {
-		entity.setIsDelete("00");
 		ResponsePageBody<Apartment> pageBody = new ResponsePageBody<Apartment>();
         Integer count = apartmentMapper.getApartmentListCount(entity);
         List<Apartment> response = apartmentMapper.getApartmentList(entity);
@@ -50,8 +55,36 @@ public class ApartmentService {
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;
 	}
+	/**
+	 * 公寓信息新增
+	 * @param entity
+	 * @param username
+	 * @return
+	 */
 	@Transactional(rollbackFor = { Exception.class})
 	public Response addApartment(Apartment entity,String username) {
-		return Response.success("公寓信息新增成功！");
+		entity.fillAllField(username);
+		if(createEntity(entity)==1){
+			return Response.success("公寓信息新增成功！");
+		}
+		return Response.fail("公寓信息新增失败！");
+	}
+	/**
+	 * 公寓信息修改
+	 * @param entity
+	 * @param username
+	 * @return
+	 */
+	@Transactional(rollbackFor = { Exception.class})
+	public Response editApartment(Apartment entity,String username) {
+		entity.fillField(username);
+		if(updateEntity(entity)==1){
+			return Response.success("公寓信息修改成功！");
+		}
+		return Response.fail("公寓信息修改失败！");
+	}
+	public ResponsePageBody<House> getHouseList(House entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
