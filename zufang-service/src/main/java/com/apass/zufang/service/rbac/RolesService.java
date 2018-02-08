@@ -1,4 +1,4 @@
-package com.apass.zufang.service;
+package com.apass.zufang.service.rbac;
 
 
 import com.apass.gfb.framework.exception.BusinessException;
@@ -181,8 +181,7 @@ public class RolesService {
     }
     /**
      * 角色权限查看
-     * 
-     * @param roleId
+     *
      */
     public  List<GrantedAuthority> queryGrantedAuthorityList() {
     	 //动态权限设置

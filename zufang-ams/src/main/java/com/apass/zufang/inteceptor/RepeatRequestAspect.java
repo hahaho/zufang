@@ -51,92 +51,92 @@ public class RepeatRequestAspect {
 
 	}
 
-	@Around("aspectPointcut()")
-	public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-		Class<?> returnType = null;
-		String uniquekey = null;
-
-		// Step 1. 检测请求是否在进行中
-		try {
-			Signature signature = joinPoint.getSignature();
-			returnType = ((MethodSignature) signature).getReturnType();
-			Object[] arr = joinPoint.getArgs();
-			String methodName = signature.getDeclaringTypeName() + "_" + signature.getName();
-			String prefixOpenId = getRequestOpenId(arr);
-
-			if (StringUtils.isBlank(prefixOpenId)) {
-				return joinPoint.proceed();
-			}
-
-			uniquekey = methodName + "_" + prefixOpenId;
-			String exists = cacheManager.get(uniquekey);
-			if (StringUtils.equals(exists, YesNo.YES.getCode())) {
-				LOG.info("Request key ->" + uniquekey);
-				throw new BusinessException("您的请求过快, 先休息一下吧");
-			}
-		} catch (BusinessException e) {
-			LOG.error("您的请求失败", e);
-			return handleErrorMsg(e.getErrorDesc(), returnType);
-		} catch (Exception e) {
-			LOG.error("请求失败", e);
-			return handleErrorMsg("服务繁忙, 请稍后再试", returnType);
-		}
-
-		// Step 2. 设置Token标记, 请求继续执行
-		try {
-			cacheManager.set(uniquekey, YesNo.YES.getCode(), 60 * 5);
-			return joinPoint.proceed();
-		} catch (BusinessException e) {
-			LOG.error("您的请求失败", e);
-			return handleErrorMsg(e.getErrorDesc(), returnType);
-		} catch (Exception e) {
-			LOG.error("请求失败", e);
-			return handleErrorMsg("服务繁忙, 请稍后再试", returnType);
-		} finally {
-			cacheManager.delete(uniquekey);
-		}
-	}
-
-	/**
-	 * 获取請求微信号
-	 */
-	private String getRequestOpenId(Object[] arr) throws BusinessException {
-		if (arr == null || arr.length == 0) {
-			return null;
-		}
-		String prefixOpenId = "";
-		String prefixCustomerId = "";
-		for (int i = 0; i < arr.length; i++) {
-			if (!(arr[i] instanceof Map)) {
-				continue;
-			}
-			@SuppressWarnings("unchecked")
-			Map<String, Object> paraMap = (Map<String, Object>) arr[i];
-			String paraValue = CommonUtils.getValue(paraMap, PREFIX_KEY);
-			String paramCustId = CommonUtils.getValue(paraMap, "customerId");
-
-			if (StringUtils.isNotBlank(paraValue)) {
-				prefixOpenId = paraValue;
-			}
-			if (StringUtils.isNotBlank(paramCustId)) {
-				prefixCustomerId = paramCustId;
-			}
-		}
-		if (StringUtils.isBlank(prefixOpenId) && StringUtils.isNumeric(prefixCustomerId)) {
-			// CustomerEntity entity =
-			// customerService.select(Long.valueOf(prefixCustomerId));
-			// prefixOpenId = entity.getOpenId();
-		}
-		return prefixOpenId;
-	}
-
-	/**
-	 * 处理异常信息
-	 */
-	private Object handleErrorMsg(String msg, Class<?> returnType) {
-		Map<String, Object> resultMap = Maps.newHashMap();
-		resultMap.put("msg", msg);
-		resultMap.put("status", StatusCode.FAILED_CODE.getCode());
-		return GsonUtils.convertObj(resultMap, returnType);
-	}
+//	@Around("aspectPointcut()")
+//	public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+//		Class<?> returnType = null;
+//		String uniquekey = null;
+//
+//		// Step 1. 检测请求是否在进行中
+//		try {
+//			Signature signature = joinPoint.getSignature();
+//			returnType = ((MethodSignature) signature).getReturnType();
+//			Object[] arr = joinPoint.getArgs();
+//			String methodName = signature.getDeclaringTypeName() + "_" + signature.getName();
+//			String prefixOpenId = getRequestOpenId(arr);
+//
+//			if (StringUtils.isBlank(prefixOpenId)) {
+//				return joinPoint.proceed();
+//			}
+//
+//			uniquekey = methodName + "_" + prefixOpenId;
+//			String exists = cacheManager.get(uniquekey);
+//			if (StringUtils.equals(exists, YesNo.YES.getCode())) {
+//				LOG.info("Request key ->" + uniquekey);
+//				throw new BusinessException("您的请求过快, 先休息一下吧");
+//			}
+//		} catch (BusinessException e) {
+//			LOG.error("您的请求失败", e);
+//			return handleErrorMsg(e.getErrorDesc(), returnType);
+//		} catch (Exception e) {
+//			LOG.error("请求失败", e);
+//			return handleErrorMsg("服务繁忙, 请稍后再试", returnType);
+//		}
+//
+//		// Step 2. 设置Token标记, 请求继续执行
+//		try {
+//			cacheManager.set(uniquekey, YesNo.YES.getCode(), 60 * 5);
+//			return joinPoint.proceed();
+//		} catch (BusinessException e) {
+//			LOG.error("您的请求失败", e);
+//			return handleErrorMsg(e.getErrorDesc(), returnType);
+//		} catch (Exception e) {
+//			LOG.error("请求失败", e);
+//			return handleErrorMsg("服务繁忙, 请稍后再试", returnType);
+//		} finally {
+//			cacheManager.delete(uniquekey);
+//		}
+//	}
+//
+//	/**
+//	 * 获取請求微信号
+//	 */
+//	private String getRequestOpenId(Object[] arr) throws BusinessException {
+//		if (arr == null || arr.length == 0) {
+//			return null;
+//		}
+//		String prefixOpenId = "";
+//		String prefixCustomerId = "";
+//		for (int i = 0; i < arr.length; i++) {
+//			if (!(arr[i] instanceof Map)) {
+//				continue;
+//			}
+//			@SuppressWarnings("unchecked")
+//			Map<String, Object> paraMap = (Map<String, Object>) arr[i];
+//			String paraValue = CommonUtils.getValue(paraMap, PREFIX_KEY);
+//			String paramCustId = CommonUtils.getValue(paraMap, "customerId");
+//
+//			if (StringUtils.isNotBlank(paraValue)) {
+//				prefixOpenId = paraValue;
+//			}
+//			if (StringUtils.isNotBlank(paramCustId)) {
+//				prefixCustomerId = paramCustId;
+//			}
+//		}
+//		if (StringUtils.isBlank(prefixOpenId) && StringUtils.isNumeric(prefixCustomerId)) {
+//			// CustomerEntity entity =
+//			// customerService.select(Long.valueOf(prefixCustomerId));
+//			// prefixOpenId = entity.getOpenId();
+//		}
+//		return prefixOpenId;
+//	}
+//
+//	/**
+//	 * 处理异常信息
+//	 */
+//	private Object handleErrorMsg(String msg, Class<?> returnType) {
+//		Map<String, Object> resultMap = Maps.newHashMap();
+//		resultMap.put("msg", msg);
+//		resultMap.put("status", StatusCode.FAILED_CODE.getCode());
+//		return GsonUtils.convertObj(resultMap, returnType);
+//	}
 }
