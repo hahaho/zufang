@@ -1,14 +1,15 @@
-package com.apass.esp.search.syncer;
+package com.apass.zufang.search.syncer;
 
-import com.apass.esp.search.entity.IdAble;
-import com.apass.esp.search.entity.UpdatedObject;
-import com.apass.esp.search.enums.IndexType;
-import com.apass.esp.search.manager.ESClientManager;
-import com.apass.esp.search.utils.Esprop;
-import com.apass.esp.search.utils.PropertiesUtils;
+import com.apass.zufang.search.entity.IdAble;
+import com.apass.zufang.search.entity.UpdatedObject;
+import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.search.manager.ESClientManager;
+import com.apass.zufang.search.utils.Esprop;
+import com.apass.zufang.search.utils.PropertiesUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

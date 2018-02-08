@@ -1,8 +1,8 @@
-package com.apass.esp.search.utils;
+package com.apass.zufang.search.utils;
 
-import com.apass.esp.search.enums.IndexType;
-import com.apass.esp.search.manager.ESClientManager;
-import com.apass.esp.search.syncer.IndexSyncer;
+import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.search.manager.ESClientManager;
+import com.apass.zufang.search.syncer.IndexSyncer;
 import com.apass.gfb.framework.environment.SystemEnvConfig;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

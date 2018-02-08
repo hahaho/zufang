@@ -1,6 +1,6 @@
-package com.apass.esp.search.condition;
+package com.apass.zufang.search.condition;
 
-import com.apass.esp.search.enums.SortMode;
+import com.apass.zufang.search.enums.SortMode;
 import com.apass.gfb.framework.mybatis.page.Pagination;
 
 /**

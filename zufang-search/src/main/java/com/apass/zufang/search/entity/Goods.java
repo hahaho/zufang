@@ -1,4 +1,4 @@
-package com.apass.esp.search.entity;
+package com.apass.zufang.search.entity;
 
 
 import java.math.BigDecimal;

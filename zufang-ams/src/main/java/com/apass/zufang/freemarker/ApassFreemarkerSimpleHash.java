@@ -1,12 +1,9 @@
-package com.apass.esp.freemarker;
-
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.stereotype.Component;
+package com.apass.zufang.freemarker;
 
 import com.apass.gfb.framework.template.overrides.ListeningFreemarkerSimpleHash;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Component
 public class ApassFreemarkerSimpleHash extends ListeningFreemarkerSimpleHash {

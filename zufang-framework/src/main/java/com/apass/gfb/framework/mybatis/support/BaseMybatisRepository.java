@@ -1,5 +1,12 @@
 package com.apass.gfb.framework.mybatis.support;
 
+import com.apass.gfb.framework.mybatis.page.Page;
+import com.apass.gfb.framework.mybatis.page.Pagination;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -7,15 +14,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.support.SqlSessionDaoSupport;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.apass.gfb.framework.mybatis.page.Page;
-import com.apass.gfb.framework.mybatis.page.Pagination;
 
 /**
  * Mybatis 操作基础类， 封装常用的数据库访问方法
@@ -77,7 +75,7 @@ public class BaseMybatisRepository<T, ID extends Serializable> extends SqlSessio
 
     /**
      * 
-     * @see org.mybatis.spring.support.SqlSessionDaoSupport#setSqlSessionFactory(org.apache.ibatis.session.SqlSessionFactory)
+     * @see SqlSessionDaoSupport#setSqlSessionFactory(SqlSessionFactory)
      */
     @Autowired
     public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {

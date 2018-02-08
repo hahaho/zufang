@@ -1,4 +1,4 @@
-package com.apass.esp.common.utils;
+package com.apass.zufang.common.utils;
 public class OSUtils {  
     public enum OSType {  
         OS_TYPE_LINUX, OS_TYPE_WIN, OS_TYPE_SOLARIS, OS_TYPE_MAC, OS_TYPE_FREEBSD, OS_TYPE_OTHER  

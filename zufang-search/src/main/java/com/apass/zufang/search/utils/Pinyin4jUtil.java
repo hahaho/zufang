@@ -1,4 +1,4 @@
-package com.apass.esp.search.utils;
+package com.apass.zufang.search.utils;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;

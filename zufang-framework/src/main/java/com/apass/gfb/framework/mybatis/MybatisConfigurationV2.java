@@ -34,7 +34,7 @@ public class MybatisConfigurationV2 {
   @Bean(name = "mysqlMapperScannerConfigurer")
   public MapperScannerConfigurer mysqlMapperScannerConfigurer() {
     MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-    mapperScannerConfigurer.setBasePackage("com.apass.zufang.mapper");
+    mapperScannerConfigurer.setBasePackage("com.apass.zufang.mapper.zfang");
     mapperScannerConfigurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
     return mapperScannerConfigurer;
   }

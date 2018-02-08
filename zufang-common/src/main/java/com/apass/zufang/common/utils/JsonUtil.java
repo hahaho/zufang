@@ -1,4 +1,4 @@
-package com.apass.esp.common.utils;
+package com.apass.zufang.common.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
