@@ -38,14 +38,12 @@ public class AJPDataBaseConfiguration {
     private String minIdle;
 
     @Bean(name = "ajpmysqlDataSource", destroyMethod = "close", initMethod = "init")
-    @Primary
     public DataSource dataSource() {
         LOGGER.debug("Configruing ajpmysql DataSource................");
         return this.createEnvDataSource();
     }
 
     @Bean(name = "ajpmysqlTransactionManager")
-    @Primary
     public PlatformTransactionManager mysqlTransactionManager(@Qualifier("ajpmysqlDataSource") DataSource mysqlDataSource) {
         return new DataSourceTransactionManager(mysqlDataSource);
     }

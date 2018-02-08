@@ -45,7 +45,6 @@ public class DataBaseConfiguration {
   }// mysql只需要配置数据源即可，sqlsessionFactory和事务已经在app包下配置，同时mybatis也已经在app包中配置
 
   @Bean(name = "mysqlTransactionManager")
-  @Primary
   public PlatformTransactionManager mysqlTransactionManager(@Qualifier("mysqlDataSource") DataSource mysqlDataSource) {
     return new DataSourceTransactionManager(mysqlDataSource);
   }
