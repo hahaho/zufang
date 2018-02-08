@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import com.apass.gfb.framework.BootApplication;
 
 @Configuration
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class Application {
 
 	public static void main(String[] args) {
