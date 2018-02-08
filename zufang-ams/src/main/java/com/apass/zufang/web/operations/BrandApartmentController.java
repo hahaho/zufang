@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -29,7 +27,7 @@ public class BrandApartmentController {
         return "operations/brandApartment";
     }
     /**
-     * 公寓信息列表查询
+     * 品牌公寓热门房源列表查询
      * @param request
      * @return
      */
