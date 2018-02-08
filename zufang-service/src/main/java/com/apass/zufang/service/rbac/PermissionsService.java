@@ -1,4 +1,4 @@
-package com.apass.zufang.service;
+package com.apass.zufang.service.rbac;
 
 import java.util.List;
 
