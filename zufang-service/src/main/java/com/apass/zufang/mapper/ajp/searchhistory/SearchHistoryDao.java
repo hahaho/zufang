@@ -9,13 +9,13 @@ import java.util.List;
  * @update 2018-02-09 11:02
  *
  */
-public class SearchHistoryDao<T> {
+public class SearchHistoryDao {
 	/**
 	 * 设备号查询
 	 * @param deviceId
 	 * @return
 	 */
-	public List<T> queryDeviceIdHistory(String deviceId) {
+	public List<String> queryDeviceIdHistory(String deviceId) {
 		return null;
 	}
 	/**
@@ -23,7 +23,7 @@ public class SearchHistoryDao<T> {
 	 * @param customerId
 	 * @return
 	 */
-	public List<T> queryCustomerIdHistory(String customerId) {
+	public List<String> queryCustomerIdHistory(String customerId) {
 		return null;
 	}
 	
