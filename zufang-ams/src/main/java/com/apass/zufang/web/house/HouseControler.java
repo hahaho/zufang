@@ -76,7 +76,7 @@ public class HouseControler {
 		try {
 			String Id = CommonUtils.getValue(paramMap, "Id");
 			ValidateUtils.isNotBlank(Id, "房屋Id为空！");
-			houseService
+			//houseService
 			return Response.success("");
 		}catch (BusinessException e){
 			logger.error("delete house businessException---->{}",e);

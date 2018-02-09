@@ -1,4 +1,7 @@
 package com.apass.zufang.service.house;
+
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ public class HouseService {
 	
 	@Autowired
 	private HouseMapper houseMapper;
+
 	
 	@Transactional(rollbackFor = { Exception.class})
 	public Integer createEntity(House entity){
@@ -32,13 +36,11 @@ public class HouseService {
 	public Integer updateEntity(House entity){
 		return houseMapper.updateByPrimaryKeySelective(entity);
 	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer deleteEntity(House entity){
-		return houseMapper.deleteByPrimaryKey(entity.getId());
+	public Integer getHouseListCount(House entity) {
+		return null;
 	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer deleteEntity(Long id){
-		return houseMapper.deleteByPrimaryKey(id);
+	public List<House> getHouseList(House entity) {
+		return null;
 	}
 	
 	/**
@@ -55,8 +57,8 @@ public class HouseService {
 		
 		House house = houseMapper.selectByPrimaryKey(Id);
 		
-		if(StringUtils.equals(house.getStatus(), cs2)){
+		/*if(StringUtils.equals(house.getStatus(), cs2)){
 			
-		}
+		}*/
 	}
 }
