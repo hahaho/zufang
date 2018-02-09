@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -29,7 +30,7 @@ public class BrandApartmentService {
 	 * @param entity
 	 * @return
 	 */
-	public ResponsePageBody<HouseVo> getHotHouseList(HouseVo entity) {
+	public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
 		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
         List<HouseVo> list = houseMapper.getHotHouseList(entity);
         pageBody.setTotal(list.size());
@@ -50,7 +51,7 @@ public class BrandApartmentService {
 		if(sorNo==1){
 			return Response.fail("热门房源上移失败,位于热门首位数据！");
 		}
-		HouseVo entity = new HouseVo();
+		HouseQueryParams entity = new HouseQueryParams();
 		entity.setIsDelete("00");
 		entity.setHouseType((byte)2);
 		House houseD = null;
@@ -85,7 +86,7 @@ public class BrandApartmentService {
 		if(sorNo==5){
 			return Response.fail("热门房源下移失败,位于热门末位数据！");
 		}
-		HouseVo entity = new HouseVo();
+		HouseQueryParams entity = new HouseQueryParams();
 		entity.setIsDelete("00");
 		entity.setHouseType((byte)2);
 		House houseD = null;
