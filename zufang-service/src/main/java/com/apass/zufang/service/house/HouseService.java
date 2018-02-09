@@ -22,10 +22,10 @@ public class HouseService {
 	public Integer updateEntity(House entity){
 		return houseMapper.updateByPrimaryKeySelective(entity);
 	}
-	public Integer getHouseListCount(House entity) {
-		return null;
-	}
 	public List<House> getHouseList(House entity) {
-		return null;
+		return houseMapper.getHouseList(entity);
+	}
+	public Integer getHouseListCount(House entity) {
+		return houseMapper.getHouseListCount(entity);
 	}
 }

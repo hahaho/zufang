@@ -44,7 +44,7 @@
     </select>
     <!-- 分页查询数量 -->
     <select id ="getApartmentListCount" resultType="java.lang.Integer"
-        parameterType="com.apass.esp.domain.entity.activity.LimitBuyActVo">
+        parameterType="com.apass.zufang.domain.entity.Apartment">
         SELECT COUNT(*) FROM t_zfang_apartment
         <include refid="QueryConditionSqlBackup" />
     </select>

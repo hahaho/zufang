@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.HouseMapper" >
+	<!-- 分页查询 -->
+    <select id="getHouseList" resultMap="BaseResultMap" 
+        parameterType="com.apass.zufang.domain.entity.House">
+        SELECT 
+            <include refid="Base_Column_List" />
+        FROM t_zfang_apartment
+            <include refid="QueryConditionSqlBackup" />
+        <![CDATA[ 
+        ORDER BY created_time DESC
+        ]]>
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+    <!-- 分页查询数量 -->
+    <select id ="getHouseListCount" resultType="java.lang.Integer"
+        parameterType="com.apass.zufang.domain.entity.House">
+        SELECT COUNT(*) FROM t_zfang_apartment
+        <include refid="QueryConditionSqlBackup" />
+    </select>
+</mapper>
