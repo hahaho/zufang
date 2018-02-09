@@ -48,7 +48,7 @@ public class BrandApartmentService {
 		House house = houseService.readEntity(id);
 		Integer sorNo = house.getSortNo();
 		if(sorNo==1){
-			return Response.success("热门房源上移失败,位于热门首位数据！");
+			return Response.fail("热门房源上移失败,位于热门首位数据！");
 		}
 		HouseVo entity = new HouseVo();
 		entity.setIsDelete("00");
@@ -77,5 +77,40 @@ public class BrandApartmentService {
 			}
 		}
 		return Response.fail("热门房源上移失败！");
+	}
+	public Response hotHouseMoveDown(String houseId, String user) {
+		Long id = Long.parseLong(houseId);
+		House house = houseService.readEntity(id);
+		Integer sorNo = house.getSortNo();
+		if(sorNo==5){
+			return Response.fail("热门房源下移失败,位于热门末位数据！");
+		}
+		HouseVo entity = new HouseVo();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		House houseD = null;
+		House houseU = null;
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+		for(HouseVo vo : list){
+			if(vo.getSortNo()==sorNo){
+				houseD = houseService.readEntity(vo.getHouseId());
+				houseD.setSortNo(sorNo+1);
+				houseD.setUpdatedUser(user);
+				houseD.setUpdatedTime(new Date());
+			}
+			if(vo.getSortNo()==sorNo+1){
+				houseU = houseService.readEntity(vo.getHouseId());
+				houseU.setSortNo(sorNo);
+				houseU.setUpdatedUser(user);
+				houseU.setUpdatedTime(new Date());
+				break;
+			}
+		}
+		if(houseService.updateEntity(houseD)==1){
+			if(houseService.updateEntity(houseU)==1){
+				return Response.success("热门房源下移成功！");
+			}
+		}
+		return Response.fail("热门房源下移失败！");
 	}
 }
