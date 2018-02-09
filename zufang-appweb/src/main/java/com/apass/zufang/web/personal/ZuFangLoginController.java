@@ -1,4 +1,4 @@
-package com.apass.zufang.personal;
+package com.apass.zufang.web.personal;
 
 import java.util.Map;
 
@@ -9,10 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
-import com.apass.zufang.mapper.ajp.personal.ZuFangLoginSevice;
+import com.apass.zufang.service.personal.ZuFangLoginSevice;
 
 /**
  * 个人中心 登录

@@ -1,10 +1,10 @@
-package com.apass.zufang.mapper.ajp.personal;
+package com.apass.zufang.service.personal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.apass.zufang.domain.ajp.entity.ZuFangLogin;
-import com.apass.zufang.search.dao.ZuFangLoginDao;
+import com.apass.zufang.mapper.ajp.personal.ZuFangLoginDao;
 /**
  * 个人中心 登录
  * 
