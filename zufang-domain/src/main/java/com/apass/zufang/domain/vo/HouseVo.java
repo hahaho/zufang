@@ -3,6 +3,8 @@ package com.apass.zufang.domain.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.apass.zufang.common.model.QueryParams;
 /**
  * 
  * @author pyc
@@ -11,7 +13,7 @@ import java.util.List;
  * @createTime：2018年2月8日 下午1:41:42 
  * @description 房屋管理类
  */
-public class HouseVo {
+public class HouseVo extends QueryParams{
 
 	
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
