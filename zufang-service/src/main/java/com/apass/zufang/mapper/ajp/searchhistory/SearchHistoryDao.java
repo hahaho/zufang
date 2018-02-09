@@ -30,5 +30,23 @@ public class SearchHistoryDao {
 		return null;
 	}
 	
+	/**
+	 * 设备号查询
+	 * @param deviceId
+	 * @return
+	 */
+	public Object deleteDeviceIdHistory(String deviceId) {
+		return null;
+	}
+	
+	/**
+	 * 用户id查询
+	 * @param customerId
+	 * @return
+	 */
+	public Object deleteCustomerIdHistory(String customerId) {
+		return null;
+	}
+	
 	
 }
