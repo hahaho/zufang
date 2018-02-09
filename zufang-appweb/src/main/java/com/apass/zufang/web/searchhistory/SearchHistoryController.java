@@ -30,7 +30,7 @@ public class SearchHistoryController {
 private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginController.class);
 	
 	@Autowired
-	private SearchHistorySevice searchHistorySevice;
+	private SearchHistorySevice<?> searchHistorySevice;
 	
 	/**
 	 *  搜索历史
@@ -48,13 +48,14 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	        	
 	        	Map<Object, Object> map = new HashMap<>();
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
-	        		//未登录
+	        		//设备ID
 	        		List<String> list = searchHistorySevice.queryDeviceIdHistory(deviceId);
 	        		map.put("list", list);
-	        		 return Response.fail("未登录操作",map);
+	        		 return Response.success("设备ID登录",map);
 	        	}else{
-	        		//已登录
-	        		return Response.success("登录成功",searchHistorySevice.queryCustomerIdHistory(customerId));
+	        		//用户ID
+	        		List<String> list =searchHistorySevice.queryCustomerIdHistory(customerId);
+	        		return Response.success("用户ID登录",list);
 	        	}
 	        } catch (Exception e) {
 	            return Response.fail("操作失败");
