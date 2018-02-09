@@ -2,6 +2,8 @@ package com.apass.zufang.mapper.ajp.searchhistory;
 
 import java.util.List;
 
+import com.apass.gfb.framework.annotation.MyBatisRepository;
+
 /**
  * 
  * 
@@ -9,6 +11,7 @@ import java.util.List;
  * @update 2018-02-09 11:02
  *
  */
+@MyBatisRepository
 public class SearchHistoryDao {
 	/**
 	 * 设备号查询
