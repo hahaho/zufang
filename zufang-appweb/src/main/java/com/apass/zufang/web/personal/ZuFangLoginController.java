@@ -38,7 +38,7 @@ public class ZuFangLoginController {
 	        		 return Response.success("未登录操作");
 	        	}else{
 	        		//已登录
-	        		return Response.success("登录成功",zuFangLoginSevice.zuFangLogin(customerId));
+	        		return Response.success("登录成功",zuFangLoginSevice.zuFangifLogin(customerId));
 	        	}
 	        } catch (Exception e) {
 	            return Response.fail("操作失败");
