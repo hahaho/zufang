@@ -4,14 +4,26 @@
 	<!-- 分页查询条件 -->
     <sql id="QueryConditionSql">
         <where>
-			<if test="name!=null and name!=''"> AND name = #{name} </if>
-            <if test="code!=null and code!=''"> AND code = #{code} </if>
-            <if test="companyName!=null and companyName!=''"> AND company_name = #{companyName} </if>
-            <if test="province!=null and province!=''"> AND province = #{province} </if>
-            <if test="city!=null and city!=''"> AND city = #{city} </if>
-            <if test="area!=null and area!=''"> AND area = #{area} </if>
-            <if test="bankName!=null and bankName!=''"> AND bank_name = #{bankName} </if>
-            <if test="bankCard!=null and bankCard!=''"> AND bank_card = #{bankCard} </if>
+			<if test="code!=null and code!=''"> AND code = #{code} </if>
+            <if test="apartmentId!=null and apartmentId!=''"> AND apartment_id = #{apartmentId} </if>
+            <if test="type!=null and type!=''"> AND type = #{type} </if>
+            <if test="sortNo!=null and sortNo!=''"> AND sort_no = #{sortNo} </if>
+            <if test="rentType!=null and rentType!=''"> AND rent_type = #{rentType} </if>
+            <if test="communityName!=null and communityName!=''"> AND community_name = #{communityName} </if>
+            <if test="acreage!=null and acreage!=''"> AND acreage = #{acreage} </if>
+            <if test="room!=null and room!=''"> AND room = #{room} </if>
+            <if test="hall!=null and hall!=''"> AND hall = #{hall} </if>
+            <if test="wei!=null and wei!=''"> AND wei = #{wei} </if>
+            <if test="floor!=null and floor!=''"> AND floor = #{floor} </if>
+            <if test="totalFloor!=null and totalFloor!=''"> AND total_floor = #{totalFloor} </if>
+            <if test="liftType!=null and liftType!=''"> AND lift_type = #{liftType} </if>
+            <if test="rentAmt!=null and rentAmt!=''"> AND rent_amt = #{rentAmt} </if>
+            <if test="zujinType!=null and zujinType!=''"> AND zujin_type = #{zujinType} </if>
+            <if test="chaoxiang!=null and chaoxiang!=''"> AND chaoxiang = #{chaoxiang} </if>
+            <if test="zujinType!=null and zujinType!=''"> AND zujin_type = #{zujinType} </if>
+            <if test="zhuangxiu!=null and zhuangxiu!=''"> AND zhuangxiu = #{zhuangxiu} </if>
+            <if test="houseType!=null and houseType!=''"> AND house_type = #{houseType} </if>
+            <if test="zujinType!=null and zujinType!=''"> AND zujin_type = #{zujinType} </if>
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
         </where>
     </sql>
