@@ -5,7 +5,16 @@ import com.apass.zufang.domain.ajp.entity.ZuFangLogin;
 
 @MyBatisRepository
 public class ZuFangLoginDao {
-
+	/**是否登录
+	 * 
+	 * @param customerId
+	 * @return
+	 */
+	public ZuFangLogin zuFangifLogin(String customerId) {
+		
+		return null;
+	}
+	
 	public Integer zufangsetpassword(ZuFangLogin zuFangLogin) {
 		return null;
 		
