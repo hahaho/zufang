@@ -22,8 +22,8 @@
             <if test="chaoxiang!=null and chaoxiang!=''"> AND chaoxiang = #{chaoxiang} </if>
             <if test="zujinType!=null and zujinType!=''"> AND zujin_type = #{zujinType} </if>
             <if test="zhuangxiu!=null and zhuangxiu!=''"> AND zhuangxiu = #{zhuangxiu} </if>
-            <if test="houseType!=null and houseType!=''"> AND house_type = #{houseType} </if>
-            <if test="zujinType!=null and zujinType!=''"> AND zujin_type = #{zujinType} </if>
+            <if test="status!=null and status!=''"> AND status = #{status} </if>
+            <if test="title!=null and title!=''"> AND title = #{title} </if>
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
         </where>
     </sql>
