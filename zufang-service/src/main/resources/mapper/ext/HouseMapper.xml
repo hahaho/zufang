@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.HouseMapper" >
+	<!-- 分页查询条件 -->
+    <sql id="QueryConditionSql">
+        <where>
+			<if test="code!=null and code!=''"> AND code = #{code} </if>
+            <if test="apartmentId!=null and apartmentId!=''"> AND apartment_id = #{apartmentId} </if>
+            <if test="type!=null and type!=''"> AND type = #{type} </if>
+            <if test="sortNo!=null and sortNo!=''"> AND sort_no = #{sortNo} </if>
+            <if test="rentType!=null and rentType!=''"> AND rent_type = #{rentType} </if>
+            <if test="communityName!=null and communityName!=''"> AND community_name = #{communityName} </if>
+            <if test="acreage!=null and acreage!=''"> AND acreage = #{acreage} </if>
+            <if test="room!=null and room!=''"> AND room = #{room} </if>
+            <if test="hall!=null and hall!=''"> AND hall = #{hall} </if>
+            <if test="wei!=null and wei!=''"> AND wei = #{wei} </if>
+            <if test="floor!=null and floor!=''"> AND floor = #{floor} </if>
+            <if test="totalFloor!=null and totalFloor!=''"> AND total_floor = #{totalFloor} </if>
+            <if test="liftType!=null and liftType!=''"> AND lift_type = #{liftType} </if>
+            <if test="rentAmt!=null and rentAmt!=''"> AND rent_amt = #{rentAmt} </if>
+            <if test="zujinType!=null and zujinType!=''"> AND zujin_type = #{zujinType} </if>
+            <if test="chaoxiang!=null and chaoxiang!=''"> AND chaoxiang = #{chaoxiang} </if>
+            <if test="zujinType!=null and zujinType!=''"> AND zujin_type = #{zujinType} </if>
+            <if test="zhuangxiu!=null and zhuangxiu!=''"> AND zhuangxiu = #{zhuangxiu} </if>
+            <if test="status!=null and status!=''"> AND status = #{status} </if>
+            <if test="title!=null and title!=''"> AND title = #{title} </if>
+            <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
+        </where>
+    </sql>
+	<!-- 分页查询 -->
+    <select id="getHouseList" resultMap="BaseResultMap" 
+        parameterType="com.apass.zufang.domain.entity.House">
+        SELECT 
+            <include refid="Base_Column_List" />
+        FROM t_zfang_apartment
+            <include refid="QueryConditionSql" />
+        <![CDATA[ 
+        ORDER BY created_time DESC
+        ]]>
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+    <!-- 分页查询数量 -->
+    <select id ="getHouseListCount" resultType="java.lang.Integer"
+        parameterType="com.apass.zufang.domain.entity.House">
+        SELECT COUNT(*) FROM t_zfang_apartment
+        <include refid="QueryConditionSql" />
+    </select>
+</mapper>
