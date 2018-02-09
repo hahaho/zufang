@@ -1,6 +1,5 @@
 package com.apass.zufang.search.dao;
 
-import com.apass.gfb.framework.annotation.MyBatisEntity;
 import com.apass.gfb.framework.annotation.MyBatisRepository;
 import com.apass.zufang.domain.ajp.entity.ZuFangLogin;
 
