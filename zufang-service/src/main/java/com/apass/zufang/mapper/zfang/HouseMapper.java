@@ -1,6 +1,7 @@
 package com.apass.zufang.mapper.zfang;
 import java.util.List;
 import com.apass.gfb.framework.mybatis.GenericMapper;
+import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.vo.HouseVo;
 /**
@@ -26,5 +27,5 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @param entity
 	 * @return
 	 */
-	public List<HouseVo> getHotHouseList(HouseVo entity);
+	public List<HouseVo> getHotHouseList(HouseQueryParams entity);
 }

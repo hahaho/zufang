@@ -35,7 +35,7 @@
      	查询列表字段    热门排序  公寓ID，公寓名称，房源ID，房源编码，房源标题（名称），小区名称，户型（室厅卫）
    		查询条件 是否热门 公寓名称 房源标题（名称）房源编码 所在区域  -->
     <select id="getHotHouseList" resultMap="com.apass.zufang.domain.vo.HouseVo" 
-    	parameterType="com.apass.zufang.domain.vo.HouseVo">
+    	parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
     	<![CDATA[
         SELECT 
         	x.sort_no sortNo,
@@ -46,11 +46,11 @@
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
        	WHERE 1=1 
        	]]>
-    	<if test="type!=null and type!=''"> AND x.type = #{type} </if>
+    	<if test="houseType!=null and houseType!=''"> AND x.type = #{houseType} </if>
     	<if test="apartmentName!=null and apartmentName!=''"> AND x.apartment_name = #{apartmentName} </if>
-    	<if test="title!=null and title!=''"> AND x.title = #{title} </if>
+    	<if test="houseTitle!=null and houseTitle!=''"> AND x.title = #{houseTitle} </if>
     	<if test="houseCode!=null and houseCode!=''"> AND x.house_code = #{houseCode} </if>
-    	<if test="area!=null and area!=''"> AND x.area = #{area} </if>
+    	<if test="houseArea!=null and houseArea!=''"> AND x.area = #{houseArea} </if>
     	<if test="isDelete!=null and isDelete!=''"> AND x.is_delete = #{isDelete} AND y.is_delete = #{isDelete}</if>
         <![CDATA[ 
         	ORDER BY x.type DESC,x.sort_no ASC,x.created_time DESC

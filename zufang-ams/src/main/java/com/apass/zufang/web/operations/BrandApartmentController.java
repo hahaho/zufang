@@ -15,6 +15,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.operation.BrandApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -45,7 +46,7 @@ public class BrandApartmentController {
      */
     @ResponseBody
     @RequestMapping("/getHotHouseList")
-    public ResponsePageBody<HouseVo> getHotHouseList(HouseVo entity) {
+    public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
         ResponsePageBody<HouseVo> respBody = new ResponsePageBody<HouseVo>();
         try {
         	entity.setIsDelete("00");
