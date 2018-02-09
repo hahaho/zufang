@@ -1,4 +1,6 @@
 package com.apass.zufang.service.house;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,13 +15,6 @@ import com.apass.zufang.mapper.zfang.HouseMapper;
 public class HouseService {
 	@Autowired
 	private HouseMapper houseMapper;
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer createEntity(House entity){
-		return houseMapper.insertSelective(entity);
-	}
-	public House readEntity(House entity){
-		return houseMapper.selectByPrimaryKey(entity.getId());
-	}
 	public House readEntity(Long id){
 		return houseMapper.selectByPrimaryKey(id);
 	}
@@ -27,12 +22,10 @@ public class HouseService {
 	public Integer updateEntity(House entity){
 		return houseMapper.updateByPrimaryKeySelective(entity);
 	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer deleteEntity(House entity){
-		return houseMapper.deleteByPrimaryKey(entity.getId());
+	public Integer getHouseListCount(House entity) {
+		return null;
 	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer deleteEntity(Long id){
-		return houseMapper.deleteByPrimaryKey(id);
+	public List<House> getHouseList(House entity) {
+		return null;
 	}
 }

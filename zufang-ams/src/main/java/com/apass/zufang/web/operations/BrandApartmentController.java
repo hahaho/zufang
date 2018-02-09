@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.apass.zufang.domain.entity.House;
-import com.apass.zufang.service.apartment.ApartmentService;
+import com.apass.zufang.service.operation.BrandApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
  * 品牌公寓热门房源配置
@@ -18,7 +18,7 @@ import com.apass.zufang.utils.ResponsePageBody;
 public class BrandApartmentController {
 	private static final Logger LOGGER  = LoggerFactory.getLogger(BrandApartmentController.class);
 	@Autowired
-	public ApartmentService apartmentService;
+	public BrandApartmentService brandApartmentService;
 	/**
      * 品牌公寓热门房源配置页面
      */
@@ -37,7 +37,7 @@ public class BrandApartmentController {
         ResponsePageBody<House> respBody = new ResponsePageBody<House>();
         try {
         	entity.setIsDelete("00");
-        	respBody = apartmentService.getHouseList(entity);
+        	respBody = brandApartmentService.getHouseList(entity);
         } catch (Exception e) {
             LOGGER.error("getHouseList EXCEPTION --- --->{}", e);
             respBody.setMsg("品牌公寓热门房源列表查询失败");
