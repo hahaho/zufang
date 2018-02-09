@@ -599,8 +599,9 @@ public class CommonUtils {
             return null;
         }
         Map<String, Object> value = null;
-        if (obj instanceof Map)
+        if (obj instanceof Map){
             value = (Map<String, Object>) obj;
+        }
         return value;
     }
 
