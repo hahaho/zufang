@@ -3,11 +3,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.Apartment;
-import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
@@ -82,9 +80,5 @@ public class ApartmentService {
 			return Response.success("公寓信息修改成功！");
 		}
 		return Response.fail("公寓信息修改失败！");
-	}
-	public ResponsePageBody<House> getHouseList(House entity) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
