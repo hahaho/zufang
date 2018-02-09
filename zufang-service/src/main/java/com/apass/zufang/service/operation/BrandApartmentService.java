@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apass.gfb.framework.utils.BaseConstants;
-import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
