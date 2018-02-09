@@ -49,7 +49,7 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	        	Map<Object, Object> map = new HashMap<>();
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
 	        		//未登录
-	        		List<T> list = searchHistorySevice.queryDeviceIdHistory(deviceId);
+	        		List<String> list = searchHistorySevice.queryDeviceIdHistory(deviceId);
 	        		map.put("list", list);
 	        		 return Response.fail("未登录操作",map);
 	        	}else{
