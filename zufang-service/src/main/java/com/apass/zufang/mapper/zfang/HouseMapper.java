@@ -2,6 +2,7 @@ package com.apass.zufang.mapper.zfang;
 import java.util.List;
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.vo.HouseVo;
 /**
  * Created by DELL on 2018/2/7.
  */
@@ -20,4 +21,10 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @return
 	 */
 	public Integer getHouseListCount(House entity);
+	/**
+	 * 品牌公寓热门房源查询
+	 * @param entity
+	 * @return
+	 */
+	public List<HouseVo> getHotHouseList(HouseVo entity);
 }

@@ -1,7 +1,7 @@
 package com.apass.zufang.domain.vo;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import com.apass.zufang.common.model.QueryParams;
 /**
  * 
  * @author pyc
@@ -10,7 +10,7 @@ import java.util.Date;
  * @createTime：2018年2月8日 下午1:41:42 
  * @description 房屋管理类
  */
-public class HouseVo {
+public class HouseVo extends QueryParams{
 
 	
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
@@ -60,7 +60,6 @@ public class HouseVo {
     private String title;//房源标题
 
     private String description;//房源描述
-
 	public String getCode() {
 		return code;
 	}
@@ -252,5 +251,32 @@ public class HouseVo {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-    
+	private String isDelete;//房源是否删除
+	private Long houseId;//房源ID
+	private String apartmentName;//公寓名称
+	private String houseCode;//房源编码
+	public String getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
+	}
+	public Long getHouseId() {
+		return houseId;
+	}
+	public void setHouseId(Long houseId) {
+		this.houseId = houseId;
+	}
+	public String getApartmentName() {
+		return apartmentName;
+	}
+	public void setApartmentName(String apartmentName) {
+		this.apartmentName = apartmentName;
+	}
+	public String getHouseCode() {
+		return houseCode;
+	}
+	public void setHouseCode(String houseCode) {
+		this.houseCode = houseCode;
+	}
 }

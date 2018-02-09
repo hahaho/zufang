@@ -31,4 +31,6 @@
         SELECT COUNT(*) FROM t_zfang_apartment
         <include refid="QueryConditionSql" />
     </select>
+    
+    
 </mapper>
