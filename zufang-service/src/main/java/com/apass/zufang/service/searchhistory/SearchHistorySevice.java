@@ -25,7 +25,7 @@ public class SearchHistorySevice<T> {
 	 * @param deviceId
 	 * @return
 	 */
-	public List<T> queryDeviceIdHistory(String deviceId) {
+	public List<String> queryDeviceIdHistory(String deviceId) {
 		return  searchHistoryDao.queryDeviceIdHistory(deviceId);
 	}
 	/**
@@ -33,7 +33,7 @@ public class SearchHistorySevice<T> {
 	 * @param customerId
 	 * @return
 	 */ 
-	public List<T> queryCustomerIdHistory(String customerId) {
+	public List<String> queryCustomerIdHistory(String customerId) {
 		return searchHistoryDao.queryCustomerIdHistory(customerId);
 		
 	}
