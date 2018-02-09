@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apass.gfb.framework.utils.BaseConstants;
-import com.apass.zufang.domain.entity.House;
-import com.apass.zufang.service.house.HouseService;
+import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
  * 品牌公寓热门房源配置
@@ -16,13 +16,12 @@ import com.apass.zufang.utils.ResponsePageBody;
 @Service
 public class BrandApartmentService {
 	@Autowired
-	public HouseService houseService;
-	public ResponsePageBody<House> getHouseList(House entity) {
-		ResponsePageBody<House> pageBody = new ResponsePageBody<House>();
-        Integer count = houseService.getHouseListCount(entity);
-        List<House> response = houseService.getHouseList(entity);
-        pageBody.setTotal(count);
-        pageBody.setRows(response);
+	private HouseMapper houseMapper;
+	public ResponsePageBody<HouseVo> getHouseList(HouseVo entity) {
+		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
+        List<HouseVo> list = houseMapper.getHotHouseList(entity);
+        pageBody.setTotal(list.size());
+        pageBody.setRows(list);
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;
 	}
