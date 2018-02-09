@@ -252,8 +252,8 @@ public class HouseVo extends QueryParams{
 		this.description = description;
 	}
 	private String isDelete;//房源是否删除
-	private Long houseId;//房源ID
 	private String apartmentName;//公寓名称
+	private Long houseId;//房源ID
 	private String houseCode;//房源编码
 	public String getIsDelete() {
 		return isDelete;
