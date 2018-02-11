@@ -14,14 +14,14 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @param entity
 	 * @return
 	 */
-	public List<House> getHouseList(House entity);
+	public List<House> getHouseList(HouseQueryParams entity);
 	/**
 	 * 数量查询
 	 * getHouseListCount
 	 * @param entity
 	 * @return
 	 */
-	public Integer getHouseListCount(House entity);
+	public Integer getHouseListCount(HouseQueryParams entity);
 	/**
 	 * 品牌公寓热门房源查询
 	 * @param entity

@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class HouseVo{
 
+	private Long id;
 	
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
 
@@ -73,6 +74,14 @@ public class HouseVo{
     private List<String> pictures;//图片
     
     private List<String> configs;//房屋配置
+    
+    private String isDelete;//房源是否删除
+    
+	private String apartmentName;//公寓名称
+	
+	private String houseCode;//房源编码
+	
+	private String locationId;//地址Id
 
 	public String getCode() {
 		return code;
@@ -314,22 +323,13 @@ public class HouseVo{
 		this.configs = configs;
 	}
 	
-	private String isDelete;//房源是否删除
-	private String apartmentName;//公寓名称
-	private Long houseId;//房源ID
-	private String houseCode;//房源编码
 	public String getIsDelete() {
 		return isDelete;
 	}
 	public void setIsDelete(String isDelete) {
 		this.isDelete = isDelete;
 	}
-	public Long getHouseId() {
-		return houseId;
-	}
-	public void setHouseId(Long houseId) {
-		this.houseId = houseId;
-	}
+	
 	public String getApartmentName() {
 		return apartmentName;
 	}
@@ -341,5 +341,20 @@ public class HouseVo{
 	}
 	public void setHouseCode(String houseCode) {
 		this.houseCode = houseCode;
+	}
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
 	}
 }
