@@ -58,13 +58,13 @@ public class BrandApartmentService {
 		List<HouseVo> list = houseMapper.getHotHouseList(entity);
 		for(HouseVo vo : list){
 			if(vo.getSortNo()==sorNo-1){
-				houseD = houseService.readEntity(vo.getHouseId());
+				houseD = houseService.readEntity(vo.getId());
 				houseD.setSortNo(sorNo);
 				houseD.setUpdatedUser(user);
 				houseD.setUpdatedTime(new Date());
 			}
 			if(vo.getSortNo()==sorNo){
-				houseU = houseService.readEntity(vo.getHouseId());
+				houseU = houseService.readEntity(vo.getId());
 				houseU.setSortNo(sorNo);
 				houseU.setUpdatedUser(user);
 				houseU.setUpdatedTime(new Date());

@@ -44,7 +44,7 @@ public class HouseService {
     @Value("${nfs.rootPath}")
     private String rootPath;
     /*** 房屋图片存放地址*/
-    @Value("${nfs.house}")
+    //@Value("${nfs.house}")
     private String nfsHouse;
 	
 	@Autowired
@@ -61,6 +61,9 @@ public class HouseService {
 	
 	@Autowired
 	private HouseImgMapper imgMapper;
+	
+	@Autowired
+	private HouseLocationService locationService;
 
 	
 	@Transactional(rollbackFor = { Exception.class})
@@ -128,6 +131,70 @@ public class HouseService {
 		for (String config : houseVo.getConfigs()) {
 			HousePeizhi peizhi = new HousePeizhi();
 			peizhi.setHouseId(record.longValue());
+			peizhi.setCreatedTime(houseVo.getCreatedTime());
+			peizhi.setUpdatedTime(houseVo.getUpdatedTime());
+			if(StringUtils.isNotBlank(config)){
+				peizhi.setName(config);
+				peizhiMapper.insertSelective(peizhi);
+			}
+		}
+	}
+	
+	/**
+	 * 修改房屋信息
+	 * @param house
+	 * @throws BusinessException 
+	 */
+	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	public void editHouse(HouseVo houseVo) throws BusinessException{
+		
+		if(null == houseVo.getId()){
+			throw new BusinessException("房屋Id不能为空!");
+		}
+		
+		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
+		if(null == part || StringUtils.isBlank(part.getCode())){
+			throw new BusinessException("房屋所属公寓的编号不存在!");
+		}
+		House house = houseMapper.selectByPrimaryKey(houseVo.getId());
+		BeanUtils.copyProperties(houseVo, house);
+		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
+		
+		/*** 添加房屋信息入库*/
+		houseMapper.updateByPrimaryKeySelective(house);
+		
+		
+		locationService.deleteLocationByHouseId(house.getId());//删除位置信息
+		/*** 添加位置入库*/
+		HouseLocation location = new HouseLocation();
+		BeanUtils.copyProperties(houseVo, location);
+		location.setHouseId(house.getId());
+		getAddressLngLat(houseVo, location);
+		locationMapper.insertSelective(location);
+		
+		
+		
+		/*** 添加图片入库*/
+		for (String pic : houseVo.getPictures()) {
+			HouseImg img = new HouseImg();
+			img.setHouseId(house.getId());
+			img.setCreatedTime(houseVo.getCreatedTime());
+			img.setUpdatedTime(houseVo.getUpdatedTime());
+			if(StringUtils.isNotBlank(pic)){
+				String picture1Url2 = nfsHouse + "_" + System.currentTimeMillis() + ".jpg";
+				byte[] picture1Byte = Base64Utils.decodeFromString(pic);
+				FileUtilsCommons.uploadByteFilesUtil(rootPath, picture1Url2, picture1Byte);
+				img.setUrl(picture1Url2);
+				imgMapper.insertSelective(img);
+			}
+		}
+		
+		
+		
+		/*** 添加配置入库*/
+		for (String config : houseVo.getConfigs()) {
+			HousePeizhi peizhi = new HousePeizhi();
+			peizhi.setHouseId(house.getId());
 			peizhi.setCreatedTime(houseVo.getCreatedTime());
 			peizhi.setUpdatedTime(houseVo.getUpdatedTime());
 			if(StringUtils.isNotBlank(config)){

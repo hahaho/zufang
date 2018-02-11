@@ -62,7 +62,8 @@ public class HouseControler {
 	public Response editHouse(Map<String, Object> paramMap){
 		try {
 			validateParams(paramMap);
-			logger.info("");
+			HouseVo vo = getVoByParams(paramMap);
+			houseService.addHouse(vo);
 			return Response.success("");
 		}catch (BusinessException e){
 			logger.error("edit house businessException---->{}",e);
@@ -239,6 +240,7 @@ public class HouseControler {
 	    }
 	    house.setUpdatedTime(date);
 	    house.setUpdatedUser(operateName);
+	    house.setId(Long.parseLong(houseId));
 		return house;
 	}
 }
