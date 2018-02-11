@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -19,9 +20,12 @@ import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.enums.RentTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
+import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
 
 @Path("/house")
@@ -35,10 +39,41 @@ public class HouseControler {
 	private HouseService houseService;
 	
 	/**
+     * 房屋信息列表查询
+     * @return
+     */
+	@POST
+	@Path("/queryHouse")
+	public Response getHouseList(Map<String,Object> paramMap){
+		ResponsePageBody<House> respBody = new ResponsePageBody<House>();
+        try {
+        	String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");//公寓名称
+        	String houseTitle = CommonUtils.getValue(paramMap, "houseTitle");//房源名称
+        	String houseCode = CommonUtils.getValue(paramMap, "houseCode");//房源编码
+        	String houseArea = CommonUtils.getValue(paramMap, "houseArea");//公寓所在区
+        	HouseQueryParams dto = new HouseQueryParams();
+        	dto.setApartmentName(apartmentName);
+        	dto.setHouseTitle(houseTitle);
+        	dto.setHouseCode(houseCode);
+        	dto.setHouseArea(houseArea);
+        	respBody = houseService.getHouseListExceptDelete(dto);
+        	respBody.setMsg("房屋信息列表查询成功!");
+        	return Response.success("查询房屋信息成功！", respBody);
+        } catch (Exception e) {
+            logger.error("getHouseList EXCEPTION --- --->{}", e);
+            respBody.setMsg("房屋信息列表查询失败!");
+            return Response.fail("查询房屋信息失败!");
+        }
+	}
+	
+	
+	/**
 	 * 添加房屋信息
 	 * @param paramMap
 	 * @return
 	 */
+    @POST
+    @Path("/addHouse")
 	public Response addHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("add house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -59,6 +94,8 @@ public class HouseControler {
 	 * 修改房屋信息
 	 * @return
 	 */
+    @POST
+    @Path("/editHouse")
 	public Response editHouse(Map<String, Object> paramMap){
 		try {
 			validateParams(paramMap);
@@ -79,6 +116,8 @@ public class HouseControler {
 	 * @param paramMap
 	 * @return
 	 */
+    @POST
+    @Path("/delHouse")
 	public Response delHouse(Map<String, Object> paramMap){
 		try {
 			String id = CommonUtils.getValue(paramMap, "id");
@@ -179,6 +218,11 @@ public class HouseControler {
 		ValidateUtils.isNotBlank(picturs, "请上传图片");
 	}
 	
+	/***
+	 * paramToVo
+	 * @param paramMap
+	 * @return
+	 */
 	public HouseVo getVoByParams(Map<String, Object> paramMap){
 		
 		HouseVo house = new HouseVo();
