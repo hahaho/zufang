@@ -63,7 +63,7 @@ public class HouseControler {
 		try {
 			validateParams(paramMap);
 			HouseVo vo = getVoByParams(paramMap);
-			houseService.addHouse(vo);
+			houseService.editHouse(vo);
 			return Response.success("");
 		}catch (BusinessException e){
 			logger.error("edit house businessException---->{}",e);
