@@ -65,6 +65,12 @@ public class HouseService {
 	
 	@Autowired
 	private HouseLocationService locationService;
+	
+	@Autowired
+	private HouseImgService imgService;
+	
+	@Autowired
+	private HousePeiZhiService peizhiService;
 
 	
 	@Transactional(rollbackFor = { Exception.class})
@@ -174,7 +180,7 @@ public class HouseService {
 		locationMapper.insertSelective(location);
 		
 		
-		
+		imgService.deleteImgByHouseId(house.getId());//删除图片记录
 		/*** 添加图片入库*/
 		for (String pic : houseVo.getPictures()) {
 			HouseImg img = new HouseImg();
@@ -190,8 +196,7 @@ public class HouseService {
 			}
 		}
 		
-		
-		
+		peizhiService.deletePeiZhiByHouseId(house.getId());//删除配置记录
 		/*** 添加配置入库*/
 		for (String config : houseVo.getConfigs()) {
 			HousePeizhi peizhi = new HousePeizhi();
