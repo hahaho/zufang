@@ -123,7 +123,7 @@ public class HouseControler {
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "房屋Id为空！");
 			houseService.deleteHouse(id, SpringSecurityUtils.getCurrentUser());
-			return Response.success("");
+			return Response.success("删除房屋信息成功！");
 		}catch (BusinessException e){
 			logger.error("delete house businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
