@@ -61,7 +61,6 @@ public class HouseService {
 	
 	@Autowired
 	private HouseImgMapper imgMapper;
-
 	
 	@Transactional(rollbackFor = { Exception.class})
 	public Integer createEntity(House entity){
