@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.enums.RentTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
@@ -29,6 +32,7 @@ import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
 import com.apass.zufang.utils.FileUtilsCommons;
 import com.apass.zufang.utils.LngLatUtils;
+import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 /**
  * 房源管理
@@ -45,7 +49,7 @@ public class HouseService {
     private String rootPath;
     /*** 房屋图片存放地址*/
 
-//  @Value("${nfs.house}")
+    @Value("${nfs.house}")
     private String nfsHouse;
 	
 	@Autowired
@@ -73,25 +77,15 @@ public class HouseService {
 	private HousePeiZhiService peizhiService;
 
 	
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer createEntity(House entity){
-		return houseMapper.insertSelective(entity);
-	}
-	public House readEntity(House entity){
-		return houseMapper.selectByPrimaryKey(entity.getId());
-	}
-	public House readEntity(Long id){
-		return houseMapper.selectByPrimaryKey(id);
-	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer updateEntity(House entity){
-		return houseMapper.updateByPrimaryKeySelective(entity);
-	}
-	public Integer getHouseListCount(House entity) {
-		return null;
-	}
-	public List<House> getHouseList(House entity) {
-		return null;
+	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
+		
+		ResponsePageBody<House> body = new ResponsePageBody<>();
+		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
+		List<House> houseList = houseMapper.getHouseList(dto);
+		body.setRows(houseList);
+		body.setTotal(houseMapper.getHouseListCount(dto));
+		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+		return body;
 	}
 	
 	/**
@@ -248,5 +242,13 @@ public class HouseService {
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
 		houseMapper.updateByPrimaryKeySelective(house);
+	}
+	
+	public House readEntity(Long id){
+		return houseMapper.selectByPrimaryKey(id);
+	}
+	@Transactional(rollbackFor = { Exception.class})
+	public Integer updateEntity(House entity){
+		return houseMapper.updateByPrimaryKeySelective(entity);
 	}
 }
