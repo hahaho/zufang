@@ -13,6 +13,8 @@ public class HousePeizhi {
 
     private Date updatedTime;
 
+    private String isDelete;
+
     public Long getId() {
         return id;
     }
@@ -51,5 +53,13 @@ public class HousePeizhi {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 }

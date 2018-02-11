@@ -7,9 +7,10 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, house_id, name, created_time, updated_time
+    id, house_id, name, created_time, updated_time, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -23,9 +24,9 @@
   </delete>
   <insert id="insert" parameterType="com.apass.zufang.domain.entity.HousePeizhi" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_house_peizhi (house_id, name, created_time, 
-      updated_time)
+      updated_time, is_delete)
     values (#{houseId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP})
+      #{updatedTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.HousePeizhi" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_house_peizhi
@@ -42,6 +43,9 @@
       <if test="updatedTime != null" >
         updated_time,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="houseId != null" >
@@ -55,6 +59,9 @@
       </if>
       <if test="updatedTime != null" >
         #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -73,6 +80,9 @@
       <if test="updatedTime != null" >
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -81,7 +91,8 @@
     set house_id = #{houseId,jdbcType=BIGINT},
       name = #{name,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
-      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
