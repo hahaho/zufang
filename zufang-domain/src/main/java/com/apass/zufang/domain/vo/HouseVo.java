@@ -80,6 +80,8 @@ public class HouseVo{
 	private String apartmentName;//公寓名称
 	
 	private String houseCode;//房源编码
+	
+	private String locationId;//地址Id
 
 	public String getCode() {
 		return code;
@@ -346,5 +348,13 @@ public class HouseVo{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
 	}
 }

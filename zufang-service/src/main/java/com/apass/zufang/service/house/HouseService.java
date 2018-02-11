@@ -78,7 +78,6 @@ public class HouseService {
 
 	
 	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
-		
 		ResponsePageBody<House> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		List<House> houseList = houseMapper.getHouseList(dto);
@@ -148,11 +147,9 @@ public class HouseService {
 	 */
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void editHouse(HouseVo houseVo) throws BusinessException{
-		
 		if(null == houseVo.getId()){
 			throw new BusinessException("房屋Id不能为空!");
 		}
-		
 		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
 		if(null == part || StringUtils.isBlank(part.getCode())){
 			throw new BusinessException("房屋所属公寓的编号不存在!");
