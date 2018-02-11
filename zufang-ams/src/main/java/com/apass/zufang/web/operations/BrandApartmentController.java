@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.operation.BrandApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -44,7 +46,7 @@ public class BrandApartmentController {
      */
     @ResponseBody
     @RequestMapping("/getHotHouseList")
-    public ResponsePageBody<HouseVo> getHotHouseList(HouseVo entity) {
+    public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
         ResponsePageBody<HouseVo> respBody = new ResponsePageBody<HouseVo>();
         try {
         	entity.setIsDelete("00");
@@ -68,7 +70,31 @@ public class BrandApartmentController {
         	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
         	String username = SpringSecurityUtils.getCurrentUser();
         	return brandApartmentService.hotHouseMoveUp(houseId,username);
-        } catch (Exception e) {
+        } catch (BusinessException e) {
+            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源上移失败"+e.getErrorDesc());
+        }catch (Exception e) {
+            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源上移失败");
+        }
+    }
+    /**
+     * 品牌公寓热门房源  热门房源上移
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/hotHouseMoveUp")
+    public Response hotHouseMoveDown(Map<String, Object> map) {
+        try {
+        	String houseId = CommonUtils.getValue(map, "houseId");
+        	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	return brandApartmentService.hotHouseMoveDown(houseId,username);
+        } catch (BusinessException e) {
+            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源下移失败"+e.getErrorDesc());
+        }catch (Exception e) {
             LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源上移失败");
         }

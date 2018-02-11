@@ -41,9 +41,7 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	@Path("/queryhistory")
 	public Response queryhistory(Map<String, Object> paramMap) {
 	        try {
-	        	//用户ID
 	        	String customerId = CommonUtils.getValue(paramMap, "customerId");
-	        	//设备ID
 	        	String deviceId = CommonUtils.getValue(paramMap, "deviceId");
 	        	
 	        	Map<Object, Object> map = new HashMap<>();
@@ -51,15 +49,36 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	        		//设备ID
 	        		List<String> list = searchHistorySevice.queryDeviceIdHistory(deviceId);
 	        		map.put("list", list);
-	        		 return Response.success("设备ID登录",map);
+	        		 return Response.success("设备ID搜索",map);
 	        	}else{
 	        		//用户ID
 	        		List<String> list =searchHistorySevice.queryCustomerIdHistory(customerId);
-	        		return Response.success("用户ID登录",list);
+	        		return Response.success("用户ID搜索",list);
 	        	}
 	        } catch (Exception e) {
 	            return Response.fail("操作失败");
 	        }
 	    }
-	
+	/**
+	 *  删除搜索历史
+	 * @param paramMap
+	 * @return
+	 */
+	@POST
+	@Path("/deletehistory")
+	public Response deletehistory(Map<String, Object> paramMap) {
+		 try {
+	        	String customerId = CommonUtils.getValue(paramMap, "customerId");
+	        	String deviceId = CommonUtils.getValue(paramMap, "deviceId");
+	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
+	        		//设备ID删除	
+	        		 return Response.success("设备ID搜索",searchHistorySevice.deleteDeviceIdHistory(deviceId));
+	        	}else{
+	        		//用户ID删除
+	        		return Response.success("用户ID搜索",searchHistorySevice.deleteCustomerIdHistory(customerId));
+	        	}
+	        } catch (Exception e) {
+	            return Response.fail("操作失败");
+	        }
+	    }
 }

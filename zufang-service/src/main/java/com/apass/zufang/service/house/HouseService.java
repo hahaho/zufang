@@ -44,7 +44,8 @@ public class HouseService {
     @Value("${nfs.rootPath}")
     private String rootPath;
     /*** 房屋图片存放地址*/
-    //@Value("${nfs.house}")
+
+//  @Value("${nfs.house}")
     private String nfsHouse;
 	
 	@Autowired

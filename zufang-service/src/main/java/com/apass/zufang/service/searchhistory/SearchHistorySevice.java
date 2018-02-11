@@ -26,7 +26,10 @@ public class SearchHistorySevice<T> {
 	 * @return
 	 */
 	public List<String> queryDeviceIdHistory(String deviceId) {
-		return  searchHistoryDao.queryDeviceIdHistory(deviceId);
+		 List<String> queryDeviceIdHistory = searchHistoryDao.queryDeviceIdHistory(deviceId);
+		 
+		 
+		 return null;
 	}
 	/**
 	 * 用户ID查询
@@ -36,6 +39,24 @@ public class SearchHistorySevice<T> {
 	public List<String> queryCustomerIdHistory(String customerId) {
 		return searchHistoryDao.queryCustomerIdHistory(customerId);
 		
+	}
+	
+	/**
+	 * 设备ID删除
+	 * @param customerId
+	 * @return
+	 */
+	public Object deleteDeviceIdHistory(String deviceId) {
+		return searchHistoryDao.deleteDeviceIdHistory(deviceId);
+	}
+	
+	/**
+	 * 用户ID删除
+	 * @param customerId
+	 * @return
+	 */
+	public Object deleteCustomerIdHistory(String customerId) {
+		return searchHistoryDao.deleteCustomerIdHistory(customerId);
 	}
 
 	

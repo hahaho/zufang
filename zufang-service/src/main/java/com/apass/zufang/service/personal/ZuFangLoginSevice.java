@@ -18,8 +18,8 @@ public class ZuFangLoginSevice {
 	private ZuFangLoginDao zuFangLoginDao;
 	
 	//是否登录
-	public ZuFangLogin zuFangLogin(String customerId) {
-		return null;
+	public ZuFangLogin zuFangifLogin(String customerId) {
+		return zuFangLoginDao.zuFangifLogin(customerId);
 	}
 	//设置密码
 	public Integer zufangsetpassword(String customerId, String mobile, String password) {

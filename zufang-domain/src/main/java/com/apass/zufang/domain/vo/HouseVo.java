@@ -11,7 +11,7 @@ import java.util.List;
  * @createTime：2018年2月8日 下午1:41:42 
  * @description 房屋管理类
  */
-public class HouseVo {
+public class HouseVo{
 
 	private Long id;
 	

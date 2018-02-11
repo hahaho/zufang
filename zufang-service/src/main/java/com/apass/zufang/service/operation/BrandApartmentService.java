@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -29,7 +30,7 @@ public class BrandApartmentService {
 	 * @param entity
 	 * @return
 	 */
-	public ResponsePageBody<HouseVo> getHotHouseList(HouseVo entity) {
+	public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
 		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
         List<HouseVo> list = houseMapper.getHotHouseList(entity);
         pageBody.setTotal(list.size());
@@ -48,9 +49,9 @@ public class BrandApartmentService {
 		House house = houseService.readEntity(id);
 		Integer sorNo = house.getSortNo();
 		if(sorNo==1){
-			return Response.success("热门房源上移失败,位于热门首位数据！");
+			return Response.fail("热门房源上移失败,位于热门首位数据！");
 		}
-		HouseVo entity = new HouseVo();
+		HouseQueryParams entity = new HouseQueryParams();
 		entity.setIsDelete("00");
 		entity.setHouseType((byte)2);
 		House houseD = null;
@@ -77,5 +78,40 @@ public class BrandApartmentService {
 			}
 		}
 		return Response.fail("热门房源上移失败！");
+	}
+	public Response hotHouseMoveDown(String houseId, String user) {
+		Long id = Long.parseLong(houseId);
+		House house = houseService.readEntity(id);
+		Integer sorNo = house.getSortNo();
+		if(sorNo==5){
+			return Response.fail("热门房源下移失败,位于热门末位数据！");
+		}
+		HouseQueryParams entity = new HouseQueryParams();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		House houseD = null;
+		House houseU = null;
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+		for(HouseVo vo : list){
+			if(vo.getSortNo()==sorNo){
+				houseD = houseService.readEntity(vo.getId());
+				houseD.setSortNo(sorNo+1);
+				houseD.setUpdatedUser(user);
+				houseD.setUpdatedTime(new Date());
+			}
+			if(vo.getSortNo()==sorNo+1){
+				houseU = houseService.readEntity(vo.getId());
+				houseU.setSortNo(sorNo);
+				houseU.setUpdatedUser(user);
+				houseU.setUpdatedTime(new Date());
+				break;
+			}
+		}
+		if(houseService.updateEntity(houseD)==1){
+			if(houseService.updateEntity(houseU)==1){
+				return Response.success("热门房源下移成功！");
+			}
+		}
+		return Response.fail("热门房源下移失败！");
 	}
 }

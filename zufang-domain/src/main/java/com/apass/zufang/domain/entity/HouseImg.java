@@ -55,11 +55,12 @@ public class HouseImg {
         this.updatedTime = updatedTime;
     }
 
-	public String getIsDelete() {
-		return isDelete;
-	}
+    public String getIsDelete() {
+        return isDelete;
+    }
 
-	public void setIsDelete(String isDelete) {
-		this.isDelete = isDelete;
-	}
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
+
 }
