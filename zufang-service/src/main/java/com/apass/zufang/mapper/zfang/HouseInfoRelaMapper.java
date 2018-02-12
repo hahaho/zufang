@@ -9,13 +9,12 @@ import com.apass.zufang.domain.entity.HouseInfoRela;
  * Created by DELL on 2018/2/8.
  */
 public interface HouseInfoRelaMapper extends GenericMapper<HouseInfoRela,Long>{
-	
 	/**
 	 * 查询房源相关信息
 	 * 
 	 * @param entity
 	 * @return
 	 */
-	public List<HouseInfoRela> getHouseInfoRelaList(HouseInfoRela entity);
+ List<HouseInfoRela> getHouseInfoRelaList(HouseInfoRela entity);
 	
 }

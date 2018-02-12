@@ -56,7 +56,7 @@ public class MyBatisLogPlugin implements Interceptor {
 		content.append(WRAN_LINE_SIGN);
 		content.append("--------------------------------------------------------------------------------------------------");
 		content.append(WRAN_LINE_SIGN);
-		LOG.debug(content.toString());
+		LOG.info(content.toString());
 		return invocation.proceed();
 	}
 
