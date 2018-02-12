@@ -85,7 +85,7 @@ public class CommonService {
 	 * @return
 	 */
 
-	public List<HouseLocation> getNearbyListings(long houseId, int number) {
+	public List<HouseLocation> getNearbyhouseInfo(long houseId, int number) {
 		// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 		HouseLocation goalLocation = new HouseLocation();
 		// setp 2 根据目标房源的所在位置查询所在城市的所有房源
