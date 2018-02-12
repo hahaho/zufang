@@ -242,6 +242,31 @@ public class HouseService {
 		houseMapper.updateByPrimaryKeySelective(house);
 	}
 	
+	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	public void upOrDownHouse(String id,String updateUser) throws BusinessException{
+		if(StringUtils.isBlank(id)){
+			throw new BusinessException("房屋Id不能为空!");
+		}
+		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
+		/**如果查询房屋信息为空*/
+		if(null == house){
+			throw new BusinessException("房屋信息不存在！");
+		}
+		/***房屋状态为上架或者删除时，不允许删除*/
+		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+			throw new BusinessException("房屋状态不允许进行上下架操作!");
+		}
+		
+		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHAGNJIA_2.getCode()){
+			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
+		}else{
+			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+		}
+		house.setUpdatedTime(new Date());
+		house.setUpdatedUser(updateUser);
+		houseMapper.updateByPrimaryKeySelective(house);
+	}
+	
 	public House readEntity(Long id){
 		return houseMapper.selectByPrimaryKey(id);
 	}
