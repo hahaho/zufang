@@ -47,18 +47,6 @@
              AND t2.delist_time > CURRENT_TIMESTAMP ()
 	]]>
 	
-    <if test="apartmentId!=null and apartmentId!=''"> AND t1.id = #{apartmentId}  </if>
-	<if test="houseId!=null and houseId!=''"> AND t2.id = #{houseId} </if>
-	<if test="province!=null and province!=''"> AND t2.province = #{province} </if>
-	<if test="city!=null and city!=''"> AND t2.city = #{city} </if>
-	<if test="district!=null and district!=''"> AND t2.id = #{district} </if>
-	<if test="rentType!=null and rentType!=''"> AND t2.rent_type = #{rentType} </if>
-	<if test="zujinType!=null and zujinType!=''"> AND t2.rent_type = #{zujinType} </if>
-	<if test="zhuangxiu!=null and zhuangxiu!=''"> AND t2.zhuangxiu = #{zhuangxiu} </if>
-	<if test="status!=null and status!=''"> AND t2.status = #{status} </if>
-	<if test="houseType!=null and houseType!=''"> AND t2.house_type = #{houseType} </if>
-	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt >= ]]>  #{minRentAmt} </if>
-	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt <= ]]>  #{maxRentAmt} </if>
 	</select>
     
 </mapper>

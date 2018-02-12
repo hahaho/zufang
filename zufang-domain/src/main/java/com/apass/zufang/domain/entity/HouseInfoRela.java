@@ -1,6 +1,7 @@
 package com.apass.zufang.domain.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class HouseInfoRela {
 	
@@ -114,6 +115,10 @@ public class HouseInfoRela {
 	 * 房屋家具配置 
 	 */
 	private String houseConfiguration;
+	/**
+	 * 房源图片url  list
+	 */
+	private List<String> imgUrList;
 	
 	/***********************************查询所用字段*************************************/
 	/**
@@ -355,6 +360,14 @@ public class HouseInfoRela {
 
 	public void setMaxRentAmt(String maxRentAmt) {
 		this.maxRentAmt = maxRentAmt;
+	}
+
+	public List<String> getImgUrList() {
+		return imgUrList;
+	}
+
+	public void setImgUrList(List<String> imgUrList) {
+		this.imgUrList = imgUrList;
 	}
 
 }
