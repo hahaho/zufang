@@ -132,6 +132,24 @@ public class HouseControler {
 		    return Response.fail("删除房屋信息失败！");
 		}
 	}
+    
+    
+    @POST
+    @Path("/upOrDownHouse")
+	public Response upOrDownHouse(Map<String, Object> paramMap){
+    	try {
+			String id = CommonUtils.getValue(paramMap, "id");
+			ValidateUtils.isNotBlank(id, "房屋Id为空！");
+			houseService.upOrDownHouse(id, SpringSecurityUtils.getCurrentUser());
+			return Response.success("操作成功！");
+		}catch (BusinessException e){
+			logger.error("delete house businessException---->{}",e);
+			return Response.fail(e.getErrorDesc());
+		}catch (Exception e) {
+			logger.error("上下架房屋信息失败，错误原因", e);
+		    return Response.fail("操作失败！");
+		}
+    }
 	
 	/**
 	 * 验证所传参数

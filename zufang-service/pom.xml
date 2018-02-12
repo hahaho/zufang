@@ -15,10 +15,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.apass.esp</groupId>
 			<artifactId>apass-monitor</artifactId>
 			<version>1.0.0-SNAPSHOT</version>

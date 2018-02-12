@@ -78,11 +78,8 @@
 				 t_uses.CREATED_BY       CREATEDBY,
 				 t_uses.CREATED_DATE     CREATEDDATE,
 				 t_uses.UPDATED_BY       UPDATEDBY,
-				 t_uses.UPDATED_DATE     UPDATEDDATE, 
-				 t_uses.MERCHANT_CODE	  MERCHANTCODE,
-				 t_merchant.merchant_name MERCHANTNAME
-		FROM LS_RBAC_USERS t_uses LEFT JOIN T_ESP_MERCHANT_INFO t_merchant
-		ON	t_uses.MERCHANT_CODE =t_merchant.MERCHANT_CODE
+				 t_uses.UPDATED_DATE     UPDATEDDATE,
+		FROM LS_RBAC_USERS t_uses
 	]]>
 		<include refid="QueryConditionSql" />
 	<![CDATA[
@@ -132,7 +129,6 @@
 				 UPDATED_BY       UPDATEDBY,
 				 UPDATED_DATE     UPDATEDDATE,
 				 UPDATED_DATE     UPDATEDDATE,
-				 MERCHANT_CODE    merchantCode
 		FROM LS_RBAC_USERS WHERE USER_NAME = #{value}
 	]]>
 	</select>
@@ -173,7 +169,6 @@
 			<if test="status != null and status != ''">
 				STATUS = #{status, jdbcType=VARCHAR},
 			</if>
-				MERCHANT_CODE = #{merchantCode, jdbcType=VARCHAR},
 		</set>
 	<![CDATA[
 		WHERE ID = #{id, jdbcType=VARCHAR} 

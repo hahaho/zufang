@@ -179,7 +179,6 @@ public class ListeningCustomJdbcDaoImpl extends JdbcDaoSupport implements UserDe
                     String mobile = rs.getString("MOBILE");
                     String email = rs.getString("EMAIL");
                     String userId = rs.getString("ID");
-                    String merchantCode=rs.getString("MERCHANTCODE");
                     ListeningCustomSecurityUserDetails securityUserDetails = new ListeningCustomSecurityUserDetails();
                     securityUserDetails.setUsername(username);
                     securityUserDetails.setPassword(password);
@@ -188,7 +187,6 @@ public class ListeningCustomJdbcDaoImpl extends JdbcDaoSupport implements UserDe
                     securityUserDetails.setRealName(realName);
                     securityUserDetails.setEnabled(true);
                     securityUserDetails.setUserId(userId);
-                    securityUserDetails.setMerchantCode(merchantCode);
                     return securityUserDetails;
                 }
             });

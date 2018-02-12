@@ -193,4 +193,11 @@ public class RolesService {
         List<GrantedAuthority> list = (List<GrantedAuthority>) details.getAuthorities();
         return list;
     }
+
+    /**
+     * Select Role Menu Settings
+     */
+    public List<RoleMenuDO> selectRoleMenuByRoleId(String roleId) {
+        return rolesRepository.selectRoleMenuByRoleId(roleId);
+    }
 }
