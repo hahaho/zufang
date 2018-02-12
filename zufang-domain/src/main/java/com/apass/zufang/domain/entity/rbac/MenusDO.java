@@ -48,7 +48,9 @@ public class MenusDO {
      */
     private List<MenusDO> children;
 
-    // 查询参数
+    /**
+     * 查询参数
+     */
     @JsonIgnore
     private String        neId;
     /**
