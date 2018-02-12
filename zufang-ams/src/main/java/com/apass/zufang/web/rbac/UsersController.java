@@ -73,8 +73,10 @@ public class UsersController {
 		ResponsePageBody<UsersDO> respBody = new ResponsePageBody<UsersDO>();
 		try {
 			// 分页参数
-			String pageNo = HttpWebUtils.getValue(request, "page");// 页码
-			String pageSize = HttpWebUtils.getValue(request, "rows");// 每页显示条数
+			// 页码
+			String pageNo = HttpWebUtils.getValue(request, "page");
+			// 每页显示条数
+			String pageSize = HttpWebUtils.getValue(request, "rows");
 			Integer pageNoNum = Integer.parseInt(pageNo);
 			Integer pageSizeNum = Integer.parseInt(pageSize);
 			Page page = new Page();
@@ -82,8 +84,10 @@ public class UsersController {
 			page.setLimit(pageSizeNum <= 0 ? 1 : pageSizeNum);
 
 			// 查询传递的参数
-			String username = HttpWebUtils.getValue(request, USERNAME);// 用户帐号
-			String realName = HttpWebUtils.getValue(request, "realName");// 用户真实姓名
+			// 用户帐号
+			String username = HttpWebUtils.getValue(request, USERNAME);
+			// 用户真实姓名
+			String realName = HttpWebUtils.getValue(request, "realName");
 			UsersDO paramDO = new UsersDO();
 			paramDO.setUserName(username);
 			paramDO.setRealName(realName);

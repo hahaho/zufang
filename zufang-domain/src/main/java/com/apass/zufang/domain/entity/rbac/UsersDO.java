@@ -19,19 +19,6 @@ public class UsersDO {
 	 */
 	private String id;
 	/**
-	 * 商户名称
-	 */
-	private String merchantName;
-
-	public String getMerchantName() {
-		return merchantName;
-	}
-
-	public void setMerchantName(String merchantName) {
-		this.merchantName = merchantName;
-	}
-
-	/**
 	 * 用户姓名
 	 */
 	private String userName;

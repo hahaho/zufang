@@ -73,7 +73,6 @@ public class MenusController {
     @Path("/pagelist")
     public Response handlePageList(HttpServletRequest request) {
         try {
-            //			String menuName = HttpWebUtils.getValue(request, "menuName");
             String menuName = HttpWebUtils.getValue(request, "menuName");
             if (StringUtils.isNoneBlank(menuName)) {
                 menuName = URLDecoder.decode(menuName, "utf-8");
