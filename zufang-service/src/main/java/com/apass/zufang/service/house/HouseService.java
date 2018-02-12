@@ -90,8 +90,7 @@ public class HouseService {
 	
 	/**
 	 * 添加房屋信息
-	 * @param house
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void addHouse(HouseVo houseVo) throws BusinessException{
