@@ -66,7 +66,7 @@ public class HouseInfoController {
 			List<HouseInfoRela> houseInfoList = houseInfoService
 					.queryHouseInfoRela(queryCondition);
 			resultMap.put("houseInfoList", houseInfoList);
-			return Response.success("设置密码成功", resultMap);
+			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
 			 LOGGER.error(e.getMessage(), e);
 	        return Response.fail("操作失败");
