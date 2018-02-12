@@ -32,13 +32,4 @@ public class ListeningAuthenticationManager {
 		Authentication result = authenticationManager.authenticate(authentication);
 		SecurityContextHolder.getContext().setAuthentication(result);
 	}
-
-	/**
-	 * Authentication And Signin
-	 * 
-	 * @param username
-	 * @param password
-	 */
-	public void logout() {
-	}
 }
