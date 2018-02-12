@@ -5,7 +5,6 @@
 	<script id="security-sql-user-login">
 	<![CDATA[
 		SELECT	ID               ID,
-		        MERCHANT_CODE    MERCHANTCODE,
 				USER_NAME        USERNAME,
 				REAL_NAME        REALNAME,
 				MOBILE           MOBILE,

@@ -53,7 +53,7 @@ public class EspAppRSAHandler {
 	 * @throws Throwable
 	 */
 
-	@Around("execution(* com.apass.esp.web..*.*(..))")
+	//@Around("execution(* com.apass.esp.web..*.*(..))")
 	private Object handleRSAInteceptor(ProceedingJoinPoint point) throws Throwable {
 		return inteceptorMethod(point);
 	}
