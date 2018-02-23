@@ -71,7 +71,7 @@ public class BrandApartmentController {
         	return brandApartmentService.hotHouseMoveUp(houseId,username);
         } catch (BusinessException e) {
             LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
-            return Response.fail("品牌公寓热门房源  热门房源上移失败"+e.getErrorDesc());
+            return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
             LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源上移失败");
@@ -92,7 +92,7 @@ public class BrandApartmentController {
         	return brandApartmentService.hotHouseMoveDown(houseId,username);
         } catch (BusinessException e) {
             LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
-            return Response.fail("品牌公寓热门房源  热门房源下移失败"+e.getErrorDesc());
+            return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
             LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源上移失败");
@@ -113,7 +113,7 @@ public class BrandApartmentController {
         	return brandApartmentService.hotHouseCancel(houseId,username);
         } catch (BusinessException e) {
             LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
-            return Response.fail("品牌公寓热门房源  热门房源取消设置失败"+e.getErrorDesc());
+            return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
             LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源取消设置失败");
@@ -136,7 +136,7 @@ public class BrandApartmentController {
         	return brandApartmentService.hotHouseSet(houseId,sortNo,username);
         } catch (BusinessException e) {
             LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
-            return Response.fail("品牌公寓热门房源  热门房源设置失败"+e.getErrorDesc());
+            return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
             LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源设置失败");
