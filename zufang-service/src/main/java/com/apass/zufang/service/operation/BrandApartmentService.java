@@ -149,7 +149,7 @@ public class BrandApartmentService {
         	house.setUpdatedTime(new Date());
         	house.setUpdatedUser(user);
         	if(houseService.updateEntity(house)!=1){
-        		throw new BusinessException("热门房源取消设置失败！");
+        		throw new BusinessException("热门房源取消设置失败,更新排序异常！");
         	}
         }
 		return Response.success("热门房源取消设置成功！");
@@ -166,6 +166,13 @@ public class BrandApartmentService {
 		Integer sort = Integer.parseInt(sortNo);
         Integer sort2 = sort;
         Long id = Long.parseLong(houseId);
+        HouseQueryParams entity = new HouseQueryParams();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+		if(list!=null&&list.size()>4){
+			throw new BusinessException("热门房源设置失败,热门房源数量已达上限！");
+		}
         House house = houseService.readEntity(id);
         house.setSortNo(sort);
         house.setUpdatedTime(new Date());
@@ -173,10 +180,6 @@ public class BrandApartmentService {
 		if(houseService.updateEntity(house)!=1){
 			throw new BusinessException("热门房源设置失败！");
 		}
-		HouseQueryParams entity = new HouseQueryParams();
-		entity.setIsDelete("00");
-		entity.setHouseType((byte)2);
-		List<HouseVo> list = houseMapper.getHotHouseList(entity);
         for(HouseVo en : list){
             if(en.getSortNo()<sort||en.getId().equals(id)){
                 continue;
@@ -186,7 +189,7 @@ public class BrandApartmentService {
             house.setUpdatedTime(new Date());
             house.setUpdatedUser(user);
             if(houseService.updateEntity(house)!=1){
-            	throw new BusinessException("热门房源设置失败！");
+            	throw new BusinessException("热门房源设置失败,更新排序异常！");
             }
         }
         return Response.success("热门房源设置成功！");
