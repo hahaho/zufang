@@ -1,6 +1,6 @@
 package com.apass.zufang.domain.ajp.entity;
 
-public class ZuFangLogin {
+public class ZuFangLoginEntity {
 	/**
 	 * 用户ID
 	 */

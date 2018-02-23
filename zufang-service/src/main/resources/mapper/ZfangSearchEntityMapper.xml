@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.domain.ajp.entity.ZfangSearchEntity" >
+	<!-- 设备号查询-->
+	<select id="queryDeviceIdHistory" parameterType="String" resultType="com.apass.zufang.domain.ajp.entity.ZfangSearchEntity">
+	<![CDATA[
+		SELECT
+			ID				id,
+			key_type 		keyType,
+			key_value 		keyValue,
+			user_id 		userId,
+			key_status  	keyStatus,
+			created_time 	createdTime,
+			updated_time 	updatedTime,
+			device_id 	 	deviceId
+		FROM
+			t_zfang_search_keys
+		WHERE
+			key_status = '0'
+		AND	
+			device_id = #{deviceId}
+		order by updated_time
+		limit 0,10;
+	]]>
+	</select>
+	
+	<!-- 用户id查询-->
+	<select id="queryCustomerIdHistory" parameterType="String" resultType="com.apass.zufang.domain.ajp.entity.ZfangSearchEntity">
+	<![CDATA[
+		SELECT
+			ID				id,
+			key_type 		keyType,
+			key_value 		keyValue,
+			user_id 		userId,
+			key_status  	keyStatus,
+			created_time 	createdTime,
+			updated_time 	updatedTime,
+			device_id 	 	deviceId
+		FROM
+			t_zfang_search_keys
+		WHERE
+			key_status = '0'
+		AND	
+			user_id = #{userId}
+		order by updated_time
+		limit 0,10;
+	]]>
+	</select>
+	
+	
+		<!-- 设备ID删除 -->
+	<select id="deleteDeviceIdHistory" parameterType="String" resultType="com.apass.zufang.domain.ajp.entity.ZfangSearchEntity">
+	<![CDATA[
+		UPDATE   t_zfang_search_keys
+		SET   key_status = ' 1'
+		WHERE  device_id = 'deviceId';
+	]]>
+	</select>
+	
+	<!--  用户id删除 -->
+	<select id="deleteCustomerIdHistory" parameterType="String" resultType="com.apass.zufang.domain.ajp.entity.ZfangSearchEntity">
+	<![CDATA[
+		UPDATE   t_zfang_search_keys
+		SET   key_status = ' 1'
+		WHERE  user_id = 'userId';
+	]]>
+	</select>	
+    
+</mapper>
