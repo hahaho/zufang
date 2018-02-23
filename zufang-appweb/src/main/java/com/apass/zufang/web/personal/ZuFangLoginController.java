@@ -113,10 +113,8 @@ public class ZuFangLoginController {
 	        		//未登录
 	        		 return Response.success("未登录操作");
 	        	}else{
-	        		return Response.successResponse();
-	        		//已登录 TODO 无zuFangLogin()方法
-	        		//return Response.success("登录成功",zuFangLoginSevice.zuFangLogin(customerId));
-					//return null;
+	        		//已登录
+	        		return Response.success("登录成功",zuFangLoginSevice.zufangsmslogin(customerId));
 	        	}
 	        } catch (Exception e) {
 	            return Response.fail("操作失败");
