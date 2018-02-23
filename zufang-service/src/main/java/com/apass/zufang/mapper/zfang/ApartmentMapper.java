@@ -15,4 +15,10 @@ public interface ApartmentMapper extends GenericMapper<Apartment,Long> {
 	 * @return
 	 */
 	public Integer getApartmentListCount(Apartment entity);
+	/**
+	 * getApartmentListCount
+	 * @param entity
+	 * @return
+	 */
+	public List<Apartment> getApartGongyu(Apartment entity);
 }

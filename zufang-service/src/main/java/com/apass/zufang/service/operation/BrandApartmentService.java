@@ -1,17 +1,20 @@
 package com.apass.zufang.service.operation;
 import java.util.Date;
 import java.util.List;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
+import com.apass.zufang.service.house.HouseImgService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
@@ -25,6 +28,10 @@ public class BrandApartmentService {
 	private HouseMapper houseMapper;
 	@Autowired
 	private HouseService houseService;
+	@Autowired
+	private HouseImgService houseImgService;
+	@Autowired
+	private HouseImgMapper houseImgMapper;
 	/**
 	 * 品牌公寓热门房源列表查询
 	 * @param entity
@@ -41,10 +48,12 @@ public class BrandApartmentService {
 	/**
 	 * 品牌公寓热门房源  热门房源上移
 	 * @param houseId
+	 * @param user
 	 * @return
+	 * @throws BusinessException 
 	 */
 	@Transactional(rollbackFor = { Exception.class})
-	public Response hotHouseMoveUp(String houseId,String user) {
+	public Response hotHouseMoveUp(String houseId,String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
 		Integer sorNo = house.getSortNo();
@@ -77,9 +86,16 @@ public class BrandApartmentService {
 				return Response.success("热门房源上移成功！");
 			}
 		}
-		return Response.fail("热门房源上移失败！");
+		throw new BusinessException("热门房源上移失败！");
 	}
-	public Response hotHouseMoveDown(String houseId, String user) {
+	/**
+	 * 品牌公寓热门房源  热门房源下移
+	 * @param houseId
+	 * @param user
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Response hotHouseMoveDown(String houseId, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
 		Integer sorNo = house.getSortNo();
@@ -112,6 +128,150 @@ public class BrandApartmentService {
 				return Response.success("热门房源下移成功！");
 			}
 		}
-		return Response.fail("热门房源下移失败！");
+		throw new BusinessException("热门房源下移失败！");
+	}
+	/**
+	 * 品牌公寓热门房源  热门房源取消设置
+	 * @param houseId
+	 * @param user
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Response hotHouseCancel(String houseId, String user) throws BusinessException {
+		Long id = Long.parseLong(houseId);
+		House house = houseService.readEntity(id);
+		house.setSortNo(0);
+		house.setUpdatedTime(new Date());
+		house.setUpdatedUser(user);
+		if(houseService.updateEntity(house)!=1){
+			throw new BusinessException("热门房源取消设置失败！");
+		}
+		HouseQueryParams entity = new HouseQueryParams();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+		Integer sort = 0;
+        for(HouseVo en : list){
+        	house = houseService.readEntity(en.getId());
+        	house.setSortNo(++sort);
+        	house.setUpdatedTime(new Date());
+        	house.setUpdatedUser(user);
+        	if(houseService.updateEntity(house)!=1){
+        		throw new BusinessException("热门房源取消设置失败,更新排序异常！");
+        	}
+        }
+		return Response.success("热门房源取消设置成功！");
+	}
+	/**
+	 * 品牌公寓热门房源  热门房源设置
+	 * @param houseId
+	 * @param sorNo
+	 * @param user
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Response hotHouseSet(String houseId, String sortNo, String url, String user) throws BusinessException {
+		Long id = Long.parseLong(houseId);
+		Integer sort = Integer.parseInt(sortNo);
+        Integer sort2 = sort;
+        HouseQueryParams entity = new HouseQueryParams();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+		if(list!=null&&list.size()>4){
+			throw new BusinessException("热门房源设置失败,热门房源数量已达上限！");
+		}
+        House house = houseService.readEntity(id);
+        house.setSortNo(sort);
+        house.setUpdatedTime(new Date());
+		house.setUpdatedUser(user);
+		if(houseService.updateEntity(house)!=1){
+			throw new BusinessException("热门房源设置失败！");
+		}else{
+			List<HouseImg> imglist = houseImgService.getHouseImgList(id);
+			if(imglist==null||imglist.size()==0){
+				HouseImg houseimg = new HouseImg();
+				houseimg.setHouseId(id);
+				houseimg.setIsDelete("00");
+				houseimg.setUrl(url);
+				houseimg.setCreatedTime(new Date());
+				houseimg.setUpdatedTime(new Date());
+				houseImgMapper.insertSelective(houseimg);
+			}else{
+				HouseImg houseimg = imglist.get(0);
+				houseimg.setUrl(url);
+				houseimg.setUpdatedTime(new Date());
+				houseImgMapper.updateByPrimaryKeySelective(houseimg);
+			}
+		}
+        for(HouseVo en : list){
+            if(en.getSortNo()<sort||en.getId().equals(id)){
+                continue;
+            }
+            house = houseService.readEntity(en.getId());
+            house.setSortNo(++sort2);
+            house.setUpdatedTime(new Date());
+            house.setUpdatedUser(user);
+            if(houseService.updateEntity(house)!=1){
+            	throw new BusinessException("热门房源设置失败,更新排序异常！");
+            }
+        }
+        return Response.success("热门房源设置成功！");
+    }
+	/**
+	 * 品牌公寓热门房源  热门房源编辑
+	 * @param houseId
+	 * @param sortNo
+	 * @param url
+	 * @param user
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Response hotHouseEdit(String houseId, String sortNo, String url, String user) throws BusinessException {
+		Long id = Long.parseLong(houseId);
+		Integer sort = Integer.parseInt(sortNo);
+        Integer sort2 = sort;
+		House house = houseService.readEntity(id);
+		house.setSortNo(sort);
+		house.setUpdatedTime(new Date());
+		house.setUpdatedUser(user);
+		if(houseService.updateEntity(house)!=1){
+			throw new BusinessException("热门房源编辑失败！");
+		}else{
+			if(!StringUtils.isBlank(url)){
+				List<HouseImg> imglist = houseImgService.getHouseImgList(id);
+				if(imglist==null||imglist.size()==0){
+					HouseImg houseimg = new HouseImg();
+					houseimg.setHouseId(id);
+					houseimg.setIsDelete("00");
+					houseimg.setUrl(url);
+					houseimg.setCreatedTime(new Date());
+					houseimg.setUpdatedTime(new Date());
+					houseImgMapper.insertSelective(houseimg);
+				}else{
+					HouseImg houseimg = imglist.get(0);
+					houseimg.setUrl(url);
+					houseimg.setUpdatedTime(new Date());
+					houseImgMapper.updateByPrimaryKeySelective(houseimg);
+				}
+			}
+		}
+		HouseQueryParams entity = new HouseQueryParams();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+        for(HouseVo en : list){
+            if(en.getSortNo()<sort||en.getId().equals(id)){
+                continue;
+            }
+            house = houseService.readEntity(en.getId());
+            house.setSortNo(++sort2);
+            house.setUpdatedTime(new Date());
+            house.setUpdatedUser(user);
+            if(houseService.updateEntity(house)!=1){
+            	throw new BusinessException("热门房源编辑失败,更新排序异常！");
+            }
+        }
+        return Response.success("热门房源编辑成功！");
 	}
 }
