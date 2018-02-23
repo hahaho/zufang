@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.HouseLocation;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
 @Service
 public class HouseInfoService {
@@ -24,7 +23,7 @@ public class HouseInfoService {
 	 */
 	private static double EARTH_RADIUS = 6367000.0; // 单位：m
 	@Autowired
-	private HouseImgMapper imgMapper;
+	private HouseImgService houseImgService;
 	
 	@Autowired
 	private HouseInfoRelaMapper houseInfoRelaMapper;
@@ -44,11 +43,8 @@ public class HouseInfoService {
 			}
 			for (HouseInfoRela houseInfo : houseInfoList) {
 				List<String> imgUrList = new ArrayList<String>();
-				List<HouseImg> houseImgList = new ArrayList<HouseImg>();
-				HouseImg houseImgEn = new HouseImg();
-				houseImgEn.setType((byte)0);
-				houseImgEn.setHouseId(houseInfo.getHouseId());
-				houseImgList = imgMapper.getImgByHouseId(houseImgEn);
+				List<HouseImg> houseImgList = houseImgService
+						.getHouseImgList(houseInfo.getHouseId(),(byte)0);
 				for (HouseImg houseImg : houseImgList) {
 					imgUrList.add(houseImg.getUrl());
 				}
