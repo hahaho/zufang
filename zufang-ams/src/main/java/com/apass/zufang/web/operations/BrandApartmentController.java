@@ -70,7 +70,7 @@ public class BrandApartmentController {
         	String username = SpringSecurityUtils.getCurrentUser();
         	return brandApartmentService.hotHouseMoveUp(houseId,username);
         } catch (BusinessException e) {
-            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
             LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
@@ -83,7 +83,7 @@ public class BrandApartmentController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/hotHouseMoveUp")
+    @RequestMapping("/hotHouseMoveDown")
     public Response hotHouseMoveDown(Map<String, Object> map) {
         try {
         	String houseId = CommonUtils.getValue(map, "houseId");
@@ -94,8 +94,8 @@ public class BrandApartmentController {
             LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
-            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
-            return Response.fail("品牌公寓热门房源  热门房源上移失败");
+            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源下移失败");
         }
     }
     /**
@@ -112,10 +112,10 @@ public class BrandApartmentController {
         	String username = SpringSecurityUtils.getCurrentUser();
         	return brandApartmentService.hotHouseCancel(houseId,username);
         } catch (BusinessException e) {
-            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            LOGGER.error("hotHouseCancel EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
-            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
+            LOGGER.error("hotHouseCancel EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源取消设置失败");
         }
     }
@@ -137,10 +137,10 @@ public class BrandApartmentController {
         	String username = SpringSecurityUtils.getCurrentUser();
         	return brandApartmentService.hotHouseSet(houseId,sortNo,url,username);
         } catch (BusinessException e) {
-            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            LOGGER.error("hotHouseSet EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
-            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
+            LOGGER.error("hotHouseSet EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源设置失败");
         }
     }
@@ -150,7 +150,7 @@ public class BrandApartmentController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/hotHouseSet")
+    @RequestMapping("/hotHouseEdit")
     public Response hotHouseEdit(Map<String, Object> map) {
         try {
         	String houseId = CommonUtils.getValue(map, "houseId");
@@ -161,10 +161,10 @@ public class BrandApartmentController {
         	String username = SpringSecurityUtils.getCurrentUser();
         	return brandApartmentService.hotHouseEdit(houseId,sortNo,url,username);
         } catch (BusinessException e) {
-            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            LOGGER.error("hotHouseEdit EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
         }catch (Exception e) {
-            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
+            LOGGER.error("hotHouseEdit EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源设置失败");
         }
     }
