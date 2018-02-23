@@ -1,4 +1,4 @@
-package com.apass.zufang.repository.rbac;
+package com.apass.zufang.rbac;
 
 import com.apass.gfb.framework.annotation.MyBatisRepository;
 import com.apass.gfb.framework.mybatis.support.BaseMybatisRepository;

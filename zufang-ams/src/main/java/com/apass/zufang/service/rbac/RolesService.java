@@ -8,7 +8,7 @@ import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.security.userdetails.ListeningCustomSecurityUserDetails;
 import com.apass.zufang.domain.entity.rbac.*;
-import com.apass.zufang.repository.rbac.RolesRepository;
+import com.apass.zufang.rbac.RolesRepository;
 import com.apass.zufang.utils.PaginationManage;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;

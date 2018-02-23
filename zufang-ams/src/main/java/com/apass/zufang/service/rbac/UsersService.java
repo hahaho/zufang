@@ -8,7 +8,7 @@ import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.zufang.domain.entity.rbac.RolesDO;
 import com.apass.zufang.domain.entity.rbac.UserRoleDO;
 import com.apass.zufang.domain.entity.rbac.UsersDO;
-import com.apass.zufang.repository.rbac.UsersRepository;
+import com.apass.zufang.rbac.UsersRepository;
 import com.apass.zufang.utils.PaginationManage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
