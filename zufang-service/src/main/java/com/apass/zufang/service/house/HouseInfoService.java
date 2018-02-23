@@ -1,5 +1,4 @@
 package com.apass.zufang.service.house;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,29 +10,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.HouseLocation;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
-import com.apass.zufang.mapper.zfang.HouseMapper;
-
 @Service
 public class HouseInfoService {
-	 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseInfoService.class);
 	
 	/**
 	 * 默认地球半径
 	 */
 	private static double EARTH_RADIUS = 6367000.0; // 单位：m
-
 	@Autowired
-	private HouseMapper houseMapper;
-	
-	@Autowired
-	private HouseImgMapper imgMapper;
+	private HouseImgService houseImgService;
 	
 	@Autowired
 	private HouseInfoRelaMapper houseInfoRelaMapper;
@@ -53,9 +43,8 @@ public class HouseInfoService {
 			}
 			for (HouseInfoRela houseInfo : houseInfoList) {
 				List<String> imgUrList = new ArrayList<String>();
-				List<HouseImg> houseImgList = new ArrayList<HouseImg>();
-				houseImgList = imgMapper
-						.getImgByHouseId(houseInfo.getHouseId());
+				List<HouseImg> houseImgList = houseImgService
+						.getHouseImgList(houseInfo.getHouseId(),(byte)0);
 				for (HouseImg houseImg : houseImgList) {
 					imgUrList.add(houseImg.getUrl());
 				}
