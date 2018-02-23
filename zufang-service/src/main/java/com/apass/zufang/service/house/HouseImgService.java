@@ -18,7 +18,10 @@ public class HouseImgService {
 	 */
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void deleteImgByHouseId(Long houseId){
-		List<HouseImg> imgs = houseImgMapper.getImgByHouseId(houseId);
+		HouseImg houseImg = new HouseImg();
+		houseImg.setType((byte)0);
+		houseImg.setHouseId(houseId);
+		List<HouseImg> imgs = houseImgMapper.getImgByHouseId(houseImg);
 		for (HouseImg img : imgs) {
 			if(StringUtils.equals(img.getIsDelete(), IsDeleteEnums.IS_DELETE_00.getCode())){
 				img.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
@@ -32,7 +35,10 @@ public class HouseImgService {
 	 * @param houseId
 	 * @return
 	 */
-	public List<HouseImg> getHouseImgList(Long houseId){
-		return houseImgMapper.getImgByHouseId(houseId);
+	public List<HouseImg> getHouseImgList(Long houseId,byte type){
+		HouseImg houseImg = new HouseImg();
+		houseImg.setType(type);
+		houseImg.setHouseId(houseId);
+		return houseImgMapper.getImgByHouseId(houseImg);
 	}
 }

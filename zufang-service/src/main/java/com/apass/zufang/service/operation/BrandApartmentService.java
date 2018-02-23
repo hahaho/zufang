@@ -188,12 +188,13 @@ public class BrandApartmentService {
 		if(houseService.updateEntity(house)!=1){
 			throw new BusinessException("热门房源设置失败！");
 		}else{
-			List<HouseImg> imglist = houseImgService.getHouseImgList(id);
+			List<HouseImg> imglist = houseImgService.getHouseImgList(id,(byte)1);
 			if(imglist==null||imglist.size()==0){
 				HouseImg houseimg = new HouseImg();
 				houseimg.setHouseId(id);
 				houseimg.setIsDelete("00");
 				houseimg.setUrl(url);
+				houseimg.setType((byte)1);
 				houseimg.setCreatedTime(new Date());
 				houseimg.setUpdatedTime(new Date());
 				houseImgMapper.insertSelective(houseimg);
@@ -239,12 +240,13 @@ public class BrandApartmentService {
 			throw new BusinessException("热门房源编辑失败！");
 		}else{
 			if(!StringUtils.isBlank(url)){
-				List<HouseImg> imglist = houseImgService.getHouseImgList(id);
+				List<HouseImg> imglist = houseImgService.getHouseImgList(id,(byte)1);
 				if(imglist==null||imglist.size()==0){
 					HouseImg houseimg = new HouseImg();
 					houseimg.setHouseId(id);
 					houseimg.setIsDelete("00");
 					houseimg.setUrl(url);
+					houseimg.setType((byte)1);
 					houseimg.setCreatedTime(new Date());
 					houseimg.setUpdatedTime(new Date());
 					houseImgMapper.insertSelective(houseimg);
