@@ -1,6 +1,5 @@
 package com.apass.zufang.web.operations;
 import java.util.Map;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
@@ -33,15 +31,16 @@ public class BrandApartmentController {
 	@Autowired
 	public BrandApartmentService brandApartmentService;
 	/**
-     * 品牌公寓热门房源配置页面
-     */
+	 * 品牌公寓热门房源配置页面
+	 * @return
+	 */
     @RequestMapping("/init")
     public String init() {
         return "operations/brandApartment";
     }
     /**
      * 品牌公寓热门房源列表查询
-     * @param request
+     * @param entity
      * @return
      */
     @ResponseBody
@@ -59,7 +58,7 @@ public class BrandApartmentController {
     }
     /**
      * 品牌公寓热门房源  热门房源上移
-     * @param request
+     * @param map
      * @return
      */
     @ResponseBody
@@ -80,7 +79,7 @@ public class BrandApartmentController {
     }
     /**
      * 品牌公寓热门房源  热门房源上移
-     * @param request
+     * @param map
      * @return
      */
     @ResponseBody
@@ -97,6 +96,50 @@ public class BrandApartmentController {
         }catch (Exception e) {
             LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源  热门房源上移失败");
+        }
+    }
+    /**
+     * 品牌公寓热门房源  热门房源取消设置
+     * @param map
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/hotHouseCancel")
+    public Response hotHouseCancel(Map<String, Object> map) {
+        try {
+        	String houseId = CommonUtils.getValue(map, "houseId");
+        	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	return brandApartmentService.hotHouseCancel(houseId,username);
+        } catch (BusinessException e) {
+            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源取消设置失败"+e.getErrorDesc());
+        }catch (Exception e) {
+            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源取消设置失败");
+        }
+    }
+    /**
+     * 品牌公寓热门房源  设置为热门房源
+     * @param map
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/hotHouseSet")
+    public Response hotHouseSet(Map<String, Object> map) {
+        try {
+        	String houseId = CommonUtils.getValue(map, "houseId");
+        	String sortNo = CommonUtils.getValue(map, "sortNo");
+        	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
+        	ValidateUtils.isNotBlank(sortNo, "热门房源排序为空！");
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	return brandApartmentService.hotHouseSet(houseId,sortNo,username);
+        } catch (BusinessException e) {
+            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源设置失败"+e.getErrorDesc());
+        }catch (Exception e) {
+            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源设置失败");
         }
     }
 }
