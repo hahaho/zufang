@@ -130,10 +130,36 @@ public class BrandApartmentController {
         try {
         	String houseId = CommonUtils.getValue(map, "houseId");
         	String sortNo = CommonUtils.getValue(map, "sortNo");
+        	String url = CommonUtils.getValue(map, "url");
+        	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
+        	ValidateUtils.isNotBlank(sortNo, "热门房源排序为空！");
+        	ValidateUtils.isNotBlank(url, "热门房源图片为空！");
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	return brandApartmentService.hotHouseSet(houseId,sortNo,url,username);
+        } catch (BusinessException e) {
+            LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
+        }catch (Exception e) {
+            LOGGER.error("hotHouseMoveUp EXCEPTION --- --->{}", e);
+            return Response.fail("品牌公寓热门房源  热门房源设置失败");
+        }
+    }
+    /**
+     * 品牌公寓热门房源  热门房源编辑
+     * @param map
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/hotHouseSet")
+    public Response hotHouseEdit(Map<String, Object> map) {
+        try {
+        	String houseId = CommonUtils.getValue(map, "houseId");
+        	String sortNo = CommonUtils.getValue(map, "sortNo");
+        	String url = CommonUtils.getValue(map, "url");
         	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
         	ValidateUtils.isNotBlank(sortNo, "热门房源排序为空！");
         	String username = SpringSecurityUtils.getCurrentUser();
-        	return brandApartmentService.hotHouseSet(houseId,sortNo,username);
+        	return brandApartmentService.hotHouseEdit(houseId,sortNo,url,username);
         } catch (BusinessException e) {
             LOGGER.error("hotHouseMoveDown EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
