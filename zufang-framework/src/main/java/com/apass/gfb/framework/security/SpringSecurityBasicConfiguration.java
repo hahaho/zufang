@@ -118,6 +118,7 @@ public class SpringSecurityBasicConfiguration {
                       .rememberMeCookieName("rm-co")
                 .and().authorizeRequests()
                       .regexMatchers("/logout|/listeningboot/.*|/noauth/.*").permitAll()
+                      .antMatchers("/data/ws/rest/application/**").permitAll()
                       .antMatchers("/data/ws/rest/producer/**").permitAll()
                       .antMatchers("/data/ws/rest/consumer/**").permitAll()
                       .anyRequest().authenticated()

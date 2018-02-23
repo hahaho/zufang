@@ -1,10 +1,9 @@
-package com.apass.zufang.mapper.ajp.searchhistory;
+package com.apass.zufang.mapper.zfang;
 
 import java.util.List;
 
 import com.apass.gfb.framework.annotation.MyBatisRepository;
 import com.apass.gfb.framework.mybatis.support.BaseMybatisRepository;
-import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.ajp.entity.ZfangSearchEntity;
 
 /**
@@ -22,7 +21,7 @@ public class SearchHistoryRepository extends BaseMybatisRepository<ZfangSearchEn
 	 * @return
 	 */
 	public List<String> queryDeviceIdHistory(String deviceId) {
-		return getSqlSession().selectOne(getSQL("queryDeviceIdHistory"), deviceId);
+		return getSqlSession().selectList(getSQL("queryDeviceIdHistory"), deviceId);
 	}
 	/**
 	 * 用户id查询
@@ -30,7 +29,7 @@ public class SearchHistoryRepository extends BaseMybatisRepository<ZfangSearchEn
 	 * @return
 	 */
 	public List<String> queryCustomerIdHistory(String userId) {
-		return getSqlSession().selectOne(getSQL("queryCustomerIdHistory"), userId);
+		return getSqlSession().selectList(getSQL("queryCustomerIdHistory"), userId);
 	}
 	
 	/**
@@ -39,7 +38,7 @@ public class SearchHistoryRepository extends BaseMybatisRepository<ZfangSearchEn
 	 * @return
 	 */
 	public Object deleteDeviceIdHistory(String deviceId) {
-		return getSqlSession().selectOne(getSQL("deleteDeviceIdHistory"), deviceId);
+		return getSqlSession().update(getSQL("deleteDeviceIdHistory"), deviceId);
 		
 	}
 	
@@ -49,7 +48,7 @@ public class SearchHistoryRepository extends BaseMybatisRepository<ZfangSearchEn
 	 * @return
 	 */
 	public Object deleteCustomerIdHistory(String customerId) {
-		return getSqlSession().selectOne(getSQL("deleteCustomerIdHistory"), customerId);
+		return getSqlSession().update(getSQL("deleteCustomerIdHistory"), customerId);
 	}
 	
 	

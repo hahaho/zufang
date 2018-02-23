@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.service.searchhistory.SearchHistorySevice;
 import com.apass.zufang.web.personal.ZuFangLoginController;
-
+import javax.ws.rs.core.MediaType;
 /**
  * 搜索历史
  * 
@@ -25,12 +26,14 @@ import com.apass.zufang.web.personal.ZuFangLoginController;
  *
  */
 @Path("/zfsearchhistory")
+@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class SearchHistoryController {
 
 private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginController.class);
 	
 	@Autowired
-	private SearchHistorySevice<?> searchHistorySevice;
+	private SearchHistorySevice searchHistorySevice;
 	
 	/**
 	 *  搜索历史
@@ -41,9 +44,10 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	@Path("/queryhistory")
 	public Response queryhistory(Map<String, Object> paramMap) {
 	        try {
+	        	
 	        	String customerId = CommonUtils.getValue(paramMap, "customerId");
 	        	String deviceId = CommonUtils.getValue(paramMap, "deviceId");
-	        	
+	        	logger.info("入参 ：customerId———————>"+customerId+"    deviceId———————>"+deviceId);
 	        	Map<Object, Object> map = new HashMap<>();
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
 	        		//设备ID
@@ -70,6 +74,7 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 		 try {
 	        	String customerId = CommonUtils.getValue(paramMap, "customerId");
 	        	String deviceId = CommonUtils.getValue(paramMap, "deviceId");
+	        	logger.info("入参 ：customerId———————>"+customerId+"      deviceId———————>"+deviceId);
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
 	        		//设备ID删除	
 	        		 return Response.success("设备ID搜索",searchHistorySevice.deleteDeviceIdHistory(deviceId));

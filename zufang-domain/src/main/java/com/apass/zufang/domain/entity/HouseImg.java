@@ -1,7 +1,5 @@
 package com.apass.zufang.domain.entity;
-
 import java.util.Date;
-
 public class HouseImg {
     private Long id;
 
@@ -12,7 +10,9 @@ public class HouseImg {
     private Date createdTime;
 
     private Date updatedTime;
-
+    
+    private String isDelete;
+    private Byte type;
     public Long getId() {
         return id;
     }
@@ -52,4 +52,18 @@ public class HouseImg {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
+	public Byte getType() {
+		return type;
+	}
+	public void setType(Byte type) {
+		this.type = type;
+	}
 }

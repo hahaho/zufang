@@ -1,9 +1,11 @@
 package com.apass.zufang.service.rbac;
 
-import java.util.List;
-
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.mybatis.page.Page;
+import com.apass.gfb.framework.mybatis.page.Pagination;
+import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.zufang.domain.entity.rbac.PermissionsDO;
-import com.apass.zufang.repository.rbac.PermissionsRepository;
+import com.apass.zufang.rbac.PermissionsRepository;
 import com.apass.zufang.utils.PaginationManage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.mybatis.page.Page;
-import com.apass.gfb.framework.mybatis.page.Pagination;
-import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
+import java.util.List;
 
 /**
  * 

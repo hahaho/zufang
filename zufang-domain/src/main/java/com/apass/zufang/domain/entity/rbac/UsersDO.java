@@ -19,23 +19,6 @@ public class UsersDO {
 	 */
 	private String id;
 	/**
-	 * 商户编码
-	 */
-	private String merchantCode;
-	/**
-	 * 商户名称
-	 */
-	private String merchantName;
-
-	public String getMerchantName() {
-		return merchantName;
-	}
-
-	public void setMerchantName(String merchantName) {
-		this.merchantName = merchantName;
-	}
-
-	/**
 	 * 用户姓名
 	 */
 	private String userName;
@@ -90,14 +73,6 @@ public class UsersDO {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getMerchantCode() {
-		return merchantCode;
-	}
-
-	public void setMerchantCode(String merchantCode) {
-		this.merchantCode = merchantCode;
 	}
 
 	public String getUserName() {

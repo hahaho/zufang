@@ -8,6 +8,11 @@ package com.apass.gfb.framework.mybatis.page;
  * @version $Id: Page.java, v 0.1 2014年7月20日 下午6:36:23 Listening Exp $
  */
 public class Page {
+	public Page(Integer pageNo, Integer pageSize) {
+		this.page = pageNo;
+		this.limit = pageSize;
+	}
+	public Page() {}
 	/**
 	 * 页码
 	 */
@@ -24,15 +29,6 @@ public class Page {
 
 	public Integer getPageSize() {
 		return limit;
-	}
-
-	public Page(Integer pageNo, Integer pageSize) {
-		this.page = pageNo;
-		this.limit = pageSize;
-	}
-
-	public Page() {
-
 	}
 
 	public Integer getPage() {

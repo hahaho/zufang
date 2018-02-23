@@ -1,7 +1,8 @@
 package com.apass.zufang.domain.vo;
 
 import java.math.BigDecimal;
-import com.apass.zufang.common.model.QueryParams;
+import java.util.Date;
+import java.util.List;
 /**
  * 
  * @author pyc
@@ -10,8 +11,9 @@ import com.apass.zufang.common.model.QueryParams;
  * @createTime：2018年2月8日 下午1:41:42 
  * @description 房屋管理类
  */
-public class HouseVo extends QueryParams{
+public class HouseVo{
 
+	private Long id;
 	
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
 
@@ -27,11 +29,11 @@ public class HouseVo extends QueryParams{
 
     private String city;//市
 
-    private String area;//区域
+    private String district;//区域
 
     private BigDecimal acreage;//面积
 
-    private String district;//街道
+    private String street;//街道
 
     private String detailAddr;//详细地址
 
@@ -60,6 +62,27 @@ public class HouseVo extends QueryParams{
     private String title;//房源标题
 
     private String description;//房源描述
+    
+    private Date createdTime;
+
+    private Date updatedTime;
+
+    private String createdUser;
+
+    private String updatedUser;
+    
+    private List<String> pictures;//图片
+    
+    private List<String> configs;//房屋配置
+    
+    private String isDelete;//房源是否删除
+    
+	private String apartmentName;//公寓名称
+	
+	private String houseCode;//房源编码
+	
+	private String locationId;//地址Id
+
 	public String getCode() {
 		return code;
 	}
@@ -116,12 +139,12 @@ public class HouseVo extends QueryParams{
 		this.city = city;
 	}
 
-	public String getArea() {
-		return area;
+	public String getStreet() {
+		return street;
 	}
 
-	public void setArea(String area) {
-		this.area = area;
+	public void setStreet(String street) {
+		this.street = street;
 	}
 
 	public BigDecimal getAcreage() {
@@ -251,22 +274,62 @@ public class HouseVo extends QueryParams{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	private String isDelete;//房源是否删除
-	private Long houseId;//房源ID
-	private String apartmentName;//公寓名称
-	private String houseCode;//房源编码
+
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
+	public String getCreatedUser() {
+		return createdUser;
+	}
+
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
+	}
+
+	public String getUpdatedUser() {
+		return updatedUser;
+	}
+
+	public void setUpdatedUser(String updatedUser) {
+		this.updatedUser = updatedUser;
+	}
+
+	public List<String> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(List<String> pictures) {
+		this.pictures = pictures;
+	}
+
+	public List<String> getConfigs() {
+		return configs;
+	}
+
+	public void setConfigs(List<String> configs) {
+		this.configs = configs;
+	}
+	
 	public String getIsDelete() {
 		return isDelete;
 	}
 	public void setIsDelete(String isDelete) {
 		this.isDelete = isDelete;
 	}
-	public Long getHouseId() {
-		return houseId;
-	}
-	public void setHouseId(Long houseId) {
-		this.houseId = houseId;
-	}
+	
 	public String getApartmentName() {
 		return apartmentName;
 	}
@@ -278,5 +341,20 @@ public class HouseVo extends QueryParams{
 	}
 	public void setHouseCode(String houseCode) {
 		this.houseCode = houseCode;
+	}
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
 	}
 }

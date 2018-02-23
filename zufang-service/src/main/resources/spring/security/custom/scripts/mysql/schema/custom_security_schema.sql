@@ -195,3 +195,4 @@ alter table LS_RBAC_ROLE_PERMISSION add constraint FK_ROLE_PERMISSION_PERMISSION
 
 alter table LS_RBAC_ROLE_PERMISSION add constraint FK_ROLE_PERMISSION_ROLEID 
 	foreign key (ROLE_ID) references LS_RBAC_ROLES (ID) on delete restrict on update restrict;
+

@@ -1,17 +1,14 @@
 package com.apass.zufang.web.rbac;
 
 import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.entity.merchant.MerchantInfoEntity;
 import com.apass.zufang.domain.entity.rbac.RolesDO;
 import com.apass.zufang.domain.entity.rbac.UsersDO;
-import com.apass.zufang.service.merchant.MerchantInforService;
 import com.apass.zufang.service.rbac.UsersService;
 import com.apass.zufang.utils.PaginationManage;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.mybatis.page.Page;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
-import com.apass.gfb.framework.security.userdetails.ListeningCustomSecurityUserDetails;
 import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
 import com.apass.gfb.framework.utils.HttpWebUtils;
 import com.apass.gfb.framework.utils.RegExpUtils;
@@ -50,8 +47,6 @@ public class UsersController {
 	private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
 	@Autowired
 	private UsersService usersService;
-	@Autowired
-	private MerchantInforService merchantInforService;
 	private static final String USER_PAGE = "rbac/users-page";
 
 	private static final String SUCCESS = "success";
@@ -70,31 +65,6 @@ public class UsersController {
 	}
 
 	/**
-	 * 用户管理页面
-	 */
-	@POST
-	@Path("/merchantList")
-	public Response merchantList() {
-		// Page page = new Page();
-		// page.setPage(1);
-		// page.setLimit(10000);
-		// Pagination<MerchantInfoEntity> pagination = null;
-		List<MerchantInfoEntity> merchantList = null;
-		try {
-			Map<String, Object> map = new HashMap<>();
-			map.put("status", "1");
-			merchantList = merchantInforService.queryMerchantInfor(map);
-			if (merchantList == null) {
-			    return Response.fail("商户信息查询失败");
-			}
-		} catch (BusinessException e) {
-			LOG.error("商户信息查询失败", e);
-			e.printStackTrace();
-		}
-		return Response.success(SUCCESS, merchantList);
-	}
-
-	/**
 	 * 分页列表JSON
 	 */
 	@POST
@@ -103,8 +73,10 @@ public class UsersController {
 		ResponsePageBody<UsersDO> respBody = new ResponsePageBody<UsersDO>();
 		try {
 			// 分页参数
-			String pageNo = HttpWebUtils.getValue(request, "page");// 页码
-			String pageSize = HttpWebUtils.getValue(request, "rows");// 每页显示条数
+			// 页码
+			String pageNo = HttpWebUtils.getValue(request, "page");
+			// 每页显示条数
+			String pageSize = HttpWebUtils.getValue(request, "rows");
 			Integer pageNoNum = Integer.parseInt(pageNo);
 			Integer pageSizeNum = Integer.parseInt(pageSize);
 			Page page = new Page();
@@ -112,8 +84,10 @@ public class UsersController {
 			page.setLimit(pageSizeNum <= 0 ? 1 : pageSizeNum);
 
 			// 查询传递的参数
-			String username = HttpWebUtils.getValue(request, USERNAME);// 用户帐号
-			String realName = HttpWebUtils.getValue(request, "realName");// 用户真实姓名
+			// 用户帐号
+			String username = HttpWebUtils.getValue(request, USERNAME);
+			// 用户真实姓名
+			String realName = HttpWebUtils.getValue(request, "realName");
 			UsersDO paramDO = new UsersDO();
 			paramDO.setUserName(username);
 			paramDO.setRealName(realName);
@@ -361,41 +335,6 @@ public class UsersController {
 		}
 	}
 
-	/**
-	 * 关联商户
-	 */
-	@POST
-	@Path("/relevanceMerchant")
-	public Response editMerchantStatus(HttpServletRequest request) {
-		Response response = new Response("0", "", "");
-		try {
-			String id = HttpWebUtils.getValue(request, "id");
-			String merchantCode = HttpWebUtils.getValue(request, "merchantCode");
 
-			UsersDO usersDO = new UsersDO();
-
-			if (null != id && !id.trim().isEmpty()) {
-				usersDO.setId(id);
-			}
-			if (null != merchantCode && !merchantCode.trim().isEmpty()) {
-				usersDO.setMerchantCode(merchantCode);
-			}
-
-			ListeningCustomSecurityUserDetails listeningCustomSecurityUserDetails = SpringSecurityUtils
-					.getLoginUserDetails();
-			usersDO.setUpdatedBy(listeningCustomSecurityUserDetails.getUsername());
-
-			int result = usersService.relevanceMerchant(usersDO);
-			if (result == 1) {
-				response.setStatus("1");
-				response.setMsg("关联商户成功！");
-			}
-		} catch (Exception e) {
-			LOG.error("关联商户失败", e);
-			response.setStatus("0");
-			response.setMsg("关联商户失败！");
-		}
-		return response;
-	}
 
 }

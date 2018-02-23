@@ -48,4 +48,14 @@
         SELECT COUNT(*) FROM t_zfang_apartment
         <include refid="QueryConditionSqlBackup" />
     </select>
+      <select id="getApartGongyu" resultMap="BaseResultMap" parameterType="com.apass.zufang.domain.entity.Apartment" >
+		    SELECT
+		    <include refid="Base_Column_List" />
+			FROM	T_ZFANG_APARTMENT
+		    <include refid="QueryConditionSqlBackup" />
+					ORDER BY
+						CREATED_TIME DESC
+					LIMIT 0,
+					 20;
+	  </select>
 </mapper>

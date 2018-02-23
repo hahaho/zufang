@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.HouseInfoRelaMapper" >
+	
+	<select id="getHouseInfoRelaList" resultType="com.apass.zufang.domain.entity.HouseInfoRela"
+		parameterType="com.apass.zufang.domain.entity.HouseInfoRela">
+		
+	<![CDATA[ 
+		SELECT t1.id apartmentId, 
+			t1.company_name companyName,
+	        t1.province province,
+	        t1.city city,
+            t4.district district,
+			t1.area area,
+		    t2.id houseId,
+			t2.title title,
+			t2.description description,
+			t2.community_name communityName,
+			t2.acreage acreage,
+			t2.chaoxiang chaoxiang,
+			t2.zhuangxiu zhuangxiu,
+			t2.status status,
+			t2.house_type houseType,
+			t2.floor floor,
+			t2.total_floor totalFloor,
+			t2.hall hall,
+			t2.room room,
+			t2.rent_type rentType,
+			t2.zujin_type zujinType,
+			t2.rent_amt rentAmt,
+			t3.`name` houseConfiguration,
+			t4.latitude latitude,
+			t4.longitude longitude,
+			t4.street street,
+			t4.detail_addr detailAddr,
+			t2.created_time houseCreatedTime
+            FROM t_zfang_apartment t1,
+			     t_zfang_house t2
+            LEFT JOIN t_zfang_house_peizhi t3 ON t3.house_id = t2.id
+             AND t3.is_delete NOT IN ('01')
+            LEFT JOIN t_zfang_house_location t4 ON t4.house_id = t2.id
+             AND t4.is_delete NOT IN ('01')
+            WHERE t1.id = t2.apartment_id
+             AND t1.is_delete NOT IN ('01')
+             AND t2.is_delete NOT IN ('01')
+             AND t2.list_time < CURRENT_TIMESTAMP ()
+             AND t2.delist_time > CURRENT_TIMESTAMP ()
+	]]>
+	<if test="apartmentId!=null and apartmentId!=''"> AND t1.id = #{apartmentId}  </if>
+	<if test="houseId!=null and houseId!=''"> AND t2.id = #{houseId} </if>
+	<if test="province!=null and province!=''"> AND t1.province = #{province} </if>
+	<if test="city!=null and city!=''"> AND t1.city = #{city} </if>
+	<if test="district!=null and district!=''"> AND t4.id = #{district} </if>
+	<if test="rentType!=null and rentType!=''"> AND t2.rent_type = #{rentType} </if>
+	<if test="zujinType!=null and zujinType!=''"> AND t2.rent_type = #{zujinType} </if>
+	<if test="zhuangxiu!=null and zhuangxiu!=''"> AND t2.zhuangxiu = #{zhuangxiu} </if>
+	<if test="status!=null and status!=''"> AND t2.status = #{status} </if>
+	<if test="houseType!=null and houseType!=''"> AND t2.house_type = #{houseType} </if>
+	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt >= ]]>  #{minRentAmt} </if>
+	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt <= ]]>  #{maxRentAmt} </if>
+	</select>
+    
+</mapper>

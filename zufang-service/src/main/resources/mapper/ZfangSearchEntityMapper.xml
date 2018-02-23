@@ -19,7 +19,7 @@
 			key_status = '0'
 		AND	
 			device_id = #{deviceId}
-		order by updated_time
+		order by updated_time desc
 		limit 0,10;
 	]]>
 	</select>
@@ -42,7 +42,7 @@
 			key_status = '0'
 		AND	
 			user_id = #{userId}
-		order by updated_time
+		order by updated_time desc
 		limit 0,10;
 	]]>
 	</select>

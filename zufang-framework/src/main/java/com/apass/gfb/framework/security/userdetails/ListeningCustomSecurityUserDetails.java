@@ -53,10 +53,6 @@ public class ListeningCustomSecurityUserDetails implements UserDetails {
      * 用户ID
      */
     private String                                 userId;
-    /**
-     * 商户Code
-     */
-    private String                                 merchantCode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -149,14 +145,6 @@ public class ListeningCustomSecurityUserDetails implements UserDetails {
         this.userId = userId;
     }
     
-    public String getMerchantCode() {
-        return merchantCode;
-    }
-
-    public void setMerchantCode(String merchantCode) {
-        this.merchantCode = merchantCode;
-    }
-
     @Override
     public boolean equals(Object rhs) {
         if (rhs instanceof ListeningCustomSecurityUserDetails) {

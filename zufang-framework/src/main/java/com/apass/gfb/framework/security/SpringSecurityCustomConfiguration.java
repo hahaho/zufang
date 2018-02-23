@@ -43,12 +43,12 @@ public class SpringSecurityCustomConfiguration {
          * DataSource
          */
         @Autowired
-        private DataSource                  dataSource;
+        private DataSource dataSource;
         /**
          * DataSource Platform
          */
         @Value("${spring.datasource.platform}")
-        private String                      datasourcePlatform;
+        private String datasourcePlatform;
         /**
          * Listening Security Properties
          */
