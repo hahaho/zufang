@@ -8,9 +8,10 @@
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
     <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, house_id, url, created_time, updated_time, is_delete
+    id, house_id, url, created_time, updated_time, is_delete, type
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -23,10 +24,12 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.apass.zufang.domain.entity.HouseImg" useGeneratedKeys="true" keyProperty="id" >
-    insert into t_zfang_house_img (house_id, url, created_time, 
-      updated_time, is_delete)
-    values (#{houseId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=VARCHAR})
+    insert into t_zfang_house_img 
+    	(house_id, url, created_time, updated_time, is_delete)
+    values 
+    	(#{houseId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, 
+    	#{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+    	#{isDelete,jdbcType=VARCHAR},#{type,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.HouseImg" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_house_img
@@ -46,6 +49,9 @@
       <if test="isDelete != null" >
         is_delete,
       </if>
+      <if test="type != null" >
+        type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="houseId != null" >
@@ -62,6 +68,9 @@
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -83,6 +92,9 @@
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=VARCHAR},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -92,7 +104,8 @@
       url = #{url,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=VARCHAR}
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

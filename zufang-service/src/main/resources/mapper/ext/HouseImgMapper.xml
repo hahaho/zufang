@@ -5,6 +5,9 @@
         SELECT 
             <include refid="Base_Column_List" />
         FROM t_zfang_house_img
-        WHERE is_delete = '00' AND house_id= #{houseId, jdbcType=BIGINT} 
+        WHERE 
+        	is_delete = '00' 
+        	AND house_id= #{houseId, jdbcType=BIGINT} 
+        	AND type= #{type, jdbcType=TINYINT} 
    </select>
 </mapper>
