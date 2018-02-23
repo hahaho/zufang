@@ -1,11 +1,10 @@
 package com.apass.zufang.service.operation;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
@@ -41,10 +40,12 @@ public class BrandApartmentService {
 	/**
 	 * 品牌公寓热门房源  热门房源上移
 	 * @param houseId
+	 * @param user
 	 * @return
+	 * @throws BusinessException 
 	 */
 	@Transactional(rollbackFor = { Exception.class})
-	public Response hotHouseMoveUp(String houseId,String user) {
+	public Response hotHouseMoveUp(String houseId,String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
 		Integer sorNo = house.getSortNo();
@@ -77,9 +78,16 @@ public class BrandApartmentService {
 				return Response.success("热门房源上移成功！");
 			}
 		}
-		return Response.fail("热门房源上移失败！");
+		throw new BusinessException("热门房源上移失败！");
 	}
-	public Response hotHouseMoveDown(String houseId, String user) {
+	/**
+	 * 品牌公寓热门房源  热门房源下移
+	 * @param houseId
+	 * @param user
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Response hotHouseMoveDown(String houseId, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
 		Integer sorNo = house.getSortNo();
@@ -112,6 +120,75 @@ public class BrandApartmentService {
 				return Response.success("热门房源下移成功！");
 			}
 		}
-		return Response.fail("热门房源下移失败！");
+		throw new BusinessException("热门房源下移失败！");
 	}
+	/**
+	 * 品牌公寓热门房源  热门房源取消设置
+	 * @param houseId
+	 * @param user
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Response hotHouseCancel(String houseId, String user) throws BusinessException {
+		Long id = Long.parseLong(houseId);
+		House house = houseService.readEntity(id);
+		house.setSortNo(0);
+		house.setUpdatedTime(new Date());
+		house.setUpdatedUser(user);
+		if(houseService.updateEntity(house)!=1){
+			throw new BusinessException("热门房源取消设置失败！");
+		}
+		HouseQueryParams entity = new HouseQueryParams();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+		Integer sort = 0;
+        for(HouseVo en : list){
+        	house = houseService.readEntity(en.getId());
+        	house.setSortNo(++sort);
+        	house.setUpdatedTime(new Date());
+        	house.setUpdatedUser(user);
+        	if(houseService.updateEntity(house)!=1){
+        		throw new BusinessException("热门房源取消设置失败！");
+        	}
+        }
+		return Response.success("热门房源取消设置成功！");
+	}
+	/**
+	 * 品牌公寓热门房源  热门房源设置
+	 * @param houseId
+	 * @param sorNo
+	 * @param user
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Response hotHouseSet(String houseId, String sortNo, String user) throws BusinessException {
+		Integer sort = Integer.parseInt(sortNo);
+        Integer sort2 = sort;
+        Long id = Long.parseLong(houseId);
+        House house = houseService.readEntity(id);
+        house.setSortNo(sort);
+        house.setUpdatedTime(new Date());
+		house.setUpdatedUser(user);
+		if(houseService.updateEntity(house)!=1){
+			throw new BusinessException("热门房源设置失败！");
+		}
+		HouseQueryParams entity = new HouseQueryParams();
+		entity.setIsDelete("00");
+		entity.setHouseType((byte)2);
+		List<HouseVo> list = houseMapper.getHotHouseList(entity);
+        for(HouseVo en : list){
+            if(en.getSortNo()<sort||en.getId().equals(id)){
+                continue;
+            }
+            house = houseService.readEntity(en.getId());
+            house.setSortNo(++sort2);
+            house.setUpdatedTime(new Date());
+            house.setUpdatedUser(user);
+            if(houseService.updateEntity(house)!=1){
+            	throw new BusinessException("热门房源设置失败！");
+            }
+        }
+        return Response.success("热门房源设置成功！");
+    }
 }

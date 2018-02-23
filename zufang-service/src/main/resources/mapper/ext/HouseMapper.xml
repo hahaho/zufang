@@ -40,7 +40,7 @@
         SELECT 
         	x.sort_no sortNo,
         	y.id apartmentid,y.name apartmentName,
-        	x.id houseId,x.code houseCode,x.title title,
+        	x.id id,x.code houseCode,x.title title,
         	x.community_name communityName,x.room room,x.hall hall,x.wei wei
         FROM t_zfang_house x
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
