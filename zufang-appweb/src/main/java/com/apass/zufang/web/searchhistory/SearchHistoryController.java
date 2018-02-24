@@ -60,6 +60,7 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	        		return Response.success("用户ID搜索",list);
 	        	}
 	        } catch (Exception e) {
+				logger.error("queryhistory error------>",e);
 	            return Response.fail("操作失败");
 	        }
 	    }
