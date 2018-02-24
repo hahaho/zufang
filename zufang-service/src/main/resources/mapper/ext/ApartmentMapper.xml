@@ -53,9 +53,6 @@
 		    <include refid="Base_Column_List" />
 			FROM	T_ZFANG_APARTMENT
 		    <include refid="QueryConditionSqlBackup" />
-					ORDER BY
-						CREATED_TIME DESC
-					LIMIT 0,
-					 20;
+			ORDER BY CREATED_TIME DESC LIMIT 0,20;
 	  </select>
 </mapper>
