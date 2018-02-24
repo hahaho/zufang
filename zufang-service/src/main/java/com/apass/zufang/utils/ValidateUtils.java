@@ -31,6 +31,25 @@ public class ValidateUtils {
 			throw new BusinessException(message);
 		}
 	}
+	/**
+	 * 验证多个字符串非空
+	 * @param value
+	 * @param message
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public static void isNotBlank(String message, Object... value) throws BusinessException{
+		for (int i = 0; i < value.length; i++) {
+			if(isEmpty(value[i])){
+				logger.error(message);
+				throw new BusinessException(message);
+			}
+		}
+	}
+
+	public static boolean isEmpty(Object str) {
+		return (str == null || "".equals(str));
+	}
 	
 	/**
 	 * 验证字符串非空

@@ -2,8 +2,9 @@ package com.apass.zufang.web.apartment;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -11,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
@@ -38,7 +37,8 @@ public class ApartmentController {
 	/**
      * 公寓信息管理页面
      */
-    @RequestMapping("/init")
+	@GET
+	@Path("/init")
     public String init() {
         return "apartment/apartmentManagement";
     }
@@ -47,8 +47,8 @@ public class ApartmentController {
      * @param request
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/getApartmentList")
+    @POST
+	@Path("/getApartmentList")
     public ResponsePageBody<Apartment> getApartmentList(Map<String,Object> map) {
         ResponsePageBody<Apartment> respBody = new ResponsePageBody<Apartment>();
         try {
@@ -68,8 +68,8 @@ public class ApartmentController {
      * @param entity
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/addApartment")
+    @POST
+	@Path("/addApartment")
 	public Response addApartment(Map<String, Object> map){
 		try{
 			LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
@@ -89,8 +89,8 @@ public class ApartmentController {
      * @param entity
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/editApartment")
+    @POST
+   	@Path("/editApartment")
 	public Response editApartment(Map<String, Object> map){
 		try{
 			LOGGER.info("editApartment map--->{}",GsonUtils.toJson(map));

@@ -1,16 +1,15 @@
 package com.apass.zufang.web.operations;
 import java.util.Map;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
@@ -37,7 +36,8 @@ public class BrandApartmentController {
 	 * 品牌公寓热门房源配置页面
 	 * @return
 	 */
-    @RequestMapping("/init")
+    @GET
+	@Path("/init")
     public String init() {
         return "operations/brandApartment";
     }
@@ -46,8 +46,8 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/getHotHouseList")
+    @POST
+	@Path("/getHotHouseList")
     public ResponsePageBody<HouseVo> getHotHouseList(Map<String,Object> map) {
         ResponsePageBody<HouseVo> respBody = new ResponsePageBody<HouseVo>();
         try {
@@ -77,8 +77,8 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseMoveUp")
+    @POST
+	@Path("/hotHouseMoveUp")
     public Response hotHouseMoveUp(Map<String, Object> map) {
         try {
         	LOGGER.info("hotHouseMoveUp map--->{}",GsonUtils.toJson(map));
@@ -99,8 +99,8 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseMoveDown")
+    @POST
+	@Path("/hotHouseMoveDown")
     public Response hotHouseMoveDown(Map<String, Object> map) {
         try {
         	LOGGER.info("hotHouseMoveDown map--->{}",GsonUtils.toJson(map));
@@ -121,8 +121,8 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseCancel")
+    @POST
+	@Path("/hotHouseCancel")
     public Response hotHouseCancel(Map<String, Object> map) {
         try {
         	LOGGER.info("hotHouseCancel map--->{}",GsonUtils.toJson(map));
@@ -143,8 +143,8 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseSet")
+    @POST
+	@Path("/hotHouseSet")
     public Response hotHouseSet(Map<String, Object> map) {
         try {
         	LOGGER.info("hotHouseSet map--->{}",GsonUtils.toJson(map));
@@ -169,8 +169,8 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseEdit")
+    @POST
+	@Path("/hotHouseEdit")
     public Response hotHouseEdit(Map<String, Object> map) {
         try {
         	LOGGER.info("hotHouseEdit map--->{}",GsonUtils.toJson(map));
