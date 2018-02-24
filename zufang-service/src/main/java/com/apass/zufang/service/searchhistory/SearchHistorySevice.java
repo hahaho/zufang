@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.apass.zufang.mapper.ajp.searchhistory.SearchHistoryDao;
+import com.apass.zufang.mapper.zfang.SearchHistoryRepository;
 
 /**
  * 搜索历史
@@ -15,10 +15,10 @@ import com.apass.zufang.mapper.ajp.searchhistory.SearchHistoryDao;
  *
  */
 @Component
-public class SearchHistorySevice<T> {
+public class SearchHistorySevice {
 	
 	@Autowired
-	private SearchHistoryDao searchHistoryDao;
+	private SearchHistoryRepository searchHistoryDao;
 	
 	/**
 	 * 设备ID查询
@@ -26,10 +26,8 @@ public class SearchHistorySevice<T> {
 	 * @return
 	 */
 	public List<String> queryDeviceIdHistory(String deviceId) {
-		 List<String> queryDeviceIdHistory = searchHistoryDao.queryDeviceIdHistory(deviceId);
+		 return searchHistoryDao.queryDeviceIdHistory(deviceId);
 		 
-		 
-		 return null;
 	}
 	/**
 	 * 用户ID查询

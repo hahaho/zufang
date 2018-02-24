@@ -1,26 +1,26 @@
 package com.apass.zufang.mapper.ajp.personal;
 
 import com.apass.gfb.framework.annotation.MyBatisRepository;
-import com.apass.zufang.domain.ajp.entity.ZuFangLogin;
+import com.apass.zufang.domain.ajp.entity.ZuFangLoginEntity;
 
 @MyBatisRepository
-public class ZuFangLoginDao {
+public class ZuFangLoginRepository {
 	/**是否登录
 	 * 
 	 * @param customerId
 	 * @return
 	 */
-	public ZuFangLogin zuFangifLogin(String customerId) {
+	public ZuFangLoginEntity zuFangifLogin(String customerId) {
 		
 		return null;
 	}
 	
-	public Integer zufangsetpassword(ZuFangLogin zuFangLogin) {
+	public Integer zufangsetpassword(ZuFangLoginEntity zuFangLogin) {
 		return null;
 		
 	}
 
-	public Integer zufangpasswordlogin(ZuFangLogin zuFangLogin) {
+	public Integer zufangpasswordlogin(ZuFangLoginEntity zuFangLogin) {
 		// TODO Auto-generated method stub
 		return null;
 	}

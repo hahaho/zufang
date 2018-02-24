@@ -3,8 +3,8 @@ package com.apass.zufang.service.personal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.apass.zufang.domain.ajp.entity.ZuFangLogin;
-import com.apass.zufang.mapper.ajp.personal.ZuFangLoginDao;
+import com.apass.zufang.domain.ajp.entity.ZuFangLoginEntity;
+import com.apass.zufang.mapper.ajp.personal.ZuFangLoginRepository;
 /**
  * 个人中心 登录
  * 
@@ -15,15 +15,15 @@ import com.apass.zufang.mapper.ajp.personal.ZuFangLoginDao;
 @Component
 public class ZuFangLoginSevice {
 	@Autowired
-	private ZuFangLoginDao zuFangLoginDao;
+	private ZuFangLoginRepository zuFangLoginDao;
 	
 	//是否登录
-	public ZuFangLogin zuFangifLogin(String customerId) {
+	public ZuFangLoginEntity zuFangifLogin(String customerId) {
 		return zuFangLoginDao.zuFangifLogin(customerId);
 	}
 	//设置密码
 	public Integer zufangsetpassword(String customerId, String mobile, String password) {
-		ZuFangLogin zuFangLogin = new ZuFangLogin();
+		ZuFangLoginEntity zuFangLogin = new ZuFangLoginEntity();
 		zuFangLogin.setCustomerId(customerId);
 		zuFangLogin.setMobile(mobile);
 		zuFangLogin.setZuFangPassword(password);
@@ -31,11 +31,16 @@ public class ZuFangLoginSevice {
 	}
 	//密码登录
 	public Integer zufangpasswordlogin(String customerId, String mobile, String password) {
-		ZuFangLogin zuFangLogin = new ZuFangLogin();
+		ZuFangLoginEntity zuFangLogin = new ZuFangLoginEntity();
 		zuFangLogin.setCustomerId(customerId);
 		zuFangLogin.setMobile(mobile);
 		zuFangLogin.setZuFangPassword(password);
 		return zuFangLoginDao.zufangpasswordlogin(zuFangLogin);
+	}
+	
+	//短信登录
+	public String zufangsmslogin(String customerId) {
+		return null;
 	}
 	
 	//
