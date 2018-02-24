@@ -1,5 +1,6 @@
 package com.apass.zufang.service.house;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ public class HouseinitService {
 	
 	@Autowired
 	private ApartmentMapper apartmentMapper;
+	@Autowired
+	private HouseMapper houseMapper;
     @Autowired
     private HouseLocationMapper HouseLocationMapper;
 
@@ -58,6 +61,19 @@ public class HouseinitService {
 	public List<HouseVo> initNearLocation(Map<String, Double> returnLLSquarePoint) {
 		List<HouseVo> initNearHouse = HouseLocationMapper.initNearLocation(returnLLSquarePoint);
 		return initNearHouse;
+	}
+
+	/**
+	 * init城市
+	 * @return
+	 */
+	public List<String> initCity() {
+		List<HouseVo> cityList = houseMapper.initCity();
+		List<String> initCity = new ArrayList<>();
+		for (int i = 0; i < cityList.size(); i++) {
+			initCity.add(cityList.get(i).getCity());
+		}
+		return initCity;
 	}
 
 }

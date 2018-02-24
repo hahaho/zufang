@@ -1,5 +1,6 @@
 package com.apass.zufang.utils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +50,14 @@ public class ValidateUtils {
 
 	public static boolean isEmpty(Object str) {
 		return (str == null || "".equals(str));
+	}
+	/**
+	 * 判断list是否为空,空→false
+	 * @param list
+	 * @return
+	 */
+	public static boolean listIsTrue(List<?> list) {
+		return list != null && !list.isEmpty();
 	}
 	
 	/**
