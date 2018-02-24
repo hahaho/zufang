@@ -21,19 +21,12 @@ public class ApartmentService {
 	public Integer createEntity(Apartment entity){
 		return apartmentMapper.insertSelective(entity);
 	}
-	public Apartment readEntity(Apartment entity){
-		return apartmentMapper.selectByPrimaryKey(entity.getId());
-	}
 	public Apartment readEntity(Long id){
 		return apartmentMapper.selectByPrimaryKey(id);
 	}
 	@Transactional(rollbackFor = { Exception.class})
 	public Integer updateEntity(Apartment entity){
 		return apartmentMapper.updateByPrimaryKeySelective(entity);
-	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer deleteEntity(Apartment entity){
-		return apartmentMapper.deleteByPrimaryKey(entity.getId());
 	}
 	@Transactional(rollbackFor = { Exception.class})
 	public Integer deleteEntity(Long id){

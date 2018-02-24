@@ -95,6 +95,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
+	@Transactional(rollbackFor = { Exception.class})
 	public Response hotHouseMoveDown(String houseId, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
@@ -137,6 +138,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
+	@Transactional(rollbackFor = { Exception.class})
 	public Response hotHouseCancel(String houseId, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
@@ -170,6 +172,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
+	@Transactional(rollbackFor = { Exception.class})
 	public Response hotHouseSet(String houseId, String sortNo, String url, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		Integer sort = Integer.parseInt(sortNo);
@@ -228,6 +231,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
+	@Transactional(rollbackFor = { Exception.class})
 	public Response hotHouseEdit(String houseId, String sortNo, String url, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		Integer sort = Integer.parseInt(sortNo);
