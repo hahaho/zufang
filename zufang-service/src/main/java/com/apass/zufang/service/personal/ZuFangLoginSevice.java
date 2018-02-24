@@ -17,11 +17,21 @@ public class ZuFangLoginSevice {
 	@Autowired
 	private ZuFangLoginRepository zuFangLoginDao;
 	
-	//是否登录
+	/**
+	 * 已登录
+	 * @param customerId
+	 * @return
+	 */
 	public ZuFangLoginEntity zuFangifLogin(String customerId) {
 		return zuFangLoginDao.zuFangifLogin(customerId);
 	}
-	//设置密码
+	/**
+	 * 设置密码
+	 * @param customerId
+	 * @param mobile
+	 * @param password
+	 * @return
+	 */
 	public Integer zufangsetpassword(String customerId, String mobile, String password) {
 		ZuFangLoginEntity zuFangLogin = new ZuFangLoginEntity();
 		zuFangLogin.setCustomerId(customerId);
@@ -29,7 +39,13 @@ public class ZuFangLoginSevice {
 		zuFangLogin.setZuFangPassword(password);
 		return zuFangLoginDao.zufangsetpassword(zuFangLogin);
 	}
-	//密码登录
+	/**
+	 * 密码登录
+	 * @param customerId
+	 * @param mobile
+	 * @param password
+	 * @return
+	 */
 	public Integer zufangpasswordlogin(String customerId, String mobile, String password) {
 		ZuFangLoginEntity zuFangLogin = new ZuFangLoginEntity();
 		zuFangLogin.setCustomerId(customerId);
@@ -38,11 +54,14 @@ public class ZuFangLoginSevice {
 		return zuFangLoginDao.zufangpasswordlogin(zuFangLogin);
 	}
 	
-	//短信登录
+	/**
+	 * 短信登录
+	 * @param customerId
+	 * @return
+	 */
 	public String zufangsmslogin(String customerId) {
 		return null;
 	}
 	
-	//
 
 }

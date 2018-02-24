@@ -3,9 +3,10 @@ package com.apass.zufang.service.searchhistory;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import com.apass.zufang.mapper.zfang.SearchHistoryRepository;
+import com.apass.zufang.domain.entity.SearchKeys;
+import com.apass.zufang.mapper.zfang.SearchHistoryMapper;
 
 /**
  * 搜索历史
@@ -14,18 +15,18 @@ import com.apass.zufang.mapper.zfang.SearchHistoryRepository;
  * @update 2018-02-09 11:02
  *
  */
-@Component
+@Service
 public class SearchHistorySevice {
 	
 	@Autowired
-	private SearchHistoryRepository searchHistoryDao;
+	private SearchHistoryMapper searchHistoryDao;
 	
 	/**
 	 * 设备ID查询
 	 * @param deviceId
 	 * @return
 	 */
-	public List<String> queryDeviceIdHistory(String deviceId) {
+	public List<SearchKeys> queryDeviceIdHistory(String deviceId) {
 		 return searchHistoryDao.queryDeviceIdHistory(deviceId);
 		 
 	}
@@ -34,7 +35,7 @@ public class SearchHistorySevice {
 	 * @param customerId
 	 * @return
 	 */ 
-	public List<String> queryCustomerIdHistory(String customerId) {
+	public List<SearchKeys> queryCustomerIdHistory(String customerId) {
 		return searchHistoryDao.queryCustomerIdHistory(customerId);
 		
 	}

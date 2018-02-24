@@ -27,7 +27,11 @@ public class ZuFangLoginController {
 	@Autowired
 	private ZuFangLoginSevice zuFangLoginSevice;
 	
-	//是否登录
+	/**
+	 * 是否登录
+	 * @param paramMap
+	 * @return
+	 */
 	@POST
 	@Path("/zufanglogin")
 	public Response ZuFangLogin(Map<String, Object> paramMap) {
@@ -45,7 +49,11 @@ public class ZuFangLoginController {
 	        }
 	    }
 	
-	//设置密码
+	/**
+	 * 设置密码
+	 * @param paramMap
+	 * @return
+	 */
 	@POST
 	@Path("/zufangsetpassword")
 	public Response zufangsetpassword(Map<String, Object> paramMap) {
@@ -56,14 +64,15 @@ public class ZuFangLoginController {
 	        	String password = CommonUtils.getValue(paramMap, "password");
 	        	
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
-	        		//用户id不能为空
-	        		 return Response.success("用户id不能为空");
+	        		//用户id不合规
+	        		 return Response.success("用户id不合规");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
-	        		//手机号不能为空
-	        		 return Response.success("手机号不能为空");
-	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(password)){
-	        		//密码不能为空
-	        		 return Response.success("密码不能为空");
+	        		//手机号不合规
+	        		 return Response.success("手机号不合规");
+	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(password)
+	        			&& password.length()>6 && password.length()<20){
+	        		//密码不合规
+	        		 return Response.success("密码不合规");
 	        	}
 	        	Integer zufangsetpassword = zuFangLoginSevice.zufangsetpassword(customerId,mobile,password);
 	        		return Response.success("设置密码成功",zufangsetpassword);
@@ -102,22 +111,4 @@ public class ZuFangLoginController {
 	    }
 	
 	
-	//短信登录  注册
-	@POST
-	@Path("/zufangsmslogin")
-	public Response zufangsmslogin(Map<String, Object> paramMap) {
-	        try {  
-	        	String customerId = CommonUtils.getValue(paramMap, "mobile");
-	        	
-	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
-	        		//未登录
-	        		 return Response.success("未登录操作");
-	        	}else{
-	        		//已登录
-	        		return Response.success("登录成功",zuFangLoginSevice.zufangsmslogin(customerId));
-	        	}
-	        } catch (Exception e) {
-	            return Response.fail("操作失败");
-	        }
-	    }
 }

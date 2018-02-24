@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.entity.SearchKeys;
 import com.apass.zufang.service.searchhistory.SearchHistorySevice;
 import com.apass.zufang.web.personal.ZuFangLoginController;
-import javax.ws.rs.core.MediaType;
 /**
  * 搜索历史
  * 
@@ -51,15 +52,16 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	        	Map<Object, Object> map = new HashMap<>();
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
 	        		//设备ID
-	        		List<String> list = searchHistorySevice.queryDeviceIdHistory(deviceId);
+	        		List<SearchKeys> list = searchHistorySevice.queryDeviceIdHistory(deviceId);
 	        		map.put("list", list);
 	        		 return Response.success("设备ID搜索",map);
 	        	}else{
 	        		//用户ID
-	        		List<String> list =searchHistorySevice.queryCustomerIdHistory(customerId);
+	        		List<SearchKeys> list =searchHistorySevice.queryCustomerIdHistory(customerId);
 	        		return Response.success("用户ID搜索",list);
 	        	}
 	        } catch (Exception e) {
+	        	logger.info("搜索历史失败——————"+e);
 	            return Response.fail("操作失败");
 	        }
 	    }
@@ -83,6 +85,7 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	        		return Response.success("用户ID搜索",searchHistorySevice.deleteCustomerIdHistory(customerId));
 	        	}
 	        } catch (Exception e) {
+	        	logger.info("删除搜索历史失败——————"+e);
 	            return Response.fail("操作失败");
 	        }
 	    }
