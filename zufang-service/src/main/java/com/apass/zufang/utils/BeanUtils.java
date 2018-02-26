@@ -28,7 +28,7 @@ public class BeanUtils {
 		try {
 			beanCopier.copy(src, dest, null);
 		} catch (Exception e) {
-			LOGGER.error("from " + src.getClass() + "[" + src + "] to " + dest.getClass() + " [" + dest + "]", e);
+			LOGGER.error("from " + src.getClass() + "[" + src + "] to " + dest.getClass() + " [" + dest + "]", e) ;
 		}
 	}
 
