@@ -210,6 +210,7 @@ public class HouseControler {
 	    String detailAddr = CommonUtils.getValue(paramMap, "detailAddr"); // 详细地址
 	    
 	    String acreage = CommonUtils.getValue(paramMap, "acreage");
+	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
 	    
 	    String room = CommonUtils.getValue(paramMap, "room"); //室
 	    String hall = CommonUtils.getValue(paramMap, "hall"); //厅
@@ -267,7 +268,7 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(floor, "请填写楼层");
 	    ValidateUtils.checkNumberRange(floor, -9, 99, "楼层分布");
 	    ValidateUtils.isNotBlank(totalFloor, "请填写总楼层");
-	    ValidateUtils.checkNumberRange(floor, 1, 99, "总楼层");
+	    ValidateUtils.checkNumberRange(totalFloor, 1, 99, "总楼层");
 	    
 	    ValidateUtils.isNotBlank(liftType, "请选择电梯情况");
 	    ValidateUtils.isNotBlank(chaoxiang, "请选择朝向");
@@ -278,14 +279,13 @@ public class HouseControler {
 	    if(StringUtils.equals(RentTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	
 	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
-	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 0, "合租户数");
+	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 100, "合租户数");
 	    	
 	    	ValidateUtils.isNotBlank(hezuResource, "请选择出租间介绍");
 	    	ValidateUtils.isNotBlank(hezuChaoxiang, "请选择出租间朝向");
 	    	
-	    	
-	    	ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
-	    	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
+	    	ValidateUtils.isNotBlank(roomAcreage, "请填写房屋面积");
+	    	ValidateUtils.checkNonNumberRange(roomAcreage, 1, 9999, "房屋面积");
 	    }
 	    
 	    ValidateUtils.isNotBlank(peizhi, "请选择房屋配置");
