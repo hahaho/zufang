@@ -90,7 +90,7 @@ public class HouseInfoController {
 			List<HouseInfoRela> targetHouseInfoList =houseInfoService.queryHouseInfoRela(queryCondition);
 			resultMap.put("targetHouseInfo", targetHouseInfoList.get(0));
 			// 附近房源信息
-			List<HouseInfoRela> houseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),20);
+			List<HouseInfoRela> houseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),10);
 			resultMap.put("houseInfoList", houseInfoList);
 			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
