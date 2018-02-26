@@ -1,6 +1,7 @@
 package com.apass.zufang.mapper.zfang;
 import java.util.List;
 import com.apass.gfb.framework.mybatis.GenericMapper;
+import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.vo.HouseVo;
@@ -23,7 +24,7 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 */
 	public Integer getHouseListCount(HouseQueryParams entity);
 	/**
-	 * 品牌公寓热门房源查询
+	 * 品牌公寓热门房源列表查询
 	 * @param entity
 	 * @return
 	 */
@@ -33,4 +34,10 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @return 
 	 */
 	public List<HouseVo> initCity();
+	/**
+	 * 电话预约管理 房源列表查询
+	 * @param entity
+	 * @return
+	 */
+	public List<HouseVo> getHouseListForPhoneAppointment(HouseAppointmentQueryParams entity);
 }
