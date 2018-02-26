@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.apass.zufang.domain.entity.HouseLocation;
+import com.google.common.collect.Maps;
 
 public class CommonService {
 
@@ -75,6 +76,30 @@ public class CommonService {
 		return Math.sqrt(Lx * Lx + Ly * Ly); // 用平面的矩形对角距离公式计算总距离
 	}
 
+	/**
+	 * 已知站点经纬度,X米范围内的其它站点
+	 * @param longitude	经度
+	 * @param latitude	纬度
+	 * @param distance	范围(米)
+	 * @return
+	 */
+	public static Map<String, Double> renturnLngLat(double longitude, double latitude, double distance){
+		// 计算经度弧度,从弧度转换为角度
+		double lng = 2 * (Math.asin(Math.sin(distance
+				/ (2 * EARTH_RADIUS))
+				/ Math.cos(Math.toRadians(latitude))));
+		lng = Math.toDegrees(lng);
+		// 计算纬度角度
+		double lat = distance / EARTH_RADIUS;
+		lat = Math.toDegrees(lat);
+		Map<String, Double> map = Maps.newHashMap();
+		map.put("maxLng", longitude + lng);
+		map.put("minLng", longitude - lng);
+		map.put("maxLat", latitude + lat);
+		map.put("minLat", latitude - lat);
+		return map;
+	    
+	}
 	/**
 	 * 获取附近房源
 	 * 

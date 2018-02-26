@@ -1,18 +1,16 @@
 package com.apass.zufang.service.nation;
 
-import com.apass.esp.common.code.BusinessErrorCode;
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.zufang.domain.common.WorkCityJd;
-import com.apass.zufang.mapper.zfang.WorkCityJdMapper;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.zufang.domain.common.WorkCityJd;
+import com.apass.zufang.mapper.zfang.WorkCityJdMapper;
 
 /**
  * 查询省份市

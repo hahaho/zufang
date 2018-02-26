@@ -28,4 +28,9 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @return
 	 */
 	public List<HouseVo> getHotHouseList(HouseQueryParams entity);
+	/**
+	 * init城市
+	 * @return 
+	 */
+	public List<HouseVo> initCity();
 }

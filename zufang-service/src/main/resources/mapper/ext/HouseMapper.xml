@@ -59,4 +59,21 @@
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
     </select>
+    
+    <!-- init城市 -->
+    <select id="initCity" resultType="com.apass.zufang.domain.vo.HouseVo">
+        <![CDATA[
+        SELECT
+			l.city
+		FROM
+			t_zfang_house h,
+			t_zfang_house_location l
+		WHERE
+			h.id = l.house_id
+		AND h.status = '3'
+		AND h.is_delete = '00'
+		GROUP BY l.city ASC
+        ]]>
+    </select>
+    
 </mapper>

@@ -1,5 +1,6 @@
 package com.apass.zufang.utils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,33 @@ public class ValidateUtils {
 			logger.error("isNotBlank value:"+value);
 			throw new BusinessException(message);
 		}
+	}
+	/**
+	 * 验证多个字符串非空
+	 * @param value
+	 * @param message
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public static void isNotBlank(String message, Object... value) throws BusinessException{
+		for (int i = 0; i < value.length; i++) {
+			if(isEmpty(value[i])){
+				logger.error(message);
+				throw new BusinessException(message);
+			}
+		}
+	}
+
+	public static boolean isEmpty(Object str) {
+		return (str == null || "".equals(str));
+	}
+	/**
+	 * 判断list是否为空,空→false
+	 * @param list
+	 * @return
+	 */
+	public static boolean listIsTrue(List<?> list) {
+		return list != null && !list.isEmpty();
 	}
 	
 	/**
