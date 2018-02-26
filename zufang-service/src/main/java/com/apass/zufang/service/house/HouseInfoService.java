@@ -66,6 +66,8 @@ public class HouseInfoService {
 	 * @return
 	 */
 	public List<HouseInfoRela> getNearbyhouseInfo(long houseId, int number) {
+		List<HouseInfoRela> result =new ArrayList<HouseInfoRela>();
+		
 		// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 		HouseInfoRela queryCondition = new HouseInfoRela();
 		queryCondition.setHouseId(houseId);
@@ -78,7 +80,9 @@ public class HouseInfoService {
 		queryInfo.setTargetHouseId(houseId);
 		List<HouseInfoRela> houseInfoList = houseInfoRelaMapper
 				.getHouseInfoRelaList(queryInfo);
-
+        if(houseInfoList==null||houseInfoList.size()<=0){
+        	return null;
+        }
 		// setp 3 计算目标房源和附近房源的距离，并绑定映射关系
 		Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
 		double[] resultArray = new double[houseInfoList.size()];
@@ -101,7 +105,7 @@ public class HouseInfoService {
 		// setp 6 根据list 查询附近房源的具体信息
 		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("houseIdList", houseIdList);
-		List<HouseInfoRela> result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+	    result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
 		return result;
 	}
 

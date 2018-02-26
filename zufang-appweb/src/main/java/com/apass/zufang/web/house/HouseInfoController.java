@@ -1,5 +1,6 @@
 package com.apass.zufang.web.house;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +60,8 @@ public class HouseInfoController {
 			}
 			queryCondition.setProvince(province);
 			queryCondition.setCity(city);
-			queryCondition.setMinRentAmt(minRentAmt);
-			queryCondition.setMaxRentAmt(maxRentAmt);
+			queryCondition.setMinRentAmt(new BigDecimal(minRentAmt) );
+			queryCondition.setMaxRentAmt(new BigDecimal(maxRentAmt));
 
 			List<HouseInfoRela> houseInfoList = houseInfoService
 					.queryHouseInfoRela(queryCondition);
@@ -79,19 +80,19 @@ public class HouseInfoController {
 	 * @return
 	 */
 	@POST
-	@Path("/nearbyHouseInfo")
-	public Response getNearbyHouseInfo(Map<String, Object> paramMap) {
+	@Path("/getHouseInfoRela")
+	public Response getHouseInfoRela(Map<String, Object> paramMap) {
 		try {
 			String houseId = CommonUtils.getValue(paramMap, "houseId");
 			Map<String, Object> resultMap = new HashMap<String, Object>();
-			// 目标房源
+			// 目标房源信息
 			HouseInfoRela queryCondition =new HouseInfoRela();
 			queryCondition.setHouseId(Long.valueOf(houseId));
 			List<HouseInfoRela> targetHouseInfoList =houseInfoService.queryHouseInfoRela(queryCondition);
 			resultMap.put("targetHouseInfo", targetHouseInfoList.get(0));
 			// 附近房源信息
-			List<HouseInfoRela> houseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),10);
-			resultMap.put("houseInfoList", houseInfoList);
+			List<HouseInfoRela> nearlyHouseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),10);
+			resultMap.put("nearlyHouseInfoList", nearlyHouseInfoList);
 			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
