@@ -4,7 +4,6 @@
 	<!-- 分页查询条件 -->
     <sql id="QueryConditionSql">
         <where>
-			<if test="status!=null and status!=''"> AND status = #{status} </if>
 			<if test="houseCode!=null and houseCode!=''"> AND code = #{houseCode} </if>
 			<if test="listTimeStr=='yes'">  AND CURRENT_TIMESTAMP > list_time </if>
             <if test="apartmentId!=null and apartmentId!=''"> AND apartment_id = #{apartmentId} </if>
@@ -12,10 +11,10 @@
             <if test="title!=null and title!=''"> AND title = #{title} </if>
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
             <if test="status!=null">
-              AND status in
-              <foreach item="item" index="index" collection="status" open="(" separator="," close=")">  
-                 #{item}  
-              </foreach>  
+                AND status in
+                <foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
         </where>
     </sql>
@@ -44,6 +43,9 @@
    		查询条件 是否热门 公寓名称 房源标题（名称）房源编码 所在区域  -->
     <select id="getHotHouseList" resultType="com.apass.zufang.domain.vo.HouseVo"
     	parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
+
+
+        
     	<![CDATA[
         SELECT 
         	x.sort_no sortNo,
@@ -114,7 +116,7 @@
         ]]>
     </select>
     <!-- 电话预约管理 房源列表查询 -->
-    <select id="getHouseList" resultMap="com.apass.zufang.domain.vo.HouseVo" 
+    <!--<select id="getHouseList" resultType="com.apass.zufang.domain.vo.HouseVo"
         parameterType="com.apass.zufang.domain.dto.HouseAppointmentQueryParams">
         <![CDATA[
         SELECT 
@@ -129,5 +131,5 @@
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
-    </select>
+    </select>-->
 </mapper>
