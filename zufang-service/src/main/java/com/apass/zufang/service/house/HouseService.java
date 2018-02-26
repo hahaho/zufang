@@ -22,6 +22,7 @@ import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.enums.RentTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
@@ -34,6 +35,7 @@ import com.apass.zufang.utils.FileUtilsCommons;
 import com.apass.zufang.utils.LngLatUtils;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
+import com.google.common.collect.Lists;
 /**
  * 房源管理
  * @author Administrator
@@ -81,6 +83,26 @@ public class HouseService {
 	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
 		ResponsePageBody<House> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
+		
+		List<Integer> status = Lists.newArrayList();
+		status.add(RentTypeEnums.ZT_WSHAGNJIA_1.getCode());
+		status.add(RentTypeEnums.ZT_SHAGNJIA_2.getCode());
+		status.add(RentTypeEnums.ZT_XIAJIA_3.getCode());
+		dto.setStatus(status);
+		List<House> houseList = houseMapper.getHouseList(dto);
+		body.setRows(houseList);
+		body.setTotal(houseMapper.getHouseListCount(dto));
+		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+		return body;
+	}
+	
+	public ResponsePageBody<House> getHouseAuditListExceptDelete(HouseQueryParams dto){
+		ResponsePageBody<House> body = new ResponsePageBody<>();
+		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
+		
+		List<Integer> status = Lists.newArrayList();
+		status.add(RentTypeEnums.ZT_XIUGAI_5.getCode());
+		dto.setStatus(status);
 		List<House> houseList = houseMapper.getHouseList(dto);
 		body.setRows(houseList);
 		body.setTotal(houseMapper.getHouseListCount(dto));
@@ -158,6 +180,10 @@ public class HouseService {
 		BeanUtils.copyProperties(houseVo, house);
 		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		
+		/** 如果是首次添加，修改，状态不变，如果是下架，修改后，状态变为5*/
+		if(house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
+			house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+		}
 		/*** 添加房屋信息入库*/
 		houseMapper.updateByPrimaryKeySelective(house);
 		
@@ -231,18 +257,45 @@ public class HouseService {
 			throw new BusinessException("房屋信息不存在！");
 		}
 		/***房屋状态为上架或者删除时，不允许删除*/
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHAGNJIA_2.getCode()
-				||house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
 			throw new BusinessException("房屋状态不允许删除!");
 		}
+		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHAGNJIA_2.getCode()){
+			throw new BusinessException("请将房源下架后重试!");
+		}
 		house.setStatus(RentTypeEnums.ZT_SHANGCHU_4.getCode().byteValue());
+		house.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
+		house.setUpdatedTime(new Date());
+		house.setUpdatedUser(updateUser);
+		houseMapper.updateByPrimaryKeySelective(house);
+	}
+	
+	
+	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	public void auditHouse(String id,String status,String updateUser) throws BusinessException{
+		if(StringUtils.isBlank(id)){
+			throw new BusinessException("房屋Id不能为空!");
+		}
+		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
+		/**如果查询房屋信息为空*/
+		if(null == house){
+			throw new BusinessException("房屋信息不存在！");
+		}
+		if(house.getStatus().intValue() != RentTypeEnums.ZT_XIUGAI_5.getCode()){
+			throw new BusinessException("房屋状态不允许操作!");
+		}
+		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
+			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+		}else{
+			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
+		}
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
 		houseMapper.updateByPrimaryKeySelective(house);
 	}
 	
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
-	public void upOrDownHouse(String id,String updateUser) throws BusinessException{
+	public void downHouse(String id,String updateUser) throws BusinessException{
 		if(StringUtils.isBlank(id)){
 			throw new BusinessException("房屋Id不能为空!");
 		}
@@ -258,13 +311,83 @@ public class HouseService {
 		
 		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHAGNJIA_2.getCode()){
 			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
-		}else{
-			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			house.setUpdatedTime(new Date());
+			house.setUpdatedUser(updateUser);
+			houseMapper.updateByPrimaryKeySelective(house);
 		}
-		house.setUpdatedTime(new Date());
-		house.setUpdatedUser(updateUser);
-		houseMapper.updateByPrimaryKeySelective(house);
 	}
+	
+	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	public String upHouse(String id,String updateUser) throws BusinessException{
+		
+		if(StringUtils.isBlank(id)){
+			throw new BusinessException("房屋Id不能为空!");
+		}
+		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
+		int status = house.getStatus().intValue();
+		//如果房屋的状态为待上架，正常上架
+		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+			return "房屋状态不允许操作！";
+		}
+		if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode() 
+				|| house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
+			if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode()){
+				house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+			}else{
+				house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			}
+			house.setUpdatedTime(new Date());
+			house.setUpdatedUser(updateUser);
+			houseMapper.updateByPrimaryKeySelective(house);
+		}
+		return status == 1 ? "房屋上架成功!":"首次录入房源需审核，通过后自动上架，请等待审核结果!";
+	}
+	
+	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	public String upHouses(String id,String updateUser) throws BusinessException{
+		
+		if(StringUtils.isBlank(id)){
+			throw new BusinessException("房屋Id不能为空!");
+		}
+		String[] ids = StringUtils.split(",");
+		
+		int waitUp = 0;//未修改的房屋信息统计
+		int others = 0;//修改后的房屋信息统计
+		
+		for (String str : ids) {
+			House house = houseMapper.selectByPrimaryKey(Long.parseLong(str));
+			//如果房屋状态为删除，则跳过
+			if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+				continue;
+			}
+			//如果房屋的状态为待上架，正常上架
+			if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode() 
+					|| house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
+				if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode()){
+					house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+					others++;
+				}else{
+					house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					waitUp++;
+				}
+				house.setUpdatedTime(new Date());
+				house.setUpdatedUser(updateUser);
+				houseMapper.updateByPrimaryKeySelective(house);
+			}
+		}
+		
+		if(others == 0 && waitUp == 0){
+			return "不能重复上架！";
+		}
+		if(waitUp == 0){
+			return "部分房源上架成功，剩余房源需审核，通过后自动上架，请等待审核结果!";
+		}
+		if(others == 0){
+			return "房源批量上架成功！";
+		}
+		return "";
+	}
+	
 	
 	public House readEntity(Long id){
 		return houseMapper.selectByPrimaryKey(id);
