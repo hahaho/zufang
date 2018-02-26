@@ -15,32 +15,35 @@
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
     <result column="created_user" property="createdUser" jdbcType="VARCHAR" />
     <result column="updated_user" property="updatedUser" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="company_logo" property="company_logo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, code, name, company_name, province, city, area, bank_name, bank_card, created_time, 
-    updated_time, created_user, updated_user
+    id, code, name, company_name, province, city, area, bank_name, bank_card, 
+    created_time, updated_time, created_user, updated_user, is_delete, company_logo
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from t_zfang_apartment
-    where id = #{id,jdbcType=BIGINT}
+    from t_zfang_apartment where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from t_zfang_apartment
-    where id = #{id,jdbcType=BIGINT}
+    delete from t_zfang_apartment where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.apass.zufang.domain.entity.Apartment" useGeneratedKeys="true" keyProperty="id" >
-    insert into t_zfang_apartment (code, name, company_name, 
-      province, city, area, 
-      bank_name, bank_card, created_time, 
-      updated_time, created_user, updated_user
-      )
-    values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
-      #{bankName,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR}
-      )
+    insert into t_zfang_apartment 
+    	(code, name, company_name, province, city, 
+    	area, bank_name, bank_card, created_time, 
+      	updated_time, created_user, updated_user,
+      	is_delete, company_logo
+      	)
+    values 
+    	(#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      	#{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
+      	#{bankName,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      	#{updatedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR},
+      	#{isDelete,jdbcType=VARCHAR},#{companyLogo,jdbcType=VARCHAR}
+      	)
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.Apartment" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_apartment
@@ -81,6 +84,12 @@
       <if test="updatedUser != null" >
         updated_user,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="companyLogo != null" >
+        company_logo,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="code != null" >
@@ -118,6 +127,12 @@
       </if>
       <if test="updatedUser != null" >
         #{updatedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLogo != null" >
+        #{companyLogo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -160,6 +175,12 @@
       <if test="updatedUser != null" >
         updated_user = #{updatedUser,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="companyLogo != null" >
+        company_logo = #{companyLogo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -176,7 +197,9 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       created_user = #{createdUser,jdbcType=VARCHAR},
-      updated_user = #{updatedUser,jdbcType=VARCHAR}
+      updated_user = #{updatedUser,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      company_logo = #{companyLogo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
