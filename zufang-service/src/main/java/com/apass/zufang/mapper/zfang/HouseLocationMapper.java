@@ -19,6 +19,8 @@ public interface HouseLocationMapper extends GenericMapper<HouseLocation,Long>{
 	List<HouseVo> initHotLocation(HouseLocation houseLocation);
 
 	List<HouseVo> initNearLocation(Map<String, Double> returnLLSquarePoint);
+
+	List<HouseVo> initHouseByCity(HouseLocation entity);
 	
 	
 }

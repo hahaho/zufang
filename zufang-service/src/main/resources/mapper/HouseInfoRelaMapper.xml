@@ -28,7 +28,6 @@
 			t2.rent_type rentType,
 			t2.zujin_type zujinType,
 			t2.rent_amt rentAmt,
-			t3.`name` houseConfiguration,
 			t4.latitude latitude,
 			t4.longitude longitude,
 			t4.street street,
@@ -36,8 +35,6 @@
 			t2.created_time houseCreatedTime
             FROM t_zfang_apartment t1,
 			     t_zfang_house t2
-            LEFT JOIN t_zfang_house_peizhi t3 ON t3.house_id = t2.id
-             AND t3.is_delete NOT IN ('01')
             LEFT JOIN t_zfang_house_location t4 ON t4.house_id = t2.id
              AND t4.is_delete NOT IN ('01')
             WHERE t1.id = t2.apartment_id
@@ -87,7 +84,6 @@
 			t2.rent_type rentType,
 			t2.zujin_type zujinType,
 			t2.rent_amt rentAmt,
-			t3.`name` houseConfiguration,
 			t4.latitude latitude,
 			t4.longitude longitude,
 			t4.street street,
@@ -95,8 +91,6 @@
 			t2.created_time houseCreatedTime
             FROM t_zfang_apartment t1,
 			     t_zfang_house t2
-            LEFT JOIN t_zfang_house_peizhi t3 ON t3.house_id = t2.id
-             AND t3.is_delete NOT IN ('01')
             LEFT JOIN t_zfang_house_location t4 ON t4.house_id = t2.id
              AND t4.is_delete NOT IN ('01')
             WHERE t1.id = t2.apartment_id
