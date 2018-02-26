@@ -16,7 +16,7 @@
     <result column="created_user" property="createdUser" jdbcType="VARCHAR" />
     <result column="updated_user" property="updatedUser" jdbcType="VARCHAR" />
     <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
-    <result column="company_logo" property="company_logo" jdbcType="VARCHAR" />
+    <result column="company_logo" property="companyLogo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, code, name, company_name, province, city, area, bank_name, bank_card, 
