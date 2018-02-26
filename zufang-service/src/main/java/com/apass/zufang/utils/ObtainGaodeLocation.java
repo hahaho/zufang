@@ -30,7 +30,7 @@ public class ObtainGaodeLocation {
 	private static String KEY;
 
 	private static Pattern pattern = Pattern.compile("\"location\":\"(\\d+\\.\\d+),(\\d+\\.\\d+)\"");
- 
+  
 	
 
 	public static GaodeLocation addressToGPS(String address) {
