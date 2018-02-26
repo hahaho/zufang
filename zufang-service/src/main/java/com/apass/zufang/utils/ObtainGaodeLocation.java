@@ -90,7 +90,7 @@ public class ObtainGaodeLocation {
 
 		return null;
 
-	}
+	} 
 	/**
 	 * 根据坐标获取详细地址
 	 * @param log
