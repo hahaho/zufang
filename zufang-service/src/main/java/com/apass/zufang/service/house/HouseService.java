@@ -42,6 +42,7 @@ import com.apass.zufang.utils.LngLatUtils;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 /**
  * 房源管理
  * @author Administrator
@@ -276,6 +277,15 @@ public class HouseService {
 		houseMapper.updateByPrimaryKeySelective(house);
 	}
 	
+	public Map<String,Object> getHouseDetail(String id) throws BusinessException{
+		
+		Map<String,Object> values = Maps.newHashMap();
+		
+		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
+		
+		
+		return values;
+	}
 	
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void auditHouse(String id,String status,String updateUser) throws BusinessException{

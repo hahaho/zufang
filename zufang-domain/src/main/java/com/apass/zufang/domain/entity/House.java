@@ -70,6 +70,8 @@ public class House {
 
     private Byte hezuResource;
 
+    private BigDecimal roomAcreage;
+
     public Long getId() {
         return id;
     }
@@ -332,5 +334,13 @@ public class House {
 
     public void setHezuResource(Byte hezuResource) {
         this.hezuResource = hezuResource;
+    }
+
+    public BigDecimal getRoomAcreage() {
+        return roomAcreage;
+    }
+
+    public void setRoomAcreage(BigDecimal roomAcreage) {
+        this.roomAcreage = roomAcreage;
     }
 }

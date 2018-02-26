@@ -39,7 +39,7 @@
         SELECT COUNT(*) FROM t_zfang_house
         <include refid="QueryConditionSql" />
     </select>
-    <!--热门房源分页查询                
+    <!--品牌公寓热门房源列表查询  热门房源分页查询                
      	查询列表字段    热门排序  公寓ID，公寓名称，房源ID，房源编码，房源标题（名称），小区名称，户型（室厅卫）
    		查询条件 是否热门 公寓名称 房源标题（名称）房源编码 所在区域  -->
     <select id="getHotHouseList" resultType="com.apass.zufang.domain.vo.HouseVo"
@@ -83,7 +83,6 @@
 		GROUP BY l.city ASC
         ]]>
     </select>
-    
     <!-- 查询房源List -->
     <select id="getHouseByID" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
@@ -114,5 +113,21 @@
 	      ORDER BY h.page_view DESC LIMIT 0,5;
         ]]>
     </select>
-    
+    <!-- 电话预约管理 房源列表查询 -->
+    <select id="getHouseList" resultMap="com.apass.zufang.domain.vo.HouseVo" 
+        parameterType="com.apass.zufang.domain.dto.HouseAppointmentQueryParams">
+        <![CDATA[
+        SELECT 
+        	
+        FROM t_zfang_house x
+       	WHERE 1=1 
+       	]]>
+       	<if test="houseName!=null and houseName!=''"> AND x.name = #{houseName} </if>
+        <![CDATA[ 
+        ORDER BY created_time DESC
+        ]]>
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
 </mapper>
