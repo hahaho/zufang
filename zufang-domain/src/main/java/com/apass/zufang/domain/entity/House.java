@@ -62,6 +62,10 @@ public class House {
 
     private String isDelete;
 
+    private Long pageView;
+
+    private String housekeeperTel;
+
     public Long getId() {
         return id;
     }
@@ -292,5 +296,21 @@ public class House {
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Long getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Long pageView) {
+        this.pageView = pageView;
+    }
+
+    public String getHousekeeperTel() {
+        return housekeeperTel;
+    }
+
+    public void setHousekeeperTel(String housekeeperTel) {
+        this.housekeeperTel = housekeeperTel;
     }
 }
