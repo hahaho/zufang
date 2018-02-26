@@ -92,6 +92,8 @@ public class HouseVo{
 	private String longitude;//经度
 	
 	private String latitude;//维度
+	
+	private BigDecimal roomAcreage;
 
 	public String getLongitude() {
 		return longitude;
@@ -407,5 +409,12 @@ public class HouseVo{
 	public void setHezuResource(Byte hezuResource) {
 		this.hezuResource = hezuResource;
 	}
-	
+
+	public BigDecimal getRoomAcreage() {
+		return roomAcreage;
+	}
+
+	public void setRoomAcreage(BigDecimal roomAcreage) {
+		this.roomAcreage = roomAcreage;
+	}
 }
