@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.jwt.common.ListeningRegExpUtils;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
@@ -98,6 +99,7 @@ public class HouseControler {
     @Path("/editHouse")
 	public Response editHouse(Map<String, Object> paramMap){
 		try {
+			logger.info("edit house paramMap--->{}",GsonUtils.toJson(paramMap));
 			validateParams(paramMap);
 			HouseVo vo = getVoByParams(paramMap);
 			houseService.editHouse(vo);
@@ -120,6 +122,7 @@ public class HouseControler {
     @Path("/delHouse")
 	public Response delHouse(Map<String, Object> paramMap){
 		try {
+			logger.info("del house paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "房屋Id为空！");
 			houseService.deleteHouse(id, SpringSecurityUtils.getCurrentUser());
@@ -135,18 +138,55 @@ public class HouseControler {
     
     
     @POST
-    @Path("/upOrDownHouse")
-	public Response upOrDownHouse(Map<String, Object> paramMap){
+    @Path("/downHouse")
+	public Response downHouse(Map<String, Object> paramMap){
     	try {
+    		logger.info("upOrDown house paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "房屋Id为空！");
-			houseService.upOrDownHouse(id, SpringSecurityUtils.getCurrentUser());
-			return Response.success("操作成功！");
+			houseService.downHouse(id, SpringSecurityUtils.getCurrentUser());
+			return Response.success("下架成功！");
 		}catch (BusinessException e){
-			logger.error("delete house businessException---->{}",e);
+			logger.error("down house businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
 		}catch (Exception e) {
-			logger.error("上下架房屋信息失败，错误原因", e);
+			logger.error("下架房屋信息失败，错误原因", e);
+		    return Response.fail("操作失败！");
+		}
+    }
+    
+    @POST
+    @Path("/upHouse")
+    public Response upHouse(Map<String, Object> paramMap){
+    	try {
+    		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
+			String id = CommonUtils.getValue(paramMap, "id");
+			ValidateUtils.isNotBlank(id, "房屋Id为空！");
+			houseService.upHouse(id, SpringSecurityUtils.getCurrentUser());
+			return Response.success("上架成功!");
+		}catch (BusinessException e){
+			logger.error("bathUp house businessException---->{}",e);
+			return Response.fail(e.getErrorDesc());
+		}catch (Exception e) {
+			logger.error("上架房屋信息失败，错误原因", e);
+		    return Response.fail("操作失败！");
+		}
+    }
+    
+    @POST
+    @Path("/bathUpHouse")
+    public Response batchUp(Map<String, Object> paramMap){
+    	try {
+    		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
+			String id = CommonUtils.getValue(paramMap, "id");
+			ValidateUtils.isNotBlank(id, "房屋Id为空！");
+			String message = houseService.upHouses(id, SpringSecurityUtils.getCurrentUser());
+			return Response.success(message);
+		}catch (BusinessException e){
+			logger.error("bathUp house businessException---->{}",e);
+			return Response.fail(e.getErrorDesc());
+		}catch (Exception e) {
+			logger.error("上架房屋信息失败，错误原因", e);
 		    return Response.fail("操作失败！");
 		}
     }
@@ -159,6 +199,9 @@ public class HouseControler {
 	public void validateParams(Map<String, Object> paramMap) throws BusinessException{
 		
 		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");
+		
+		String phone = CommonUtils.getValue(paramMap,"phone");
+		
 		String rentType = CommonUtils.getValue(paramMap, "rentType");
 		String communityName = CommonUtils.getValue(paramMap, "communityName");
 		
@@ -187,22 +230,30 @@ public class HouseControler {
 	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");
 	    String houseType = CommonUtils.getValue(paramMap, "houseType");
 	    String title = CommonUtils.getValue(paramMap, "title");
-	    String description = CommonUtils.getValue(paramMap, "description");
+//	    String description = CommonUtils.getValue(paramMap, "description");
 	    
 	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
 	    
 	    ValidateUtils.isNotBlank(apartmentId, "请选择所属公寓");
+	    ValidateUtils.isNotBlank(phone, "请填写手机号码");
+	    if(!ListeningRegExpUtils.mobile(phone)){
+	    	throw new BusinessException("请正确填写11位手机号码");
+	    }
 		ValidateUtils.isNotBlank(rentType, "请选择出租方式");
 		ValidateUtils.isNotBlank(communityName, "请填写小区名称");
 		ValidateUtils.checkLength(communityName, 2, 20, "2-20个字，可填写汉字，数字，不能填写特殊字符");
-	    
+		if(!ListeningRegExpUtils.isChineseOrMath(communityName)){
+			throw new BusinessException("2-20个字，可填写汉字，数字，不能填写特殊字符");
+		}
 	    ValidateUtils.isNotBlank(province, "请选择省份");
 	    ValidateUtils.isNotBlank(city, "请选择城市");
 	    ValidateUtils.isNotBlank(district, "请选择区域");
 	    ValidateUtils.isNotBlank(street, "请选择街道");
 	    ValidateUtils.isNotBlank(detailAddr, "请填写详细地址");
 	    ValidateUtils.checkLength(detailAddr, 2, 30, "2-30个字，可填写汉字，数字，不能填写特殊字符");
-	    
+	    if(!ListeningRegExpUtils.isChineseOrMath(detailAddr)){
+			throw new BusinessException("2-30个字，可填写汉字，数字，不能填写特殊字符");
+		}
 	    if(StringUtils.equals(rentType, RentTypeEnums.HZ_HEZU_2.getCode()+"")){
 	    	ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
 	    	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
@@ -232,7 +283,7 @@ public class HouseControler {
 	    
 	    ValidateUtils.isNotBlank(title, "请填写房源标题");
 		ValidateUtils.checkLength(title, 6, 30, "请填写6-30个字");
-		ValidateUtils.checkValueLength(description, 8, 100, "请填写10-800个字");
+//		ValidateUtils.checkValueLength(description, 8, 100, "请填写10-800个字");
 		ValidateUtils.isNotBlank(picturs, "请上传图片");
 	}
 	
@@ -246,6 +297,8 @@ public class HouseControler {
 		HouseVo house = new HouseVo();
 		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");
 		house.setApartmentId(Long.parseLong(apartmentId));
+		String phone = CommonUtils.getValue(paramMap, "phone");
+		house.setHousekeeperTel(phone);
 		String rentType = CommonUtils.getValue(paramMap, "rentType");
 		house.setRentType(Byte.valueOf(rentType));
 		String communityName = CommonUtils.getValue(paramMap, "communityName");
@@ -290,8 +343,8 @@ public class HouseControler {
 	    house.setHouseType(Byte.valueOf(houseType));
 	    String title = CommonUtils.getValue(paramMap, "title");
 	    house.setTitle(title);
-	    String description = CommonUtils.getValue(paramMap, "description");
-	    house.setDescription(description);
+//	    String description = CommonUtils.getValue(paramMap, "description");
+//	    house.setDescription(description);
 		
 	    String houseId = CommonUtils.getValue(paramMap,"id");
 	    Date date = new Date();

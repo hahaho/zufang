@@ -31,7 +31,10 @@ public class ElasticsearchTest1 {
 
     public final static String HOST = "192.168.1.140";
 
-    public final static int PORT = 9300; //http请求的端口是9200，客户端是9300
+    /**
+     * http请求的端口是9200，客户端是9300
+     */
+    public final static int PORT = 9300;
 
     private TransportClient client = null;
     /**

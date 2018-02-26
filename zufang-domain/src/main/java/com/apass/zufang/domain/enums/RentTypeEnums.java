@@ -27,6 +27,7 @@ public enum RentTypeEnums {
 	ZT_SHAGNJIA_2(2, "上架"),
 	ZT_XIAJIA_3(3, "下架"),
 	ZT_SHANGCHU_4(4, "删除"),
+	ZT_XIUGAI_5(5,"修改"),
 	// '装修情况:1:豪华装修...'
 	ZX_HAOHUA_1(1, "豪华装修"),
 	// '1:普通住宅...',

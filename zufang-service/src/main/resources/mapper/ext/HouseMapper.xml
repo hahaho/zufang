@@ -9,6 +9,12 @@
             <if test="type!=null and type!=''"> AND type = #{type} </if>
             <if test="title!=null and title!=''"> AND title = #{title} </if>
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
+            <if test="status!=null and status!=''">
+              status in 
+              <foreach item="item" index="index" collection="status" open="(" separator="," close=")">  
+                 #{item}  
+              </foreach>  
+            </if>
         </where>
     </sql>
 	<!-- 分页查询 -->
