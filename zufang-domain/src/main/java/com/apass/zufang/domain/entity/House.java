@@ -40,8 +40,6 @@ public class House {
 
     private Byte zhuangxiu;
 
-    private Byte houseType;
-
     private Byte status;
 
     private Date listTime;
@@ -61,6 +59,16 @@ public class House {
     private String updatedUser;
 
     private String isDelete;
+
+    private Long pageView;
+
+    private String housekeeperTel;
+
+    private String totalDoors;
+
+    private Byte hezuChaoxiang;
+
+    private Byte hezuResource;
 
     public Long getId() {
         return id;
@@ -206,14 +214,6 @@ public class House {
         this.zhuangxiu = zhuangxiu;
     }
 
-    public Byte getHouseType() {
-        return houseType;
-    }
-
-    public void setHouseType(Byte houseType) {
-        this.houseType = houseType;
-    }
-
     public Byte getStatus() {
         return status;
     }
@@ -292,5 +292,45 @@ public class House {
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Long getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Long pageView) {
+        this.pageView = pageView;
+    }
+
+    public String getHousekeeperTel() {
+        return housekeeperTel;
+    }
+
+    public void setHousekeeperTel(String housekeeperTel) {
+        this.housekeeperTel = housekeeperTel;
+    }
+
+    public String getTotalDoors() {
+        return totalDoors;
+    }
+
+    public void setTotalDoors(String totalDoors) {
+        this.totalDoors = totalDoors;
+    }
+
+    public Byte getHezuChaoxiang() {
+        return hezuChaoxiang;
+    }
+
+    public void setHezuChaoxiang(Byte hezuChaoxiang) {
+        this.hezuChaoxiang = hezuChaoxiang;
+    }
+
+    public Byte getHezuResource() {
+        return hezuResource;
+    }
+
+    public void setHezuResource(Byte hezuResource) {
+        this.hezuResource = hezuResource;
     }
 }

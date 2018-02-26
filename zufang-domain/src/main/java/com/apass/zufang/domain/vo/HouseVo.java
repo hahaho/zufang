@@ -18,6 +18,8 @@ public class HouseVo{
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
 
     private Long apartmentId;//所属公寓
+    
+    private String housekeeperTel;
 
     private Integer sortNo;//排序字段
 
@@ -82,6 +84,26 @@ public class HouseVo{
 	private String houseCode;//房源编码
 	
 	private String locationId;//地址Id
+	
+	private String longitude;//经度
+	
+	private String latitude;//维度
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
 
 	public String getCode() {
 		return code;
@@ -97,6 +119,14 @@ public class HouseVo{
 
 	public void setApartmentId(Long apartmentId) {
 		this.apartmentId = apartmentId;
+	}
+	
+	public String getHousekeeperTel() {
+		return housekeeperTel;
+	}
+
+	public void setHousekeeperTel(String housekeeperTel) {
+		this.housekeeperTel = housekeeperTel;
 	}
 
 	public Integer getSortNo() {

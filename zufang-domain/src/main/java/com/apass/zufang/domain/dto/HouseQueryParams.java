@@ -1,4 +1,6 @@
 package com.apass.zufang.domain.dto;
+import java.util.List;
+
 import com.apass.zufang.common.model.QueryParams;
 /**
  * 
@@ -16,6 +18,8 @@ public class HouseQueryParams extends QueryParams{
 	private String houseCode;//房源编码
 	private String houseArea;//公寓所在区
 	private String isDelete;//房源是否删除
+	private List<Integer> status;//状态
+	
 	public byte getHouseType() {
 		return houseType;
 	}
@@ -57,5 +61,11 @@ public class HouseQueryParams extends QueryParams{
 	}
 	public void setIsDelete(String isDelete) {
 		this.isDelete = isDelete;
+	}
+	public List<Integer> getStatus() {
+		return status;
+	}
+	public void setStatus(List<Integer> status) {
+		this.status = status;
 	}
 }
