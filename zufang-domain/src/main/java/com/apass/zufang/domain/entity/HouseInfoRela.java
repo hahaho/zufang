@@ -1,5 +1,6 @@
 package com.apass.zufang.domain.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -48,11 +49,11 @@ public class HouseInfoRela {
 	/**
 	 * 房屋现状1:待上架；2：上架；3：下架；4：删除
 	 */
-	private String status;
+	private Byte status;
 	/**
 	 * 1:普通住宅...
 	 */
-	private String houseType;
+	private Byte houseType;
 	/**
 	 * 房屋创建时间
 	 */
@@ -80,41 +81,41 @@ public class HouseInfoRela {
 	private String chaoxiang;
 	
 	/**
-	 * 房屋装修情况:1:豪华装修...
+	 * 房屋装修类型:1:豪华装修...
 	 */
-	private String zhuangxiu;
+	private Byte zhuangxiu;
 	/**
 	 * 房屋第几层
 	 */
-	private String floor;
+	private Integer floor;
 	/**
 	 * 房屋总共的楼层数
 	 */
-	private String totalFloor;
+	private Integer totalFloor;
 	/**
 	 * 房屋     面积
 	 */
-	private String acreage;
+	private BigDecimal acreage;
 	/**
 	 * 房屋     室 
 	 */
-	private String room;
+	private Integer room;
 	/**
 	 * 房屋      厅
 	 */
-	private String hall;
+	private Integer hall;
 	/**
-	 * 房屋 1:整租；2:合租
+	 * 房屋 租赁类型 1:整租；2:合租
 	 */
-	private String rentType;
+	private Byte rentType;
 	/**
-	 * 房屋
+	 * 房屋租金类型
 	 */
-	private String zujinType;
+	private Byte zujinType;
 	/**
 	 * 租金/月
 	 */
-	private String rentAmt;
+	private BigDecimal rentAmt;
 	/**
 	 * 房屋家具配置 
 	 */
@@ -128,11 +129,11 @@ public class HouseInfoRela {
 	/**
 	 * 最小租金/月
 	 */
-	private String minRentAmt;
+	private BigDecimal minRentAmt;
 	/**
 	 * 最大租金/月
 	 */
-	private String maxRentAmt;
+	private BigDecimal maxRentAmt;
 
 	public Long getHouseId() {
 		return houseId;
@@ -246,74 +247,6 @@ public class HouseInfoRela {
 		this.chaoxiang = chaoxiang;
 	}
 
-	public String getFloor() {
-		return floor;
-	}
-
-	public void setFloor(String floor) {
-		this.floor = floor;
-	}
-
-	public String getTotalFloor() {
-		return totalFloor;
-	}
-
-	public void setTotalFloor(String totalFloor) {
-		this.totalFloor = totalFloor;
-	}
-
-	public String getAcreage() {
-		return acreage;
-	}
-
-	public void setAcreage(String acreage) {
-		this.acreage = acreage;
-	}
-
-	public String getRoom() {
-		return room;
-	}
-
-	public void setRoom(String room) {
-		this.room = room;
-	}
-
-	public String getHall() {
-		return hall;
-	}
-
-	public void setHall(String hall) {
-		this.hall = hall;
-	}
-
-	public String getRentType() {
-		return rentType;
-	}
-
-	public void setRentType(String rentType) {
-		this.rentType = rentType;
-	}
-
-	public String getZujinType() {
-		return zujinType;
-	}
-
-	public void setZujinType(String zujinType) {
-		this.zujinType = zujinType;
-	}
-
-	public String getRentAmt() {
-		return rentAmt;
-	}
-
-	public void setRentAmt(String rentAmt) {
-		this.rentAmt = rentAmt;
-	}
-
-	public String getHouseConfiguration() {
-		return houseConfiguration;
-	}
-
 	public void setHouseConfiguration(String houseConfiguration) {
 		this.houseConfiguration = houseConfiguration;
 	}
@@ -324,46 +257,6 @@ public class HouseInfoRela {
 
 	public void setApartmentId(Long apartmentId) {
 		this.apartmentId = apartmentId;
-	}
-
-	public String getZhuangxiu() {
-		return zhuangxiu;
-	}
-
-	public void setZhuangxiu(String zhuangxiu) {
-		this.zhuangxiu = zhuangxiu;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getHouseType() {
-		return houseType;
-	}
-
-	public void setHouseType(String houseType) {
-		this.houseType = houseType;
-	}
-
-	public String getMinRentAmt() {
-		return minRentAmt;
-	}
-
-	public void setMinRentAmt(String minRentAmt) {
-		this.minRentAmt = minRentAmt;
-	}
-
-	public String getMaxRentAmt() {
-		return maxRentAmt;
-	}
-
-	public void setMaxRentAmt(String maxRentAmt) {
-		this.maxRentAmt = maxRentAmt;
 	}
 
 	public List<String> getImgUrList() {
@@ -380,6 +273,114 @@ public class HouseInfoRela {
 
 	public void setTargetHouseId(Long targetHouseId) {
 		this.targetHouseId = targetHouseId;
+	}
+
+	public Byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
+	}
+
+	public Byte getHouseType() {
+		return houseType;
+	}
+
+	public void setHouseType(Byte houseType) {
+		this.houseType = houseType;
+	}
+
+	public Integer getFloor() {
+		return floor;
+	}
+
+	public void setFloor(Integer floor) {
+		this.floor = floor;
+	}
+
+	public Integer getTotalFloor() {
+		return totalFloor;
+	}
+
+	public void setTotalFloor(Integer totalFloor) {
+		this.totalFloor = totalFloor;
+	}
+
+	public Integer getRoom() {
+		return room;
+	}
+
+	public void setRoom(Integer room) {
+		this.room = room;
+	}
+
+	public Integer getHall() {
+		return hall;
+	}
+
+	public void setHall(Integer hall) {
+		this.hall = hall;
+	}
+
+	public Byte getRentType() {
+		return rentType;
+	}
+
+	public void setRentType(Byte rentType) {
+		this.rentType = rentType;
+	}
+
+	public Byte getZujinType() {
+		return zujinType;
+	}
+
+	public void setZujinType(Byte zujinType) {
+		this.zujinType = zujinType;
+	}
+
+	public BigDecimal getRentAmt() {
+		return rentAmt;
+	}
+
+	public void setRentAmt(BigDecimal rentAmt) {
+		this.rentAmt = rentAmt;
+	}
+
+	public String getHouseConfiguration() {
+		return houseConfiguration;
+	}
+
+	public BigDecimal getMinRentAmt() {
+		return minRentAmt;
+	}
+
+	public void setMinRentAmt(BigDecimal minRentAmt) {
+		this.minRentAmt = minRentAmt;
+	}
+
+	public BigDecimal getMaxRentAmt() {
+		return maxRentAmt;
+	}
+
+	public void setMaxRentAmt(BigDecimal maxRentAmt) {
+		this.maxRentAmt = maxRentAmt;
+	}
+
+	public Byte getZhuangxiu() {
+		return zhuangxiu;
+	}
+
+	public void setZhuangxiu(Byte zhuangxiu) {
+		this.zhuangxiu = zhuangxiu;
+	}
+
+	public BigDecimal getAcreage() {
+		return acreage;
+	}
+
+	public void setAcreage(BigDecimal acreage) {
+		this.acreage = acreage;
 	}
 
 }

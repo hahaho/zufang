@@ -48,7 +48,7 @@
 	]]>
 	<if test="apartmentId!=null and apartmentId!=''"> AND t1.id = #{apartmentId}  </if>
 	<if test="houseId!=null and houseId!=''"> AND t2.id = #{houseId} </if>
-	<if test="targetHouseId!=null and targetHouseId!=''"> AND t2.id not in(#{targetHouseId})</if>
+	<if test="targetHouseId!=null and targetHouseId!=''"> <![CDATA[  AND t2.id <> ]]> #{targetHouseId}</if>
 	<if test="province!=null and province!=''"> AND t1.province = #{province} </if>
 	<if test="city!=null and city!=''"> AND t1.city = #{city} </if>
 	<if test="district!=null and district!=''"> AND t4.id = #{district} </if>
