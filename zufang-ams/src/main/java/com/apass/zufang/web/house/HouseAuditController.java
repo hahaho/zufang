@@ -80,4 +80,21 @@ public class HouseAuditController {
 		}
 	}
 	
+	@POST
+	@Path("/detail")
+	public Response detailHouse(Map<String,Object> paramMap){
+		
+		try {
+			String id = CommonUtils.getValue(paramMap, "id");
+			Map<String,Object> values = houseService.getHouseDetail(id);
+			return Response.success("获取详情成功!", values);
+		}catch (BusinessException e){
+			logger.error("detail house businessException---->{}",e);
+			return Response.fail(e.getErrorDesc());
+		}catch (Exception e) {
+			logger.error("信息失败，错误原因", e);
+		    return Response.fail("审核房屋信息失败！");
+		}
+	}
+	
 }
