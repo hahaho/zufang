@@ -117,9 +117,9 @@ public class HouseInfoRela {
 	 */
 	private BigDecimal rentAmt;
 	/**
-	 * 房屋家具配置 
+	 * 房屋家具配置 list
 	 */
-	private String houseConfiguration;
+	private List<String> houseConfigList;
 	/**
 	 * 房源图片url  list
 	 */
@@ -247,10 +247,6 @@ public class HouseInfoRela {
 		this.chaoxiang = chaoxiang;
 	}
 
-	public void setHouseConfiguration(String houseConfiguration) {
-		this.houseConfiguration = houseConfiguration;
-	}
-
 	public Long getApartmentId() {
 		return apartmentId;
 	}
@@ -347,10 +343,6 @@ public class HouseInfoRela {
 		this.rentAmt = rentAmt;
 	}
 
-	public String getHouseConfiguration() {
-		return houseConfiguration;
-	}
-
 	public BigDecimal getMinRentAmt() {
 		return minRentAmt;
 	}
@@ -381,6 +373,14 @@ public class HouseInfoRela {
 
 	public void setAcreage(BigDecimal acreage) {
 		this.acreage = acreage;
+	}
+
+	public List<String> getHouseConfigList() {
+		return houseConfigList;
+	}
+
+	public void setHouseConfigList(List<String> houseConfigList) {
+		this.houseConfigList = houseConfigList;
 	}
 
 }
