@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseInfoRela;
+import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
+import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
 @Service
 public class HouseInfoService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseInfoService.class);
@@ -22,8 +25,9 @@ public class HouseInfoService {
 	 */
 	private static double EARTH_RADIUS = 6367000.0; // 单位：m
 	@Autowired
-	private HouseImgService houseImgService;
-	
+	private HouseImgMapper houseImgMapper;
+	@Autowired
+	private HousePeizhiMapper peizhiMapper;
 	@Autowired
 	private HouseInfoRelaMapper houseInfoRelaMapper;
 
@@ -41,13 +45,23 @@ public class HouseInfoService {
 				return houseInfoList;
 			}
 			for (HouseInfoRela houseInfo : houseInfoList) {
+				// 房屋的图片
 				List<String> imgUrList = new ArrayList<String>();
-				List<HouseImg> houseImgList = houseImgService
-						.getHouseImgList(houseInfo.getHouseId(),(byte)0);
+				HouseImg   orHouseImg =new HouseImg();
+				orHouseImg.setHouseId(houseInfo.getHouseId());
+				List<HouseImg> houseImgList = houseImgMapper
+						.getImgByHouseId(orHouseImg);
 				for (HouseImg houseImg : houseImgList) {
 					imgUrList.add(houseImg.getUrl());
 				}
 				houseInfo.setImgUrList(imgUrList);
+				// 房屋的配置
+				List<String> houseConfigList = new ArrayList<String>();
+				List<HousePeizhi> housePeizhiList=peizhiMapper.getPeiZhiByHouseId(houseInfo.getHouseId());
+				for (HousePeizhi Peizhi : housePeizhiList) {
+					houseConfigList.add(Peizhi.getName());
+				}
+				houseInfo.setHouseConfigList(houseConfigList);
 			}
 			return houseInfoList;
 		} catch (Exception e) {
