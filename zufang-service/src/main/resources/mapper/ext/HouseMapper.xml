@@ -44,6 +44,9 @@
    		查询条件 是否热门 公寓名称 房源标题（名称）房源编码 所在区域  -->
     <select id="getHotHouseList" resultType="com.apass.zufang.domain.vo.HouseVo"
     	parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
+
+
+        
     	<![CDATA[
         SELECT 
         	x.sort_no sortNo,
