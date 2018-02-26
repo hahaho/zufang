@@ -14,6 +14,10 @@ public class HouseInfoRela {
 	 */
 	private Long houseId;
 	/**
+	 * 需排除的目标房源id
+	 */
+	private Long targetHouseId;
+	/**
 	 * 房屋所在省
 	 */
 	private String province;
@@ -368,6 +372,14 @@ public class HouseInfoRela {
 
 	public void setImgUrList(List<String> imgUrList) {
 		this.imgUrList = imgUrList;
+	}
+
+	public Long getTargetHouseId() {
+		return targetHouseId;
+	}
+
+	public void setTargetHouseId(Long targetHouseId) {
+		this.targetHouseId = targetHouseId;
 	}
 
 }

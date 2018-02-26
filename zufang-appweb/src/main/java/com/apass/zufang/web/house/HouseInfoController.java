@@ -15,11 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.HouseInfoRela;
-import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.house.HouseService;
 
@@ -37,7 +35,7 @@ public class HouseInfoController {
 	private HouseInfoService houseInfoService;
 
 	/**
-	 * 查根据houseId显示房屋信息
+	 * 查根据查询条件显示房屋信息
 	 * 
 	 * @param paramMap
 	 * @return
@@ -75,7 +73,7 @@ public class HouseInfoController {
 	}
 
 	/**
-	 * 查询附近房源
+	 * 房屋详情页：查根据houseId显示房屋信息以及附近房源
 	 * 
 	 * @param paramMap
 	 * @return
@@ -86,7 +84,13 @@ public class HouseInfoController {
 		try {
 			String houseId = CommonUtils.getValue(paramMap, "houseId");
 			Map<String, Object> resultMap = new HashMap<String, Object>();
-			List<HouseLocation> houseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),20);
+			// 目标房源
+			HouseInfoRela queryCondition =new HouseInfoRela();
+			queryCondition.setHouseId(Long.valueOf(houseId));
+			List<HouseInfoRela> targetHouseInfoList =houseInfoService.queryHouseInfoRela(queryCondition);
+			resultMap.put("targetHouseInfo", targetHouseInfoList.get(0));
+			// 附近房源信息
+			List<HouseInfoRela> houseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),20);
 			resultMap.put("houseInfoList", houseInfoList);
 			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {

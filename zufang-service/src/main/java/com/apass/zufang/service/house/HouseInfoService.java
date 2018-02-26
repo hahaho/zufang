@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseInfoRela;
-import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
 @Service
 public class HouseInfoService {
@@ -66,7 +65,7 @@ public class HouseInfoService {
 	 *            附近房源数量
 	 * @return
 	 */
-	public List<HouseLocation> getNearbyhouseInfo(long houseId, int number) {
+	public List<HouseInfoRela> getNearbyhouseInfo(long houseId, int number) {
 		// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 		HouseInfoRela queryCondition = new HouseInfoRela();
 		queryCondition.setHouseId(houseId);
@@ -76,6 +75,7 @@ public class HouseInfoService {
 		HouseInfoRela queryInfo = new HouseInfoRela();
 		queryInfo.setProvince(houseInfo.getProvince());
 		queryInfo.setCity(houseInfo.getCity());
+		queryInfo.setTargetHouseId(houseId);
 		List<HouseInfoRela> houseInfoList = houseInfoRelaMapper
 				.getHouseInfoRelaList(queryInfo);
 
@@ -93,12 +93,15 @@ public class HouseInfoService {
 		Arrays.sort(resultArray);
 		// setp 5 取得前number的houseId 的list
 		List<Long> houseIdList = new ArrayList<Long>();
-		for (int i = 0; i < number; i++) {
+		int value=resultArray.length>number?number:resultArray.length;
+		for (int i = 0; i < value; i++) {
 			double disance = resultArray[i];
 			houseIdList.add(houseDistanceMap.get(disance));
 		}
 		// setp 6 根据list 查询附近房源的具体信息
-		List<HouseLocation> result = new ArrayList<HouseLocation>();
+		Map<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("houseIdList", houseIdList);
+		List<HouseInfoRela> result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
 		return result;
 	}
 
