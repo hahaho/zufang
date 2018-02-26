@@ -19,6 +19,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.HouseInfoRela;
+import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.house.HouseService;
 
@@ -84,11 +85,14 @@ public class HouseInfoController {
 	public Response getNearbyHouseInfo(Map<String, Object> paramMap) {
 		try {
 			String houseId = CommonUtils.getValue(paramMap, "houseId");
-
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			List<HouseLocation> houseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),20);
+			resultMap.put("houseInfoList", houseInfoList);
+			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
 			return Response.fail("操作失败");
 		}
-		return null;
 	}
 
 }
