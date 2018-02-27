@@ -233,10 +233,10 @@ public class HouseEs implements IdAble{
     private String configNamePinyin;
 
     /**
-     * 价格区间标记
+     * 价格区间标记:见PriceRangeEnum
      * @return
      */
-    private String flag;
+    private Integer priceFlag;
 
     @Override
     public Integer getId() {
@@ -663,5 +663,13 @@ public class HouseEs implements IdAble{
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public Integer getPriceFlag() {
+        return priceFlag;
+    }
+
+    public void setPriceFlag(Integer priceFlag) {
+        this.priceFlag = priceFlag;
     }
 }
