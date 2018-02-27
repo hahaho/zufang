@@ -8,7 +8,7 @@ import com.apass.zufang.common.model.QueryParams;
 public class HouseAppointmentQueryParams extends QueryParams{
 	private String apartmentName;//公寓名称
 	private String communityName;//小区名称
-	private String houseName;//房源名称
+	private String houseTitle;//房源标题(名称)
 	private String houseCode;//房源编号
 	private String houseCity;//房源城市
 	private String houseDistrict;//房源区域
@@ -32,11 +32,11 @@ public class HouseAppointmentQueryParams extends QueryParams{
 	public void setCommunityName(String communityName) {
 		this.communityName = communityName;
 	}
-	public String getHouseName() {
-		return houseName;
+	public String getHouseTitle() {
+		return houseTitle;
 	}
-	public void setHouseName(String houseName) {
-		this.houseName = houseName;
+	public void setHouseTitle(String houseTitle) {
+		this.houseTitle = houseTitle;
 	}
 	public String getHouseCode() {
 		return houseCode;
