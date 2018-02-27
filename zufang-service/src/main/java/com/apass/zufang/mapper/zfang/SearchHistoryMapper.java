@@ -6,9 +6,13 @@ import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.entity.SearchKeys;
 
 /**
- * Created by DELL on 2018/2/7.
+ * 
+ * 搜索历史
+ * @author ls
+ * @update 2018-02-09 11:02
+ *
  */
-public interface SearchKeysMapper extends GenericMapper<SearchKeys,Long>{
+public interface SearchHistoryMapper extends GenericMapper<SearchKeys,Long>  {
 	/**
 	 * 设备号查询
 	 * @param deviceId
@@ -27,12 +31,14 @@ public interface SearchKeysMapper extends GenericMapper<SearchKeys,Long>{
 	 * @param deviceId
 	 * @return
 	 */
-	public Object deleteDeviceIdHistory(String deviceId) ;
+	public Integer deleteDeviceIdHistory(String deviceId) ;
 	
 	/**
 	 * 用户id删除
 	 * @param customerId
 	 * @return
 	 */
-	public Object deleteCustomerIdHistory(String customerId) ;
+	public Integer deleteCustomerIdHistory(String userId) ;
+	
+	
 }
