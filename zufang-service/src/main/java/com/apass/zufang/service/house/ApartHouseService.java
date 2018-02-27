@@ -34,14 +34,6 @@ public class ApartHouseService {
     	}
     	return initCity;
     }
-    
-	/**
-	 * 品牌公寓接口:默认按创建降序排列20个
-	 * @return
-	 */
-	public List<Apartment> getApartGongyu(Apartment entity) {
-		return apartmentMapper.getApartGongyu(entity);
-	}
 
 	/**
 	 * 获取公寓Id
@@ -55,8 +47,8 @@ public class ApartHouseService {
 	 * 查询房源List
 	 * @return
 	 */
-	public List<Apartment> getHouseByID(ArrayList<String> list) {
-		return houseMapper.getHouseByID(list);
+	public List<Apartment> getHouseByCodes(ArrayList<String> list) {
+		return houseMapper.getHouseByCodes(list);
 	}
 
 }

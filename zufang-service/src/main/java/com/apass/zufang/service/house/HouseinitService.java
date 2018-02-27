@@ -1,17 +1,15 @@
 package com.apass.zufang.service.house;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.HouseImg;
-import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.vo.HouseVo;
-import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -20,42 +18,11 @@ import com.apass.zufang.mapper.zfang.HouseMapper;
 public class HouseinitService {
 	
 	@Autowired
-	private ApartmentMapper apartmentMapper;
-	@Autowired
 	private HouseMapper houseMapper;
 	@Autowired
 	private HouseImgMapper houseImgMapper;
     @Autowired
     private HouseLocationMapper HouseLocationMapper;
-
-	/**
-	 * 品牌公寓接口:默认按创建降序排列20个
-	 * @return
-	 */
-	public List<Apartment> getApartGongyu(Apartment apartment) {
-		return apartmentMapper.getApartGongyu(apartment);
-	}
-
-	/**
-	 * init配置热门房源
-	 * @param houseLocation 
-	 * @return
-	 */
-	public List<HouseVo> initPeizhiLocation(HouseLocation houseLocation) {
-		
-		List<HouseVo> initPei = HouseLocationMapper.initPeizhiLocation(houseLocation);
-		return initPei;
-	}
-
-	/**
-	 * init热门房源
-	 * @param houseLocation 
-	 * @return
-	 */
-	public List<HouseVo> initHotLocation(HouseLocation houseLocation) {
-		List<HouseVo> inithot = HouseLocationMapper.initHotLocation(houseLocation);
-		return inithot;
-	}
 
 	/**
 	 * init附近房源
@@ -93,8 +60,8 @@ public class HouseinitService {
 		return initCity;
 	}
 
-	public List<HouseVo> initHouseByCity(HouseLocation entity) {
-		 List<HouseVo> initHouse = HouseLocationMapper.initHouseByCity(entity);
+	public List<HouseVo> initHouseByCity(HashMap<String, String> map) {
+		 List<HouseVo> initHouse = HouseLocationMapper.initHouseByCity(map);
 		return initHouse;
 	}
 	

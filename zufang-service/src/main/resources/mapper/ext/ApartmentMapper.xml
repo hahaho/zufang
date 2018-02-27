@@ -48,14 +48,7 @@
         SELECT COUNT(*) FROM t_zfang_apartment
         <include refid="QueryConditionSqlBackup" />
     </select>
-	<select id="getApartGongyu" resultMap="BaseResultMap"
-		parameterType="com.apass.zufang.domain.entity.Apartment">
-		SELECT
-		<include refid="Base_Column_List" />
-		FROM T_ZFANG_APARTMENT
-		<include refid="QueryConditionSqlBackup" />
-		ORDER BY CREATED_TIME DESC;
-	</select>
+    <!-- 搜索所有公寓codes -->
 	<select id="getApartByCity" resultMap="BaseResultMap"
 		parameterType="com.apass.zufang.domain.entity.Apartment">
 		SELECT a.id,a.code,a.name
@@ -64,7 +57,6 @@
 		WHERE
 		a.is_delete = '00'
 		AND a.city = #{city}
-		GROUP BY
-		a.city, a.created_time DESC;
+		GROUP BY a.city ORDER BY a.created_time DESC;
 	</select>
 </mapper>
