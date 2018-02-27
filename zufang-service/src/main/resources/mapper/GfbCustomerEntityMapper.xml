@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.ajp.personal.GfbCustomerEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.ajp.entity.GfbCustomerEntity" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="OPEN_ID" property="openId" jdbcType="VARCHAR" />
+    <result column="INVITE_ID" property="inviteId" jdbcType="VARCHAR" />
+    <result column="AGENT" property="agent" jdbcType="VARCHAR" />
+    <result column="IDENTITY_NO" property="identityNo" jdbcType="VARCHAR" />
+    <result column="IDENTITY_EXPIRES" property="identityExpires" jdbcType="VARCHAR" />
+    <result column="IDENTITY_PERSON" property="identityPerson" jdbcType="VARCHAR" />
+    <result column="REAL_NAME" property="realName" jdbcType="VARCHAR" />
+    <result column="WORK_CITY" property="workCity" jdbcType="VARCHAR" />
+    <result column="SUPPORT_ADVANCE" property="supportAdvance" jdbcType="VARCHAR" />
+    <result column="ADVANCE_TYPE" property="advanceType" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="MOBILE_AUTH_STATUS" property="mobileAuthStatus" jdbcType="VARCHAR" />
+    <result column="MOBILE_AUTH_DATE" property="mobileAuthDate" jdbcType="TIMESTAMP" />
+    <result column="MOBILE_AUTH_FLAG" property="mobileAuthFlag" jdbcType="VARCHAR" />
+    <result column="MOBILE_REPORT_ID" property="mobileReportId" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="LOCAL_REGISTRY" property="localRegistry" jdbcType="VARCHAR" />
+    <result column="MOBILE_AUTH_IDENTITY" property="mobileAuthIdentity" jdbcType="VARCHAR" />
+    <result column="EDUCATION_DEGREE" property="educationDegree" jdbcType="VARCHAR" />
+    <result column="JOB" property="job" jdbcType="VARCHAR" />
+    <result column="MARRY_STATUS" property="marryStatus" jdbcType="VARCHAR" />
+    <result column="WORK_PROVINCE" property="workProvince" jdbcType="VARCHAR" />
+    <result column="MOBILE_REPEAT_APPLY" property="mobileRepeatApply" jdbcType="VARCHAR" />
+    <result column="IDENTITY_RECOGNIZE_NAME" property="identityRecognizeName" jdbcType="VARCHAR" />
+    <result column="IDENTITY_RECOGNIZE_ADDRESS" property="identityRecognizeAddress" jdbcType="VARCHAR" />
+    <result column="CUST_HEAD" property="custHead" jdbcType="VARCHAR" />
+    <result column="QUICK_LOAN_CUST" property="quickLoanCust" jdbcType="VARCHAR" />
+    <result column="BAIDU_SIMILARITY" property="baiduSimilarity" jdbcType="DECIMAL" />
+    <result column="MINSHI_SIMILARITY" property="minshiSimilarity" jdbcType="DECIMAL" />
+    <result column="APP_ID" property="appId" jdbcType="BIGINT" />
+    <result column="MOBILE_AUTH_NAME" property="mobileAuthName" jdbcType="VARCHAR" />
+    <result column="REMIND_REPAYMENT" property="remindRepayment" jdbcType="INTEGER" />
+    <result column="MONTHLY_INCOME" property="monthlyIncome" jdbcType="INTEGER" />
+    <result column="TRAN_PASSWORD" property="tranPassword" jdbcType="VARCHAR" />
+    <result column="PAIR_VERIFY_RESULT" property="pairVerifyResult" jdbcType="VARCHAR" />
+    <result column="PAIR_VERIFY_SIMILARITY" property="pairVerifySimilarity" jdbcType="VARCHAR" />
+    <result column="APP_AGENT" property="appAgent" jdbcType="VARCHAR" />
+    <result column="CREDIT_APPLY_TYPE" property="creditApplyType" jdbcType="VARCHAR" />
+    <result column="ZM_SCORE" property="zmScore" jdbcType="INTEGER" />
+    <result column="sub_status" property="subStatus" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OPEN_ID, INVITE_ID, AGENT, IDENTITY_NO, IDENTITY_EXPIRES, IDENTITY_PERSON, REAL_NAME, 
+    WORK_CITY, SUPPORT_ADVANCE, ADVANCE_TYPE, MOBILE, MOBILE_AUTH_STATUS, MOBILE_AUTH_DATE, 
+    MOBILE_AUTH_FLAG, MOBILE_REPORT_ID, STATUS, CREATED_DATE, UPDATED_DATE, LOCAL_REGISTRY, 
+    MOBILE_AUTH_IDENTITY, EDUCATION_DEGREE, JOB, MARRY_STATUS, WORK_PROVINCE, MOBILE_REPEAT_APPLY, 
+    IDENTITY_RECOGNIZE_NAME, IDENTITY_RECOGNIZE_ADDRESS, CUST_HEAD, QUICK_LOAN_CUST, 
+    BAIDU_SIMILARITY, MINSHI_SIMILARITY, APP_ID, MOBILE_AUTH_NAME, REMIND_REPAYMENT, 
+    MONTHLY_INCOME, TRAN_PASSWORD, PAIR_VERIFY_RESULT, PAIR_VERIFY_SIMILARITY, APP_AGENT, 
+    CREDIT_APPLY_TYPE, ZM_SCORE, sub_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_gfb_customer
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_gfb_customer
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.ajp.entity.GfbCustomerEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_gfb_customer (OPEN_ID, INVITE_ID, AGENT, 
+      IDENTITY_NO, IDENTITY_EXPIRES, IDENTITY_PERSON, 
+      REAL_NAME, WORK_CITY, SUPPORT_ADVANCE, 
+      ADVANCE_TYPE, MOBILE, MOBILE_AUTH_STATUS, 
+      MOBILE_AUTH_DATE, MOBILE_AUTH_FLAG, MOBILE_REPORT_ID, 
+      STATUS, CREATED_DATE, UPDATED_DATE, 
+      LOCAL_REGISTRY, MOBILE_AUTH_IDENTITY, EDUCATION_DEGREE, 
+      JOB, MARRY_STATUS, WORK_PROVINCE, 
+      MOBILE_REPEAT_APPLY, IDENTITY_RECOGNIZE_NAME, 
+      IDENTITY_RECOGNIZE_ADDRESS, CUST_HEAD, QUICK_LOAN_CUST, 
+      BAIDU_SIMILARITY, MINSHI_SIMILARITY, APP_ID, 
+      MOBILE_AUTH_NAME, REMIND_REPAYMENT, MONTHLY_INCOME, 
+      TRAN_PASSWORD, PAIR_VERIFY_RESULT, PAIR_VERIFY_SIMILARITY, 
+      APP_AGENT, CREDIT_APPLY_TYPE, ZM_SCORE, 
+      sub_status)
+    values (#{openId,jdbcType=VARCHAR}, #{inviteId,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR}, 
+      #{identityNo,jdbcType=VARCHAR}, #{identityExpires,jdbcType=VARCHAR}, #{identityPerson,jdbcType=VARCHAR}, 
+      #{realName,jdbcType=VARCHAR}, #{workCity,jdbcType=VARCHAR}, #{supportAdvance,jdbcType=VARCHAR}, 
+      #{advanceType,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{mobileAuthStatus,jdbcType=VARCHAR}, 
+      #{mobileAuthDate,jdbcType=TIMESTAMP}, #{mobileAuthFlag,jdbcType=VARCHAR}, #{mobileReportId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{localRegistry,jdbcType=VARCHAR}, #{mobileAuthIdentity,jdbcType=VARCHAR}, #{educationDegree,jdbcType=VARCHAR}, 
+      #{job,jdbcType=VARCHAR}, #{marryStatus,jdbcType=VARCHAR}, #{workProvince,jdbcType=VARCHAR}, 
+      #{mobileRepeatApply,jdbcType=VARCHAR}, #{identityRecognizeName,jdbcType=VARCHAR}, 
+      #{identityRecognizeAddress,jdbcType=VARCHAR}, #{custHead,jdbcType=VARCHAR}, #{quickLoanCust,jdbcType=VARCHAR}, 
+      #{baiduSimilarity,jdbcType=DECIMAL}, #{minshiSimilarity,jdbcType=DECIMAL}, #{appId,jdbcType=BIGINT}, 
+      #{mobileAuthName,jdbcType=VARCHAR}, #{remindRepayment,jdbcType=INTEGER}, #{monthlyIncome,jdbcType=INTEGER}, 
+      #{tranPassword,jdbcType=VARCHAR}, #{pairVerifyResult,jdbcType=VARCHAR}, #{pairVerifySimilarity,jdbcType=VARCHAR}, 
+      #{appAgent,jdbcType=VARCHAR}, #{creditApplyType,jdbcType=VARCHAR}, #{zmScore,jdbcType=INTEGER}, 
+      #{subStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.ajp.entity.GfbCustomerEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_gfb_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="openId != null" >
+        OPEN_ID,
+      </if>
+      <if test="inviteId != null" >
+        INVITE_ID,
+      </if>
+      <if test="agent != null" >
+        AGENT,
+      </if>
+      <if test="identityNo != null" >
+        IDENTITY_NO,
+      </if>
+      <if test="identityExpires != null" >
+        IDENTITY_EXPIRES,
+      </if>
+      <if test="identityPerson != null" >
+        IDENTITY_PERSON,
+      </if>
+      <if test="realName != null" >
+        REAL_NAME,
+      </if>
+      <if test="workCity != null" >
+        WORK_CITY,
+      </if>
+      <if test="supportAdvance != null" >
+        SUPPORT_ADVANCE,
+      </if>
+      <if test="advanceType != null" >
+        ADVANCE_TYPE,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="mobileAuthStatus != null" >
+        MOBILE_AUTH_STATUS,
+      </if>
+      <if test="mobileAuthDate != null" >
+        MOBILE_AUTH_DATE,
+      </if>
+      <if test="mobileAuthFlag != null" >
+        MOBILE_AUTH_FLAG,
+      </if>
+      <if test="mobileReportId != null" >
+        MOBILE_REPORT_ID,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE,
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE,
+      </if>
+      <if test="localRegistry != null" >
+        LOCAL_REGISTRY,
+      </if>
+      <if test="mobileAuthIdentity != null" >
+        MOBILE_AUTH_IDENTITY,
+      </if>
+      <if test="educationDegree != null" >
+        EDUCATION_DEGREE,
+      </if>
+      <if test="job != null" >
+        JOB,
+      </if>
+      <if test="marryStatus != null" >
+        MARRY_STATUS,
+      </if>
+      <if test="workProvince != null" >
+        WORK_PROVINCE,
+      </if>
+      <if test="mobileRepeatApply != null" >
+        MOBILE_REPEAT_APPLY,
+      </if>
+      <if test="identityRecognizeName != null" >
+        IDENTITY_RECOGNIZE_NAME,
+      </if>
+      <if test="identityRecognizeAddress != null" >
+        IDENTITY_RECOGNIZE_ADDRESS,
+      </if>
+      <if test="custHead != null" >
+        CUST_HEAD,
+      </if>
+      <if test="quickLoanCust != null" >
+        QUICK_LOAN_CUST,
+      </if>
+      <if test="baiduSimilarity != null" >
+        BAIDU_SIMILARITY,
+      </if>
+      <if test="minshiSimilarity != null" >
+        MINSHI_SIMILARITY,
+      </if>
+      <if test="appId != null" >
+        APP_ID,
+      </if>
+      <if test="mobileAuthName != null" >
+        MOBILE_AUTH_NAME,
+      </if>
+      <if test="remindRepayment != null" >
+        REMIND_REPAYMENT,
+      </if>
+      <if test="monthlyIncome != null" >
+        MONTHLY_INCOME,
+      </if>
+      <if test="tranPassword != null" >
+        TRAN_PASSWORD,
+      </if>
+      <if test="pairVerifyResult != null" >
+        PAIR_VERIFY_RESULT,
+      </if>
+      <if test="pairVerifySimilarity != null" >
+        PAIR_VERIFY_SIMILARITY,
+      </if>
+      <if test="appAgent != null" >
+        APP_AGENT,
+      </if>
+      <if test="creditApplyType != null" >
+        CREDIT_APPLY_TYPE,
+      </if>
+      <if test="zmScore != null" >
+        ZM_SCORE,
+      </if>
+      <if test="subStatus != null" >
+        sub_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteId != null" >
+        #{inviteId,jdbcType=VARCHAR},
+      </if>
+      <if test="agent != null" >
+        #{agent,jdbcType=VARCHAR},
+      </if>
+      <if test="identityNo != null" >
+        #{identityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="identityExpires != null" >
+        #{identityExpires,jdbcType=VARCHAR},
+      </if>
+      <if test="identityPerson != null" >
+        #{identityPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="workCity != null" >
+        #{workCity,jdbcType=VARCHAR},
+      </if>
+      <if test="supportAdvance != null" >
+        #{supportAdvance,jdbcType=VARCHAR},
+      </if>
+      <if test="advanceType != null" >
+        #{advanceType,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileAuthStatus != null" >
+        #{mobileAuthStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileAuthDate != null" >
+        #{mobileAuthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobileAuthFlag != null" >
+        #{mobileAuthFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileReportId != null" >
+        #{mobileReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="localRegistry != null" >
+        #{localRegistry,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileAuthIdentity != null" >
+        #{mobileAuthIdentity,jdbcType=VARCHAR},
+      </if>
+      <if test="educationDegree != null" >
+        #{educationDegree,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="marryStatus != null" >
+        #{marryStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="workProvince != null" >
+        #{workProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileRepeatApply != null" >
+        #{mobileRepeatApply,jdbcType=VARCHAR},
+      </if>
+      <if test="identityRecognizeName != null" >
+        #{identityRecognizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="identityRecognizeAddress != null" >
+        #{identityRecognizeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="custHead != null" >
+        #{custHead,jdbcType=VARCHAR},
+      </if>
+      <if test="quickLoanCust != null" >
+        #{quickLoanCust,jdbcType=VARCHAR},
+      </if>
+      <if test="baiduSimilarity != null" >
+        #{baiduSimilarity,jdbcType=DECIMAL},
+      </if>
+      <if test="minshiSimilarity != null" >
+        #{minshiSimilarity,jdbcType=DECIMAL},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=BIGINT},
+      </if>
+      <if test="mobileAuthName != null" >
+        #{mobileAuthName,jdbcType=VARCHAR},
+      </if>
+      <if test="remindRepayment != null" >
+        #{remindRepayment,jdbcType=INTEGER},
+      </if>
+      <if test="monthlyIncome != null" >
+        #{monthlyIncome,jdbcType=INTEGER},
+      </if>
+      <if test="tranPassword != null" >
+        #{tranPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="pairVerifyResult != null" >
+        #{pairVerifyResult,jdbcType=VARCHAR},
+      </if>
+      <if test="pairVerifySimilarity != null" >
+        #{pairVerifySimilarity,jdbcType=VARCHAR},
+      </if>
+      <if test="appAgent != null" >
+        #{appAgent,jdbcType=VARCHAR},
+      </if>
+      <if test="creditApplyType != null" >
+        #{creditApplyType,jdbcType=VARCHAR},
+      </if>
+      <if test="zmScore != null" >
+        #{zmScore,jdbcType=INTEGER},
+      </if>
+      <if test="subStatus != null" >
+        #{subStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.ajp.entity.GfbCustomerEntity" >
+    update t_gfb_customer
+    <set >
+      <if test="openId != null" >
+        OPEN_ID = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteId != null" >
+        INVITE_ID = #{inviteId,jdbcType=VARCHAR},
+      </if>
+      <if test="agent != null" >
+        AGENT = #{agent,jdbcType=VARCHAR},
+      </if>
+      <if test="identityNo != null" >
+        IDENTITY_NO = #{identityNo,jdbcType=VARCHAR},
+      </if>
+      <if test="identityExpires != null" >
+        IDENTITY_EXPIRES = #{identityExpires,jdbcType=VARCHAR},
+      </if>
+      <if test="identityPerson != null" >
+        IDENTITY_PERSON = #{identityPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        REAL_NAME = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="workCity != null" >
+        WORK_CITY = #{workCity,jdbcType=VARCHAR},
+      </if>
+      <if test="supportAdvance != null" >
+        SUPPORT_ADVANCE = #{supportAdvance,jdbcType=VARCHAR},
+      </if>
+      <if test="advanceType != null" >
+        ADVANCE_TYPE = #{advanceType,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileAuthStatus != null" >
+        MOBILE_AUTH_STATUS = #{mobileAuthStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileAuthDate != null" >
+        MOBILE_AUTH_DATE = #{mobileAuthDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobileAuthFlag != null" >
+        MOBILE_AUTH_FLAG = #{mobileAuthFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileReportId != null" >
+        MOBILE_REPORT_ID = #{mobileReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="localRegistry != null" >
+        LOCAL_REGISTRY = #{localRegistry,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileAuthIdentity != null" >
+        MOBILE_AUTH_IDENTITY = #{mobileAuthIdentity,jdbcType=VARCHAR},
+      </if>
+      <if test="educationDegree != null" >
+        EDUCATION_DEGREE = #{educationDegree,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        JOB = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="marryStatus != null" >
+        MARRY_STATUS = #{marryStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="workProvince != null" >
+        WORK_PROVINCE = #{workProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileRepeatApply != null" >
+        MOBILE_REPEAT_APPLY = #{mobileRepeatApply,jdbcType=VARCHAR},
+      </if>
+      <if test="identityRecognizeName != null" >
+        IDENTITY_RECOGNIZE_NAME = #{identityRecognizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="identityRecognizeAddress != null" >
+        IDENTITY_RECOGNIZE_ADDRESS = #{identityRecognizeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="custHead != null" >
+        CUST_HEAD = #{custHead,jdbcType=VARCHAR},
+      </if>
+      <if test="quickLoanCust != null" >
+        QUICK_LOAN_CUST = #{quickLoanCust,jdbcType=VARCHAR},
+      </if>
+      <if test="baiduSimilarity != null" >
+        BAIDU_SIMILARITY = #{baiduSimilarity,jdbcType=DECIMAL},
+      </if>
+      <if test="minshiSimilarity != null" >
+        MINSHI_SIMILARITY = #{minshiSimilarity,jdbcType=DECIMAL},
+      </if>
+      <if test="appId != null" >
+        APP_ID = #{appId,jdbcType=BIGINT},
+      </if>
+      <if test="mobileAuthName != null" >
+        MOBILE_AUTH_NAME = #{mobileAuthName,jdbcType=VARCHAR},
+      </if>
+      <if test="remindRepayment != null" >
+        REMIND_REPAYMENT = #{remindRepayment,jdbcType=INTEGER},
+      </if>
+      <if test="monthlyIncome != null" >
+        MONTHLY_INCOME = #{monthlyIncome,jdbcType=INTEGER},
+      </if>
+      <if test="tranPassword != null" >
+        TRAN_PASSWORD = #{tranPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="pairVerifyResult != null" >
+        PAIR_VERIFY_RESULT = #{pairVerifyResult,jdbcType=VARCHAR},
+      </if>
+      <if test="pairVerifySimilarity != null" >
+        PAIR_VERIFY_SIMILARITY = #{pairVerifySimilarity,jdbcType=VARCHAR},
+      </if>
+      <if test="appAgent != null" >
+        APP_AGENT = #{appAgent,jdbcType=VARCHAR},
+      </if>
+      <if test="creditApplyType != null" >
+        CREDIT_APPLY_TYPE = #{creditApplyType,jdbcType=VARCHAR},
+      </if>
+      <if test="zmScore != null" >
+        ZM_SCORE = #{zmScore,jdbcType=INTEGER},
+      </if>
+      <if test="subStatus != null" >
+        sub_status = #{subStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.ajp.entity.GfbCustomerEntity" >
+    update t_gfb_customer
+    set OPEN_ID = #{openId,jdbcType=VARCHAR},
+      INVITE_ID = #{inviteId,jdbcType=VARCHAR},
+      AGENT = #{agent,jdbcType=VARCHAR},
+      IDENTITY_NO = #{identityNo,jdbcType=VARCHAR},
+      IDENTITY_EXPIRES = #{identityExpires,jdbcType=VARCHAR},
+      IDENTITY_PERSON = #{identityPerson,jdbcType=VARCHAR},
+      REAL_NAME = #{realName,jdbcType=VARCHAR},
+      WORK_CITY = #{workCity,jdbcType=VARCHAR},
+      SUPPORT_ADVANCE = #{supportAdvance,jdbcType=VARCHAR},
+      ADVANCE_TYPE = #{advanceType,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      MOBILE_AUTH_STATUS = #{mobileAuthStatus,jdbcType=VARCHAR},
+      MOBILE_AUTH_DATE = #{mobileAuthDate,jdbcType=TIMESTAMP},
+      MOBILE_AUTH_FLAG = #{mobileAuthFlag,jdbcType=VARCHAR},
+      MOBILE_REPORT_ID = #{mobileReportId,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      LOCAL_REGISTRY = #{localRegistry,jdbcType=VARCHAR},
+      MOBILE_AUTH_IDENTITY = #{mobileAuthIdentity,jdbcType=VARCHAR},
+      EDUCATION_DEGREE = #{educationDegree,jdbcType=VARCHAR},
+      JOB = #{job,jdbcType=VARCHAR},
+      MARRY_STATUS = #{marryStatus,jdbcType=VARCHAR},
+      WORK_PROVINCE = #{workProvince,jdbcType=VARCHAR},
+      MOBILE_REPEAT_APPLY = #{mobileRepeatApply,jdbcType=VARCHAR},
+      IDENTITY_RECOGNIZE_NAME = #{identityRecognizeName,jdbcType=VARCHAR},
+      IDENTITY_RECOGNIZE_ADDRESS = #{identityRecognizeAddress,jdbcType=VARCHAR},
+      CUST_HEAD = #{custHead,jdbcType=VARCHAR},
+      QUICK_LOAN_CUST = #{quickLoanCust,jdbcType=VARCHAR},
+      BAIDU_SIMILARITY = #{baiduSimilarity,jdbcType=DECIMAL},
+      MINSHI_SIMILARITY = #{minshiSimilarity,jdbcType=DECIMAL},
+      APP_ID = #{appId,jdbcType=BIGINT},
+      MOBILE_AUTH_NAME = #{mobileAuthName,jdbcType=VARCHAR},
+      REMIND_REPAYMENT = #{remindRepayment,jdbcType=INTEGER},
+      MONTHLY_INCOME = #{monthlyIncome,jdbcType=INTEGER},
+      TRAN_PASSWORD = #{tranPassword,jdbcType=VARCHAR},
+      PAIR_VERIFY_RESULT = #{pairVerifyResult,jdbcType=VARCHAR},
+      PAIR_VERIFY_SIMILARITY = #{pairVerifySimilarity,jdbcType=VARCHAR},
+      APP_AGENT = #{appAgent,jdbcType=VARCHAR},
+      CREDIT_APPLY_TYPE = #{creditApplyType,jdbcType=VARCHAR},
+      ZM_SCORE = #{zmScore,jdbcType=INTEGER},
+      sub_status = #{subStatus,jdbcType=TINYINT}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
