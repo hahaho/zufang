@@ -156,6 +156,7 @@
         FROM t_zfang_house_location z
 			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
+        	LEFT JOIN t_zfang_house_peizhi a ON a.house_id = x.id
        	WHERE 1=1 
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` = #{apartmentName} </if>
