@@ -27,6 +27,11 @@ public class HouseEs implements IdAble{
     private Long apartmentId;
 
     /**
+     * 公寓名称
+     */
+    private String companyName;
+
+    /**
      * 热门房源类型：1：正常，2:精选
      */
     private Byte type;
@@ -227,6 +232,11 @@ public class HouseEs implements IdAble{
     private String configName;
     private String configNamePinyin;
 
+    /**
+     * 价格区间标记
+     * @return
+     */
+    private String flag;
 
     @Override
     public Integer getId() {
@@ -645,5 +655,13 @@ public class HouseEs implements IdAble{
 
     public void setHezuResource(Byte hezuResource) {
         this.hezuResource = hezuResource;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

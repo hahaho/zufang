@@ -442,7 +442,9 @@ public class HouseService {
 	public List<HouseEs> getHouseEsList(List<House> houses) {
 		List<HouseEs> houseEsList = Lists.newArrayList();
 		for (House h : houses) {
-			HouseEs houseEs = houseInfoToHouseEs(h,null,null,null);
+			Long houseId = h.getId();
+
+			HouseEs houseEs = houseInfoToHouseEs(houseId);
 			if (null == houseEs) {
 				continue;
 			}
@@ -455,10 +457,13 @@ public class HouseService {
 
 	/**
 	 * House转HouseEs
-	 * @param h
+	 * @param houseId:房源id
 	 * @return
      */
-	private HouseEs houseInfoToHouseEs(House h,HouseImg hImg, HouseLocation hLocation, HousePeizhi hPeizhi) {
+	private HouseEs houseInfoToHouseEs(Long houseId) {
+//		HouseImg hImg, HouseLocation hLocation, HousePeizhi hPeizhi;
+
+		House h = houseMapper.selectByPrimaryKey(houseId);
 		HouseEs houseEs = new HouseEs();
 		try{
 			if(h!=null){
@@ -501,23 +506,28 @@ public class HouseService {
 				houseEs.setPageView(h.getPageView());
 				houseEs.setHousekeeperTel(h.getHousekeeperTel());
 			}
-			if(hLocation!=null){
-				houseEs.setProvince(hLocation.getProvince());
-				houseEs.setCity(hLocation.getCity());
-				houseEs.setDistrict(hLocation.getDistrict());
-				houseEs.setStreet(hLocation.getStreet());
-				houseEs.setDetailAddr(hLocation.getDetailAddr());
-				houseEs.setDetailAddrPinyin(Pinyin4jUtil.converterToSpell(hLocation.getDetailAddr()));
-				houseEs.setLongitude(hLocation.getLongitude());
-				houseEs.setLatitude(hLocation.getLatitude());
+
+			Apartment apartment = apartmentMapper.selectByPrimaryKey(h.getApartmentId());
+			if(apartment != null){
+				houseEs.setCompanyName(apartment.getCompanyName());
 			}
-			if(hImg!=null){
-				houseEs.setUrl(hImg.getUrl());
-			}
-			if(hPeizhi!=null){
-				houseEs.setConfigName(hPeizhi.getName());
-				houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
-			}
+//			if(hLocation!=null){
+//				houseEs.setProvince(hLocation.getProvince());
+//				houseEs.setCity(hLocation.getCity());
+//				houseEs.setDistrict(hLocation.getDistrict());
+//				houseEs.setStreet(hLocation.getStreet());
+//				houseEs.setDetailAddr(hLocation.getDetailAddr());
+//				houseEs.setDetailAddrPinyin(Pinyin4jUtil.converterToSpell(hLocation.getDetailAddr()));
+//				houseEs.setLongitude(hLocation.getLongitude());
+//				houseEs.setLatitude(hLocation.getLatitude());
+//			}
+//			if(hImg!=null){
+//				houseEs.setUrl(hImg.getUrl());
+//			}
+//			if(hPeizhi!=null){
+//				houseEs.setConfigName(hPeizhi.getName());
+//				houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
+//			}
 
 			return  houseEs;
 		}catch (Exception e){
