@@ -13,11 +13,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.common.utils.FarmartJavaBean;
+import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
+import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.service.appointment.PhoneAppointmentService;
 import com.apass.zufang.utils.ResponsePageBody;
+import com.apass.zufang.utils.ValidateUtils;
 /**
  * 电话预约
  * @author Administrator
@@ -58,11 +63,29 @@ public class PhoneAppointmentController {
         return respBody;
     }
     /**
+     * 电话预约管理 预约看房记录新增
+     * @param map
+     * @return
+     */
+    @POST
+	@Path("/addReserveHouse")
+    public Response addReserveHouse(Map<String, Object> map) {
+    	try {
+    		LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
+    		ReserveHouse entity = validateParams2(map);
+    		String username = SpringSecurityUtils.getCurrentUser();
+    		return phoneAppointmentService.addReserveHouse(entity,username);
+    	} catch (Exception e) {
+    		LOGGER.error("getHouseListForPhoneAppointment EXCEPTION --- --->{}", e);
+    		return Response.fail("电话预约管理 预约看房失败！");
+    	}
+    }
+    /**
      * 验证参数
      * @param map
      * @throws BusinessException
      */
-    private HouseAppointmentQueryParams validateParams(Map<String, Object> map) throws BusinessException{
+    private HouseAppointmentQueryParams validateParams(Map<String, Object> map) {
     	Set<Entry<String, Object>> set = map.entrySet();
     	String key = null;
     	Object value =null;
@@ -75,6 +98,23 @@ public class PhoneAppointmentController {
     				entity = (HouseAppointmentQueryParams) FarmartJavaBean.farmartJavaB(entity, HouseAppointmentQueryParams.class, value, key);
     			}
     		}
+    	}
+    	return entity;
+	}
+    private ReserveHouse validateParams2(Map<String, Object> map) throws BusinessException{
+    	Set<Entry<String, Object>> set = map.entrySet();
+    	String key = null;
+    	Object value =null;
+    	ReserveHouse entity = null;
+    	for(Entry<String, Object> entry : set){
+    		key = entry.getKey();
+    		value = entry.getValue();
+    		if(value==null){
+    			throw new BusinessException("参数" + key + "为空！");
+    		}else{
+    			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
+    		}
+    		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(new ReserveHouse(), ReserveHouse.class, value, key);
     	}
     	return entity;
 	}
