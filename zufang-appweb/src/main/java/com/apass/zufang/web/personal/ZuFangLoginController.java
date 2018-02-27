@@ -77,7 +77,7 @@ public class ZuFangLoginController {
 	        	String password = CommonUtils.getValue(paramMap, "password");
 	        	String smsType = CommonUtils.getValue(paramMap, "smsType");// 类型
 	        	String code = CommonUtils.getValue(paramMap, "code");// 验证码
-	        	
+	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password+" smsType—————>"+smsType);
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
 	        		//用户id不合规
 	        		 return Response.success("用户id不合规");
@@ -111,7 +111,7 @@ public class ZuFangLoginController {
 	        		return Response.fail("验证码错误");
 	        	}
 	        } catch (Exception e) {
-	        	logger.info("设置密码失败"+e);
+	        	logger.error("设置密码失败"+e);
 	            return Response.fail("操作失败");
 	        }
 	    }
@@ -130,6 +130,8 @@ public class ZuFangLoginController {
 	        	String userId = CommonUtils.getValue(paramMap, "userId");
 	        	String mobile = CommonUtils.getValue(paramMap, "mobile");
 	        	String password = CommonUtils.getValue(paramMap, "password");
+	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password);
+	        	
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
 	        		//用户id不能为空
 	        		 return Response.success("用户id不能为空");
@@ -149,7 +151,7 @@ public class ZuFangLoginController {
 	        		return Response.success("登录成功",returnMap);
 	        	
 	        } catch (Exception e) {
-	        	logger.info("密码登录失败"+e);
+	        	logger.error("密码登录失败"+e);
 	            return Response.fail("操作失败");
 	        }
 	    }
@@ -162,6 +164,8 @@ public class ZuFangLoginController {
 	        	String mobile = CommonUtils.getValue(paramMap, "mobile");// 手机
 	    		String smsType = CommonUtils.getValue(paramMap, "smsType");// 类型
 	    		String code = CommonUtils.getValue(paramMap, "code");// 验证码
+	    		
+	    		logger.info("入参 ：smsType————>"+smsType+" mobile————>"+mobile+" code—————>"+code);
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(smsType)){
 	        		//类型不合规
 	        		 return Response.success("类型不合规");
@@ -200,7 +204,7 @@ public class ZuFangLoginController {
 	        }
 	        	
 	        } catch (Exception e) {
-	        	logger.info("验证码登录失败"+e);
+	        	logger.error("验证码登录失败"+e);
 	            return Response.fail("操作失败");
 	        }
 	    }
