@@ -86,7 +86,7 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	        		return Response.success("用户ID删除成功",searchHistorySevice.deleteCustomerIdHistory(userId));
 	        	}
 	        } catch (Exception e) {
-	        	logger.info("删除搜索历史失败——————"+e);
+	        	logger.error("删除搜索历史失败——————"+e);
 	            return Response.fail("操作失败");
 	        }
 	    }
