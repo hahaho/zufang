@@ -20,7 +20,6 @@
 			t2.chaoxiang chaoxiang,
 			t2.zhuangxiu zhuangxiu,
 			t2.status status,
-			t2.house_type houseType,
 			t2.floor floor,
 			t2.total_floor totalFloor,
 			t2.hall hall,
@@ -53,7 +52,6 @@
 	<if test="zujinType!=null and zujinType!=''"> AND t2.rent_type = #{zujinType} </if>
 	<if test="zhuangxiu!=null and zhuangxiu!=''"> AND t2.zhuangxiu = #{zhuangxiu} </if>
 	<if test="status!=null and status!=''"> AND t2.status = #{status} </if>
-	<if test="houseType!=null and houseType!=''"> AND t2.house_type = #{houseType} </if>
 	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt >= ]]>  #{minRentAmt} </if>
 	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt <= ]]>  #{maxRentAmt} </if>
 	</select>
@@ -76,7 +74,6 @@
 			t2.chaoxiang chaoxiang,
 			t2.zhuangxiu zhuangxiu,
 			t2.status status,
-			t2.house_type houseType,
 			t2.floor floor,
 			t2.total_floor totalFloor,
 			t2.hall hall,

@@ -1,4 +1,4 @@
-package com.apass.zufang.domain.ajp.entity;
+package com.apass.zufang.domain.entity;
 
 
 public class ZfangSearchEntity {

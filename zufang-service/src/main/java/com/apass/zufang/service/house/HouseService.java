@@ -1,5 +1,6 @@
 package com.apass.zufang.service.house;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,7 @@ import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
 import com.apass.zufang.utils.FileUtilsCommons;
 import com.apass.zufang.utils.LngLatUtils;
+import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
@@ -86,7 +88,7 @@ public class HouseService {
 	@Autowired
 	private HousePeiZhiService peizhiService;
 
-	
+	/*** 房屋信息管理列表 */
 	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
 		ResponsePageBody<House> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
@@ -103,6 +105,7 @@ public class HouseService {
 		return body;
 	}
 	
+	/*** 房屋信息审核管理列表*/
 	public ResponsePageBody<House> getHouseAuditListExceptDelete(HouseQueryParams dto){
 		ResponsePageBody<House> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
@@ -117,10 +120,7 @@ public class HouseService {
 		return body;
 	}
 	
-	/**
-	 * 添加房屋信息
-	 * @throws BusinessException
-	 */
+	/*** 添加房屋信息* @throws BusinessException*/
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void addHouse(HouseVo houseVo) throws BusinessException{
 		
@@ -149,6 +149,9 @@ public class HouseService {
 			img.setCreatedTime(houseVo.getCreatedTime());
 			img.setUpdatedTime(houseVo.getUpdatedTime());
 			if(StringUtils.isNotBlank(pic)){
+				/**
+				 * TODO 验证图片大小 最少2张，最多8张，每张图片不得大于2M，支持.jpg.png，尺寸待定
+				 */
 				String picture1Url2 = nfsHouse + "_" + System.currentTimeMillis() + ".jpg";
 				byte[] picture1Byte = Base64Utils.decodeFromString(pic);
 				FileUtilsCommons.uploadByteFilesUtil(rootPath, picture1Url2, picture1Byte);
@@ -243,9 +246,11 @@ public class HouseService {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(houseVo.getProvince()).append(houseVo.getCity()).append(houseVo.getDistrict());
 		buffer.append(houseVo.getStreet()).append(houseVo.getDetailAddr());
-		Map<String,Double> lnglat = LngLatUtils.getLngAndLat(buffer.toString());
-		location.setLongitude(lnglat.get("lng"));
-		location.setLatitude(lnglat.get("lat"));
+		String[] lnglat = ObtainGaodeLocation.getLocation(buffer.toString());
+		if(null != lnglat){
+			location.setLongitude(Double.parseDouble(lnglat[0]));
+			location.setLatitude(Double.parseDouble(lnglat[1]));
+		}
 	}
 	
 	/**
@@ -402,6 +407,27 @@ public class HouseService {
 			return "房源批量上架成功！";
 		}
 		return "";
+	}
+	
+	/*** 删除图片信息 * @throws BusinessException */
+	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	public void delPicture(String id) throws BusinessException{
+		
+		if(StringUtils.isBlank(id)){
+			throw new BusinessException("图片Id不能为空!");
+		}
+		HouseImg img = imgMapper.selectByPrimaryKey(Long.parseLong(id));
+		if(null == img){
+			throw new BusinessException("图片信息不存在!");
+		}
+		/*** 是否要删除原图片 */
+		File file = new File(img.getUrl());
+		if(file.exists()){
+			file.delete();
+		}
+		img.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
+		img.setUpdatedTime(new Date());
+		imgMapper.updateByPrimaryKey(img);
 	}
 	
 	

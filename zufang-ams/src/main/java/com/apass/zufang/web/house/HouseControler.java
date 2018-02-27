@@ -1,6 +1,7 @@
 package com.apass.zufang.web.house;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -190,6 +191,24 @@ public class HouseControler {
 		    return Response.fail("操作失败！");
 		}
     }
+    
+    @POST
+    @Path("/delpicture")
+    public Response deletePicture(Map<String, Object> paramMap){
+    	try {
+    		logger.info("delpicture paramMap--->{}",GsonUtils.toJson(paramMap));
+			String id = CommonUtils.getValue(paramMap, "id");
+			ValidateUtils.isNotBlank(id, "图片Id为空！");
+			houseService.delPicture(id);
+			return Response.success("删除成功!");
+		}catch (BusinessException e){
+			logger.error("delpicture businessException---->{}",e);
+			return Response.fail(e.getErrorDesc());
+		}catch (Exception e) {
+			logger.error("删除图片信息失败，错误原因", e);
+		    return Response.fail("删除失败！");
+		}
+    }
 	
 	/**
 	 * 验证所传参数
@@ -350,6 +369,24 @@ public class HouseControler {
 	    house.setChaoxiang(Byte.valueOf(chaoxiang));
 	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");
 	    house.setZhuangxiu(Byte.valueOf(zhuangxiu));
+	    
+	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
+	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
+	    
+	    String[] peizhis = StringUtils.split(peizhi, ",");
+	    house.setConfigs(Arrays.asList(peizhis));
+	    
+	    String[] pictures = StringUtils.split(picturs,",");
+	    house.setPictures(Arrays.asList(pictures));
+	    
+	    String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
+	    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
+	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
+	    
+	    house.setTotalDoors(totalDoors);
+	    house.setHezuResource(Byte.valueOf(hezuResource));
+	    house.setHezuChaoxiang(Byte.valueOf(hezuChaoxiang));
+	    
 	    String title = CommonUtils.getValue(paramMap, "title");
 	    house.setTitle(title);
 		
