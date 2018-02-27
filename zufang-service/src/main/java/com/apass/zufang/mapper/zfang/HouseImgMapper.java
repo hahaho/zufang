@@ -9,7 +9,7 @@ import com.apass.zufang.domain.entity.HouseImg;
 public interface HouseImgMapper extends GenericMapper<HouseImg,Long>{
 	/**
 	 * getImgByHouseId
-	 * @param houseImg
+	 * @param houseImg：实体类
 	 * @return
 	 */
 	public List<HouseImg> getImgByHouseId(HouseImg houseImg);
@@ -24,4 +24,11 @@ public interface HouseImgMapper extends GenericMapper<HouseImg,Long>{
 	 * @return
 	 */
 	public List<HouseImg> initImg();
+
+	/**
+	 * getImgByRealHouseId
+	 * @param houseId：房源id
+	 * @return
+     */
+	public List<HouseImg> getImgByRealHouseId(Long houseId);
 }

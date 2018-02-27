@@ -1,17 +1,25 @@
 package com.apass.zufang.service.house;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
-import com.apass.zufang.domain.enums.YesNo;
+import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.entity.*;
+import com.apass.zufang.domain.enums.HouseAuditEnums;
+import com.apass.zufang.domain.enums.IsDeleteEnums;
+import com.apass.zufang.domain.enums.RentTypeEnums;
+import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.mapper.zfang.*;
+import com.apass.zufang.search.dao.HouseEsDao;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
+import com.apass.zufang.utils.FileUtilsCommons;
+import com.apass.zufang.utils.ObtainGaodeLocation;
+import com.apass.zufang.utils.ResponsePageBody;
+import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,30 +30,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.utils.BaseConstants;
-import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.entity.Apartment;
-import com.apass.zufang.domain.entity.House;
-import com.apass.zufang.domain.entity.HouseImg;
-import com.apass.zufang.domain.entity.HouseLocation;
-import com.apass.zufang.domain.entity.HousePeizhi;
-import com.apass.zufang.domain.enums.HouseAuditEnums;
-import com.apass.zufang.domain.enums.IsDeleteEnums;
-import com.apass.zufang.domain.enums.RentTypeEnums;
-import com.apass.zufang.domain.vo.HouseVo;
-import com.apass.zufang.mapper.zfang.ApartmentMapper;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
-import com.apass.zufang.mapper.zfang.HouseLocationMapper;
-import com.apass.zufang.mapper.zfang.HouseMapper;
-import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
-import com.apass.zufang.utils.FileUtilsCommons;
-import com.apass.zufang.utils.LngLatUtils;
-import com.apass.zufang.utils.ObtainGaodeLocation;
-import com.apass.zufang.utils.ResponsePageBody;
-import com.apass.zufang.utils.ToolsUtils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 /**
  * 房源管理
  * @author Administrator
@@ -88,6 +77,9 @@ public class HouseService {
 	
 	@Autowired
 	private HousePeiZhiService peizhiService;
+
+	@Autowired
+	private HouseEsDao houseEsDao;
 
 	/*** 房屋信息管理列表 */
 	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
@@ -486,7 +478,7 @@ public class HouseService {
 	 * House转HouseEs
 	 * @param houseId:房源id
 	 * @return
-     */
+	 */
 	private HouseEs houseInfoToHouseEs(Long houseId) {
 		House h = houseMapper.selectByPrimaryKey(houseId);
 		HouseEs houseEs = new HouseEs();
@@ -554,16 +546,22 @@ public class HouseService {
 			if(apartment != null){
 				houseEs.setCompanyName(apartment.getCompanyName());
 			}
-//			if(hLocation!=null){
-//				houseEs.setProvince(hLocation.getProvince());
-//				houseEs.setCity(hLocation.getCity());
-//				houseEs.setDistrict(hLocation.getDistrict());
-//				houseEs.setStreet(hLocation.getStreet());
-//				houseEs.setDetailAddr(hLocation.getDetailAddr());
-//				houseEs.setDetailAddrPinyin(Pinyin4jUtil.converterToSpell(hLocation.getDetailAddr()));
-//				houseEs.setLongitude(hLocation.getLongitude());
-//				houseEs.setLatitude(hLocation.getLatitude());
-//			}
+
+			HouseLocation hLocation = locationMapper.getLocationByHouseId(houseId);
+			if(hLocation!=null){
+				houseEs.setProvince(hLocation.getProvince());
+				houseEs.setCity(hLocation.getCity());
+				houseEs.setDistrict(hLocation.getDistrict());
+				houseEs.setStreet(hLocation.getStreet());
+				houseEs.setDetailAddr(hLocation.getDetailAddr());
+				houseEs.setDetailAddrPinyin(Pinyin4jUtil.converterToSpell(hLocation.getDetailAddr()));
+				houseEs.setLongitude(hLocation.getLongitude());
+				houseEs.setLatitude(hLocation.getLatitude());
+			}
+			List<HouseImg> hImgs = imgMapper.getImgByRealHouseId(houseId);
+			if(CollectionUtils.isEmpty(hImgs)){
+
+			}
 //			if(hImg!=null){
 //				houseEs.setUrl(hImg.getUrl());
 //			}
@@ -580,4 +578,22 @@ public class HouseService {
 
 		return null;
 	}
+
+	public void houseAddEs(Long houseId){
+		HouseEs es = houseInfoToHouseEs(houseId);
+		houseEsDao.add(es);
+	}
+
+	public void houseDeleteEs(Long houseId){
+		HouseEs es = houseInfoToHouseEs(houseId);
+		houseEsDao.delete(es);
+	}
+
+	public void houseUpdateEs(Long houseId){
+		HouseEs es = houseInfoToHouseEs(houseId);
+		houseEsDao.update(es);
+	}
+
+
+
 }
