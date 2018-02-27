@@ -91,9 +91,9 @@ public class HouseService {
 		status.add(RentTypeEnums.ZT_SHAGNJIA_2.getCode());
 		status.add(RentTypeEnums.ZT_XIAJIA_3.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseList(dto);
+		List<House> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
-		body.setTotal(houseMapper.getHouseListCount(dto));
+		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
 		return body;
 	}
@@ -106,9 +106,9 @@ public class HouseService {
 		List<Integer> status = Lists.newArrayList();
 		status.add(RentTypeEnums.ZT_XIUGAI_5.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseList(dto);
+		List<House> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
-		body.setTotal(houseMapper.getHouseListCount(dto));
+		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
 		return body;
 	}
@@ -187,17 +187,16 @@ public class HouseService {
 		if(house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
 			house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 		}
-		/*** 添加房屋信息入库*/
+		/*** 修改房屋信息*/
 		houseMapper.updateByPrimaryKeySelective(house);
 		
 		
-		locationService.deleteLocationByHouseId(house.getId());//删除位置信息
-		/*** 添加位置入库*/
-		HouseLocation location = new HouseLocation();
+		/*** 修改位置信息*/
+		HouseLocation location = locationMapper.selectByPrimaryKey(Long.parseLong(houseVo.getLocationId()));
 		BeanUtils.copyProperties(houseVo, location);
 		location.setHouseId(house.getId());
 		getAddressLngLat(houseVo, location);
-		locationMapper.insertSelective(location);
+		locationMapper.updateByPrimaryKeySelective(location);
 		
 		
 		imgService.deleteImgByHouseId(house.getId());//删除图片记录
@@ -314,7 +313,7 @@ public class HouseService {
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
-			houseInfoToHouseEs(house.getId());
+			houseAddEs(house.getId());
 		}else{
 			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 		}
@@ -343,6 +342,7 @@ public class HouseService {
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
 			houseMapper.updateByPrimaryKeySelective(house);
+			houseDeleteEs(house.getId());
 		}
 	}
 	
@@ -364,7 +364,7 @@ public class HouseService {
 				house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 			}else{
 				house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
-				houseInfoToHouseEs(house.getId());
+				houseAddEs(house.getId());
 			}
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
@@ -379,7 +379,7 @@ public class HouseService {
 		if(StringUtils.isBlank(id)){
 			throw new BusinessException("房屋Id不能为空!");
 		}
-		String[] ids = StringUtils.split(",");
+		String[] ids = StringUtils.split(id,",");
 		
 		int waitUp = 0;//未修改的房屋信息统计
 		int others = 0;//修改后的房屋信息统计
@@ -398,7 +398,7 @@ public class HouseService {
 					others++;
 				}else{
 					house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
-					houseInfoToHouseEs(house.getId());
+					houseAddEs(house.getId());
 					waitUp++;
 				}
 				house.setUpdatedTime(new Date());
