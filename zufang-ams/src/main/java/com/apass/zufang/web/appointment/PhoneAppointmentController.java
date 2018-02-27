@@ -21,6 +21,7 @@ import com.apass.zufang.common.utils.FarmartJavaBean;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.appointment.PhoneAppointmentService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -53,8 +54,8 @@ public class PhoneAppointmentController {
      */
     @POST
 	@Path("/getHouseListForPhoneAppointment")
-    public ResponsePageBody<HouseVo> getHouseListForPhoneAppointment(Map<String,Object> map) {
-        ResponsePageBody<HouseVo> respBody = new ResponsePageBody<HouseVo>();
+    public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(Map<String,Object> map) {
+        ResponsePageBody<HouseAppointmentVo> respBody = new ResponsePageBody<HouseAppointmentVo>();
         try {
         	HouseAppointmentQueryParams entity = validateParams(map);
         	respBody = phoneAppointmentService.getHouseListForPhoneAppointment(entity);
