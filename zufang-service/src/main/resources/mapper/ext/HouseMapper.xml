@@ -124,7 +124,7 @@
    		公寓名称  小区名称 房源标题（名称）房源编码  所在城 区 街 房源状态 
    		面积 上下限 是否独立厨、卫，创建时间上下限
     -->
-    <select id="getHouseListForPhoneAppointment" resultMap="com.apass.zufang.domain.vo.HouseAppointmentVo" 
+    <select id="getHouseListForPhoneAppointment" resultType="com.apass.zufang.domain.vo.HouseAppointmentVo" 
         parameterType="com.apass.zufang.domain.dto.HouseAppointmentQueryParams">
         <![CDATA[
         SELECT 
