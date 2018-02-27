@@ -1,3 +1,4 @@
+
 package com.apass.zufang.service.house;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,7 @@ public class HouseImgService {
 			}
 		}
 	}
+	
 	/**
 	 * getHouseImgList
 	 * @param houseId
@@ -50,8 +52,6 @@ public class HouseImgService {
 	 * @return
 	 */
 	public List<HouseImg> getHouseImgList(Long houseId){
-		HouseImg houseImg = new HouseImg();
-		houseImg.setHouseId(houseId);
-		return houseImgMapper.getImgByHouseId(houseImg);
+		return getHouseImgList(houseId, (byte)1);
 	}
 }

@@ -1,7 +1,6 @@
 package com.apass.zufang.mapper.zfang;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.dto.HouseQueryParams;
@@ -14,21 +13,36 @@ import com.apass.zufang.domain.vo.HouseVo;
  */
 public interface HouseMapper extends GenericMapper<House,Long> {
 	/**
-	 * 列表集合查询
+	 * es初始化列表集合查询
 	 * getHouseList
 	 * @param entity
 	 * @return
 	 */
 	public List<House> getHouseList(HouseQueryParams entity);
+
 	/**
-	 * 数量查询
+	 *  es初始化数量查询
 	 * getHouseListCount
 	 * @param entity
 	 * @return
 	 */
 	public Integer getHouseListCount(HouseQueryParams entity);
+	
 	/**
-	 * 品牌公寓热门房源列表查询
+	 * 房源信息管理
+	 * @param entity
+	 * @return
+	 */
+	public List<House> getHouseLists(HouseQueryParams entity);
+	
+	/**
+	 * 房源信息管理数量查询
+	 * @param entity
+	 * @return
+	 */
+	public Integer getHouseListsCount(HouseQueryParams entity);
+	/**
+	 * 品牌公寓热门房源查询
 	 * @param entity
 	 * @return
 	 */
@@ -43,9 +57,9 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @param list
 	 * @return
 	 */
-	public List<Apartment> getHouseByID(ArrayList<String> list);
+	public List<Apartment> getHouseByCodes(ArrayList<String> list);
 	/**
-	 * 电话预约管理 房源列表查询
+	 * getHouseListForPhoneAppointment
 	 * @param entity
 	 * @return
 	 */

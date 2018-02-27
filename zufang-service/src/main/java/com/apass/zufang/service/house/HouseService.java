@@ -1,16 +1,25 @@
 package com.apass.zufang.service.house;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
-import com.apass.zufang.domain.enums.YesNo;
+import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.entity.*;
+import com.apass.zufang.domain.enums.HouseAuditEnums;
+import com.apass.zufang.domain.enums.IsDeleteEnums;
+import com.apass.zufang.domain.enums.RentTypeEnums;
+import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.mapper.zfang.*;
+import com.apass.zufang.search.dao.HouseEsDao;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
+import com.apass.zufang.utils.FileUtilsCommons;
+import com.apass.zufang.utils.ObtainGaodeLocation;
+import com.apass.zufang.utils.ResponsePageBody;
+import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,30 +30,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.utils.BaseConstants;
-import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.entity.Apartment;
-import com.apass.zufang.domain.entity.House;
-import com.apass.zufang.domain.entity.HouseImg;
-import com.apass.zufang.domain.entity.HouseLocation;
-import com.apass.zufang.domain.entity.HousePeizhi;
-import com.apass.zufang.domain.enums.HouseAuditEnums;
-import com.apass.zufang.domain.enums.IsDeleteEnums;
-import com.apass.zufang.domain.enums.RentTypeEnums;
-import com.apass.zufang.domain.vo.HouseVo;
-import com.apass.zufang.mapper.zfang.ApartmentMapper;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
-import com.apass.zufang.mapper.zfang.HouseLocationMapper;
-import com.apass.zufang.mapper.zfang.HouseMapper;
-import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
-import com.apass.zufang.utils.FileUtilsCommons;
-import com.apass.zufang.utils.LngLatUtils;
-import com.apass.zufang.utils.ObtainGaodeLocation;
-import com.apass.zufang.utils.ResponsePageBody;
-import com.apass.zufang.utils.ToolsUtils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 房源管理
  * @author Administrator
@@ -78,7 +69,6 @@ public class HouseService {
 	@Autowired
 	private HouseImgMapper imgMapper;
 
-	
 	@Autowired
 	private HouseLocationService locationService;
 	
@@ -87,6 +77,9 @@ public class HouseService {
 	
 	@Autowired
 	private HousePeiZhiService peizhiService;
+
+	@Autowired
+	private HouseEsDao houseEsDao;
 
 	/*** 房屋信息管理列表 */
 	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
@@ -98,9 +91,9 @@ public class HouseService {
 		status.add(RentTypeEnums.ZT_SHAGNJIA_2.getCode());
 		status.add(RentTypeEnums.ZT_XIAJIA_3.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseList(dto);
+		List<House> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
-		body.setTotal(houseMapper.getHouseListCount(dto));
+		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
 		return body;
 	}
@@ -113,9 +106,9 @@ public class HouseService {
 		List<Integer> status = Lists.newArrayList();
 		status.add(RentTypeEnums.ZT_XIUGAI_5.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseList(dto);
+		List<House> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
-		body.setTotal(houseMapper.getHouseListCount(dto));
+		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
 		return body;
 	}
@@ -194,17 +187,16 @@ public class HouseService {
 		if(house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
 			house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 		}
-		/*** 添加房屋信息入库*/
+		/*** 修改房屋信息*/
 		houseMapper.updateByPrimaryKeySelective(house);
 		
 		
-		locationService.deleteLocationByHouseId(house.getId());//删除位置信息
-		/*** 添加位置入库*/
-		HouseLocation location = new HouseLocation();
+		/*** 修改位置信息*/
+		HouseLocation location = locationMapper.selectByPrimaryKey(Long.parseLong(houseVo.getLocationId()));
 		BeanUtils.copyProperties(houseVo, location);
 		location.setHouseId(house.getId());
 		getAddressLngLat(houseVo, location);
-		locationMapper.insertSelective(location);
+		locationMapper.updateByPrimaryKeySelective(location);
 		
 		
 		imgService.deleteImgByHouseId(house.getId());//删除图片记录
@@ -282,12 +274,26 @@ public class HouseService {
 		houseMapper.updateByPrimaryKeySelective(house);
 	}
 	
+	/*** 根据房屋Id,获取房屋信息*/
 	public Map<String,Object> getHouseDetail(String id) throws BusinessException{
 		
 		Map<String,Object> values = Maps.newHashMap();
 		
 		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
+		if(null == house){
+			throw new BusinessException("房屋信息不存在!");
+		}
 		
+		HouseLocation location = locationMapper.getLocationByHouseId(house.getId());
+		
+		List<HouseImg> imgs = imgService.getHouseImgList(house.getId());
+		
+		List<HousePeizhi> peizhis = peizhiMapper.getPeiZhiByHouseId(house.getId());
+		
+		values.put("house", house);
+		values.put("location",location);
+		values.put("imgs",imgs);
+		values.put("peizhis",peizhis);
 		
 		return values;
 	}
@@ -307,6 +313,7 @@ public class HouseService {
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			houseAddEs(house.getId());
 		}else{
 			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 		}
@@ -335,6 +342,7 @@ public class HouseService {
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
 			houseMapper.updateByPrimaryKeySelective(house);
+			houseDeleteEs(house.getId());
 		}
 	}
 	
@@ -356,6 +364,7 @@ public class HouseService {
 				house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 			}else{
 				house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+				houseAddEs(house.getId());
 			}
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
@@ -370,7 +379,7 @@ public class HouseService {
 		if(StringUtils.isBlank(id)){
 			throw new BusinessException("房屋Id不能为空!");
 		}
-		String[] ids = StringUtils.split(",");
+		String[] ids = StringUtils.split(id,",");
 		
 		int waitUp = 0;//未修改的房屋信息统计
 		int others = 0;//修改后的房屋信息统计
@@ -389,6 +398,7 @@ public class HouseService {
 					others++;
 				}else{
 					house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					houseAddEs(house.getId());
 					waitUp++;
 				}
 				house.setUpdatedTime(new Date());
@@ -468,7 +478,9 @@ public class HouseService {
 	public List<HouseEs> getHouseEsList(List<House> houses) {
 		List<HouseEs> houseEsList = Lists.newArrayList();
 		for (House h : houses) {
-			HouseEs houseEs = houseInfoToHouseEs(h,null,null,null);
+			Long houseId = h.getId();
+
+			HouseEs houseEs = houseInfoToHouseEs(houseId);
 			if (null == houseEs) {
 				continue;
 			}
@@ -481,14 +493,15 @@ public class HouseService {
 
 	/**
 	 * House转HouseEs
-	 * @param h
+	 * @param houseId:房源id
 	 * @return
-     */
-	private HouseEs houseInfoToHouseEs(House h,HouseImg hImg, HouseLocation hLocation, HousePeizhi hPeizhi) {
+	 */
+	private HouseEs houseInfoToHouseEs(Long houseId) {
+		House h = houseMapper.selectByPrimaryKey(houseId);
 		HouseEs houseEs = new HouseEs();
 		try{
-			if(h!=null){
-				houseEs.setId(Integer.valueOf(h.getId()+""));
+			if(h!=null) {
+				houseEs.setId(Integer.valueOf(h.getId() + ""));
 				houseEs.setHouseId(h.getId());
 				houseEs.setCode(h.getCode());
 				houseEs.setApartmentId(h.getApartmentId());
@@ -510,23 +523,48 @@ public class HouseService {
 				houseEs.setZhuangxiu(h.getZhuangxiu());
 				houseEs.setStatus(h.getStatus());
 				houseEs.setListTime(h.getListTime());
-				String listTimeStr = DateFormatUtil.dateToString(h.getListTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+				String listTimeStr = DateFormatUtil.dateToString(h.getListTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
 				houseEs.setListTimeStr(listTimeStr);
 				houseEs.setDelistTime(h.getDelistTime());
-				String delistStr = DateFormatUtil.dateToString(h.getDelistTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+				String delistStr = DateFormatUtil.dateToString(h.getDelistTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
 				houseEs.setDelistTimeStr(delistStr);
 				houseEs.setDescription(h.getDescription());
 				houseEs.setDescriptionPinyin(Pinyin4jUtil.converterToSpell(h.getDescription()));
 				houseEs.setCreatedTime(h.getCreatedTime());
-				houseEs.setCreatedTimeStr(DateFormatUtil.dateToString(h.getCreatedTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
+				houseEs.setCreatedTimeStr(DateFormatUtil.dateToString(h.getCreatedTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
 				houseEs.setUpdatedTime(h.getUpdatedTime());
-				houseEs.setUpdatedTimeStr(DateFormatUtil.dateToString(h.getUpdatedTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
+				houseEs.setUpdatedTimeStr(DateFormatUtil.dateToString(h.getUpdatedTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
 				houseEs.setCreatedUser(h.getCreatedUser());
 				houseEs.setUpdatedUser(h.getUpdatedUser());
 				houseEs.setIsDelete(h.getIsDelete());
 				houseEs.setPageView(h.getPageView());
 				houseEs.setHousekeeperTel(h.getHousekeeperTel());
+				houseEs.setTotalDoors(h.getTotalDoors());
+				houseEs.setHezuChaoxiang(h.getHezuChaoxiang());
+				houseEs.setHezuResource(h.getHezuResource());
+				houseEs.setAcreage(h.getAcreage());
+
+				//增加价格区间标记priceFlag
+				int priceFlag = 6;
+				if (h.getRentAmt().compareTo(new BigDecimal(1500)) < 0) {
+					priceFlag = 1;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(1500)) >= 0 && h.getRentAmt().compareTo(new BigDecimal(2500)) <= 0) {
+					priceFlag = 2;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(2501)) >= 0 && h.getRentAmt().compareTo(new BigDecimal(3500)) <= 0) {
+					priceFlag = 3;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(3501)) >= 0 && h.getRentAmt().compareTo(new BigDecimal(5500)) <= 0) {
+					priceFlag = 4;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(5501)) >= 0) {
+					priceFlag = 5;
+				}
+				houseEs.setPriceFlag(priceFlag);
 			}
+			Apartment apartment = apartmentMapper.selectByPrimaryKey(h.getApartmentId());
+			if(apartment != null){
+				houseEs.setCompanyName(apartment.getCompanyName());
+			}
+
+			HouseLocation hLocation = locationMapper.getLocationByHouseId(houseId);
 			if(hLocation!=null){
 				houseEs.setProvince(hLocation.getProvince());
 				houseEs.setCity(hLocation.getCity());
@@ -537,14 +575,23 @@ public class HouseService {
 				houseEs.setLongitude(hLocation.getLongitude());
 				houseEs.setLatitude(hLocation.getLatitude());
 			}
-			if(hImg!=null){
-				houseEs.setUrl(hImg.getUrl());
+			List<HouseImg> hImgs = imgMapper.getImgByRealHouseId(houseId);
+			if(CollectionUtils.isNotEmpty(hImgs)){
+				for(HouseImg hImg: hImgs){
+					if(hImg!=null){
+						houseEs.setUrl(hImg.getUrl());
+					}
+				}
 			}
-			if(hPeizhi!=null){
-				houseEs.setConfigName(hPeizhi.getName());
-				houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
+			List<HousePeizhi> peiZhiByHouses = peizhiMapper.getPeiZhiByHouseId(houseId);
+			if(CollectionUtils.isNotEmpty(peiZhiByHouses)){
+				for(HousePeizhi hPeizhi: peiZhiByHouses){
+					if(hPeizhi!=null){
+						houseEs.setConfigName(hPeizhi.getName());
+						houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
+					}
+				}
 			}
-
 			return  houseEs;
 		}catch (Exception e){
 			LOGGER.error("--------houseInfoToHouseEs Exception------{}",e);
@@ -553,4 +600,22 @@ public class HouseService {
 
 		return null;
 	}
+
+	public void houseAddEs(Long houseId){
+		HouseEs es = houseInfoToHouseEs(houseId);
+		houseEsDao.add(es);
+	}
+
+	public void houseDeleteEs(Long houseId){
+		HouseEs es = houseInfoToHouseEs(houseId);
+		houseEsDao.delete(es);
+	}
+
+	public void houseUpdateEs(Long houseId){
+		HouseEs es = houseInfoToHouseEs(houseId);
+		houseEsDao.update(es);
+	}
+
+
+
 }

@@ -5,62 +5,8 @@
         SELECT 
             <include refid="Base_Column_List" />
         FROM t_zfang_house_location
-        WHERE is_delete = '00' AND house_id= {houseId}
+        WHERE is_delete = '00' AND house_id= #{houseId}
    </select>
-   <!-- init配置房源 -->
-    <select id="initPeizhiLocation" resultType="com.apass.zufang.domain.vo.HouseVo"
-    	parameterType="com.apass.zufang.domain.entity.HouseLocation">
-    	<![CDATA[
-			SELECT
-				h.id			id,
-				h.title			title,
-				h.rent_amt		rentAmt,
-				h.room			room,
-				h.hall			hall,
-				h.wei			wei,
-				h.acreage		acreage,
-				i.url			pictures,
-				l.detail_addr	detailAddr
-			FROM
-				t_zfang_house h,
-				t_zfang_house_img i,
-				t_zfang_house_location l
-			WHERE
-				h.id = i.house_id = l.house_id
-				AND h.is_delete = '00'
-				AND h.type = '2'
-				AND h.status = '3'
-				AND l.city like #{city}
-	        	ORDER BY h.page_view DESC;
-       	]]>
-    </select>
-   <!-- initHot房源 -->
-    <select id="initHotLocation" resultType="com.apass.zufang.domain.vo.HouseVo"
-    	parameterType="com.apass.zufang.domain.entity.HouseLocation">
-    	<![CDATA[
-			SELECT
-				h.id			id,
-				h.title			title,
-				h.rent_amt		rentAmt,
-				h.room			room,
-				h.hall			hall,
-				h.wei			wei,
-				h.acreage		acreage,
-				i.url			pictures,
-				l.detail_addr	detailAddr
-			FROM
-				t_zfang_house h,
-				t_zfang_house_img i,
-				t_zfang_house_location l
-			WHERE
-				h.id = i.house_id = l.house_id
-				AND h.is_delete = '00'
-				AND h.type = '1'
-				AND h.status = '3'
-				AND l.city = #{city}
-	        	ORDER BY h.page_view DESC;
-       	]]>
-    </select>
    <!-- init附近房源By经纬 -->
     <select id="initNearLocation" resultType="com.apass.zufang.domain.vo.HouseVo"
     	parameterType="java.util.Map">
@@ -93,8 +39,7 @@
 	        	ORDER BY h.page_view DESC;
        	]]>
     </select>
-    
-   <!-- init附近房源Bycity -->
+   	<!-- init附近房源Bycity -->
     <select id="initHouseByCity" resultType="com.apass.zufang.domain.vo.HouseVo"
     	parameterType="java.util.Map">
     	<![CDATA[
@@ -117,7 +62,7 @@
 			WHERE
 				h.id = i.house_id = l.house_id
 				AND h.is_delete = '00'
-				AND h.type = '1'
+				AND h.type = #{type}
 				AND h.status = '3'
 				AND l.city = #{city}
 	        	ORDER BY h.page_view DESC;
