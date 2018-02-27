@@ -88,6 +88,12 @@ public class ZuFangLoginController {
 	        			&& password.length()>6 && password.length()<20){
 	        		//密码不合规
 	        		 return Response.success("密码不合规");
+	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(smsType)){
+	        		//手机号不合规
+	        		 return Response.success("类型不能为空");
+	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(code)){
+	        		//手机号不合规
+	        		 return Response.success("验证码不能为空");
 	        	}
 	        	
 	        	//验证码校验
