@@ -40,8 +40,6 @@ public class House {
 
     private Byte zhuangxiu;
 
-    private Byte houseType;
-
     private Byte status;
 
     private Date listTime;
@@ -65,6 +63,14 @@ public class House {
     private Long pageView;
 
     private String housekeeperTel;
+
+    private String totalDoors;
+
+    private Byte hezuChaoxiang;
+
+    private Byte hezuResource;
+
+    private BigDecimal roomAcreage;
 
     public Long getId() {
         return id;
@@ -210,14 +216,6 @@ public class House {
         this.zhuangxiu = zhuangxiu;
     }
 
-    public Byte getHouseType() {
-        return houseType;
-    }
-
-    public void setHouseType(Byte houseType) {
-        this.houseType = houseType;
-    }
-
     public Byte getStatus() {
         return status;
     }
@@ -312,5 +310,37 @@ public class House {
 
     public void setHousekeeperTel(String housekeeperTel) {
         this.housekeeperTel = housekeeperTel;
+    }
+
+    public String getTotalDoors() {
+        return totalDoors;
+    }
+
+    public void setTotalDoors(String totalDoors) {
+        this.totalDoors = totalDoors;
+    }
+
+    public Byte getHezuChaoxiang() {
+        return hezuChaoxiang;
+    }
+
+    public void setHezuChaoxiang(Byte hezuChaoxiang) {
+        this.hezuChaoxiang = hezuChaoxiang;
+    }
+
+    public Byte getHezuResource() {
+        return hezuResource;
+    }
+
+    public void setHezuResource(Byte hezuResource) {
+        this.hezuResource = hezuResource;
+    }
+
+    public BigDecimal getRoomAcreage() {
+        return roomAcreage;
+    }
+
+    public void setRoomAcreage(BigDecimal roomAcreage) {
+        this.roomAcreage = roomAcreage;
     }
 }

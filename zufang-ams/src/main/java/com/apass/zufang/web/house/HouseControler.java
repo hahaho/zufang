@@ -1,6 +1,7 @@
 package com.apass.zufang.web.house;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -199,9 +200,7 @@ public class HouseControler {
 	public void validateParams(Map<String, Object> paramMap) throws BusinessException{
 		
 		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");
-		
 		String phone = CommonUtils.getValue(paramMap,"phone");
-		
 		String rentType = CommonUtils.getValue(paramMap, "rentType");
 		String communityName = CommonUtils.getValue(paramMap, "communityName");
 		
@@ -212,6 +211,7 @@ public class HouseControler {
 	    String detailAddr = CommonUtils.getValue(paramMap, "detailAddr"); // 详细地址
 	    
 	    String acreage = CommonUtils.getValue(paramMap, "acreage");
+	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
 	    
 	    String room = CommonUtils.getValue(paramMap, "room"); //室
 	    String hall = CommonUtils.getValue(paramMap, "hall"); //厅
@@ -221,6 +221,11 @@ public class HouseControler {
 	    
 	    String liftType = CommonUtils.getValue(paramMap, "liftType");//有无电梯
 	    
+	    
+	    String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
+	    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
+	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
+	    
 	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
 	    
 	    String rentAmt = CommonUtils.getValue(paramMap, "rentAmt");
@@ -228,9 +233,8 @@ public class HouseControler {
 	    
 	    String chaoxiang = CommonUtils.getValue(paramMap, "chaoxiang");
 	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");
-	    String houseType = CommonUtils.getValue(paramMap, "houseType");
+	    
 	    String title = CommonUtils.getValue(paramMap, "title");
-//	    String description = CommonUtils.getValue(paramMap, "description");
 	    
 	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
 	    
@@ -254,10 +258,6 @@ public class HouseControler {
 	    if(!ListeningRegExpUtils.isChineseOrMath(detailAddr)){
 			throw new BusinessException("2-30个字，可填写汉字，数字，不能填写特殊字符");
 		}
-	    if(StringUtils.equals(rentType, RentTypeEnums.HZ_HEZU_2.getCode()+"")){
-	    	ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
-	    	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
-	    }
 	    
 	    ValidateUtils.isNotBlank(room, "请填写室");
 	    ValidateUtils.checkNumberRange(room, 0, 0,"室");
@@ -269,21 +269,33 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(floor, "请填写楼层");
 	    ValidateUtils.checkNumberRange(floor, -9, 99, "楼层分布");
 	    ValidateUtils.isNotBlank(totalFloor, "请填写总楼层");
-	    ValidateUtils.checkNumberRange(floor, 1, 99, "总楼层");
+	    ValidateUtils.checkNumberRange(totalFloor, 1, 99, "总楼层");
 	    
 	    ValidateUtils.isNotBlank(liftType, "请选择电梯情况");
+	    ValidateUtils.isNotBlank(chaoxiang, "请选择朝向");
+	    ValidateUtils.isNotBlank(zhuangxiu, "请选择装修情况");
+	    ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
+    	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
+	    
+	    if(StringUtils.equals(RentTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    	
+	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
+	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 100, "合租户数");
+	    	
+	    	ValidateUtils.isNotBlank(hezuResource, "请选择出租间介绍");
+	    	ValidateUtils.isNotBlank(hezuChaoxiang, "请选择出租间朝向");
+	    	
+	    	ValidateUtils.isNotBlank(roomAcreage, "请填写房屋面积");
+	    	ValidateUtils.checkNonNumberRange(roomAcreage, 1, 9999, "房屋面积");
+	    }
+	    
 	    ValidateUtils.isNotBlank(peizhi, "请选择房屋配置");
 	    ValidateUtils.isNotBlank(rentAmt, "请填写租金");
 	    ValidateUtils.checkNumberRange(rentAmt, 0, 0, "租金");
 	    ValidateUtils.isNotBlank(zujinType, "请选择租金支付方式");
 	    
-	    ValidateUtils.isNotBlank(chaoxiang, "请选择朝向");
-	    ValidateUtils.isNotBlank(zhuangxiu, "请选择装修情况");
-	    ValidateUtils.isNotBlank(houseType, "请选择房屋类型");
-	    
 	    ValidateUtils.isNotBlank(title, "请填写房源标题");
 		ValidateUtils.checkLength(title, 6, 30, "请填写6-30个字");
-//		ValidateUtils.checkValueLength(description, 8, 100, "请填写10-800个字");
 		ValidateUtils.isNotBlank(picturs, "请上传图片");
 	}
 	
@@ -339,12 +351,26 @@ public class HouseControler {
 	    house.setChaoxiang(Byte.valueOf(chaoxiang));
 	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");
 	    house.setZhuangxiu(Byte.valueOf(zhuangxiu));
-	    String houseType = CommonUtils.getValue(paramMap, "houseType");
-	    house.setHouseType(Byte.valueOf(houseType));
+	    
+	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
+	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
+	    
+	    String[] peizhis = StringUtils.split(peizhi, ",");
+	    house.setConfigs(Arrays.asList(peizhis));
+	    
+	    String[] pictures = StringUtils.split(picturs,",");
+	    house.setPictures(Arrays.asList(pictures));
+	    
+	    String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
+	    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
+	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
+	    
+	    house.setTotalDoors(totalDoors);
+	    house.setHezuResource(Byte.valueOf(hezuResource));
+	    house.setHezuChaoxiang(Byte.valueOf(hezuChaoxiang));
+	    
 	    String title = CommonUtils.getValue(paramMap, "title");
 	    house.setTitle(title);
-//	    String description = CommonUtils.getValue(paramMap, "description");
-//	    house.setDescription(description);
 		
 	    String houseId = CommonUtils.getValue(paramMap,"id");
 	    Date date = new Date();

@@ -21,4 +21,9 @@ public interface ApartmentMapper extends GenericMapper<Apartment,Long> {
 	 * @return
 	 */
 	public List<Apartment> getApartGongyu(Apartment entity);
+	/**
+	 * 获取公寓Id
+	 * @return
+	 */
+	public List<Apartment> getApartByCity(Apartment entity);
 }

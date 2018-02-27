@@ -21,10 +21,18 @@
         	AND type= #{type, jdbcType=TINYINT} 
    </select>
    
-   <select id="queryImgInfo" resultMap="BaseResultMap" parameterType="com.apass.zufang.domain.entity.HouseImg">
+   <select id="queryImgInfo" resultMap="BaseResultMap">
         SELECT 
             <include refid="Base_Column_List" />
         FROM t_zfang_house_img
         <include refid="QueryConditionSql" />
+   </select>
+         
+  <select id="initImg" resultMap="BaseResultMap">
+        SELECT 
+            <include refid="Base_Column_List" />
+        FROM t_zfang_house_img
+        WHERE 
+        	is_delete = '00' 
    </select>
 </mapper>
