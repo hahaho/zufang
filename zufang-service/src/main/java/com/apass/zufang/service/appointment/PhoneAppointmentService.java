@@ -1,8 +1,11 @@
 package com.apass.zufang.service.appointment;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.entity.HousePeizhi;
@@ -10,6 +13,7 @@ import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.service.house.HousePeiZhiService;
 import com.apass.zufang.utils.ResponsePageBody;
+@Service
 public class PhoneAppointmentService {
 	@Autowired
 	private HouseMapper houseMapper;
