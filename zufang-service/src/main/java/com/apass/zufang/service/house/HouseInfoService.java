@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.HousePeizhi;
@@ -51,9 +52,13 @@ public class HouseInfoService {
 			throw e;
 		}
 	}
-
+	
+   /**
+    * 处理房源特殊数据
+    * 
+    * @param houseInfoList
+    */
 	public void dealHouseRela(List<HouseInfoRela> houseInfoList) {
-		
 		for (HouseInfoRela houseInfo : houseInfoList) {
 			// 房屋的图片
 			List<String> imgUrlList = new ArrayList<String>();
@@ -77,7 +82,7 @@ public class HouseInfoService {
 	}
 
 	/**
-	 * 获取附近房源
+	 * 根据坐标查询附近房源
 	 * 
 	 * @param houseId
 	 *            目标房源
@@ -85,9 +90,66 @@ public class HouseInfoService {
 	 *            附近房源数量
 	 * @return
 	 */
-	public List<HouseInfoRela> getNearbyhouseInfo(long houseId, int number) {
+	public List<HouseInfoRela> getNearHouseByCoordinate(Double latitude, Double longitude) {
 		List<HouseInfoRela> result = new ArrayList<HouseInfoRela>();
 		try {
+			int number =ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
+			// setp 1 查询房源
+			HouseInfoRela queryInfo = new HouseInfoRela();
+//			queryInfo.setProvince(houseInfo.getProvince());
+//			queryInfo.setCity(houseInfo.getCity());
+			List<HouseInfoRela> houseInfoList = houseInfoRelaMapper
+					.getHouseInfoRelaList(queryInfo);
+			if (houseInfoList == null || houseInfoList.size() <= 0) {
+				return null;
+			}
+			// setp 3 计算目标房源和附近房源的距离，并绑定映射关系
+			Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
+			double[] resultArray = new double[houseInfoList.size()];
+			for (HouseInfoRela houseLocation : houseInfoList) {
+				double distance = this.distanceSimplify(latitude,
+						longitude, houseLocation.getLatitude(),
+						houseLocation.getLongitude());
+				houseDistanceMap.put(distance, houseLocation.getHouseId());
+				Arrays.fill(resultArray, distance);
+			}
+			// setp 4 对距离按照升序排序
+			Arrays.sort(resultArray);
+			// setp 5 取得前number的houseId 的list
+			List<Long> houseIdList = new ArrayList<Long>();
+			int value = resultArray.length > number ? number
+					: resultArray.length;
+			for (int i = 0; i < value; i++) {
+				double disance = resultArray[i];
+				houseIdList.add(houseDistanceMap.get(disance));
+			}
+			// setp 6 根据list 查询附近房源的具体信息
+			Map<String, Object> paraMap = new HashMap<String, Object>();
+			paraMap.put("houseIdList", houseIdList);
+			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+			if (result != null && result.size() != 0) {
+				this.dealHouseRela(result);
+			}
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("根据坐标查询附近房源getNearbyhouseInfo出错==》",e);
+			throw e;
+		}
+	}
+	
+	/**
+	 * 查询指定目标附近房源
+	 * 
+	 * @param houseId
+	 *            目标房源
+	 * @param number
+	 *            附近房源数量
+	 * @return
+	 */
+	public List<HouseInfoRela> getNearbyhouseId(long houseId) {
+		List<HouseInfoRela> result = new ArrayList<HouseInfoRela>();
+		try {
+			int number =ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
 			// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 			HouseInfoRela queryCondition = new HouseInfoRela();
 			queryCondition.setHouseId(houseId);
