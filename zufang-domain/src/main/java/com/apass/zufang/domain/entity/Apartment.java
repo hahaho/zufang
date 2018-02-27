@@ -19,6 +19,7 @@ public class Apartment extends CreatedUser{
 
     private String bankCard;
     private String isDelete;
+    private String companyLogo;
     public Long getId() {
         return id;
     }
@@ -95,5 +96,11 @@ public class Apartment extends CreatedUser{
 	}
 	public void setIsDelete(String isDelete) {
 		this.isDelete = isDelete;
+	}
+	public String getCompanyLogo() {
+		return companyLogo;
+	}
+	public void setCompanyLogo(String companyLogo) {
+		this.companyLogo = companyLogo;
 	}
 }

@@ -9,12 +9,7 @@
     <result column="sort_no" property="sortNo" jdbcType="INTEGER" />
     <result column="rent_type" property="rentType" jdbcType="TINYINT" />
     <result column="community_name" property="communityName" jdbcType="VARCHAR" />
-    <result column="province" property="province" jdbcType="VARCHAR" />
-    <result column="city" property="city" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="acreage" property="acreage" jdbcType="DECIMAL" />
-    <result column="district" property="district" jdbcType="VARCHAR" />
-    <result column="detail_addr" property="detailAddr" jdbcType="VARCHAR" />
     <result column="room" property="room" jdbcType="INTEGER" />
     <result column="hall" property="hall" jdbcType="INTEGER" />
     <result column="wei" property="wei" jdbcType="INTEGER" />
@@ -25,7 +20,6 @@
     <result column="zujin_type" property="zujinType" jdbcType="TINYINT" />
     <result column="chaoxiang" property="chaoxiang" jdbcType="TINYINT" />
     <result column="zhuangxiu" property="zhuangxiu" jdbcType="TINYINT" />
-    <result column="house_type" property="houseType" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="list_time" property="listTime" jdbcType="TIMESTAMP" />
     <result column="delist_time" property="delistTime" jdbcType="TIMESTAMP" />
@@ -35,12 +29,20 @@
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
     <result column="created_user" property="createdUser" jdbcType="VARCHAR" />
     <result column="updated_user" property="updatedUser" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="page_view" property="pageView" jdbcType="BIGINT" />
+    <result column="housekeeper_tel" property="housekeeperTel" jdbcType="VARCHAR" />
+    <result column="total_doors" property="totalDoors" jdbcType="VARCHAR" />
+    <result column="hezu_chaoxiang" property="hezuChaoxiang" jdbcType="TINYINT" />
+    <result column="hezu_resource" property="hezuResource" jdbcType="TINYINT" />
+    <result column="room_acreage" property="roomAcreage" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, code, apartment_id, type, sort_no, rent_type, community_name, province, city, 
-    area, acreage, district, detail_addr, room, hall, wei, floor, total_floor, lift_type, 
-    rent_amt, zujin_type, chaoxiang, zhuangxiu, house_type, status, list_time, delist_time, 
-    title, description, created_time, updated_time, created_user, updated_user
+    id, code, apartment_id, type, sort_no, rent_type, community_name, acreage, room, 
+    hall, wei, floor, total_floor, lift_type, rent_amt, zujin_type, chaoxiang, zhuangxiu, 
+    status, list_time, delist_time, title, description, created_time, updated_time, created_user, 
+    updated_user, is_delete, page_view, housekeeper_tel, total_doors, hezu_chaoxiang, 
+    hezu_resource, room_acreage
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -55,26 +57,28 @@
   <insert id="insert" parameterType="com.apass.zufang.domain.entity.House" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_house (code, apartment_id, type, 
       sort_no, rent_type, community_name, 
-      province, city, area, 
-      acreage, district, detail_addr, 
-      room, hall, wei, floor, 
-      total_floor, lift_type, rent_amt, 
-      zujin_type, chaoxiang, zhuangxiu, 
-      house_type, status, list_time, 
-      delist_time, title, description, 
-      created_time, updated_time, created_user, 
-      updated_user)
+      acreage, room, hall, 
+      wei, floor, total_floor, 
+      lift_type, rent_amt, zujin_type, 
+      chaoxiang, zhuangxiu, status, 
+      list_time, delist_time, title, 
+      description, created_time, updated_time, 
+      created_user, updated_user, is_delete, 
+      page_view, housekeeper_tel, total_doors, 
+      hezu_chaoxiang, hezu_resource, room_acreage
+      )
     values (#{code,jdbcType=VARCHAR}, #{apartmentId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, 
       #{sortNo,jdbcType=INTEGER}, #{rentType,jdbcType=TINYINT}, #{communityName,jdbcType=VARCHAR}, 
-      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
-      #{acreage,jdbcType=DECIMAL}, #{district,jdbcType=VARCHAR}, #{detailAddr,jdbcType=VARCHAR}, 
-      #{room,jdbcType=INTEGER}, #{hall,jdbcType=INTEGER}, #{wei,jdbcType=INTEGER}, #{floor,jdbcType=INTEGER}, 
-      #{totalFloor,jdbcType=INTEGER}, #{liftType,jdbcType=TINYINT}, #{rentAmt,jdbcType=DECIMAL}, 
-      #{zujinType,jdbcType=TINYINT}, #{chaoxiang,jdbcType=TINYINT}, #{zhuangxiu,jdbcType=TINYINT}, 
-      #{houseType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{listTime,jdbcType=TIMESTAMP}, 
-      #{delistTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR}, 
-      #{updatedUser,jdbcType=VARCHAR})
+      #{acreage,jdbcType=DECIMAL}, #{room,jdbcType=INTEGER}, #{hall,jdbcType=INTEGER}, 
+      #{wei,jdbcType=INTEGER}, #{floor,jdbcType=INTEGER}, #{totalFloor,jdbcType=INTEGER}, 
+      #{liftType,jdbcType=TINYINT}, #{rentAmt,jdbcType=DECIMAL}, #{zujinType,jdbcType=TINYINT}, 
+      #{chaoxiang,jdbcType=TINYINT}, #{zhuangxiu,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{listTime,jdbcType=TIMESTAMP}, #{delistTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, 
+      #{pageView,jdbcType=BIGINT}, #{housekeeperTel,jdbcType=VARCHAR}, #{totalDoors,jdbcType=VARCHAR}, 
+      #{hezuChaoxiang,jdbcType=TINYINT}, #{hezuResource,jdbcType=TINYINT}, #{roomAcreage,jdbcType=DECIMAL}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.House" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_house
@@ -97,23 +101,8 @@
       <if test="communityName != null" >
         community_name,
       </if>
-      <if test="province != null" >
-        province,
-      </if>
-      <if test="city != null" >
-        city,
-      </if>
-      <if test="area != null" >
-        area,
-      </if>
       <if test="acreage != null" >
         acreage,
-      </if>
-      <if test="district != null" >
-        district,
-      </if>
-      <if test="detailAddr != null" >
-        detail_addr,
       </if>
       <if test="room != null" >
         room,
@@ -145,9 +134,6 @@
       <if test="zhuangxiu != null" >
         zhuangxiu,
       </if>
-      <if test="houseType != null" >
-        house_type,
-      </if>
       <if test="status != null" >
         status,
       </if>
@@ -175,6 +161,27 @@
       <if test="updatedUser != null" >
         updated_user,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="pageView != null" >
+        page_view,
+      </if>
+      <if test="housekeeperTel != null" >
+        housekeeper_tel,
+      </if>
+      <if test="totalDoors != null" >
+        total_doors,
+      </if>
+      <if test="hezuChaoxiang != null" >
+        hezu_chaoxiang,
+      </if>
+      <if test="hezuResource != null" >
+        hezu_resource,
+      </if>
+      <if test="roomAcreage != null" >
+        room_acreage,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="code != null" >
@@ -195,23 +202,8 @@
       <if test="communityName != null" >
         #{communityName,jdbcType=VARCHAR},
       </if>
-      <if test="province != null" >
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null" >
-        #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        #{area,jdbcType=VARCHAR},
-      </if>
       <if test="acreage != null" >
         #{acreage,jdbcType=DECIMAL},
-      </if>
-      <if test="district != null" >
-        #{district,jdbcType=VARCHAR},
-      </if>
-      <if test="detailAddr != null" >
-        #{detailAddr,jdbcType=VARCHAR},
       </if>
       <if test="room != null" >
         #{room,jdbcType=INTEGER},
@@ -243,9 +235,6 @@
       <if test="zhuangxiu != null" >
         #{zhuangxiu,jdbcType=TINYINT},
       </if>
-      <if test="houseType != null" >
-        #{houseType,jdbcType=TINYINT},
-      </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
@@ -273,6 +262,27 @@
       <if test="updatedUser != null" >
         #{updatedUser,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="pageView != null" >
+        #{pageView,jdbcType=BIGINT},
+      </if>
+      <if test="housekeeperTel != null" >
+        #{housekeeperTel,jdbcType=VARCHAR},
+      </if>
+      <if test="totalDoors != null" >
+        #{totalDoors,jdbcType=VARCHAR},
+      </if>
+      <if test="hezuChaoxiang != null" >
+        #{hezuChaoxiang,jdbcType=TINYINT},
+      </if>
+      <if test="hezuResource != null" >
+        #{hezuResource,jdbcType=TINYINT},
+      </if>
+      <if test="roomAcreage != null" >
+        #{roomAcreage,jdbcType=DECIMAL},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.House" >
@@ -296,23 +306,8 @@
       <if test="communityName != null" >
         community_name = #{communityName,jdbcType=VARCHAR},
       </if>
-      <if test="province != null" >
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null" >
-        city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        area = #{area,jdbcType=VARCHAR},
-      </if>
       <if test="acreage != null" >
         acreage = #{acreage,jdbcType=DECIMAL},
-      </if>
-      <if test="district != null" >
-        district = #{district,jdbcType=VARCHAR},
-      </if>
-      <if test="detailAddr != null" >
-        detail_addr = #{detailAddr,jdbcType=VARCHAR},
       </if>
       <if test="room != null" >
         room = #{room,jdbcType=INTEGER},
@@ -344,9 +339,6 @@
       <if test="zhuangxiu != null" >
         zhuangxiu = #{zhuangxiu,jdbcType=TINYINT},
       </if>
-      <if test="houseType != null" >
-        house_type = #{houseType,jdbcType=TINYINT},
-      </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
@@ -374,6 +366,27 @@
       <if test="updatedUser != null" >
         updated_user = #{updatedUser,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="pageView != null" >
+        page_view = #{pageView,jdbcType=BIGINT},
+      </if>
+      <if test="housekeeperTel != null" >
+        housekeeper_tel = #{housekeeperTel,jdbcType=VARCHAR},
+      </if>
+      <if test="totalDoors != null" >
+        total_doors = #{totalDoors,jdbcType=VARCHAR},
+      </if>
+      <if test="hezuChaoxiang != null" >
+        hezu_chaoxiang = #{hezuChaoxiang,jdbcType=TINYINT},
+      </if>
+      <if test="hezuResource != null" >
+        hezu_resource = #{hezuResource,jdbcType=TINYINT},
+      </if>
+      <if test="roomAcreage != null" >
+        room_acreage = #{roomAcreage,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -385,12 +398,7 @@
       sort_no = #{sortNo,jdbcType=INTEGER},
       rent_type = #{rentType,jdbcType=TINYINT},
       community_name = #{communityName,jdbcType=VARCHAR},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
-      area = #{area,jdbcType=VARCHAR},
       acreage = #{acreage,jdbcType=DECIMAL},
-      district = #{district,jdbcType=VARCHAR},
-      detail_addr = #{detailAddr,jdbcType=VARCHAR},
       room = #{room,jdbcType=INTEGER},
       hall = #{hall,jdbcType=INTEGER},
       wei = #{wei,jdbcType=INTEGER},
@@ -401,7 +409,6 @@
       zujin_type = #{zujinType,jdbcType=TINYINT},
       chaoxiang = #{chaoxiang,jdbcType=TINYINT},
       zhuangxiu = #{zhuangxiu,jdbcType=TINYINT},
-      house_type = #{houseType,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
       list_time = #{listTime,jdbcType=TIMESTAMP},
       delist_time = #{delistTime,jdbcType=TIMESTAMP},
@@ -410,7 +417,14 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       created_user = #{createdUser,jdbcType=VARCHAR},
-      updated_user = #{updatedUser,jdbcType=VARCHAR}
+      updated_user = #{updatedUser,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      page_view = #{pageView,jdbcType=BIGINT},
+      housekeeper_tel = #{housekeeperTel,jdbcType=VARCHAR},
+      total_doors = #{totalDoors,jdbcType=VARCHAR},
+      hezu_chaoxiang = #{hezuChaoxiang,jdbcType=TINYINT},
+      hezu_resource = #{hezuResource,jdbcType=TINYINT},
+      room_acreage = #{roomAcreage,jdbcType=DECIMAL}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

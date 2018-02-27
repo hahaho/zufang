@@ -1,17 +1,19 @@
 package com.apass.zufang.web.operations;
 import java.util.Map;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.vo.HouseVo;
@@ -34,20 +36,34 @@ public class BrandApartmentController {
 	 * 品牌公寓热门房源配置页面
 	 * @return
 	 */
-    @RequestMapping("/init")
+    @GET
+	@Path("/init")
     public String init() {
         return "operations/brandApartment";
     }
     /**
      * 品牌公寓热门房源列表查询
-     * @param entity
+     * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/getHotHouseList")
-    public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
+    @POST
+	@Path("/getHotHouseList")
+    public ResponsePageBody<HouseVo> getHotHouseList(Map<String,Object> map) {
         ResponsePageBody<HouseVo> respBody = new ResponsePageBody<HouseVo>();
         try {
+        	String houseType = CommonUtils.getValue(map, "houseType");//房源是否热门
+        	String apartmentName = CommonUtils.getValue(map, "apartmentName");//公寓名称
+        	String houseTitle = CommonUtils.getValue(map, "houseTitle");//房源名称
+        	String houseCode = CommonUtils.getValue(map, "houseCode");//房源编码
+        	String houseArea = CommonUtils.getValue(map, "houseArea");//公寓所在区
+        	HouseQueryParams entity = new HouseQueryParams();
+        	entity.setApartmentName(apartmentName);
+        	entity.setHouseTitle(houseTitle);
+        	entity.setHouseCode(houseCode);
+        	entity.setHouseArea(houseArea);
+        	if(StringUtils.isNotBlank(houseType)){
+        		entity.setHouseType((byte)Integer.parseInt(houseType));
+        	}
         	entity.setIsDelete("00");
         	respBody = brandApartmentService.getHotHouseList(entity);
         } catch (Exception e) {
@@ -61,10 +77,11 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseMoveUp")
+    @POST
+	@Path("/hotHouseMoveUp")
     public Response hotHouseMoveUp(Map<String, Object> map) {
         try {
+        	LOGGER.info("hotHouseMoveUp map--->{}",GsonUtils.toJson(map));
         	String houseId = CommonUtils.getValue(map, "houseId");
         	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
         	String username = SpringSecurityUtils.getCurrentUser();
@@ -82,10 +99,11 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseMoveDown")
+    @POST
+	@Path("/hotHouseMoveDown")
     public Response hotHouseMoveDown(Map<String, Object> map) {
         try {
+        	LOGGER.info("hotHouseMoveDown map--->{}",GsonUtils.toJson(map));
         	String houseId = CommonUtils.getValue(map, "houseId");
         	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
         	String username = SpringSecurityUtils.getCurrentUser();
@@ -103,10 +121,11 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseCancel")
+    @POST
+	@Path("/hotHouseCancel")
     public Response hotHouseCancel(Map<String, Object> map) {
         try {
+        	LOGGER.info("hotHouseCancel map--->{}",GsonUtils.toJson(map));
         	String houseId = CommonUtils.getValue(map, "houseId");
         	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
         	String username = SpringSecurityUtils.getCurrentUser();
@@ -124,10 +143,11 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseSet")
+    @POST
+	@Path("/hotHouseSet")
     public Response hotHouseSet(Map<String, Object> map) {
         try {
+        	LOGGER.info("hotHouseSet map--->{}",GsonUtils.toJson(map));
         	String houseId = CommonUtils.getValue(map, "houseId");
         	String sortNo = CommonUtils.getValue(map, "sortNo");
         	String url = CommonUtils.getValue(map, "url");
@@ -149,10 +169,11 @@ public class BrandApartmentController {
      * @param map
      * @return
      */
-    @ResponseBody
-    @RequestMapping("/hotHouseEdit")
+    @POST
+	@Path("/hotHouseEdit")
     public Response hotHouseEdit(Map<String, Object> map) {
         try {
+        	LOGGER.info("hotHouseEdit map--->{}",GsonUtils.toJson(map));
         	String houseId = CommonUtils.getValue(map, "houseId");
         	String sortNo = CommonUtils.getValue(map, "sortNo");
         	String url = CommonUtils.getValue(map, "url");

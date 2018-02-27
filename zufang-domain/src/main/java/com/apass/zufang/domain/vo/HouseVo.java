@@ -18,6 +18,8 @@ public class HouseVo{
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
 
     private Long apartmentId;//所属公寓
+    
+    private String housekeeperTel;
 
     private Integer sortNo;//排序字段
 
@@ -56,9 +58,7 @@ public class HouseVo{
     private Byte chaoxiang;//朝向， 1:东：2:南....
 
     private Byte zhuangxiu;//装修情况:1:豪华装修...
-
-    private Byte houseType;//1:普通住宅...
-
+    
     private String title;//房源标题
 
     private String description;//房源描述
@@ -82,6 +82,34 @@ public class HouseVo{
 	private String houseCode;//房源编码
 	
 	private String locationId;//地址Id
+	
+	private String totalDoors;//几户合租
+
+    private Byte hezuChaoxiang;//朝向
+
+    private Byte hezuResource;//出租介绍
+
+	private String longitude;//经度
+	
+	private String latitude;//维度
+	
+	private BigDecimal roomAcreage;//单间房屋面积
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
 
 	public String getCode() {
 		return code;
@@ -97,6 +125,14 @@ public class HouseVo{
 
 	public void setApartmentId(Long apartmentId) {
 		this.apartmentId = apartmentId;
+	}
+	
+	public String getHousekeeperTel() {
+		return housekeeperTel;
+	}
+
+	public void setHousekeeperTel(String housekeeperTel) {
+		this.housekeeperTel = housekeeperTel;
 	}
 
 	public Integer getSortNo() {
@@ -251,14 +287,6 @@ public class HouseVo{
 		this.zhuangxiu = zhuangxiu;
 	}
 
-	public Byte getHouseType() {
-		return houseType;
-	}
-
-	public void setHouseType(Byte houseType) {
-		this.houseType = houseType;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -356,5 +384,37 @@ public class HouseVo{
 
 	public void setLocationId(String locationId) {
 		this.locationId = locationId;
+	}
+
+	public String getTotalDoors() {
+		return totalDoors;
+	}
+
+	public void setTotalDoors(String totalDoors) {
+		this.totalDoors = totalDoors;
+	}
+
+	public Byte getHezuChaoxiang() {
+		return hezuChaoxiang;
+	}
+
+	public void setHezuChaoxiang(Byte hezuChaoxiang) {
+		this.hezuChaoxiang = hezuChaoxiang;
+	}
+
+	public Byte getHezuResource() {
+		return hezuResource;
+	}
+
+	public void setHezuResource(Byte hezuResource) {
+		this.hezuResource = hezuResource;
+	}
+
+	public BigDecimal getRoomAcreage() {
+		return roomAcreage;
+	}
+
+	public void setRoomAcreage(BigDecimal roomAcreage) {
+		this.roomAcreage = roomAcreage;
 	}
 }

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.ReturnVisitMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.ReturnVisit" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="house_id" property="houseId" jdbcType="BIGINT" />
+    <result column="reserve_house_id" property="reserveHouseId" jdbcType="BIGINT" />
+    <result column="visit_status" property="visitStatus" jdbcType="TINYINT" />
+    <result column="rent_status" property="rentStatus" jdbcType="TINYINT" />
+    <result column="feed_back" property="feedBack" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, house_id, reserve_house_id, visit_status, rent_status, feed_back, memo, is_delete, 
+    created_time, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zfang_return_visit
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_zfang_return_visit
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.entity.ReturnVisit" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_return_visit (house_id, reserve_house_id, visit_status, 
+      rent_status, feed_back, memo, 
+      is_delete, created_time, updated_time
+      )
+    values (#{houseId,jdbcType=BIGINT}, #{reserveHouseId,jdbcType=BIGINT}, #{visitStatus,jdbcType=TINYINT}, 
+      #{rentStatus,jdbcType=TINYINT}, #{feedBack,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.ReturnVisit" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_return_visit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="houseId != null" >
+        house_id,
+      </if>
+      <if test="reserveHouseId != null" >
+        reserve_house_id,
+      </if>
+      <if test="visitStatus != null" >
+        visit_status,
+      </if>
+      <if test="rentStatus != null" >
+        rent_status,
+      </if>
+      <if test="feedBack != null" >
+        feed_back,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="houseId != null" >
+        #{houseId,jdbcType=BIGINT},
+      </if>
+      <if test="reserveHouseId != null" >
+        #{reserveHouseId,jdbcType=BIGINT},
+      </if>
+      <if test="visitStatus != null" >
+        #{visitStatus,jdbcType=TINYINT},
+      </if>
+      <if test="rentStatus != null" >
+        #{rentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="feedBack != null" >
+        #{feedBack,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.ReturnVisit" >
+    update t_zfang_return_visit
+    <set >
+      <if test="houseId != null" >
+        house_id = #{houseId,jdbcType=BIGINT},
+      </if>
+      <if test="reserveHouseId != null" >
+        reserve_house_id = #{reserveHouseId,jdbcType=BIGINT},
+      </if>
+      <if test="visitStatus != null" >
+        visit_status = #{visitStatus,jdbcType=TINYINT},
+      </if>
+      <if test="rentStatus != null" >
+        rent_status = #{rentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="feedBack != null" >
+        feed_back = #{feedBack,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.ReturnVisit" >
+    update t_zfang_return_visit
+    set house_id = #{houseId,jdbcType=BIGINT},
+      reserve_house_id = #{reserveHouseId,jdbcType=BIGINT},
+      visit_status = #{visitStatus,jdbcType=TINYINT},
+      rent_status = #{rentStatus,jdbcType=TINYINT},
+      feed_back = #{feedBack,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

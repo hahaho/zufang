@@ -5,6 +5,6 @@
         SELECT 
             <include refid="Base_Column_List" />
         FROM t_zfang_house_peizhi
-        WHERE is_delete = '00' AND house_id= {houseId}
+        WHERE is_delete = '00' AND house_id= #{houseId}
    </select>
 </mapper>

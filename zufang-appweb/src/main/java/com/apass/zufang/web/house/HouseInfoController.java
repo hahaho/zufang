@@ -1,5 +1,6 @@
 package com.apass.zufang.web.house;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.HouseInfoRela;
@@ -36,7 +36,7 @@ public class HouseInfoController {
 	private HouseInfoService houseInfoService;
 
 	/**
-	 * 查根据houseId显示房屋信息
+	 * 查根据查询条件显示房屋信息
 	 * 
 	 * @param paramMap
 	 * @return
@@ -60,8 +60,8 @@ public class HouseInfoController {
 			}
 			queryCondition.setProvince(province);
 			queryCondition.setCity(city);
-			queryCondition.setMinRentAmt(minRentAmt);
-			queryCondition.setMaxRentAmt(maxRentAmt);
+			queryCondition.setMinRentAmt(new BigDecimal(minRentAmt) );
+			queryCondition.setMaxRentAmt(new BigDecimal(maxRentAmt));
 
 			List<HouseInfoRela> houseInfoList = houseInfoService
 					.queryHouseInfoRela(queryCondition);
@@ -74,21 +74,30 @@ public class HouseInfoController {
 	}
 
 	/**
-	 * 查询附近房源
+	 * 房屋详情页：查根据houseId显示房屋信息以及附近房源
 	 * 
 	 * @param paramMap
 	 * @return
 	 */
 	@POST
-	@Path("/nearbyHouseInfo")
-	public Response getNearbyHouseInfo(Map<String, Object> paramMap) {
+	@Path("/getHouseInfoRela")
+	public Response getHouseInfoRela(Map<String, Object> paramMap) {
 		try {
 			String houseId = CommonUtils.getValue(paramMap, "houseId");
-
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			// 目标房源信息
+			HouseInfoRela queryCondition =new HouseInfoRela();
+			queryCondition.setHouseId(Long.valueOf(houseId));
+			List<HouseInfoRela> targetHouseInfoList =houseInfoService.queryHouseInfoRela(queryCondition);
+			resultMap.put("targetHouseInfo", targetHouseInfoList.get(0));
+			// 附近房源信息
+			List<HouseInfoRela> nearlyHouseInfoList =houseInfoService.getNearbyhouseInfo(Long.valueOf(houseId),10);
+			resultMap.put("nearlyHouseInfoList", nearlyHouseInfoList);
+			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
 			return Response.fail("操作失败");
 		}
-		return null;
 	}
 
 }
