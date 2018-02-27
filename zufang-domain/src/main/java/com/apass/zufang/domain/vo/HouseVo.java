@@ -93,7 +93,7 @@ public class HouseVo{
 	
 	private String latitude;//维度
 	
-	private BigDecimal roomAcreage;
+	private BigDecimal roomAcreage;//单间房屋面积
 
 	public String getLongitude() {
 		return longitude;

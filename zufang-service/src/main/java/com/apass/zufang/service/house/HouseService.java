@@ -86,7 +86,7 @@ public class HouseService {
 	@Autowired
 	private HousePeiZhiService peizhiService;
 
-	
+	/*** 房屋信息管理列表 */
 	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
 		ResponsePageBody<House> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
@@ -103,6 +103,7 @@ public class HouseService {
 		return body;
 	}
 	
+	/*** 房屋信息审核管理列表*/
 	public ResponsePageBody<House> getHouseAuditListExceptDelete(HouseQueryParams dto){
 		ResponsePageBody<House> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
@@ -117,10 +118,7 @@ public class HouseService {
 		return body;
 	}
 	
-	/**
-	 * 添加房屋信息
-	 * @throws BusinessException
-	 */
+	/*** 添加房屋信息* @throws BusinessException*/
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void addHouse(HouseVo houseVo) throws BusinessException{
 		
@@ -149,6 +147,9 @@ public class HouseService {
 			img.setCreatedTime(houseVo.getCreatedTime());
 			img.setUpdatedTime(houseVo.getUpdatedTime());
 			if(StringUtils.isNotBlank(pic)){
+				//TODO 验证图片大小 最少2张，最多8张，每张图片不得大于2M，支持.jpg.png，尺寸待定
+				
+				
 				String picture1Url2 = nfsHouse + "_" + System.currentTimeMillis() + ".jpg";
 				byte[] picture1Byte = Base64Utils.decodeFromString(pic);
 				FileUtilsCommons.uploadByteFilesUtil(rootPath, picture1Url2, picture1Byte);
