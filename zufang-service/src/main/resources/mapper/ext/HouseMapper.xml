@@ -83,7 +83,7 @@
     </select>
     
     <!-- 查询房源List -->
-    <select id="getHouseByID" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
+    <select id="getHouseByCodes" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
         SELECT
 				h.id			id,
@@ -101,15 +101,16 @@
 				t_zfang_house_location l,
 				t_zfang_apartment a
 			WHERE
-				h.id = i.house_id = l.house_id
+				h.id = i.house_id = l.house_id = a.house_id
+				AND h.apartment_id = a.id
 				AND h.status = '3'
-				AND h.apartment_id in
+				AND a.code in
         ]]>
         <foreach collection="list" item="employeeId" index="index" open="(" separator="," close=")">
 				#{employeeId}
         </foreach>
         <![CDATA[
-	      ORDER BY h.page_view DESC LIMIT 0,5;
+	      ORDER BY h.page_view DESC;
         ]]>
     </select>
     

@@ -40,5 +40,5 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @param list
 	 * @return
 	 */
-	public List<Apartment> getHouseByID(ArrayList<String> list);
+	public List<Apartment> getHouseByCodes(ArrayList<String> list);
 }

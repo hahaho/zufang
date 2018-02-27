@@ -13,16 +13,13 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
-import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.service.house.ApartHouseService;
-import com.apass.zufang.utils.ValidateUtils;
 
-@Path("/ApartHouse")
+@Path("/apartHouse")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class ApartHouseController {
@@ -52,7 +49,7 @@ public class ApartHouseController {
 	 * @return
 	 */
 	@POST
-	@Path("/getApartID")
+	@Path("/getApartCodes")
 	public Response getApartByCity(Map<String, String> paramMap) {
 		
 		try {
@@ -73,11 +70,11 @@ public class ApartHouseController {
 	 * @return
 	 */
 	@POST
-	@Path("/getHouseByID")
-	public Response getHouseByID(Map<String, String> paramMap) {
+	@Path("/getHouseByCodes")
+	public Response getHouseByCodes(Map<String, String> paramMap) {
 		
 		try {
-			String str = paramMap.get("list");
+			String str = paramMap.get("codes");
 			if (StringUtils.isBlank(str)) {
 				return Response.fail("请求参数为空！");
 			}
@@ -86,35 +83,8 @@ public class ApartHouseController {
 			for (int i = 0; i < split.length; i++) {
 				list.add(split[i]);
 			}
-			List<Apartment> apartList = apartHouseService.getHouseByID(list);
+			List<Apartment> apartList = apartHouseService.getHouseByCodes(list);
 			return Response.success("success", GsonUtils.toJson(apartList));
-		} catch (Exception e) {
-			LOG.error("查询品牌公寓失败！", e);
-			return Response.fail("查询品牌公寓失败！");
-		}
-	}
-	/**
-	 * 品牌公寓
-	 * @return
-	 */
-	@POST
-	@Path("/getApartGongyu")
-	public Response getApartGongyu(Map<String, Object> paramMap) {
-		
-		try {
-			
-			String communityName = CommonUtils.getValue(paramMap, "communityName");// 区域
-			ValidateUtils.isNotBlank(communityName, "品牌名称无数据");
-			
-			Apartment apartment = new Apartment();
-			apartment.setCompanyName(communityName);
-			
-			List<Apartment> resultApartment = apartHouseService.getApartGongyu(apartment);
-			
-			return Response.success("success", GsonUtils.toJson(resultApartment));
-		}catch (BusinessException e){
-			LOG.error("查询品牌公寓失败！",e);
-			return Response.fail(e.getErrorDesc());
 		} catch (Exception e) {
 			LOG.error("查询品牌公寓失败！", e);
 			return Response.fail("查询品牌公寓失败！");

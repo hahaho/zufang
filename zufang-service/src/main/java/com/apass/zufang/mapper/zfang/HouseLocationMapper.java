@@ -1,5 +1,6 @@
 package com.apass.zufang.mapper.zfang;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,13 +15,8 @@ public interface HouseLocationMapper extends GenericMapper<HouseLocation,Long>{
 	
 	HouseLocation getLocationByHouseId(Long houseId);
 	
-	List<HouseVo> initPeizhiLocation(HouseLocation houseLocation);
-
-	List<HouseVo> initHotLocation(HouseLocation houseLocation);
-
 	List<HouseVo> initNearLocation(Map<String, Double> returnLLSquarePoint);
 
-	List<HouseVo> initHouseByCity(HouseLocation entity);
-	
+	List<HouseVo> initHouseByCity(HashMap<String, String> map);
 	
 }
