@@ -46,19 +46,20 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	public Response queryhistory(Map<String, Object> paramMap) {
 	        try {
 	        	
-	        	String customerId = CommonUtils.getValue(paramMap, "customerId");
+	        	String userId = CommonUtils.getValue(paramMap, "userId");
 	        	String deviceId = CommonUtils.getValue(paramMap, "deviceId");
-	        	logger.info("入参 ：customerId———————>"+customerId+"    deviceId———————>"+deviceId);
+	        	logger.info("入参 ：customerId———————>"+userId+"    deviceId———————>"+deviceId);
 	        	Map<Object, Object> map = new HashMap<>();
-	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
+	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
 	        		//设备ID
 	        		List<SearchKeys> list = searchHistorySevice.queryDeviceIdHistory(deviceId);
 	        		map.put("list", list);
 	        		 return Response.success("设备ID搜索",map);
 	        	}else{
 	        		//用户ID
-	        		List<SearchKeys> list =searchHistorySevice.queryCustomerIdHistory(customerId);
-	        		return Response.success("用户ID搜索",list);
+	        		List<SearchKeys> list =searchHistorySevice.queryCustomerIdHistory(userId);
+	        		map.put("list", list);
+	        		return Response.success("用户ID搜索",map);
 	        	}
 	        } catch (Exception e) {
 	        	logger.info("搜索历史失败——————"+e);
@@ -74,15 +75,15 @@ private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginControll
 	@Path("/deletehistory")
 	public Response deletehistory(Map<String, Object> paramMap) {
 		 try {
-	        	String customerId = CommonUtils.getValue(paramMap, "customerId");
+	        	String userId = CommonUtils.getValue(paramMap, "userId");
 	        	String deviceId = CommonUtils.getValue(paramMap, "deviceId");
-	        	logger.info("入参 ：customerId———————>"+customerId+"      deviceId———————>"+deviceId);
-	        	if(org.apache.commons.lang3.StringUtils.isBlank(customerId)){
+	        	logger.info("入参 ：customerId———————>"+userId+"      deviceId———————>"+deviceId);
+	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
 	        		//设备ID删除	
-	        		 return Response.success("设备ID搜索",searchHistorySevice.deleteDeviceIdHistory(deviceId));
+	        		 return Response.success("设备IDs删除成功",searchHistorySevice.deleteDeviceIdHistory(deviceId));
 	        	}else{
 	        		//用户ID删除
-	        		return Response.success("用户ID搜索",searchHistorySevice.deleteCustomerIdHistory(customerId));
+	        		return Response.success("用户ID删除成功",searchHistorySevice.deleteCustomerIdHistory(userId));
 	        	}
 	        } catch (Exception e) {
 	        	logger.info("删除搜索历史失败——————"+e);

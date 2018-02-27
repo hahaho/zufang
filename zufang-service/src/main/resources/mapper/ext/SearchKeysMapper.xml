@@ -53,7 +53,7 @@
 	<![CDATA[
 		UPDATE   t_zfang_search_keys
 		SET   key_status = ' 1'
-		WHERE  device_id = 'deviceId';
+		WHERE  device_id = #{deviceId};
 	]]>
 	</update>
 	
@@ -63,7 +63,7 @@
 	<![CDATA[
 		UPDATE   t_zfang_search_keys
 		SET   key_status = ' 1'
-		WHERE  user_id = 'userId';
+		WHERE  user_id = #{userId};
 	]]>
 	</update>
     

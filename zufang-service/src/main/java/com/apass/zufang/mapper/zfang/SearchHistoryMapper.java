@@ -31,14 +31,14 @@ public interface SearchHistoryMapper extends GenericMapper<SearchKeys,Long>  {
 	 * @param deviceId
 	 * @return
 	 */
-	public Object deleteDeviceIdHistory(String deviceId) ;
+	public Integer deleteDeviceIdHistory(String deviceId) ;
 	
 	/**
 	 * 用户id删除
 	 * @param customerId
 	 * @return
 	 */
-	public Object deleteCustomerIdHistory(String customerId) ;
+	public Integer deleteCustomerIdHistory(String userId) ;
 	
 	
 }

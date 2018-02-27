@@ -35,8 +35,8 @@ public class SearchHistorySevice {
 	 * @param customerId
 	 * @return
 	 */ 
-	public List<SearchKeys> queryCustomerIdHistory(String customerId) {
-		return searchHistoryDao.queryCustomerIdHistory(customerId);
+	public List<SearchKeys> queryCustomerIdHistory(String userId) {
+		return searchHistoryDao.queryCustomerIdHistory(userId);
 		
 	}
 	
@@ -54,8 +54,8 @@ public class SearchHistorySevice {
 	 * @param customerId
 	 * @return
 	 */
-	public Object deleteCustomerIdHistory(String customerId) {
-		return searchHistoryDao.deleteCustomerIdHistory(customerId);
+	public Object deleteCustomerIdHistory(String userId) {
+		return searchHistoryDao.deleteCustomerIdHistory(userId);
 	}
 
 	

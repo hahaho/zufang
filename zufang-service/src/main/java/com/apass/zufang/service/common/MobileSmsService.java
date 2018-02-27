@@ -18,7 +18,6 @@ import org.tempuri.SmsMessageData;
 import com.apass.gfb.framework.cache.CacheManager;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.GsonUtils;
-import com.apass.zufang.mapper.ajp.personal.ZuFangLoginRepository;
 
 
 /**
@@ -48,9 +47,6 @@ public class MobileSmsService {
 	@Autowired
 	private CacheManager cacheManager;
 	
-	
-	@Autowired
-	private ZuFangLoginRepository  zuFangLoginRepository;
 
 	/**
 	 * 短信通道类型，1：逐鹿，2：创蓝(默认使用逐鹿)，3：云融正通营销短信
@@ -78,12 +74,6 @@ public class MobileSmsService {
 			String code = map.get("code");
 			if (StringUtils.isNotBlank(code)) {
 				boolean result = StringUtils.equalsIgnoreCase(code, mobileVerificationCode);
-				
-				//校验成功  插入数据库
-				if(result){
-					zuFangLoginRepository.Mobilelogin(mobile);
-				}
-				
 				logger.info("random validate result -> " + result);
 				return result;
 			} else {
