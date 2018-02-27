@@ -35,6 +35,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 /**
  * 房源管理
  * @author Administrator
@@ -68,7 +69,6 @@ public class HouseService {
 	@Autowired
 	private HouseImgMapper imgMapper;
 
-	
 	@Autowired
 	private HouseLocationService locationService;
 	
@@ -275,12 +275,26 @@ public class HouseService {
 		houseMapper.updateByPrimaryKeySelective(house);
 	}
 	
+	/*** 根据房屋Id,获取房屋信息*/
 	public Map<String,Object> getHouseDetail(String id) throws BusinessException{
 		
 		Map<String,Object> values = Maps.newHashMap();
 		
 		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
+		if(null == house){
+			throw new BusinessException("房屋信息不存在!");
+		}
 		
+		HouseLocation location = locationMapper.getLocationByHouseId(house.getId());
+		
+		List<HouseImg> imgs = imgService.getHouseImgList(house.getId());
+		
+		List<HousePeizhi> peizhis = peizhiMapper.getPeiZhiByHouseId(house.getId());
+		
+		values.put("house", house);
+		values.put("location",location);
+		values.put("imgs",imgs);
+		values.put("peizhis",peizhis);
 		
 		return values;
 	}
@@ -300,6 +314,7 @@ public class HouseService {
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			houseInfoToHouseEs(house.getId());
 		}else{
 			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 		}
@@ -349,6 +364,7 @@ public class HouseService {
 				house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 			}else{
 				house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+				houseInfoToHouseEs(house.getId());
 			}
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
@@ -382,6 +398,7 @@ public class HouseService {
 					others++;
 				}else{
 					house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					houseInfoToHouseEs(house.getId());
 					waitUp++;
 				}
 				house.setUpdatedTime(new Date());
