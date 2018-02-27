@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.WorkSubwayMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.WorkSubway" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="BIGINT" />
+    <result column="line_name" property="lineName" jdbcType="VARCHAR" />
+    <result column="site_name" property="siteName" jdbcType="VARCHAR" />
+    <result column="nearest_point" property="nearestPoint" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="parent_code" property="parentCode" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, line_name, site_name, nearest_point, level, parent_code, created_time, 
+    updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zufang_work_subway
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_zufang_work_subway
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.entity.WorkSubway" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zufang_work_subway (code, line_name, site_name, 
+      nearest_point, level, parent_code, 
+      created_time, updated_time)
+    values (#{code,jdbcType=BIGINT}, #{lineName,jdbcType=VARCHAR}, #{siteName,jdbcType=VARCHAR}, 
+      #{nearestPoint,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{parentCode,jdbcType=BIGINT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.WorkSubway" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zufang_work_subway
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="lineName != null" >
+        line_name,
+      </if>
+      <if test="siteName != null" >
+        site_name,
+      </if>
+      <if test="nearestPoint != null" >
+        nearest_point,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="parentCode != null" >
+        parent_code,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=BIGINT},
+      </if>
+      <if test="lineName != null" >
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null" >
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="nearestPoint != null" >
+        #{nearestPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null" >
+        #{parentCode,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.WorkSubway" >
+    update t_zufang_work_subway
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=BIGINT},
+      </if>
+      <if test="lineName != null" >
+        line_name = #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null" >
+        site_name = #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="nearestPoint != null" >
+        nearest_point = #{nearestPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null" >
+        parent_code = #{parentCode,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.WorkSubway" >
+    update t_zufang_work_subway
+    set code = #{code,jdbcType=BIGINT},
+      line_name = #{lineName,jdbcType=VARCHAR},
+      site_name = #{siteName,jdbcType=VARCHAR},
+      nearest_point = #{nearestPoint,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      parent_code = #{parentCode,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

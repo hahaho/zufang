@@ -20,7 +20,15 @@
         	AND house_id= #{houseId, jdbcType=BIGINT} 
         	AND type= #{type, jdbcType=TINYINT} 
    </select>
-   
+    <select id="getImgByRealHouseId" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM t_zfang_house_img
+        WHERE
+        	is_delete = '00'
+        	AND house_id= #{houseId, jdbcType=BIGINT}
+   </select>
+
    <select id="queryImgInfo" resultMap="BaseResultMap">
         SELECT 
             <include refid="Base_Column_List" />
