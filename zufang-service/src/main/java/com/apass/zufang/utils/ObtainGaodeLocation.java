@@ -18,11 +18,10 @@ import com.apass.zufang.domain.common.GaodeLocation;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-
 public class ObtainGaodeLocation {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ObtainGaodeLocation.class);
-	
+
 	/**
 	 * key值
 	 */
@@ -30,9 +29,11 @@ public class ObtainGaodeLocation {
 	private static String KEY;
 
 	private static Pattern pattern = Pattern.compile("\"location\":\"(\\d+\\.\\d+),(\\d+\\.\\d+)\"");
-  
-	
-
+	/**
+	 * 获取坐标信息
+	 * @param address
+	 * @return
+	 */
 	public static GaodeLocation addressToGPS(String address) {
 
 		try {
@@ -75,9 +76,9 @@ public class ObtainGaodeLocation {
 					data += line;
 
 				}
-				
-				GaodeLocation jsonGaode= GsonUtils.convertObj(data, GaodeLocation.class);
-				
+
+				GaodeLocation jsonGaode = GsonUtils.convertObj(data, GaodeLocation.class);
+
 				return jsonGaode;
 			}
 		} catch (Exception e) {
@@ -89,63 +90,85 @@ public class ObtainGaodeLocation {
 
 		return null;
 
-	}
-	public static CoordinateAddress getAdd(String log, String lat ){  
-		
-		CoordinateAddress result=new CoordinateAddress();
-        //lat 小  log  大  
-        //参数解释: 纬度,经度 type 001 (100代表道路，010代表POI，001代表门址，111可以同时显示前三项)  
-        String urlString = "http://gc.ditu.aliyun.com/regeocoding?l="+lat+","+log+"&type=010";  
-        String res = "";     
-        try {     
-            URL url = new URL(urlString);    
-            java.net.HttpURLConnection conn = (java.net.HttpURLConnection)url.openConnection();    
-            conn.setDoOutput(true);    
-            conn.setRequestMethod("POST");    
-            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(),"UTF-8"));    
-            String line;    
-           while ((line = in.readLine()) != null) {    
-               res += line+"\n";    
-         }    
-            in.close();    
-        } catch (Exception e) {    
-            System.out.println("error in wapaction,and e is " + e.getMessage());    
-        }   
-    	JSONObject jsonObject = JSONObject.fromObject(res);  
-        JSONArray jsonArray = JSONArray.fromObject(jsonObject.getString("addrList"));  
-        JSONObject j_2 = JSONObject.fromObject(jsonArray.get(0));  
-        int status = j_2.getInt("status");  
-        if(status==1){
-        	 result.setName(j_2.getString("name"));
-        	 result.setId(j_2.getString("id"));
-        	 result.setAdmCode(j_2.getString("admCode"));
-        	 
-        	 String allAdd = j_2.getString("admName");
-        	 String arr[] = allAdd.split(",");  
-        	 result.setProvince(arr[0]);
-        	 result.setCity(arr[1]);
-        	 result.setArea(arr[2]);
-        	 result.setAddr(j_2.getString("addr"));
-        	 result.setDistance(j_2.getDouble("distance"));
-        	 
-        }else{
-        	 return null; 
-        }
-        return result;    
-    } 
-	
-	
-	
+	} 
+	/**
+	 * 根据坐标获取详细地址
+	 * @param log
+	 * @param lat
+	 * @return
+	 */
+	public static CoordinateAddress getAdd(String log, String lat) {
 
-//	public static void main(String[] args) {
-//		
-//		GaodeLocation data = ObtainGaodeLocation.addressToGPS("上海市东方明珠广播电视塔有限公司");
-//		
-//		CoordinateAddress add = getAdd("121.499361", "31.240229");
-//
-//		System.out.println("经度,纬度:" + data.getGeocodes().get(0).getLocation());
-//
-//	}
-	
-	
+		CoordinateAddress result = new CoordinateAddress();
+		// lat 小 log 大
+		// 参数解释: 纬度,经度 type 001 (100代表道路，010代表POI，001代表门址，111可以同时显示前三项)
+		String urlString = "http://gc.ditu.aliyun.com/regeocoding?l=" + lat + "," + log + "&type=010";
+		String res = "";
+		try {
+			URL url = new URL(urlString);
+			java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			java.io.BufferedReader in = new java.io.BufferedReader(
+					new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
+			String line;
+			while ((line = in.readLine()) != null) {
+				res += line + "\n";
+			}
+			in.close();
+		} catch (Exception e) {
+			System.out.println("error in wapaction,and e is " + e.getMessage());
+		}
+		JSONObject jsonObject = JSONObject.fromObject(res);
+		JSONArray jsonArray = JSONArray.fromObject(jsonObject.getString("addrList"));
+		JSONObject j_2 = JSONObject.fromObject(jsonArray.get(0));
+		int status = j_2.getInt("status");
+		if (status == 1) {
+			result.setName(j_2.getString("name"));
+			result.setId(j_2.getString("id"));
+			result.setAdmCode(j_2.getString("admCode"));
+
+			String allAdd = j_2.getString("admName");
+			String arr[] = allAdd.split(",");
+			result.setProvince(arr[0]);
+			result.setCity(arr[1]);
+			result.setArea(arr[2]);
+			result.setAddr(j_2.getString("addr"));
+			result.setDistance(j_2.getDouble("distance"));
+
+		} else {
+			return null;
+		}
+		return result;
+	}
+
+	/**
+	 * 根据 获取具体坐标
+	 * 
+	 * @param address
+	 * @return
+	 */
+	public static String[] getLocation(String address) {
+
+		String[] result = null;
+		GaodeLocation resultDto = addressToGPS(address);
+		if (resultDto.getStatus().equals("0")) {
+			return result;
+		}
+		result = resultDto.getGeocodes().get(0).getLocation().split(",");
+
+		return result;
+	};
+
+	// public static void main(String[] args) {
+	//
+	// GaodeLocation data =
+	// ObtainGaodeLocation.addressToGPS("上海市东方明珠广播电视塔有限公司");
+	//
+	// CoordinateAddress add = getAdd("121.499361", "31.240229");
+	//
+	// System.out.println("经度,纬度:" + data.getGeocodes().get(0).getLocation());
+	//
+	// }
+
 }

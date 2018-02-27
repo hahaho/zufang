@@ -68,7 +68,7 @@ public class Configs {
             IOUtils.closeQuietly(esIn);
         }
         try {
-            new IndexSyncer(IndexType.GOODS).start();
+            new IndexSyncer(IndexType.HOUSE).start();
         } catch (Exception e) {
             LOGGER.error("init goods index error ...");
         }

@@ -5,7 +5,7 @@ package com.apass.zufang.search.enums;
  */
 
 
-import com.apass.zufang.search.entity.Goods;
+import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.entity.IdAble;
 import com.apass.zufang.search.entity.UpdatedObject;
 
@@ -16,15 +16,15 @@ import java.util.concurrent.TransferQueue;
  * Created by xianzhi.wang on 2017/5/22.
  */
 public enum IndexType {
-    GOODS("goods") {
+    HOUSE("house") {
         @Override
         public String getMapper() {
-            return "/esmapper/goodsMapper.txt";
+            return "/esmapper/houseMapper.txt";
         }
 
         @Override
         public Class<? extends IdAble> getTypeClass() {
-            return Goods.class;
+            return HouseEs.class;
         }
     };
     private String dataName;
