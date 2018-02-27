@@ -10,6 +10,7 @@ import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.search.enums.OperatorType;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Created by xiaohai on 2018/2/26.
  */
+@Repository
 public class HouseEsDao implements EsBaseDao<HouseEs>{
     @Override
     public boolean add(HouseEs houseEs) {

@@ -576,17 +576,22 @@ public class HouseService {
 				houseEs.setLatitude(hLocation.getLatitude());
 			}
 			List<HouseImg> hImgs = imgMapper.getImgByRealHouseId(houseId);
-			if(CollectionUtils.isEmpty(hImgs)){
-
+			if(CollectionUtils.isNotEmpty(hImgs)){
+				for(HouseImg hImg: hImgs){
+					if(hImg!=null){
+						houseEs.setUrl(hImg.getUrl());
+					}
+				}
 			}
-//			if(hImg!=null){
-//				houseEs.setUrl(hImg.getUrl());
-//			}
-//			if(hPeizhi!=null){
-//				houseEs.setConfigName(hPeizhi.getName());
-//				houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
-//			}
-
+			List<HousePeizhi> peiZhiByHouses = peizhiMapper.getPeiZhiByHouseId(houseId);
+			if(CollectionUtils.isNotEmpty(peiZhiByHouses)){
+				for(HousePeizhi hPeizhi: peiZhiByHouses){
+					if(hPeizhi!=null){
+						houseEs.setConfigName(hPeizhi.getName());
+						houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
+					}
+				}
+			}
 			return  houseEs;
 		}catch (Exception e){
 			LOGGER.error("--------houseInfoToHouseEs Exception------{}",e);
