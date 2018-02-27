@@ -24,7 +24,23 @@ public class PhoneAppointmentService {
 	public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(HouseAppointmentQueryParams entity) {
 		ResponsePageBody<HouseAppointmentVo> pageBody = new ResponsePageBody<HouseAppointmentVo>();
         List<HouseAppointmentVo> list = houseMapper.getHouseListForPhoneAppointment(entity);
-        for(HouseAppointmentVo vo : list){
+//        list = checkHouseList(list);
+        pageBody.setTotal(list.size());
+        pageBody.setRows(list);
+        pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+        return pageBody;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	@SuppressWarnings("unused")
+	private List<HouseAppointmentVo> checkHouseList(List<HouseAppointmentVo> list){
+		for(HouseAppointmentVo vo : list){
         	List<HousePeizhi> peizhiList = housePeiZhiService.getHousePeizhiList(vo.getHouseId());
         	Boolean houseKitchenFalg = checkhouseKitchenToiletFalg(peizhiList,"可做饭");
         	if(houseKitchenFalg){
@@ -38,11 +54,8 @@ public class PhoneAppointmentService {
         	}else{
         		vo.setHouseToiletFalg("否");
         	}
-        }
-        pageBody.setTotal(list.size());
-        pageBody.setRows(list);
-        pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
-        return pageBody;
+		}
+		return list;
 	}
 	private Boolean checkhouseKitchenToiletFalg(List<HousePeizhi> peizhiList, String peizhiName) {
     	for(HousePeizhi peizhi : peizhiList){

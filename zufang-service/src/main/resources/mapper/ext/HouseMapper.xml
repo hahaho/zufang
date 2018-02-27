@@ -153,11 +153,14 @@
 			x.description houseDescription,
 			x.hezu_resource houseHezuResource,
 			x.chaoxiang houseChaoxiang,
-			x.hezu_chaoxiang houseHezuChaoxiang
+			x.hezu_chaoxiang houseHezuChaoxiang,
+			CASE WHEN a1.id >0 THEN '是' ELSE '否' END houseKitchenFalg,
+       		CASE WHEN a2.id >0 THEN '是' ELSE '否' END houseToiletFalg
         FROM t_zfang_house_location z
 			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
-        	LEFT JOIN t_zfang_house_peizhi a ON a.house_id = x.id
+        	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id and a.`name` = '独卫'
+        	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a.`name` = '可做饭'
        	WHERE 1=1 
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` = #{apartmentName} </if>
@@ -178,6 +181,8 @@
        	ELSE '其他' END
        	<if test="houseCreatedFloor!=null and houseCreatedFloor!=''"> <![CDATA[ AND x.created_time >= #{houseCreatedFloor} ]]></if>
        	<if test="houseCreatedCeiling!=null and houseCreatedCeiling!=''"> <![CDATA[ AND x.created_time <= #{houseCreatedCeiling} ]]></if>
+       	<if test="houseKitchenFalg!=null and houseKitchenFalg!=''"> AND (CASE WHEN a1.id >0 THEN '是' ELSE '否' END) = #{houseKitchenFalg} </if>
+       	<if test="houseToiletFalg!=null and houseToiletFalg!=''"> AND (CASE WHEN a2.id >0 THEN '是' ELSE '否' END) = #{houseToiletFalg} </if>
         <![CDATA[ 
         ORDER BY x.created_time DESC
         ]]>
