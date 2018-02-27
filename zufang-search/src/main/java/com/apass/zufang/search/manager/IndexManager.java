@@ -76,7 +76,7 @@ public class IndexManager<T> {
             multiMatchQueryBuilder.field("goodsSkuAttr", 0.8f);
             //TODO
             Pagination<Goods> goodsPagination =
-                    search(multiMatchQueryBuilder, IndexType.GOODS, desc, from, size, sortField);
+                    search(multiMatchQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
             if (!CollectionUtils.isEmpty(goodsPagination.getDataList())) {
                 return goodsPagination;
             }
@@ -91,16 +91,22 @@ public class IndexManager<T> {
 	public static <Goods> Pagination<Goods> goodSearchCategoryId2(String categoryId2, String sortField1, boolean desc,
 			int from, int size) {
         TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("categoryId2", categoryId2);
-		Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.GOODS, desc, from, size, sortField1);
+		Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.HOUSE, desc, from, size, sortField1);
         return goodsPagination;
 	}
     public static <Goods> Pagination<Goods> goodSearchCategoryId2ForOtherCategory(String categoryId2, String sortField1,String sortField2, boolean desc,
                                                                   int from, int size) {
         TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("categoryId2", categoryId2);
-        Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.GOODS, desc, from, size, sortField1,sortField2);
+        Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.HOUSE, desc, from, size, sortField1,sortField2);
         return goodsPagination;
     }
-    //根据skuId查询ES中的记录
+
+    /**
+     * 根据skuId查询ES中的记录
+     * @param goodId
+     * @param <Goods>
+     * @return
+     */
 	public static <Goods> Goods goodSearchFromESBySkuId(Long goodId) {
 		TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("goodId", goodId);
 		List<Goods> goodsList = goodSearchFromES(termQueryBuilder);
@@ -128,7 +134,7 @@ public class IndexManager<T> {
                 .should(QueryBuilders.termQuery("categoryName2Pinyin", value).boost(1f))
                 .should(QueryBuilders.termQuery("categoryName3Pinyin", value).boost(1.5f))
                 .should(QueryBuilders.termQuery("goodsSkuAttrPinyin", value).boost(0.8f));
-        return search(boolQueryBuilder, IndexType.GOODS, desc, from, size, sortField);
+        return search(boolQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
     }
 
     /**
@@ -158,9 +164,11 @@ public class IndexManager<T> {
             json = ESDataUtil.toBytes(t);
             bulkRequest.add(new DeleteRequest(esprop.getIndice(),indexType.getDataName(),t.getId() + ""));
             bulkRequest.add(new IndexRequest(esprop.getIndice(), indexType.getDataName(), t.getId() + "").source(json));
-//            bulkRequest.add(new UpdateRequest(esprop.getIndice(), indexType.getDataName(), t.getId() + "").upsert(json));
         }
-        // 执行批量处理request
+
+        /**
+         * 执行批量处理request
+         */
         BulkResponse bulkResponse = bulkRequest.get();
         // 处理错误信息
         if (bulkResponse.hasFailures()) {
@@ -197,7 +205,13 @@ public class IndexManager<T> {
         ESClientManager.getClient().prepareDelete(index, type.getDataName(), String.valueOf(id)).get();
     }
 
-
+    /**
+     * 根据index,type,id获取document
+     * @param index:索引
+     * @param type:类型
+     * @param id:id
+     * @return
+     */
     public static <T> T getDocument(String index, IndexType type, Integer id) {
         GetResponse getResponse = ESClientManager.getClient().prepareGet(index, type.getDataName(), String.valueOf(id)).get();
         if (getResponse != null && getResponse.isExists()) {
@@ -211,16 +225,19 @@ public class IndexManager<T> {
     /**
      * 查询
      *
-     * @param queryBuilder
-     * @param type
-     * @param desc
-     * @param from         分页起始偏移量
-     * @param size         页面大小
+     * @param queryBuilder 查询字段
+     * @param type 类型
+     * @param desc 排序方式
+     * @param from 分页起始偏移量
+     * @param size 页面大小
      * @return
      */
     private static <T> Pagination<T> search(QueryBuilder queryBuilder, IndexType type, boolean desc, int from, int size, String ...sortFields) {
         List<T> results = new ArrayList<>();
-        SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch(esprop.getIndice())//不同的索引 变量 代码通用
+        /**
+         * 不同的索引 变量 代码通用
+         */
+        SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch(esprop.getIndice())
                 .setTypes(type.getDataName())
                 .setQuery(queryBuilder);
         if (sortFields != null) {
@@ -248,18 +265,23 @@ public class IndexManager<T> {
         return pagination;
     }
 
-	// 根据条件查询ES中的消息
+    /**
+     * 根据条件查询ES中的消息
+     */
 	public static <Goods> List<Goods> goodSearchFromES(QueryBuilder queryBuilder) {
 		List<Goods> results = new ArrayList<>();
-		SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch(esprop.getIndice())// 不同的索引  变量代   码通用
-							.setTypes(IndexType.GOODS.getDataName())
+        /**
+         * 不同的索引  变量代   码通用
+         */
+		SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch(esprop.getIndice())
+							.setTypes(IndexType.HOUSE.getDataName())
 							.setQuery(queryBuilder);
 		serachBuilder.addSort("_score", SortOrder.DESC);
 		SearchResponse response = serachBuilder.execute().actionGet();
 		SearchHits searchHits = response.getHits();
 		SearchHit[] hits = searchHits.getHits();
 		for (SearchHit hit : hits) {
-			results.add((Goods) ESDataUtil.readValue(hit.source(), IndexType.GOODS.getTypeClass()));
+			results.add((Goods) ESDataUtil.readValue(hit.source(), IndexType.HOUSE.getTypeClass()));
 		}
         return results;
 	}

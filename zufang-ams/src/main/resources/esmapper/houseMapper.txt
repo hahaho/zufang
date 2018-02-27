@@ -1,73 +1,61 @@
 {
-        "goods": {
+        "house": {
             "properties": {
-                "goodsName": {
+                "communityName": {
                     "type": "text",
                     "index": "analyzed",
                     "analyzer": "ik_max_word",
                     "search_analyzer": "ik_max_word"
                 },
-                "goodsNamePinyin": {
+                "communityNamePinyin": {
                     "type": "text",
                     "index": "analyzed",
                     "analyzer": "standard",
                     "search_analyzer": "standard"
                 },
-                "goodsTitle": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "ik_max_word",
-                    "search_analyzer": "ik_max_word"
-                },
-                "goodsTitlePinyin": {
+                "houseTitle": {
                     "type": "text",
                     "index": "analyzed",
                     "analyzer": "standard",
                     "search_analyzer": "standard"
                 },
-                "categoryName1": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "ik_max_word",
-                    "search_analyzer": "ik_max_word"
-                },
-                "categoryName2": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "ik_max_word",
-                    "search_analyzer": "ik_max_word"
-                },
-                "categoryName3": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "ik_max_word",
-                    "search_analyzer": "ik_max_word"
-                },
-                "categoryName1Pinyin": {
+                "houseTitlePinyin": {
                     "type": "text",
                     "index": "analyzed",
                     "analyzer": "standard",
                     "search_analyzer": "standard"
                 },
-                "categoryName2Pinyin": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "standard",
-                    "search_analyzer": "standard"
-                },
-                "categoryName3Pinyin": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "standard",
-                    "search_analyzer": "standard"
-                },
-                "goodsSkuAttr": {
+                "description": {
                     "type": "text",
                     "index": "analyzed",
                     "analyzer": "ik_max_word",
                     "search_analyzer": "ik_max_word"
                 },
-                "goodsSkuAttrPinyin": {
+                "descriptionPinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
+                "detailAddr": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "detailAddrPinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
+                "configName": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "configNamePinyin": {
                     "type": "text",
                     "index": "analyzed",
                     "analyzer": "standard",

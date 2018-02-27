@@ -2,6 +2,9 @@ package com.apass.zufang.domain.dto;
 import java.util.List;
 
 import com.apass.zufang.common.model.QueryParams;
+
+import java.util.Date;
+
 /**
  * 
  * @author pyc
@@ -20,6 +23,31 @@ public class HouseQueryParams extends QueryParams{
 	private String isDelete;//房源是否删除
 	private List<Integer> status;//状态
 	
+	/**
+	 *
+	 */
+	private Long apartmentId;
+
+	private Byte type;
+
+	private String title;
+
+	/**
+	 * 是否查询上架时间
+	 * @return
+     */
+	private String listTimeStr;
+
+	private Date listTime;
+
+	public String getListTimeStr() {
+		return listTimeStr;
+	}
+
+	public void setListTimeStr(String listTimeStr) {
+		this.listTimeStr = listTimeStr;
+	}
+
 	public byte getHouseType() {
 		return houseType;
 	}
@@ -67,5 +95,36 @@ public class HouseQueryParams extends QueryParams{
 	}
 	public void setStatus(List<Integer> status) {
 		this.status = status;
+	}
+	public Long getApartmentId() {
+		return apartmentId;
+	}
+
+	public void setApartmentId(Long apartmentId) {
+		this.apartmentId = apartmentId;
+	}
+
+	public Byte getType() {
+		return type;
+	}
+
+	public void setType(Byte type) {
+		this.type = type;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Date getListTime() {
+		return listTime;
+	}
+
+	public void setListTime(Date listTime) {
+		this.listTime = listTime;
 	}
 }

@@ -1,4 +1,4 @@
-package com.apass.zufang.inteceptor;
+/*package com.apass.zufang.inteceptor;
 
 import java.util.Map;
 
@@ -20,21 +20,21 @@ import com.apass.gfb.framework.jwt.domains.TokenInfo;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.google.common.collect.Maps;
 
-/**
+*//**
  * 
  * @description token拦截器
  *
  * @author lixining
  * @version $Id: AdminTokenHandler.java, v 0.1 2016年4月7日 上午10:13:16 lixining Exp
  *          $
- */
+ *//*
 @Aspect
 @Component
 @Order(value=Ordered.HIGHEST_PRECEDENCE + 100)
 public class AdminTokenHandler {
-	/**
+	*//**
 	 * 日志
-	 */
+	 *//*
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AdminTokenHandler.class);
 
@@ -43,13 +43,13 @@ public class AdminTokenHandler {
 	
 	private static final String EXPIRE_CODE = "-1"; //token失效
 
-	/**
+	*//**
 	 * 拦截方法 - token校验
 	 *
 	 * @param point
 	 * @return Object
 	 * @throws Throwable
-	 */
+	 *//*
 	@SuppressWarnings("unchecked")
 //    @Around("execution(* com.apass.esp.web..*.*(..))")
 	private Object handleTokenInteceptor(ProceedingJoinPoint point)
@@ -115,3 +115,4 @@ public class AdminTokenHandler {
 	}
 
 }
+*/
