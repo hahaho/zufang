@@ -1,31 +1,23 @@
 package com.apass.zufang.web.appointment;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
-
+import java.util.Set;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.common.utils.FarmartJavaBean;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
-import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
-import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.appointment.PhoneAppointmentService;
 import com.apass.zufang.utils.ResponsePageBody;
-import com.apass.zufang.utils.ValidateUtils;
 /**
  * 电话预约
  * @author Administrator

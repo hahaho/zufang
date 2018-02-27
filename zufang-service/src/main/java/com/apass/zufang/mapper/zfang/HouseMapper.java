@@ -2,9 +2,11 @@ package com.apass.zufang.mapper.zfang;
 import java.util.ArrayList;
 import java.util.List;
 import com.apass.gfb.framework.mybatis.GenericMapper;
+import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.domain.vo.HouseVo;
 /**
  * Created by DELL on 2018/2/7.
@@ -41,4 +43,10 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @return
 	 */
 	public List<Apartment> getHouseByCodes(ArrayList<String> list);
+	/**
+	 * getHouseListForPhoneAppointment
+	 * @param entity
+	 * @return
+	 */
+	public List<HouseAppointmentVo> getHouseListForPhoneAppointment(HouseAppointmentQueryParams entity);
 }
