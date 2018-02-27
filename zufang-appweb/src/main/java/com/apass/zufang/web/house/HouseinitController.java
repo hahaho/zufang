@@ -1,5 +1,6 @@
 package com.apass.zufang.web.house;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,12 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.HouseLocation;
+import com.apass.zufang.domain.enums.RentTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.service.house.HouseinitService;
 import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Maps;
 
 
 @Path("/home")
@@ -81,11 +84,12 @@ public class HouseinitController {
 			String city = CommonUtils.getValue(paramMap, "city");// 城市
 			ValidateUtils.isNotBlank("请求参数丢失数据", city);
 			
-			HouseLocation houseLocation = new HouseLocation();
-			houseLocation.setCity(city);
+			HashMap<String, String> map = Maps.newHashMap();
+			map.put("city", city);
+			map.put("type", RentTypeEnums.FY_JINGXUAN_2.getCode().toString());
 			
 			// 从后台配置读取热门房源
-			List<HouseVo> searchPeizhi = houseinitService.initPeizhiLocation(houseLocation);
+			List<HouseVo> searchPeizhi = houseinitService.initHouseByCity(map);
 //			if(ValidateUtils.listIsTrue(searchPeizhi)){
 //				//不为空的情况
 //				if (searchPeizhi.size() < 6) {
@@ -106,7 +110,8 @@ public class HouseinitController {
 //				searchPeizhi = houseinitService.initHotLocation(houseLocation);
 //				}
 			if (!ValidateUtils.listIsTrue(searchPeizhi)) {
-				searchPeizhi = houseinitService.initHotLocation(houseLocation);
+				map.put("type", RentTypeEnums.FY_ZHENGCHANG_1.getCode().toString());
+				searchPeizhi = houseinitService.initHouseByCity(map);
 			}
 			return Response.success("初始热门房源成功！", GsonUtils.toJson(searchPeizhi));
 		}catch (BusinessException e){
@@ -138,7 +143,9 @@ public class HouseinitController {
 				HouseLocation houseLocation = new HouseLocation();
 				houseLocation.setCity(city);
 				
-				initNearHouse = houseinitService.initHouseByCity(houseLocation);
+				HashMap<String, String> map = Maps.newHashMap();
+				map.put("city", city);
+				map.put("type", RentTypeEnums.FY_ZHENGCHANG_1.getCode().toString());
 				// #林去除按流量排进热门的数据
 			}else{
 				ValidateUtils.isNotBlank("请求参数丢失数据", longitude, latitude);

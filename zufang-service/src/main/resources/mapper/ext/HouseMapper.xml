@@ -86,7 +86,7 @@
         ]]>
     </select>
     <!-- 查询房源List -->
-    <select id="getHouseByID" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
+    <select id="getHouseByCodes" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
         SELECT
 				h.id			id,
@@ -104,15 +104,16 @@
 				t_zfang_house_location l,
 				t_zfang_apartment a
 			WHERE
-				h.id = i.house_id = l.house_id
+				h.id = i.house_id = l.house_id = a.house_id
+				AND h.apartment_id = a.id
 				AND h.status = '3'
-				AND h.apartment_id in
+				AND a.code in
         ]]>
         <foreach collection="list" item="employeeId" index="index" open="(" separator="," close=")">
 				#{employeeId}
         </foreach>
         <![CDATA[
-	      ORDER BY h.page_view DESC LIMIT 0,5;
+	      ORDER BY h.page_view DESC;
         ]]>
     </select>
     <!--电话预约管理 房源列表查询 
@@ -124,7 +125,7 @@
    		公寓名称  小区名称 房源标题（名称）房源编码  所在城 区 街 房源状态 
    		面积 上下限 是否独立厨、卫，创建时间上下限
     -->
-    <select id="getHouseListForPhoneAppointment" resultMap="com.apass.zufang.domain.vo.HouseAppointmentVo" 
+    <select id="getHouseListForPhoneAppointment" resultType="com.apass.zufang.domain.vo.HouseAppointmentVo" 
         parameterType="com.apass.zufang.domain.dto.HouseAppointmentQueryParams">
         <![CDATA[
         SELECT 
@@ -156,6 +157,7 @@
         FROM t_zfang_house_location z
 			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
+        	LEFT JOIN t_zfang_house_peizhi a ON a.house_id = x.id
        	WHERE 1=1 
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` = #{apartmentName} </if>

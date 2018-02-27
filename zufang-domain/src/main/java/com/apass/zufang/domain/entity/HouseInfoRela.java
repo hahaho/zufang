@@ -123,7 +123,7 @@ public class HouseInfoRela {
 	/**
 	 * 房源图片url  list
 	 */
-	private List<String> imgUrList;
+	private List<String> imgUrlList;
 	
 	/***********************************查询所用字段*************************************/
 	/**
@@ -255,12 +255,12 @@ public class HouseInfoRela {
 		this.apartmentId = apartmentId;
 	}
 
-	public List<String> getImgUrList() {
-		return imgUrList;
+	public List<String> getImgUrlList() {
+		return imgUrlList;
 	}
 
-	public void setImgUrList(List<String> imgUrList) {
-		this.imgUrList = imgUrList;
+	public void setImgUrlList(List<String> imgUrlList) {
+		this.imgUrlList = imgUrlList;
 	}
 
 	public Long getTargetHouseId() {
