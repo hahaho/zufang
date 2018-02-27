@@ -1,6 +1,7 @@
 package com.apass.zufang.service.house;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -320,6 +321,7 @@ public class HouseService {
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			houseInfoToHouseEs(house.getId());
 		}else{
 			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 		}
@@ -369,6 +371,7 @@ public class HouseService {
 				house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 			}else{
 				house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+				houseInfoToHouseEs(house.getId());
 			}
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
@@ -402,6 +405,7 @@ public class HouseService {
 					others++;
 				}else{
 					house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					houseInfoToHouseEs(house.getId());
 					waitUp++;
 				}
 				house.setUpdatedTime(new Date());
@@ -481,7 +485,9 @@ public class HouseService {
 	public List<HouseEs> getHouseEsList(List<House> houses) {
 		List<HouseEs> houseEsList = Lists.newArrayList();
 		for (House h : houses) {
-			HouseEs houseEs = houseInfoToHouseEs(h,null,null,null);
+			Long houseId = h.getId();
+
+			HouseEs houseEs = houseInfoToHouseEs(houseId);
 			if (null == houseEs) {
 				continue;
 			}
@@ -494,14 +500,15 @@ public class HouseService {
 
 	/**
 	 * House转HouseEs
-	 * @param h
+	 * @param houseId:房源id
 	 * @return
      */
-	private HouseEs houseInfoToHouseEs(House h,HouseImg hImg, HouseLocation hLocation, HousePeizhi hPeizhi) {
+	private HouseEs houseInfoToHouseEs(Long houseId) {
+		House h = houseMapper.selectByPrimaryKey(houseId);
 		HouseEs houseEs = new HouseEs();
 		try{
-			if(h!=null){
-				houseEs.setId(Integer.valueOf(h.getId()+""));
+			if(h!=null) {
+				houseEs.setId(Integer.valueOf(h.getId() + ""));
 				houseEs.setHouseId(h.getId());
 				houseEs.setCode(h.getCode());
 				houseEs.setApartmentId(h.getApartmentId());
@@ -523,40 +530,63 @@ public class HouseService {
 				houseEs.setZhuangxiu(h.getZhuangxiu());
 				houseEs.setStatus(h.getStatus());
 				houseEs.setListTime(h.getListTime());
-				String listTimeStr = DateFormatUtil.dateToString(h.getListTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+				String listTimeStr = DateFormatUtil.dateToString(h.getListTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
 				houseEs.setListTimeStr(listTimeStr);
 				houseEs.setDelistTime(h.getDelistTime());
-				String delistStr = DateFormatUtil.dateToString(h.getDelistTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+				String delistStr = DateFormatUtil.dateToString(h.getDelistTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
 				houseEs.setDelistTimeStr(delistStr);
 				houseEs.setDescription(h.getDescription());
 				houseEs.setDescriptionPinyin(Pinyin4jUtil.converterToSpell(h.getDescription()));
 				houseEs.setCreatedTime(h.getCreatedTime());
-				houseEs.setCreatedTimeStr(DateFormatUtil.dateToString(h.getCreatedTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
+				houseEs.setCreatedTimeStr(DateFormatUtil.dateToString(h.getCreatedTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
 				houseEs.setUpdatedTime(h.getUpdatedTime());
-				houseEs.setUpdatedTimeStr(DateFormatUtil.dateToString(h.getUpdatedTime(),DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
+				houseEs.setUpdatedTimeStr(DateFormatUtil.dateToString(h.getUpdatedTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
 				houseEs.setCreatedUser(h.getCreatedUser());
 				houseEs.setUpdatedUser(h.getUpdatedUser());
 				houseEs.setIsDelete(h.getIsDelete());
 				houseEs.setPageView(h.getPageView());
 				houseEs.setHousekeeperTel(h.getHousekeeperTel());
+				houseEs.setTotalDoors(h.getTotalDoors());
+				houseEs.setHezuChaoxiang(h.getHezuChaoxiang());
+				houseEs.setHezuResource(h.getHezuResource());
+				houseEs.setAcreage(h.getAcreage());
+
+				//增加价格区间标记priceFlag
+				int priceFlag = 6;
+				if (h.getRentAmt().compareTo(new BigDecimal(1500)) < 0) {
+					priceFlag = 1;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(1500)) >= 0 && h.getRentAmt().compareTo(new BigDecimal(2500)) <= 0) {
+					priceFlag = 2;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(2501)) >= 0 && h.getRentAmt().compareTo(new BigDecimal(3500)) <= 0) {
+					priceFlag = 3;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(3501)) >= 0 && h.getRentAmt().compareTo(new BigDecimal(5500)) <= 0) {
+					priceFlag = 4;
+				} else if (h.getRentAmt().compareTo(new BigDecimal(5501)) >= 0) {
+					priceFlag = 5;
+				}
+				houseEs.setPriceFlag(priceFlag);
 			}
-			if(hLocation!=null){
-				houseEs.setProvince(hLocation.getProvince());
-				houseEs.setCity(hLocation.getCity());
-				houseEs.setDistrict(hLocation.getDistrict());
-				houseEs.setStreet(hLocation.getStreet());
-				houseEs.setDetailAddr(hLocation.getDetailAddr());
-				houseEs.setDetailAddrPinyin(Pinyin4jUtil.converterToSpell(hLocation.getDetailAddr()));
-				houseEs.setLongitude(hLocation.getLongitude());
-				houseEs.setLatitude(hLocation.getLatitude());
+			Apartment apartment = apartmentMapper.selectByPrimaryKey(h.getApartmentId());
+			if(apartment != null){
+				houseEs.setCompanyName(apartment.getCompanyName());
 			}
-			if(hImg!=null){
-				houseEs.setUrl(hImg.getUrl());
-			}
-			if(hPeizhi!=null){
-				houseEs.setConfigName(hPeizhi.getName());
-				houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
-			}
+//			if(hLocation!=null){
+//				houseEs.setProvince(hLocation.getProvince());
+//				houseEs.setCity(hLocation.getCity());
+//				houseEs.setDistrict(hLocation.getDistrict());
+//				houseEs.setStreet(hLocation.getStreet());
+//				houseEs.setDetailAddr(hLocation.getDetailAddr());
+//				houseEs.setDetailAddrPinyin(Pinyin4jUtil.converterToSpell(hLocation.getDetailAddr()));
+//				houseEs.setLongitude(hLocation.getLongitude());
+//				houseEs.setLatitude(hLocation.getLatitude());
+//			}
+//			if(hImg!=null){
+//				houseEs.setUrl(hImg.getUrl());
+//			}
+//			if(hPeizhi!=null){
+//				houseEs.setConfigName(hPeizhi.getName());
+//				houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
+//			}
 
 			return  houseEs;
 		}catch (Exception e){
