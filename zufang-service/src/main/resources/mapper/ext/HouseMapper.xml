@@ -53,9 +53,9 @@
        	WHERE 1=1 
        	]]>
     	<if test="houseType!=null and houseType!=''"> AND x.type = #{houseType} </if>
-    	<if test="apartmentName!=null and apartmentName!=''"> AND x.apartment_name = #{apartmentName} </if>
+    	<if test="apartmentName!=null and apartmentName!=''"> AND x.name = #{apartmentName} </if>
     	<if test="houseTitle!=null and houseTitle!=''"> AND x.title = #{houseTitle} </if>
-    	<if test="houseCode!=null and houseCode!=''"> AND x.house_code = #{houseCode} </if>
+    	<if test="houseCode!=null and houseCode!=''"> AND x.code = #{houseCode} </if>
     	<if test="houseArea!=null and houseArea!=''"> AND x.area = #{houseArea} </if>
     	<if test="isDelete!=null and isDelete!=''"> AND x.is_delete = #{isDelete} AND y.is_delete = #{isDelete}</if>
         <![CDATA[ 
@@ -111,18 +111,69 @@
 	      ORDER BY h.page_view DESC LIMIT 0,5;
         ]]>
     </select>
-    <!-- 电话预约管理 房源列表查询 -->
-    <select id="getHouseList" resultMap="com.apass.zufang.domain.vo.HouseVo" 
+    <!--电话预约管理 房源列表查询 
+    	&查询列表字段     
+    	公寓ID，公寓名称，小区名称，房源ID，房源标题（名称）,房源编码，房源状态，
+    	所在城市，所在区域，所在街道，租金，户型（室厅卫），面积，是否独立厨、卫，
+    	付款方式，出租类型
+   		&查询条件 
+   		公寓名称  小区名称 房源标题（名称）房源编码  所在城 区 街 房源状态 
+   		面积 上下限 是否独立厨、卫，创建时间上下限
+    -->
+    <select id="getHouseListForPhoneAppointment" resultMap="com.apass.zufang.domain.vo.HouseAppointmentVo" 
         parameterType="com.apass.zufang.domain.dto.HouseAppointmentQueryParams">
         <![CDATA[
         SELECT 
-        	
-        FROM t_zfang_house x
+			y.id apartmentId,
+			y.`name` apartmentName,
+			y.`code` apartmentCode,
+			x.id houseId,
+			x.community_name communityName,
+			x.title houseTitle,
+			x.`code` houseCode,
+			x.`status` houseStatus,
+			z.province houseProvince,
+			z.city houseCity,
+			z.district houseDistrict,
+			z.street houseStreet,
+			z.detail_addr houseDetailAddr,
+			x.rent_amt houseRentAmt,
+			x.zujin_type houseZujinType,
+			x.room houseRoom,
+			x.hall houseHall,
+			x.wei houseWei,
+			x.rent_type houseRentType,
+			x.acreage houseAcreage,
+			x.room_acreage houseRoomAcreage,
+			x.description houseDescription,
+			x.hezu_resource houseHezuResource,
+			x.chaoxiang houseChaoxiang,
+			x.hezu_chaoxiang houseHezuChaoxiang
+        FROM t_zfang_house_location z
+			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
+        	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
        	WHERE 1=1 
        	]]>
-       	<if test="houseName!=null and houseName!=''"> AND x.name = #{houseName} </if>
+       	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` = #{apartmentName} </if>
+       	<if test="communityName!=null and communityName!=''"> AND x.community_name = #{communityName} </if>
+       	<if test="houseTitle!=null and houseTitle!=''"> AND x.title = #{houseTitle} </if>
+       	<if test="houseCode!=null and houseCode!=''"> AND x.`code` = #{houseCode} </if>
+       	<if test="houseCity!=null and houseCity!=''"> AND z.city = #{houseCity} </if>
+       	<if test="houseDistrict!=null and houseDistrict!=''"> AND z.district = #{houseDistrict} </if>
+       	<if test="houseStreet!=null and houseStreet!=''"> AND z.street = #{houseStreet} </if>
+       	<if test="houseStatus!=null and houseStatus!=''"> AND x.`status` = #{houseStatus} </if>
+       	AND CASE x.rent_type
+       		WHEN '1' THEN 
+       			<if test="houseAcreageFloor!=null and houseAcreageFloor!=''"> <![CDATA[ AND x.acreage >= #{houseAcreageFloor} ]]></if>
+       			<if test="houseAcreageCeiling!=null and houseAcreageCeiling!=''"> <![CDATA[ AND x.acreage <= #{houseAcreageCeiling} ]]></if>
+       		WHEN '2' THEN 
+       			<if test="houseAcreageFloor!=null and houseAcreageFloor!=''"> <![CDATA[ AND x.room_acreage >= #{houseAcreageFloor} ]]></if>
+       			<if test="houseAcreageCeiling!=null and houseAcreageCeiling!=''"> <![CDATA[ AND x.room_acreage <= #{houseAcreageCeiling} ]]></if>
+       	ELSE '其他' END
+       	<if test="houseCreatedFloor!=null and houseCreatedFloor!=''"> <![CDATA[ AND x.created_time >= #{houseCreatedFloor} ]]></if>
+       	<if test="houseCreatedCeiling!=null and houseCreatedCeiling!=''"> <![CDATA[ AND x.created_time <= #{houseCreatedCeiling} ]]></if>
         <![CDATA[ 
-        ORDER BY created_time DESC
+        ORDER BY x.created_time DESC
         ]]>
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
