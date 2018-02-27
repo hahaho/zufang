@@ -1,6 +1,7 @@
 package com.apass.zufang.mapper.zfang;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.dto.HouseQueryParams;
