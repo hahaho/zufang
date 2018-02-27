@@ -1,11 +1,8 @@
 package com.apass.zufang.service.appointment;
-import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.entity.HousePeizhi;
