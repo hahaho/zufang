@@ -2,16 +2,10 @@ package com.apass.zufang.service.house;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.apass.gfb.framework.utils.DateFormatUtil;
-import com.apass.zufang.domain.enums.YesNo;
-import com.apass.zufang.search.entity.HouseEs;
-import com.apass.zufang.search.utils.Pinyin4jUtil;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +18,7 @@ import org.springframework.util.Base64Utils;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.House;
@@ -39,8 +34,10 @@ import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
+import com.apass.zufang.search.dao.HouseEsDao;
+import com.apass.zufang.search.entity.HouseEs;
+import com.apass.zufang.search.utils.Pinyin4jUtil;
 import com.apass.zufang.utils.FileUtilsCommons;
-import com.apass.zufang.utils.LngLatUtils;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
@@ -79,6 +76,8 @@ public class HouseService {
 	@Autowired
 	private HouseImgMapper imgMapper;
 
+	@Autowired
+	private HouseEsDao houseEsDao;
 	
 	@Autowired
 	private HouseLocationService locationService;
@@ -283,12 +282,26 @@ public class HouseService {
 		houseMapper.updateByPrimaryKeySelective(house);
 	}
 	
+	/*** 根据房屋Id,获取房屋信息*/
 	public Map<String,Object> getHouseDetail(String id) throws BusinessException{
 		
 		Map<String,Object> values = Maps.newHashMap();
 		
 		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
+		if(null == house){
+			throw new BusinessException("房屋信息不存在!");
+		}
 		
+		HouseLocation location = locationMapper.getLocationByHouseId(house.getId());
+		
+		List<HouseImg> imgs = imgService.getHouseImgList(house.getId());
+		
+		List<HousePeizhi> peizhis = peizhiMapper.getPeiZhiByHouseId(house.getId());
+		
+		values.put("house", house);
+		values.put("location",location);
+		values.put("imgs",imgs);
+		values.put("peizhis",peizhis);
 		
 		return values;
 	}
@@ -308,6 +321,7 @@ public class HouseService {
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			houseInfoToHouseEs(house.getId());
 		}else{
 			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 		}
@@ -357,6 +371,7 @@ public class HouseService {
 				house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 			}else{
 				house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+				houseInfoToHouseEs(house.getId());
 			}
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
@@ -390,6 +405,7 @@ public class HouseService {
 					others++;
 				}else{
 					house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					houseInfoToHouseEs(house.getId());
 					waitUp++;
 				}
 				house.setUpdatedTime(new Date());
