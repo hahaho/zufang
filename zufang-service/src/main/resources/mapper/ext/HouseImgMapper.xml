@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.apass.zufang.mapper.zfang.HouseImgMapper" >
+  
+   <sql id="QueryConditionSql">
+        <where>
+			<if test="houseId!=null and houseId!=''"> AND house_id = #{houseId} </if>
+            <if test="url!=null and url!=''"> AND url = #{url} </if>
+            <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
+            <if test="type!=null and type!=''"> AND type = #{type} </if>
+        </where>
+    </sql>
+  
   <select id="getImgByHouseId" resultMap="BaseResultMap">
         SELECT 
             <include refid="Base_Column_List" />
@@ -9,5 +19,12 @@
         	is_delete = '00' 
         	AND house_id= #{houseId, jdbcType=BIGINT} 
         	AND type= #{type, jdbcType=TINYINT} 
+   </select>
+   
+   <select id="queryImgInfo" resultMap="BaseResultMap" parameterType="com.apass.zufang.domain.entity.HouseImg">
+        SELECT 
+            <include refid="Base_Column_List" />
+        FROM t_zfang_house_img
+        <include refid="QueryConditionSql" />
    </select>
 </mapper>

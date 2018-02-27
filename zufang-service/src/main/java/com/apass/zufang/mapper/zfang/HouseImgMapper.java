@@ -12,4 +12,12 @@ public interface HouseImgMapper extends GenericMapper<HouseImg,Long>{
 	 * @return
 	 */
 	public List<HouseImg> getImgByHouseId(HouseImg houseImg);
+	
+	/**
+	 * queryImgInfo
+	 * @param houseImg
+	 * @return
+	 */
+	public List<HouseImg> queryImgInfo(HouseImg houseImg);
+	
 }
