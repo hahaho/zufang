@@ -105,6 +105,10 @@ public class HouseInfoRela {
 	 */
 	private Integer hall;
 	/**
+	 * 房屋      卫
+	 */
+	private Integer wei;
+	/**
 	 * 房屋 租赁类型 1:整租；2:合租
 	 */
 	private Byte rentType;
@@ -421,6 +425,14 @@ public class HouseInfoRela {
 
 	public void setDelistTime(String delistTime) {
 		this.delistTime = delistTime;
+	}
+
+	public Integer getWei() {
+		return wei;
+	}
+
+	public void setWei(Integer wei) {
+		this.wei = wei;
 	}
 
 }
