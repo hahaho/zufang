@@ -86,6 +86,7 @@ public class ListeningCustomJdbcDaoImpl extends JdbcDaoSupport implements UserDe
     /**
      * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
      */
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<ListeningCustomSecurityUserDetails> users = loadUsersByUsername(username);
         if (users.size() == 0) {

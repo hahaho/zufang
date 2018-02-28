@@ -28,9 +28,11 @@ public class ListeningUsernamePasswordAuthenticationFilter extends UsernamePassw
      * 
      * @see org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter#attemptAuthentication(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-        if (!request.getMethod().equals("POST")) {
+        String methodStr = "POST";
+        if (!request.getMethod().equals(methodStr)) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
 
