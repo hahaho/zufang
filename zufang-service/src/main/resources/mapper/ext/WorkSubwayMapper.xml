@@ -7,8 +7,7 @@
         from t_zufang_work_subway
          <include refid="QueryConditionSql" />
     </select>
-    
- 
+
     <sql id="QueryConditionSql">
         <where>
 			<if test="parentCode!=null and parentCode!=''"> AND PARENT_CODE =#{parentCode,jdbcType=BIGINT}</if>

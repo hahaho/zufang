@@ -13,19 +13,34 @@ import com.apass.zufang.domain.vo.HouseVo;
  */
 public interface HouseMapper extends GenericMapper<House,Long> {
 	/**
-	 * 列表集合查询
+	 * es初始化列表集合查询
 	 * getHouseList
 	 * @param entity
 	 * @return
 	 */
 	public List<House> getHouseList(HouseQueryParams entity);
+
 	/**
-	 * 数量查询
+	 *  es初始化数量查询
 	 * getHouseListCount
 	 * @param entity
 	 * @return
 	 */
 	public Integer getHouseListCount(HouseQueryParams entity);
+	
+	/**
+	 * 房源信息管理
+	 * @param entity
+	 * @return
+	 */
+	public List<House> getHouseLists(HouseQueryParams entity);
+	
+	/**
+	 * 房源信息管理数量查询
+	 * @param entity
+	 * @return
+	 */
+	public Integer getHouseListsCount(HouseQueryParams entity);
 	/**
 	 * 品牌公寓热门房源查询
 	 * @param entity

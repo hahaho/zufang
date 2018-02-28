@@ -4,8 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.service.house.HousePeiZhiService;
@@ -16,6 +18,8 @@ public class PhoneAppointmentService {
 	private HouseMapper houseMapper;
 	@Autowired
 	private HousePeiZhiService housePeiZhiService;
+	@Autowired
+	private ReserveHouseService reserveHouseService;
 	/**
 	 * 电话预约管理 房源列表查询
 	 * @param entity
@@ -30,14 +34,18 @@ public class PhoneAppointmentService {
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 电话预约管理 预约看房记录新增
+	 * @param entity
+	 * @return
+	 */
+	public Response addReserveHouse(ReserveHouse entity,String user) {
+		entity.fillAllField(user);
+		if(reserveHouseService.createEntity(entity)==1){
+			return Response.success("预约看房记录新增成功！");
+		}
+		return Response.fail("预约看房记录新增失败！");
+	}
 	@SuppressWarnings("unused")
 	private List<HouseAppointmentVo> checkHouseList(List<HouseAppointmentVo> list){
 		for(HouseAppointmentVo vo : list){
