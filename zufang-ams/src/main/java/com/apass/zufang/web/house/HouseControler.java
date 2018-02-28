@@ -24,7 +24,7 @@ import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
-import com.apass.zufang.domain.enums.RentTypeEnums;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -295,7 +295,7 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
     	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
 	    
-	    if(StringUtils.equals(RentTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	
 	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
 	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 99, "合租户数");
@@ -399,7 +399,7 @@ public class HouseControler {
 	    }
 	    house.setUpdatedTime(date);
 	    house.setUpdatedUser(operateName);
-	    house.setId(Long.parseLong(houseId));
+	    house.setHouseId(Long.parseLong(houseId));
 		return house;
 	}
 }

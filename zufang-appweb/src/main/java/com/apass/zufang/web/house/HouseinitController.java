@@ -18,7 +18,7 @@ import com.apass.gfb.framework.logstash.LOG;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.HouseLocation;
-import com.apass.zufang.domain.enums.RentTypeEnums;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.service.house.HouseinitService;
@@ -85,12 +85,12 @@ public class HouseinitController {
 			ValidateUtils.isNotBlank("请求参数丢失数据", city);
 			
 			HashMap<String, String> map = Maps.newHashMap();
-			map.put("type", RentTypeEnums.FY_JINGXUAN_2.getCode().toString());
+			map.put("type", BusinessHouseTypeEnums.FY_JINGXUAN_2.getCode().toString());
 			map.put("city", city);
 			
 			// 从后台配置读取热门房源
 			List<HouseVo> searchPeizhi = houseinitService.initHouseByCity(map);
-			map.put("type", RentTypeEnums.FY_ZHENGCHANG_1.getCode().toString());
+			map.put("type", BusinessHouseTypeEnums.FY_ZHENGCHANG_1.getCode().toString());
 			if(ValidateUtils.listIsTrue(searchPeizhi)){
 				//不为空的情况
 				if (searchPeizhi.size() < 5) {
@@ -143,16 +143,16 @@ public class HouseinitController {
 				HouseLocation houseLocation = new HouseLocation();
 				houseLocation.setCity(city);
 				
-				map.put("type", RentTypeEnums.FY_ZHENGCHANG_1.getCode().toString());
+				map.put("type", BusinessHouseTypeEnums.FY_ZHENGCHANG_1.getCode().toString());
 				initNearHouse = houseinitService.initHouseByCity(map);
 				// 去除按流量排进热门的数据
-				initNearHouse = removeHotHouse(initNearHouse, map, RentTypeEnums.FY_JINGXUAN_2);
+				initNearHouse = removeHotHouse(initNearHouse, map, BusinessHouseTypeEnums.FY_JINGXUAN_2);
 			}else{
 				ValidateUtils.isNotBlank("请求参数丢失数据", longitude, latitude);
 				Map<String, Double> returnLLSquarePoint = CommonService.renturnLngLat(new Double(longitude), new Double(latitude), new Double(2000));
 				initNearHouse = houseinitService.initNearLocation(returnLLSquarePoint);
 				// 去除按流量排进热门的数据
-				initNearHouse = removeHotHouse(initNearHouse, map, RentTypeEnums.FY_JINGXUAN_2);
+				initNearHouse = removeHotHouse(initNearHouse, map, BusinessHouseTypeEnums.FY_JINGXUAN_2);
 				if (ValidateUtils.listIsTrue(initNearHouse)) {
 					// 使用冒泡排列经纬距离
 					for (int i = 1; i < initNearHouse.size(); i++) {
@@ -186,7 +186,7 @@ public class HouseinitController {
 		}
 	}
 
-	private List<HouseVo> removeHotHouse(List<HouseVo> hotHouse, HashMap<String, String> map, RentTypeEnums type) {
+	private List<HouseVo> removeHotHouse(List<HouseVo> hotHouse, HashMap<String, String> map, BusinessHouseTypeEnums type) {
 		
 		try {
 			map.put("type", type.getCode().toString());
