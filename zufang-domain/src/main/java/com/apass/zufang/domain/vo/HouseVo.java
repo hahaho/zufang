@@ -89,25 +89,25 @@ public class HouseVo{
 
     private Byte hezuResource;//出租介绍
 
-	private String longitude;//经度
+	private double longitude;//经度
 	
-	private String latitude;//维度
+	private double latitude;//维度
 	
 	private BigDecimal roomAcreage;//单间房屋面积
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
