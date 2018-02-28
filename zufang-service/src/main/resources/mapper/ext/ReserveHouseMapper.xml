@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.ReserveHouseMapper" >
+	<!--电话预约管理 房源列表查询 
+    	&查询列表字段     
+    	公寓ID，公寓名称，小区名称，房源ID，房源标题（名称）,房源编码，房源状态，
+    	所在城市，所在区域，所在街道，租金，户型（室厅卫），面积，是否独立厨、卫，
+    	付款方式，出租类型
+   		&查询条件 
+   		公寓名称  小区名称 房源标题（名称）房源编码  所在城 区 街 房源状态 
+   		面积 上下限 是否独立厨、卫，创建时间上下限
+    -->
+    <select id="getReserveHouseList" resultType="com.apass.zufang.domain.vo.ReserveHouseVo" 
+        parameterType="com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams">
+        <![CDATA[
+        SELECT 
+			x.id id,
+			x.house_id houseId,
+			x.type type,
+			x.user_id userId,
+			x.telphone telphone,
+			x.`name` name,
+			x.reserve_date reserveDate,
+			x.memo memo,
+			z.id apartmentId,
+			z.`name` apartmentName,
+			z.`code` apartmentCode,
+			y.community_name communityName,
+			y.title houseTitle,
+			y.`code` houseCode,
+			y.`status` houseStatus,
+			a.province houseProvince,
+			a.city houseCity,
+			a.district houseDistrict,
+			a.street houseStreet,
+			a.detail_addr houseDetailAddr,
+			y.rent_amt houseRentAmt,			
+			y.zujin_type houseZujinType,
+			y.room houseRoom,
+			y.hall houseHall,
+			y.wei houseWei,
+			y.rent_type houseRentType,
+			y.acreage houseAcreage,
+			y.room_acreage houseRoomAcreage,
+			y.description houseDescription,
+			y.hezu_resource houseHezuResource,
+			y.chaoxiang houseChaoxiang,
+			y.hezu_chaoxiang houseHezuChaoxiang
+		FROM t_zfang_reserve_house x 
+		LEFT JOIN t_zfang_house y on y.id = x.house_id
+		LEFT JOIN t_zfang_apartment z on z.id = y.apartment_id
+		JOIN t_zfang_house_location a on a.house_id = x.house_id
+        ]]>
+        <if test="name!=null and name!=''"> AND x.`name` LIKE '%${name}%' </if>
+        <if test="telphone!=null and telphone!=''"> AND x.telphone = #{telphone} </if>
+        <if test="createdFloor!=null and createdFloor!=''"> <![CDATA[ AND x.created_time >= #{houseCreatedFloor} ]]></if>
+       	<if test="createdCeiling!=null and createdCeiling!=''"> <![CDATA[ AND x.created_time <= #{createdCeiling} ]]></if>
+       	<if test="apartmentName!=null and apartmentName!=''"> AND z.`name` LIKE '%${apartmentName}%' </if>
+       	
+       	<if test="rentAmtFloor!=null and rentAmtFloor!=''"> <![CDATA[ AND y.rent_amt >= #{rentAmtFloor} ]]></if>
+       	<if test="rentAmtCeiling!=null and rentAmtCeiling!=''"> <![CDATA[ AND y.rent_amt <= #{rentAmtCeiling} ]]></if>
+       	
+       	<if test="houseCode!=null and houseCode!=''"> AND y.`code` = #{houseCode} </if>
+       	<if test="houseCity!=null and houseCity!=''"> AND a.city = #{houseCity} </if>
+       	<if test="houseDistrict!=null and houseDistrict!=''"> AND a.district = #{houseDistrict} </if>
+       	<if test="houseStreet!=null and houseStreet!=''"> AND a.street = #{houseStreet} </if>
+       	
+       	<if test="reserveDateFloor!=null and reserveDateFloor!=''"> <![CDATA[ AND x.reserve_date >= #{reserveDateFloor} ]]></if>
+       	<if test="reserveDateCeiling!=null and reserveDateCeiling!=''"> <![CDATA[ AND x.reserve_date <= #{reserveDateCeiling} ]]></if>
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+</mapper>

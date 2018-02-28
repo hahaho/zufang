@@ -9,13 +9,10 @@ import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
-import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.service.house.HousePeiZhiService;
 import com.apass.zufang.utils.ResponsePageBody;
 @Service
 public class PhoneAppointmentService {
-	@Autowired
-	private HouseMapper houseMapper;
 	@Autowired
 	private HousePeiZhiService housePeiZhiService;
 	@Autowired
@@ -27,7 +24,7 @@ public class PhoneAppointmentService {
 	 */
 	public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(HouseAppointmentQueryParams entity) {
 		ResponsePageBody<HouseAppointmentVo> pageBody = new ResponsePageBody<HouseAppointmentVo>();
-        List<HouseAppointmentVo> list = houseMapper.getHouseListForPhoneAppointment(entity);
+        List<HouseAppointmentVo> list = reserveHouseService.getHouseListForPhoneAppointment(entity);
 //        list = checkHouseList(list);
         pageBody.setTotal(list.size());
         pageBody.setRows(list);
