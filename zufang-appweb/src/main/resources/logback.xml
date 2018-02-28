@@ -11,7 +11,7 @@
 
 	<!-- INFO -->
 	<appender name="InfoRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/var/logs/espApp.log</file>
+		<file>/var/logs/zufangApp.log</file>
 		<encoder>
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
 		</encoder>

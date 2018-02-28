@@ -2,7 +2,6 @@ package com.apass.zufang.inteceptor;
 
 import com.apass.esp.common.utils.JsonUtil;
 import com.apass.gfb.framework.utils.AESUtils;
-import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.gfb.framework.utils.RSAUtils;
@@ -53,7 +52,7 @@ public class EspAppRSAHandler {
 	 * @throws Throwable
 	 */
 
-	//@Around("execution(* com.apass.esp.web..*.*(..))")
+	@Around("execution(* com.apass.zufang.web..*.*(..))")
 	private Object handleRSAInteceptor(ProceedingJoinPoint point) throws Throwable {
 		return inteceptorMethod(point);
 	}

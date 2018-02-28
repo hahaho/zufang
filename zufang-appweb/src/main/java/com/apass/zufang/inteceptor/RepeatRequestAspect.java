@@ -43,7 +43,7 @@ public class RepeatRequestAspect {
 	@Autowired
 	private CacheManager cacheManager;
 
-	@Pointcut("within(com.apass.esp.web..* || com.apass.esp.noauth..*)")
+	@Pointcut("within(com.apass.zufang.web..*)")
 	public void aspectPointcut() {
 
 	}
