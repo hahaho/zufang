@@ -65,8 +65,8 @@ public class CommonService {
 	 *            附近房源经度
 	 * @return
 	 */
-	public double distanceSimplify(double goalLat, double goalLng, double lat,
-			double lng) {
+	public static double distanceSimplify(double goalLng, double goalLat, double lng,
+			double lat) {
 		double dx = goalLng - lng; // 经度差值
 		double dy = goalLat - lat; // 纬度差值
 		double b = (goalLat + lat) / 2.0; // 平均纬度

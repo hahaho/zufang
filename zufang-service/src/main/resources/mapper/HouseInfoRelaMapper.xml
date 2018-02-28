@@ -60,9 +60,8 @@
 	<if test="sortField!=null and sortField!=''"><![CDATA[ ORDER BY listTime DESC LIMIT ]]>  #{sortField} </if>
 	</select>
 	
-	<select id="getHouseInfoByIdList" resultType="com.apass.zufang.domain.entity.HouseInfoRela"
+	<select id="getHouseInfoByHouseId" resultType="com.apass.zufang.domain.entity.HouseInfoRela"
 		 parameterType="java.util.Map">
-		
 	<![CDATA[ 
 		SELECT t1.id apartmentId, 
 			t1.company_name companyName,
@@ -103,12 +102,8 @@
              AND t2.list_time < CURRENT_TIMESTAMP ()
              AND t2.delist_time > CURRENT_TIMESTAMP ()
 	]]>
-	<if test="houseIdList != null and houseIdList.size>0">
-			AND t2.id in
-		    <foreach collection="houseIdList" index="index" item="item" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
+			AND t2.id  = #{houseId}
+			LIMIT 1
 	</select>
     
 </mapper>

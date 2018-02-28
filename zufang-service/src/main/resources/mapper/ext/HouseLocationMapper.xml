@@ -20,6 +20,10 @@
 				h.wei			wei,
 				h.acreage		acreage,
 				i.url			pictures,
+				l.province		province,
+				l.city			city,
+				l.district		district,
+				l.street		street,
 				l.detail_addr	detailAddr,
 				l.longitude longitude,
 				l.latitude	latitude
@@ -52,6 +56,10 @@
 				h.wei			wei,
 				h.acreage		acreage,
 				i.url			pictures,
+				l.province		province,
+				l.city			city,
+				l.district		district,
+				l.street		street,
 				l.detail_addr	detailAddr,
 				l.longitude longitude,
 				l.latitude	latitude

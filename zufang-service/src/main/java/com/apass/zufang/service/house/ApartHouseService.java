@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.HouseImg;
+import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -47,7 +48,7 @@ public class ApartHouseService {
 	 * 查询房源List
 	 * @return
 	 */
-	public List<Apartment> getHouseByCodes(ArrayList<String> list) {
+	public List<HouseVo> getHouseByCodes(ArrayList<String> list) {
 		return houseMapper.getHouseByCodes(list);
 	}
 

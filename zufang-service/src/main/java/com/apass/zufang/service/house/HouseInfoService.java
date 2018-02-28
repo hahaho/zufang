@@ -1,4 +1,5 @@
 package com.apass.zufang.service.house;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,14 +15,17 @@ import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
 import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
+
 @Service
 public class HouseInfoService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(HouseInfoService.class);
-	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(HouseInfoService.class);
+
 	/**
 	 * 默认地球半径
 	 */
@@ -52,18 +56,37 @@ public class HouseInfoService {
 			throw e;
 		}
 	}
-	
-   /**
-    * 处理房源特殊数据
-    * 
-    * @param houseInfoList
-    */
+
+	/**
+	 * 处理房源特殊数据
+	 * 
+	 * @param houseInfoList
+	 */
 	public void dealHouseRela(List<HouseInfoRela> houseInfoList) {
 		for (HouseInfoRela houseInfo : houseInfoList) {
 			// 房屋的图片
 			List<String> imgUrlList = new ArrayList<String>();
-			HouseImg   orHouseImg =new HouseImg();
+			HouseImg orHouseImg = new HouseImg();
 			orHouseImg.setHouseId(houseInfo.getHouseId());
+			// 处理租赁类型
+			if(houseInfo.getRentType()!=null){
+			BusinessHouseTypeEnums rentType = BusinessHouseTypeEnums.valueOf(
+					Integer.valueOf(houseInfo.getRentType()), "HZ");
+			houseInfo.setRentTypeStr(rentType.getMessage());
+			}
+			// 处理租金类型
+			if(houseInfo.getZujinType()!=null){
+			BusinessHouseTypeEnums zujinType = BusinessHouseTypeEnums.valueOf(
+					Integer.valueOf(houseInfo.getZujinType()), "YJLX");
+			houseInfo.setZujinTypeStr(zujinType.getMessage());
+			}
+			// 处理朝向
+			if(houseInfo.getChaoxiang()!=null){
+				BusinessHouseTypeEnums chaoxiang = BusinessHouseTypeEnums.valueOf(
+						Integer.valueOf(houseInfo.getChaoxiang()), "CX");
+				houseInfo.setChaoxiangStr(chaoxiang.getMessage());
+			}
+
 			orHouseImg.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 			List<HouseImg> houseImgList = houseImgMapper
 					.queryImgInfo(orHouseImg);
@@ -73,7 +96,8 @@ public class HouseInfoService {
 			houseInfo.setImgUrlList(imgUrlList);
 			// 房屋的配置
 			List<String> houseConfigList = new ArrayList<String>();
-			List<HousePeizhi> housePeizhiList=peizhiMapper.getPeiZhiByHouseId(houseInfo.getHouseId());
+			List<HousePeizhi> housePeizhiList = peizhiMapper
+					.getPeiZhiByHouseId(houseInfo.getHouseId());
 			for (HousePeizhi Peizhi : housePeizhiList) {
 				houseConfigList.add(Peizhi.getName());
 			}
@@ -90,14 +114,15 @@ public class HouseInfoService {
 	 *            附近房源数量
 	 * @return
 	 */
-	public List<HouseInfoRela> getNearHouseByCoordinate(Double latitude, Double longitude) {
+	public List<HouseInfoRela> getNearHouseByCoordinate(Double latitude,
+			Double longitude) {
 		List<HouseInfoRela> result = new ArrayList<HouseInfoRela>();
 		try {
-			int number =ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
+			int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
 			// setp 1 查询房源
 			HouseInfoRela queryInfo = new HouseInfoRela();
-//			queryInfo.setProvince(houseInfo.getProvince());
-//			queryInfo.setCity(houseInfo.getCity());
+			// queryInfo.setProvince(houseInfo.getProvince());
+			// queryInfo.setCity(houseInfo.getCity());
 			List<HouseInfoRela> houseInfoList = houseInfoRelaMapper
 					.getHouseInfoRelaList(queryInfo);
 			if (houseInfoList == null || houseInfoList.size() <= 0) {
@@ -107,9 +132,13 @@ public class HouseInfoService {
 			Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
 			double[] resultArray = new double[houseInfoList.size()];
 			for (HouseInfoRela houseLocation : houseInfoList) {
-				double distance = this.distanceSimplify(latitude,
-						longitude, houseLocation.getLatitude(),
+				double distance = this.distanceSimplify(latitude, longitude,
+						houseLocation.getLatitude(),
 						houseLocation.getLongitude());
+				if(houseDistanceMap.get(distance)!=null){
+					// TODO 相同的距离 需要处理  （后一个加上0.0001）
+//					distance=distance+"0.000001"
+				}
 				houseDistanceMap.put(distance, houseLocation.getHouseId());
 				Arrays.fill(resultArray, distance);
 			}
@@ -124,19 +153,23 @@ public class HouseInfoService {
 				houseIdList.add(houseDistanceMap.get(disance));
 			}
 			// setp 6 根据list 查询附近房源的具体信息
-			Map<String, Object> paraMap = new HashMap<String, Object>();
-			paraMap.put("houseIdList", houseIdList);
-			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+//			Map<String, Object> paraMap = new HashMap<String, Object>();
+//			paraMap.put("houseIdList", houseIdList);
+//			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+			for(Long newHouseId:houseIdList){
+				HouseInfoRela finalHouseInfo = houseInfoRelaMapper.getHouseInfoByHouseId(newHouseId);
+				result.add(finalHouseInfo);
+			}
 			if (result != null && result.size() != 0) {
 				this.dealHouseRela(result);
 			}
 			return result;
 		} catch (Exception e) {
-			LOGGER.error("根据坐标查询附近房源getNearbyhouseInfo出错==》",e);
+			LOGGER.error("根据坐标查询附近房源getNearbyhouseInfo出错==》", e);
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * 查询指定目标附近房源
 	 * 
@@ -149,7 +182,7 @@ public class HouseInfoService {
 	public List<HouseInfoRela> getNearbyhouseId(long houseId) {
 		List<HouseInfoRela> result = new ArrayList<HouseInfoRela>();
 		try {
-			int number =ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
+			int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
 			// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 			HouseInfoRela queryCondition = new HouseInfoRela();
 			queryCondition.setHouseId(houseId);
@@ -172,6 +205,10 @@ public class HouseInfoService {
 				double distance = distanceSimplify(houseInfo.getLatitude(),
 						houseInfo.getLongitude(), houseLocation.getLatitude(),
 						houseLocation.getLongitude());
+				if(houseDistanceMap.get(distance)!=null){
+					// TODO 相同的距离 需要处理  （后一个加上0.0001）
+//					distance=distance+"0.000001"
+				}
 				houseDistanceMap.put(distance, houseLocation.getHouseId());
 				Arrays.fill(resultArray, distance);
 			}
@@ -186,15 +223,19 @@ public class HouseInfoService {
 				houseIdList.add(houseDistanceMap.get(disance));
 			}
 			// setp 6 根据list 查询附近房源的具体信息
-			Map<String, Object> paraMap = new HashMap<String, Object>();
-			paraMap.put("houseIdList", houseIdList);
-			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+//			Map<String, Object> paraMap = new HashMap<String, Object>();
+//			paraMap.put("houseIdList", houseIdList);
+			for(Long newHouseId:houseIdList){
+				HouseInfoRela finalHouseInfo = houseInfoRelaMapper.getHouseInfoByHouseId(newHouseId);
+				result.add(finalHouseInfo);
+			}
+//			result = houseInfoRelaMapper.getHouseInfoByHouseId(paraMap);
 			if (result != null && result.size() != 0) {
 				this.dealHouseRela(result);
 			}
 			return result;
 		} catch (Exception e) {
-			LOGGER.error("获取附近房源方法getNearbyhouseInfo出错==》",e);
+			LOGGER.error("获取附近房源方法getNearbyhouseInfo出错==》", e);
 			throw e;
 		}
 	}
