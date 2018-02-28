@@ -8,10 +8,11 @@
          <include refid="QueryConditionSql" />
     </select>
     
-  <sql id="Base_List" >
+    <sql id="Base_List" >
       ID as id, CODE as code,LINE_NAME as lineName,SITE_NAME as siteName,NEAREST_POINT as nearestPoint,
        LEVEL as level,PARENT_CODE as parentCode,CREATE_DATE as createDate,UPDATE_DATE as updateDate
-  </sql>
+    </sql>
+
     <sql id="QueryConditionSql">
         <where>
 			<if test="parentCode!=null and parentCode!=''"> AND PARENT_CODE =#{parentCode,jdbcType=BIGINT}</if>
