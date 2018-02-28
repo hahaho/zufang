@@ -1,40 +1,46 @@
 package com.apass.zufang.service.house;
 
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.utils.BaseConstants;
-import com.apass.gfb.framework.utils.DateFormatUtil;
-import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.entity.*;
-import com.apass.zufang.domain.enums.HouseAuditEnums;
-import com.apass.zufang.domain.enums.IsDeleteEnums;
-import com.apass.zufang.domain.enums.RentTypeEnums;
-import com.apass.zufang.domain.vo.HouseVo;
-import com.apass.zufang.mapper.zfang.*;
-import com.apass.zufang.search.dao.HouseEsDao;
-import com.apass.zufang.search.entity.HouseEs;
-import com.apass.zufang.search.utils.Pinyin4jUtil;
-import com.apass.zufang.utils.FileUtilsCommons;
-import com.apass.zufang.utils.ObtainGaodeLocation;
-import com.apass.zufang.utils.ResponsePageBody;
-import com.apass.zufang.utils.ToolsUtils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.gfb.framework.utils.DateFormatUtil;
+import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.entity.HouseImg;
+import com.apass.zufang.domain.entity.HouseLocation;
+import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.HouseAuditEnums;
+import com.apass.zufang.domain.enums.IsDeleteEnums;
+import com.apass.zufang.domain.enums.RentTypeEnums;
+import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.mapper.zfang.ApartmentMapper;
+import com.apass.zufang.mapper.zfang.HouseImgMapper;
+import com.apass.zufang.mapper.zfang.HouseLocationMapper;
+import com.apass.zufang.mapper.zfang.HouseMapper;
+import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
+import com.apass.zufang.search.dao.HouseEsDao;
+import com.apass.zufang.search.entity.HouseEs;
+import com.apass.zufang.search.utils.Pinyin4jUtil;
+import com.apass.zufang.utils.ObtainGaodeLocation;
+import com.apass.zufang.utils.ResponsePageBody;
+import com.apass.zufang.utils.ToolsUtils;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * 房源管理
@@ -45,14 +51,6 @@ import java.util.Map;
 public class HouseService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseService.class);
-	
-	/** * 图片服务器地址*/
-    @Value("${nfs.rootPath}")
-    private String rootPath;
-    /*** 房屋图片存放地址*/
-
-    @Value("${nfs.house}")
-    private String nfsHouse;
 	
 	@Autowired
 	private HouseMapper houseMapper;
@@ -68,9 +66,6 @@ public class HouseService {
 	
 	@Autowired
 	private HouseImgMapper imgMapper;
-
-	@Autowired
-	private HouseLocationService locationService;
 	
 	@Autowired
 	private HouseImgService imgService;
@@ -142,13 +137,7 @@ public class HouseService {
 			img.setCreatedTime(houseVo.getCreatedTime());
 			img.setUpdatedTime(houseVo.getUpdatedTime());
 			if(StringUtils.isNotBlank(pic)){
-				/**
-				 * TODO 验证图片大小 最少2张，最多8张，每张图片不得大于2M，支持.jpg.png，尺寸待定
-				 */
-				String picture1Url2 = nfsHouse + "_" + System.currentTimeMillis() + ".jpg";
-				byte[] picture1Byte = Base64Utils.decodeFromString(pic);
-				FileUtilsCommons.uploadByteFilesUtil(rootPath, picture1Url2, picture1Byte);
-				img.setUrl(picture1Url2);
+				img.setUrl(pic);
 				imgMapper.insertSelective(img);
 			}
 		}
@@ -207,10 +196,7 @@ public class HouseService {
 			img.setCreatedTime(houseVo.getCreatedTime());
 			img.setUpdatedTime(houseVo.getUpdatedTime());
 			if(StringUtils.isNotBlank(pic)){
-				String picture1Url2 = nfsHouse + "_" + System.currentTimeMillis() + ".jpg";
-				byte[] picture1Byte = Base64Utils.decodeFromString(pic);
-				FileUtilsCommons.uploadByteFilesUtil(rootPath, picture1Url2, picture1Byte);
-				img.setUrl(picture1Url2);
+				img.setUrl(pic);
 				imgMapper.insertSelective(img);
 			}
 		}
@@ -286,7 +272,7 @@ public class HouseService {
 		
 		HouseLocation location = locationMapper.getLocationByHouseId(house.getId());
 		
-		List<HouseImg> imgs = imgService.getHouseImgList(house.getId());
+		List<HouseImg> imgs = imgMapper.getImgByRealHouseId(house.getId());
 		
 		List<HousePeizhi> peizhis = peizhiMapper.getPeiZhiByHouseId(house.getId());
 		
