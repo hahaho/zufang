@@ -19,11 +19,12 @@ public interface HouseInfoRelaMapper extends GenericMapper<HouseInfoRela, Long> 
 	List<HouseInfoRela> getHouseInfoRelaList(HouseInfoRela entity);
 
 	/**
-	 * 根据houseIdList查询房源信息
+	 * 根据houseId查询房源信息
 	 * 
 	 * @param paraMap
 	 * @return
 	 */
-	List<HouseInfoRela> getHouseInfoByIdList(Map<String, Object> paraMap);
+	HouseInfoRela getHouseInfoByHouseId(Long houseId);
+	
 
 }
