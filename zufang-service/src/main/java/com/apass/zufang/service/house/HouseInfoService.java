@@ -135,6 +135,10 @@ public class HouseInfoService {
 				double distance = this.distanceSimplify(latitude, longitude,
 						houseLocation.getLatitude(),
 						houseLocation.getLongitude());
+				if(houseDistanceMap.get(distance)!=null){
+					// TODO 相同的距离 需要处理  （后一个加上0.0001）
+//					distance=distance+"0.000001"
+				}
 				houseDistanceMap.put(distance, houseLocation.getHouseId());
 				Arrays.fill(resultArray, distance);
 			}
@@ -149,9 +153,13 @@ public class HouseInfoService {
 				houseIdList.add(houseDistanceMap.get(disance));
 			}
 			// setp 6 根据list 查询附近房源的具体信息
-			Map<String, Object> paraMap = new HashMap<String, Object>();
-			paraMap.put("houseIdList", houseIdList);
-			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+//			Map<String, Object> paraMap = new HashMap<String, Object>();
+//			paraMap.put("houseIdList", houseIdList);
+//			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+			for(Long newHouseId:houseIdList){
+				HouseInfoRela finalHouseInfo = houseInfoRelaMapper.getHouseInfoByHouseId(newHouseId);
+				result.add(finalHouseInfo);
+			}
 			if (result != null && result.size() != 0) {
 				this.dealHouseRela(result);
 			}
@@ -197,6 +205,10 @@ public class HouseInfoService {
 				double distance = distanceSimplify(houseInfo.getLatitude(),
 						houseInfo.getLongitude(), houseLocation.getLatitude(),
 						houseLocation.getLongitude());
+				if(houseDistanceMap.get(distance)!=null){
+					// TODO 相同的距离 需要处理  （后一个加上0.0001）
+//					distance=distance+"0.000001"
+				}
 				houseDistanceMap.put(distance, houseLocation.getHouseId());
 				Arrays.fill(resultArray, distance);
 			}
@@ -211,9 +223,13 @@ public class HouseInfoService {
 				houseIdList.add(houseDistanceMap.get(disance));
 			}
 			// setp 6 根据list 查询附近房源的具体信息
-			Map<String, Object> paraMap = new HashMap<String, Object>();
-			paraMap.put("houseIdList", houseIdList);
-			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
+//			Map<String, Object> paraMap = new HashMap<String, Object>();
+//			paraMap.put("houseIdList", houseIdList);
+			for(Long newHouseId:houseIdList){
+				HouseInfoRela finalHouseInfo = houseInfoRelaMapper.getHouseInfoByHouseId(newHouseId);
+				result.add(finalHouseInfo);
+			}
+//			result = houseInfoRelaMapper.getHouseInfoByHouseId(paraMap);
 			if (result != null && result.size() != 0) {
 				this.dealHouseRela(result);
 			}
