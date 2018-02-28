@@ -45,13 +45,4 @@ public class HouseImgService {
 		houseImg.setHouseId(houseId);
 		return houseImgMapper.getImgByHouseId(houseImg);
 	}
-	
-	/**
-	 * getHouseImgList
-	 * @param houseId
-	 * @return
-	 */
-	public List<HouseImg> getHouseImgList(Long houseId){
-		return getHouseImgList(houseId, (byte)1);
-	}
 }
