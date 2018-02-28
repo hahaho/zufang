@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.entity.SearchKeys;
 import com.apass.zufang.mapper.zfang.SearchHistoryMapper;
 
@@ -26,7 +27,7 @@ public class SearchHistorySevice {
 	 * @param deviceId
 	 * @return
 	 */
-	public List<SearchKeys> queryDeviceIdHistory(String deviceId) {
+	public List<SearchKeys> queryDeviceIdHistory(String deviceId)throws BusinessException {
 		 return searchHistoryDao.queryDeviceIdHistory(deviceId);
 		 
 	}
@@ -35,7 +36,7 @@ public class SearchHistorySevice {
 	 * @param customerId
 	 * @return
 	 */ 
-	public List<SearchKeys> queryCustomerIdHistory(String userId) {
+	public List<SearchKeys> queryCustomerIdHistory(String userId)throws BusinessException {
 		return searchHistoryDao.queryCustomerIdHistory(userId);
 		
 	}
@@ -45,7 +46,7 @@ public class SearchHistorySevice {
 	 * @param customerId
 	 * @return
 	 */
-	public Object deleteDeviceIdHistory(String deviceId) {
+	public Object deleteDeviceIdHistory(String deviceId) throws BusinessException{
 		return searchHistoryDao.deleteDeviceIdHistory(deviceId);
 	}
 	
@@ -54,7 +55,7 @@ public class SearchHistorySevice {
 	 * @param customerId
 	 * @return
 	 */
-	public Object deleteCustomerIdHistory(String userId) {
+	public Object deleteCustomerIdHistory(String userId) throws BusinessException{
 		return searchHistoryDao.deleteCustomerIdHistory(userId);
 	}
 
