@@ -11,7 +11,7 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	private String reserveDateFloor;//预约时间下限
 	private String reserveDateCeiling;//预约时间上限
 	private String apartmentName;//公寓名称
-	
+//	rent_amt
 	private String communityName;//小区名称
 	private String houseTitle;//房源标题(名称)
 	private String houseCode;//房源编号
