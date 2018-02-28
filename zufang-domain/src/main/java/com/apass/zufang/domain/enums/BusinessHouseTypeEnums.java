@@ -5,7 +5,7 @@ package com.apass.zufang.domain.enums;
  * @author shilin
  *
  */
-public enum RentTypeEnums {
+public enum BusinessHouseTypeEnums {
 	
 	// 热门房源类型	1：正常，2:精选',
 	FY_ZHENGCHANG_1(1, "正常"),
@@ -38,7 +38,7 @@ public enum RentTypeEnums {
 
 	private String message;
 	
-	private RentTypeEnums(Integer code, String message) {
+	private BusinessHouseTypeEnums(Integer code, String message) {
 		this.code = code;
 		this.message = message;
 	}
