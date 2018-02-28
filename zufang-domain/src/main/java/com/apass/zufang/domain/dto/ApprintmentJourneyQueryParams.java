@@ -8,40 +8,58 @@ import com.apass.zufang.common.model.QueryParams;
 public class ApprintmentJourneyQueryParams extends QueryParams{
 	private String name;//姓名
 	private String telphone;//电话
-	private String reserveDateFloor;//预约时间下限
-	private String reserveDateCeiling;//预约时间上限
+	private String createdFloor;//预约时间下限
+	private String createdCeiling;//预约时间上限
 	private String apartmentName;//公寓名称
-//	rent_amt
-	private String communityName;//小区名称
-	private String houseTitle;//房源标题(名称)
+	private String rentAmtFloor;//租金下限
+	private String rentAmtCeiling;//租金上限
 	private String houseCode;//房源编号
 	private String houseCity;//房源城市
 	private String houseDistrict;//房源区域
 	private String houseStreet;//房源街道
-	private String houseStatus;//房源状态
-	private String houseAcreageFloor;//房源面积下限
-	private String houseAcreageCeiling;//房源面积上限
-	private String houseKitchenFalg;//房源独立厨房
-	private String houseToiletFalg;//房源独立卫生间
-	private String houseCreatedFloor;//房源创建时间下限
-	private String houseCreatedCeiling;//房源创建时间上限
+	private String reserveDateFloor;//看房时间下限
+	private String reserveDateCeiling;//看房时间上限
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTelphone() {
+		return telphone;
+	}
+	public void setTelphone(String telphone) {
+		this.telphone = telphone;
+	}
+	public String getCreatedFloor() {
+		return createdFloor;
+	}
+	public void setCreatedFloor(String createdFloor) {
+		this.createdFloor = createdFloor;
+	}
+	public String getCreatedCeiling() {
+		return createdCeiling;
+	}
+	public void setCreatedCeiling(String createdCeiling) {
+		this.createdCeiling = createdCeiling;
+	}
 	public String getApartmentName() {
 		return apartmentName;
 	}
 	public void setApartmentName(String apartmentName) {
 		this.apartmentName = apartmentName;
 	}
-	public String getCommunityName() {
-		return communityName;
+	public String getRentAmtFloor() {
+		return rentAmtFloor;
 	}
-	public void setCommunityName(String communityName) {
-		this.communityName = communityName;
+	public void setRentAmtFloor(String rentAmtFloor) {
+		this.rentAmtFloor = rentAmtFloor;
 	}
-	public String getHouseTitle() {
-		return houseTitle;
+	public String getRentAmtCeiling() {
+		return rentAmtCeiling;
 	}
-	public void setHouseTitle(String houseTitle) {
-		this.houseTitle = houseTitle;
+	public void setRentAmtCeiling(String rentAmtCeiling) {
+		this.rentAmtCeiling = rentAmtCeiling;
 	}
 	public String getHouseCode() {
 		return houseCode;
@@ -67,46 +85,16 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	public void setHouseStreet(String houseStreet) {
 		this.houseStreet = houseStreet;
 	}
-	public String getHouseStatus() {
-		return houseStatus;
+	public String getReserveDateFloor() {
+		return reserveDateFloor;
 	}
-	public void setHouseStatus(String houseStatus) {
-		this.houseStatus = houseStatus;
+	public void setReserveDateFloor(String reserveDateFloor) {
+		this.reserveDateFloor = reserveDateFloor;
 	}
-	public String getHouseAcreageFloor() {
-		return houseAcreageFloor;
+	public String getReserveDateCeiling() {
+		return reserveDateCeiling;
 	}
-	public void setHouseAcreageFloor(String houseAcreageFloor) {
-		this.houseAcreageFloor = houseAcreageFloor;
-	}
-	public String getHouseAcreageCeiling() {
-		return houseAcreageCeiling;
-	}
-	public void setHouseAcreageCeiling(String houseAcreageCeiling) {
-		this.houseAcreageCeiling = houseAcreageCeiling;
-	}
-	public String getHouseKitchenFalg() {
-		return houseKitchenFalg;
-	}
-	public void setHouseKitchenFalg(String houseKitchenFalg) {
-		this.houseKitchenFalg = houseKitchenFalg;
-	}
-	public String getHouseToiletFalg() {
-		return houseToiletFalg;
-	}
-	public void setHouseToiletFalg(String houseToiletFalg) {
-		this.houseToiletFalg = houseToiletFalg;
-	}
-	public String getHouseCreatedFloor() {
-		return houseCreatedFloor;
-	}
-	public void setHouseCreatedFloor(String houseCreatedFloor) {
-		this.houseCreatedFloor = houseCreatedFloor;
-	}
-	public String getHouseCreatedCeiling() {
-		return houseCreatedCeiling;
-	}
-	public void setHouseCreatedCeiling(String houseCreatedCeiling) {
-		this.houseCreatedCeiling = houseCreatedCeiling;
+	public void setReserveDateCeiling(String reserveDateCeiling) {
+		this.reserveDateCeiling = reserveDateCeiling;
 	}
 }
