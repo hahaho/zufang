@@ -72,6 +72,9 @@ public class HouseService {
 	
 	@Autowired
 	private HousePeiZhiService peizhiService;
+	
+	@Autowired
+	private HouseLocationService  locationService;
 
 	@Autowired
 	private HouseEsDao houseEsDao;
@@ -122,36 +125,14 @@ public class HouseService {
 		
 		/*** 添加房屋信息入库*/
 		Integer record = houseMapper.insertSelective(house);
+		houseVo.setHouseId(record.longValue());
 		
 		/*** 添加位置入库*/
-		HouseLocation location = new HouseLocation();
-		BeanUtils.copyProperties(houseVo, location);
-		location.setHouseId(record.longValue());
-		getAddressLngLat(houseVo, location);
-		locationMapper.insertSelective(location);
-		
+		locationService.insertOrUpdateLocation(houseVo);
 		/*** 添加图片入库*/
-		for (String pic : houseVo.getPictures()) {
-			HouseImg img = new HouseImg();
-			img.setHouseId(record.longValue());
-			img.setCreatedTime(houseVo.getCreatedTime());
-			img.setUpdatedTime(houseVo.getUpdatedTime());
-			if(StringUtils.isNotBlank(pic)){
-				img.setUrl(pic);
-				imgMapper.insertSelective(img);
-			}
-		}
+		imgService.insertImg(houseVo);
 		/*** 添加配置入库*/
-		for (String config : houseVo.getConfigs()) {
-			HousePeizhi peizhi = new HousePeizhi();
-			peizhi.setHouseId(record.longValue());
-			peizhi.setCreatedTime(houseVo.getCreatedTime());
-			peizhi.setUpdatedTime(houseVo.getUpdatedTime());
-			if(StringUtils.isNotBlank(config)){
-				peizhi.setName(config);
-				peizhiMapper.insertSelective(peizhi);
-			}
-		}
+		peizhiService.insertPeiZhi(houseVo);
 	}
 	
 	/**
@@ -161,14 +142,14 @@ public class HouseService {
 	 */
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void editHouse(HouseVo houseVo) throws BusinessException{
-		if(null == houseVo.getId()){
+		if(null == houseVo.getHouseId()){
 			throw new BusinessException("房屋Id不能为空!");
 		}
 		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
 		if(null == part || StringUtils.isBlank(part.getCode())){
 			throw new BusinessException("房屋所属公寓的编号不存在!");
 		}
-		House house = houseMapper.selectByPrimaryKey(houseVo.getId());
+		House house = houseMapper.selectByPrimaryKey(houseVo.getHouseId());
 		BeanUtils.copyProperties(houseVo, house);
 		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		
@@ -179,56 +160,16 @@ public class HouseService {
 		/*** 修改房屋信息*/
 		houseMapper.updateByPrimaryKeySelective(house);
 		
-		
 		/*** 修改位置信息*/
-		HouseLocation location = locationMapper.selectByPrimaryKey(Long.parseLong(houseVo.getLocationId()));
-		BeanUtils.copyProperties(houseVo, location);
-		location.setHouseId(house.getId());
-		getAddressLngLat(houseVo, location);
-		locationMapper.updateByPrimaryKeySelective(location);
-		
+		locationService.insertOrUpdateLocation(houseVo);
 		
 		imgService.deleteImgByHouseId(house.getId());//删除图片记录
 		/*** 添加图片入库*/
-		for (String pic : houseVo.getPictures()) {
-			HouseImg img = new HouseImg();
-			img.setHouseId(house.getId());
-			img.setCreatedTime(houseVo.getCreatedTime());
-			img.setUpdatedTime(houseVo.getUpdatedTime());
-			if(StringUtils.isNotBlank(pic)){
-				img.setUrl(pic);
-				imgMapper.insertSelective(img);
-			}
-		}
+		imgService.insertImg(houseVo);
 		
 		peizhiService.deletePeiZhiByHouseId(house.getId());//删除配置记录
 		/*** 添加配置入库*/
-		for (String config : houseVo.getConfigs()) {
-			HousePeizhi peizhi = new HousePeizhi();
-			peizhi.setHouseId(house.getId());
-			peizhi.setCreatedTime(houseVo.getCreatedTime());
-			peizhi.setUpdatedTime(houseVo.getUpdatedTime());
-			if(StringUtils.isNotBlank(config)){
-				peizhi.setName(config);
-				peizhiMapper.insertSelective(peizhi);
-			}
-		}
-	}
-	
-	/**
-	 * 根据指定的位置获取经纬度
-	 * @param houseVo
-	 * @param location
-	 */
-	public void getAddressLngLat(HouseVo houseVo,HouseLocation location){
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(houseVo.getProvince()).append(houseVo.getCity()).append(houseVo.getDistrict());
-		buffer.append(houseVo.getStreet()).append(houseVo.getDetailAddr());
-		String[] lnglat = ObtainGaodeLocation.getLocation(buffer.toString());
-		if(null != lnglat){
-			location.setLongitude(Double.parseDouble(lnglat[0]));
-			location.setLatitude(Double.parseDouble(lnglat[1]));
-		}
+		peizhiService.insertPeiZhi(houseVo);
 	}
 	
 	/**
