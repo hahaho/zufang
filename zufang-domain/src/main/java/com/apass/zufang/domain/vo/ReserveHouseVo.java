@@ -1,16 +1,29 @@
 package com.apass.zufang.domain.vo;
 import java.math.BigDecimal;
+import java.util.Date;
 /**
- * 电话预约专用  公寓房源列表VO实体类
+ * 看房行程 专用 电话预约看房VO实体类
  * @author Administrator
  *
  */
-public class HouseAppointmentVo{
-	private Long apartmentId;//所属公寓ID
+public class ReserveHouseVo{
+	private Long id;//预约看房字段
+    private Long houseId;
+    private Byte type;
+    private String userId;
+    private String telphone;
+    private String name;
+    private Date reserveDate;
+    private String memo;
+    private String isDelete;
+    private Date createdTime;
+    private Date updatedTime;
+    private String reserveDateTime;//预约看房新增字段 看房时间
+    
+    private Long apartmentId;//所属公寓ID
 	private String apartmentName;//公寓名称
 	private String apartmentCode;//公寓编码
 	
-	private Long houseId;//房源ID
 	private String communityName;//小区名称
 	private String houseTitle;//房源名称标题
     private String houseCode;//房源编码
@@ -33,12 +46,78 @@ public class HouseAppointmentVo{
     private String houseAcreage;//房源总面积
     private String houseRoomAcreage;//房源合租面积
     private String houseDescription;//房源描述
-    
-    private String houseKitchenFalg;//房源独立厨房
-	private String houseToiletFalg;//房源独立卫生间
-	private String houseHezuResource;//房源合租房介绍， 1:出租主卧；2：出租次卧；3：出租隔断；4：出租床位
-	private String houseChaoxiang;//房源朝向， 1:东：2:南....
-    private String houseHezuChaoxiang;//房源合租房朝向， 1:东：2:南....
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Long getHouseId() {
+		return houseId;
+	}
+	public void setHouseId(Long houseId) {
+		this.houseId = houseId;
+	}
+	public Byte getType() {
+		return type;
+	}
+	public void setType(Byte type) {
+		this.type = type;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getTelphone() {
+		return telphone;
+	}
+	public void setTelphone(String telphone) {
+		this.telphone = telphone;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Date getReserveDate() {
+		return reserveDate;
+	}
+	public void setReserveDate(Date reserveDate) {
+		this.reserveDate = reserveDate;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+	public String getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
+	}
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+	public String getReserveDateTime() {
+		return reserveDateTime;
+	}
+	public void setReserveDateTime(String reserveDateTime) {
+		this.reserveDateTime = reserveDateTime;
+	}
 	public Long getApartmentId() {
 		return apartmentId;
 	}
@@ -56,12 +135,6 @@ public class HouseAppointmentVo{
 	}
 	public void setApartmentCode(String apartmentCode) {
 		this.apartmentCode = apartmentCode;
-	}
-	public Long getHouseId() {
-		return houseId;
-	}
-	public void setHouseId(Long houseId) {
-		this.houseId = houseId;
 	}
 	public String getCommunityName() {
 		return communityName;
@@ -176,35 +249,5 @@ public class HouseAppointmentVo{
 	}
 	public void setHouseDescription(String houseDescription) {
 		this.houseDescription = houseDescription;
-	}
-	public String getHouseKitchenFalg() {
-		return houseKitchenFalg;
-	}
-	public void setHouseKitchenFalg(String houseKitchenFalg) {
-		this.houseKitchenFalg = houseKitchenFalg;
-	}
-	public String getHouseToiletFalg() {
-		return houseToiletFalg;
-	}
-	public void setHouseToiletFalg(String houseToiletFalg) {
-		this.houseToiletFalg = houseToiletFalg;
-	}
-	public String getHouseHezuResource() {
-		return houseHezuResource;
-	}
-	public void setHouseHezuResource(String houseHezuResource) {
-		this.houseHezuResource = houseHezuResource;
-	}
-	public String getHouseChaoxiang() {
-		return houseChaoxiang;
-	}
-	public void setHouseChaoxiang(String houseChaoxiang) {
-		this.houseChaoxiang = houseChaoxiang;
-	}
-	public String getHouseHezuChaoxiang() {
-		return houseHezuChaoxiang;
-	}
-	public void setHouseHezuChaoxiang(String houseHezuChaoxiang) {
-		this.houseHezuChaoxiang = houseHezuChaoxiang;
 	}
 }
