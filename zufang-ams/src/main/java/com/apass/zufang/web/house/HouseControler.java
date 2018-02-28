@@ -399,7 +399,7 @@ public class HouseControler {
 	    }
 	    house.setUpdatedTime(date);
 	    house.setUpdatedUser(operateName);
-	    house.setId(Long.parseLong(houseId));
+	    house.setHouseId(Long.parseLong(houseId));
 		return house;
 	}
 }

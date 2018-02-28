@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class HouseVo{
 
-	private Long id;
+	private Long houseId;
 	
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
 
@@ -370,12 +370,13 @@ public class HouseVo{
 	public void setHouseCode(String houseCode) {
 		this.houseCode = houseCode;
 	}
-	public Long getId() {
-		return id;
+	
+	public Long getHouseId() {
+		return houseId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setHouseId(Long houseId) {
+		this.houseId = houseId;
 	}
 
 	public String getLocationId() {
