@@ -24,9 +24,12 @@
 			t2.total_floor totalFloor,
 			t2.hall hall,
 			t2.room room,
+			t2.wei wei,
 			t2.rent_type rentType,
 			t2.zujin_type zujinType,
 			t2.rent_amt rentAmt,
+			t2.list_time listTime,
+            t2.delist_time delistTime,
 			t4.latitude latitude,
 			t4.longitude longitude,
 			t4.street street,
@@ -54,6 +57,7 @@
 	<if test="status!=null and status!=''"> AND t2.status = #{status} </if>
 	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt >= ]]>  #{minRentAmt} </if>
 	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt <= ]]>  #{maxRentAmt} </if>
+	<if test="sortField!=null and sortField!=''"><![CDATA[ ORDER BY listTime DESC LIMIT ]]>  #{sortField} </if>
 	</select>
 	
 	<select id="getHouseInfoByIdList" resultType="com.apass.zufang.domain.entity.HouseInfoRela"
@@ -78,9 +82,12 @@
 			t2.total_floor totalFloor,
 			t2.hall hall,
 			t2.room room,
+			t2.wei wei,
 			t2.rent_type rentType,
 			t2.zujin_type zujinType,
 			t2.rent_amt rentAmt,
+			t2.list_time listTime,
+            t2.delist_time delistTime,
 			t4.latitude latitude,
 			t4.longitude longitude,
 			t4.street street,

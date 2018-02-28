@@ -3,8 +3,10 @@ package com.apass.zufang.web.personal;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.TokenManager;
+import com.apass.gfb.framework.jwt.common.SaltEncodeUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
-import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.ajp.entity.GfbRegisterInfoEntity;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.service.common.MobileSmsService;
 import com.apass.zufang.service.personal.ZuFangLoginSevice;
+import com.apass.zufang.domain.Response;
+import javax.ws.rs.core.MediaType;
 
 /**
  * 个人中心 登录
@@ -27,6 +31,8 @@ import com.apass.zufang.service.personal.ZuFangLoginSevice;
  *
  */
 @Path("/zufangpersonal")
+@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class ZuFangLoginController {
 	private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginController.class);
 	
@@ -77,7 +83,7 @@ public class ZuFangLoginController {
 	        	String password = CommonUtils.getValue(paramMap, "password");
 	        	String smsType = CommonUtils.getValue(paramMap, "smsType");// 类型
 	        	String code = CommonUtils.getValue(paramMap, "code");// 验证码
-	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password+" smsType—————>"+smsType);
+	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password+" smsType—————>"+smsType+" code—————>"+code);
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
 	        		//用户id不合规
 	        		 return Response.success("用户id不合规");
@@ -101,18 +107,26 @@ public class ZuFangLoginController {
 	        	if(mobileCodeValidate){
 	        		// 3.检查是否已注册(通过注册手机号检查)
 					GfbRegisterInfoEntity userInfo = zuFangLoginSevice.zfselecetmobile(mobile);
+					
 					if (userInfo == null) {
 						returnMap.put("operationResult", false);
 						returnMap.put("displayInfo", "该手机号尚未注册");
 						return Response.fail("该手机号尚未注册",returnMap);
 					}
-					userInfo.setPassword(password);
-					
-					// 4. 客户保存重置密码
-					zuFangLoginSevice.zufangsetpassword(userInfo);
-				    returnMap.put("operationResult", true);
-					returnMap.put("displayInfo", "用户重置密码成功");
-					return Response.success("用户重置密码成功", returnMap);
+					//校验新旧密码是否一致
+					String newPassword = SaltEncodeUtils.sha1(password, userInfo.getSalt());
+					if(newPassword.equals(userInfo.getPassword())){
+						returnMap.put("operationResult", false);
+						returnMap.put("displayInfo", "此密码与旧密码一致");
+						return Response.fail("此密码与旧密码一致",returnMap);
+					}
+						userInfo.setPassword(password);
+						// 4. 客户保存重置密码
+						zuFangLoginSevice.zufangsetpassword(userInfo);
+						returnMap.put("operationResult", true);
+						returnMap.put("displayInfo", "用户重置密码成功");
+						returnMap.put("gfbRegisterIn", userInfo);
+						return Response.success("用户重置密码成功", returnMap);
 	        	}else{
 	        		return Response.fail("验证码错误");
 	        	}
@@ -201,7 +215,7 @@ public class ZuFangLoginController {
 	        		//已注册用户
 	        		String token = tokenManager.createToken(null, mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
 	        		resultMap.put("token", token);
-	        		resultMap.put("ACCOUNT", zfselecetmobile.getAccount());
+	        		resultMap.put("account", zfselecetmobile.getAccount());
 	        		resultMap.put("userId", zfselecetmobile.getId());
 	        		return Response.success("验证码真确登录成功",resultMap);
 	        		}

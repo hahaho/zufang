@@ -25,6 +25,10 @@ public class MybatisConfigurationV2 {
       sessionFactory.setDataSource(mysqlDataSource);
       sessionFactory.setTypeAliasesPackage("com.apass.zufang.domain.entity");
       sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/**/*.xml"));
+      
+      org.apache.ibatis.session.Configuration mybatisConfig = new org.apache.ibatis.session.Configuration();
+      mybatisConfig.setLogPrefix("apass.mybatis.");
+      sessionFactory.setConfiguration(mybatisConfig);
       return sessionFactory.getObject();
     } catch (Exception e) {
       logger.error("Could not confiure mybatis session factory", e);
@@ -36,6 +40,7 @@ public class MybatisConfigurationV2 {
     MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
     mapperScannerConfigurer.setBasePackage("com.apass.zufang.mapper.zfang");
     mapperScannerConfigurer.setSqlSessionFactoryBeanName("mysqlSqlSessionFactory");
+    
     return mapperScannerConfigurer;
   }
 

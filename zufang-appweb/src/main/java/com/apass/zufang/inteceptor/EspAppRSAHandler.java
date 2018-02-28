@@ -1,8 +1,7 @@
-/*package com.apass.zufang.inteceptor;
+package com.apass.zufang.inteceptor;
 
 import com.apass.esp.common.utils.JsonUtil;
 import com.apass.gfb.framework.utils.AESUtils;
-import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.gfb.framework.utils.RSAUtils;
@@ -24,36 +23,36 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-*//**
+/**
  * 
  * @description RSA 加解密拦截器
  *
  * @author lixining
  * @version $Id: AdminRSAHandler.java, v 0.1 2016年4月7日 上午10:13:16 lixining Exp $
- *//*
+ */
 @Aspect
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 5)
 public class EspAppRSAHandler {
-	*//**
+	/**
 	 * 日志
-	 *//*
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(EspAppRSAHandler.class);
-	*//**
+	/**
 	 * RSA 私钥
-	 *//*
+	 */
 	@Value("${gfb-app.privatekey}")
 	private String privateKey;
 
-	*//**
+	/**
 	 * 拦截方法 - 入參解密 出参-加密
 	 *
 	 * @param point
 	 * @return Object
 	 * @throws Throwable
-	 *//*
+	 */
 
-	//@Around("execution(* com.apass.esp.web..*.*(..))")
+	@Around("execution(* com.apass.zufang.web..*.*(..))")
 	private Object handleRSAInteceptor(ProceedingJoinPoint point) throws Throwable {
 		return inteceptorMethod(point);
 	}
@@ -136,4 +135,3 @@ public class EspAppRSAHandler {
 		}
 	}
 }
-*/

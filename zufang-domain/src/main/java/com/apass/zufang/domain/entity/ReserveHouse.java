@@ -1,8 +1,7 @@
 package com.apass.zufang.domain.entity;
-
 import java.util.Date;
-
-public class ReserveHouse {
+import com.apass.zufang.common.model.CreatedUser;
+public class ReserveHouse extends CreatedUser{
     private Long id;
 
     private Long houseId;

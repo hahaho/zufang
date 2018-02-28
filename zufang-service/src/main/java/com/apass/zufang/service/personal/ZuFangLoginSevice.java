@@ -63,14 +63,6 @@ public class ZuFangLoginSevice {
 			registerInfo.setPassword(newPassword);
 			registerInfo.setSalt(salt);
 			
-//			// 1. 使用加密盐加密
-//			String salt = registerInfo.getSalt();
-//			String password = registerInfo.getPassword();
-//			// 2. 加密后的密码
-//			String newPassword = SaltEncodeUtils.sha1(password, salt);
-//			registerInfo.setPassword(newPassword);
-//			registerInfo.setSalt(salt);
-			// 3. 保存注册信息
 			gfbRegisterInfoEntityMapper.zufangsetpassword(registerInfo);
 		} catch (Exception e) {
 			LOGGER.error("保存客户注册信息出错===》", e);
@@ -144,7 +136,7 @@ public class ZuFangLoginSevice {
 	 * @param mobile
 	 * @return
 	 */
-	public GfbRegisterInfoEntity zfselecetmobile(String mobile) {
+	public GfbRegisterInfoEntity zfselecetmobile(String mobile) throws BusinessException{
 		return gfbRegisterInfoEntityMapper.selectMobile(mobile);
 	}
 	

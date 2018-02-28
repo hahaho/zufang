@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.apass.zufang.mapper.zfang.HouseMapper" >
-	<!-- 分页查询条件 -->
+	<!-- 初始es分页查询条件 -->
     <sql id="QueryConditionSql">
         <where>
 			<if test="houseCode!=null and houseCode!=''"> AND code = #{houseCode} </if>
@@ -18,7 +18,41 @@
             </if>
         </where>
     </sql>
-	<!-- 分页查询 -->
+    
+    <!-- 房屋信息管理中心 -->
+    <sql id="QueryHouseConditionSql">
+       <where>
+	        <if test="apartmentName!=null and apartmentName!=''">
+	            AND apart.name LIKE '%${apartmentName}%'
+	        </if>
+	        <if test="title!=null and title!=''"> 
+	            AND house.title LIKE '%${title}%'
+	        </if>
+	        <if test="code!=null and code!=''"> 
+	            AND house.code = #{code} 
+	        </if>
+	        <if test="city!=null and city!=''">
+	            AND location.city = #{city} 
+	        </if>
+	        <if test="district!=null and district!=''">
+	            AND location.district = #{district} 
+	        </if>
+	        <if test="street!=null and street!=''">
+	            AND location.street = #{street} 
+	        </if>
+	        <if test="isDelete!=null and isDelete!=''"> 
+	            AND house.is_delete = #{isDelete} AND apart.is_delete = #{isDelete} AND location.is_delete = #{isDelete}
+	        </if>
+	        <if test="status!=null">
+	            AND status in
+	            <foreach item="item" index="index" collection="status" open="(" separator="," close=")">
+	                #{item}
+	            </foreach>
+	        </if>
+        </where>
+    </sql>
+    
+	<!-- 初始化es查询 -->
     <select id="getHouseList" resultMap="BaseResultMap" 
         parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
         SELECT 
@@ -38,14 +72,60 @@
         SELECT COUNT(*) FROM t_zfang_house
         <include refid="QueryConditionSql" />
     </select>
+    
+    <!-- 房源信息管理 -->
+    <select id="getHouseLists" resultType="com.apass.zufang.domain.vo.HouseBagVo" 
+        parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
+        SELECT 
+            apart.id apartId,
+            apart.name apartName,
+            house.id houseId,
+            house.code houseCode,
+            house.title title,
+            house.status status,
+            house.community_name communityName,
+            house.room room,
+            house.hall hall,
+            house.wei  wei,
+            house.rent_amt rentAmt,
+            house.zujin_type zujinType
+        FROM t_zfang_house house 
+        left join t_zfang_apartment apart on house.apartment_id = apart.id
+        left join t_zfang_house_location location on house.id = location.house_id
+        <include refid="QueryHouseConditionSql" />
+        ORDER BY house.created_time DESC
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+    <!-- 房源信息管理分页查询数量 -->
+    <select id ="getHouseListsCount" resultType="java.lang.Integer"
+       parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
+        SELECT 
+            apart.id apartId,
+            apart.name apartName,
+            house.id houseId,
+            house.code houseCode,
+            house.title title,
+            house.status status,
+            house.community_name communityName,
+            house.room room,
+            house.hall hall,
+            house.wei  wei,
+            house.rent_amt rentAmt,
+            house.zujin_type zujinType
+        FROM t_zfang_house house 
+        left join t_zfang_apartment apart on house.apartment_id = apart.id
+        left join t_zfang_house_location location on house.id = location.house_id
+        <include refid="QueryHouseConditionSql" />
+        ORDER BY house.created_time DESC
+    </select>
+    
     <!--品牌公寓热门房源列表查询  热门房源分页查询                
      	查询列表字段    热门排序  公寓ID，公寓名称，房源ID，房源编码，房源标题（名称），小区名称，户型（室厅卫）
    		查询条件 是否热门 公寓名称 房源标题（名称）房源编码 所在区域  -->
     <select id="getHotHouseList" resultType="com.apass.zufang.domain.vo.HouseVo"
     	parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
-
-
-        
     	<![CDATA[
         SELECT 
         	x.sort_no sortNo,
@@ -153,11 +233,14 @@
 			x.description houseDescription,
 			x.hezu_resource houseHezuResource,
 			x.chaoxiang houseChaoxiang,
-			x.hezu_chaoxiang houseHezuChaoxiang
+			x.hezu_chaoxiang houseHezuChaoxiang,
+			CASE WHEN a1.id >0 THEN '是' ELSE '否' END houseKitchenFalg,
+       		CASE WHEN a2.id >0 THEN '是' ELSE '否' END houseToiletFalg
         FROM t_zfang_house_location z
 			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
-        	LEFT JOIN t_zfang_house_peizhi a ON a.house_id = x.id
+        	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id and a.`name` = '独卫'
+        	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a.`name` = '可做饭'
        	WHERE 1=1 
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` = #{apartmentName} </if>
@@ -178,6 +261,8 @@
        	ELSE '其他' END
        	<if test="houseCreatedFloor!=null and houseCreatedFloor!=''"> <![CDATA[ AND x.created_time >= #{houseCreatedFloor} ]]></if>
        	<if test="houseCreatedCeiling!=null and houseCreatedCeiling!=''"> <![CDATA[ AND x.created_time <= #{houseCreatedCeiling} ]]></if>
+       	<if test="houseKitchenFalg!=null and houseKitchenFalg!=''"> AND (CASE WHEN a1.id >0 THEN '是' ELSE '否' END) = #{houseKitchenFalg} </if>
+       	<if test="houseToiletFalg!=null and houseToiletFalg!=''"> AND (CASE WHEN a2.id >0 THEN '是' ELSE '否' END) = #{houseToiletFalg} </if>
         <![CDATA[ 
         ORDER BY x.created_time DESC
         ]]>

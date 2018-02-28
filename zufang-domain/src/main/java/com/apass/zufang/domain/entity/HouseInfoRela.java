@@ -105,6 +105,10 @@ public class HouseInfoRela {
 	 */
 	private Integer hall;
 	/**
+	 * 房屋      卫
+	 */
+	private Integer wei;
+	/**
 	 * 房屋 租赁类型 1:整租；2:合租
 	 */
 	private Byte rentType;
@@ -125,6 +129,16 @@ public class HouseInfoRela {
 	 */
 	private List<String> imgUrlList;
 	
+	/**
+	 * 上架时间
+	 */
+	private String listTime;
+	
+	/**
+	 * 下架时间
+	 */
+	private String delistTime;
+	
 	/***********************************查询所用字段*************************************/
 	/**
 	 * 最小租金/月
@@ -134,6 +148,12 @@ public class HouseInfoRela {
 	 * 最大租金/月
 	 */
 	private BigDecimal maxRentAmt;
+	
+	/**
+	 * 排序字段
+	 */
+	private Integer sortField;
+	
 
 	public Long getHouseId() {
 		return houseId;
@@ -381,6 +401,38 @@ public class HouseInfoRela {
 
 	public void setHouseConfigList(List<String> houseConfigList) {
 		this.houseConfigList = houseConfigList;
+	}
+
+	public Integer getSortField() {
+		return sortField;
+	}
+
+	public void setSortField(Integer sortField) {
+		this.sortField = sortField;
+	}
+
+	public String getListTime() {
+		return listTime;
+	}
+
+	public void setListTime(String listTime) {
+		this.listTime = listTime;
+	}
+
+	public String getDelistTime() {
+		return delistTime;
+	}
+
+	public void setDelistTime(String delistTime) {
+		this.delistTime = delistTime;
+	}
+
+	public Integer getWei() {
+		return wei;
+	}
+
+	public void setWei(Integer wei) {
+		this.wei = wei;
 	}
 
 }

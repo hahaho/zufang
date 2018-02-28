@@ -298,7 +298,7 @@ public class HouseControler {
 	    if(StringUtils.equals(RentTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	
 	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
-	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 100, "合租户数");
+	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 99, "合租户数");
 	    	
 	    	ValidateUtils.isNotBlank(hezuResource, "请选择出租间介绍");
 	    	ValidateUtils.isNotBlank(hezuChaoxiang, "请选择出租间朝向");

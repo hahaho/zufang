@@ -2,8 +2,11 @@ package com.apass.zufang.web.personal;
 
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,6 +21,8 @@ import com.apass.zufang.domain.Response;
  * 验证码
  */
 @Path("/mobile")
+@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class MobileRandomController {
 	private static final Logger logger = LoggerFactory.getLogger(MobileRandomController.class);
 
