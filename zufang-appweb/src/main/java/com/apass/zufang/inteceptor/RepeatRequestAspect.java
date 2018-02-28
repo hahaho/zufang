@@ -1,4 +1,4 @@
-/*package com.apass.zufang.inteceptor;
+package com.apass.zufang.inteceptor;
 
 import com.apass.gfb.framework.cache.CacheManager;
 import com.apass.gfb.framework.exception.BusinessException;
@@ -21,29 +21,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
-*//**
+/**
  * 重复提交锁
  * 
  * @author admin
  *
- *//*
+ */
 //@Aspect
 //@Component
 //@Order(value = Ordered.HIGHEST_PRECEDENCE + 200)
 public class RepeatRequestAspect {
-	*//**
+	/**
 	 * 日志
-	 *//*
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(RepeatRequestAspect.class);
-	*//**
+	/**
 	 * 属性标识
-	 *//*
+	 */
 	private static final String PREFIX_KEY = "userId";
 
 	@Autowired
 	private CacheManager cacheManager;
 
-	@Pointcut("within(com.apass.esp.web..* || com.apass.esp.noauth..*)")
+	@Pointcut("within(com.apass.zufang.web..*)")
 	public void aspectPointcut() {
 
 	}
@@ -94,9 +94,9 @@ public class RepeatRequestAspect {
 		}
 	}
 
-	*//**
+	/**
 	 * 获取請求微信号
-	 *//*
+	 */
 	private String getRequestOpenId(Object[] arr) throws BusinessException {
 		if (arr == null || arr.length == 0) {
 			return null;
@@ -117,9 +117,9 @@ public class RepeatRequestAspect {
 		return prefixOpenId;
 	}
 
-	*//**
+	/**
 	 * 处理异常信息
-	 *//*
+	 */
 	private Object handleErrorMsg(ErrorCode code, Class<?> returnType) {
 		Map<String, Object> resultMap = Maps.newHashMap();
 		String msg = null;
@@ -133,4 +133,3 @@ public class RepeatRequestAspect {
 		return GsonUtils.convertObj(resultMap, returnType);
 	}
 }
-*/
