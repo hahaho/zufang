@@ -49,7 +49,7 @@ public class PhoneAppointmentController {
      * @param map
      * @return
      */
-    @POST
+	@POST
 	@Path("/getHouseListForPhoneAppointment")
     public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(Map<String,Object> map) {
         ResponsePageBody<HouseAppointmentVo> respBody = new ResponsePageBody<HouseAppointmentVo>();
