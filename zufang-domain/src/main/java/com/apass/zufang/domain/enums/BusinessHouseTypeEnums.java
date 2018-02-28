@@ -87,7 +87,7 @@ public enum BusinessHouseTypeEnums {
         if("HZ".equals(type)&&value==1){
         	return HZ_ZHENGZU_1;
         }
-        if("HZ".equals(type)||value==2){
+        if("HZ".equals(type)&&value==2){
         	return HZ_HEZU_2;
         }
         

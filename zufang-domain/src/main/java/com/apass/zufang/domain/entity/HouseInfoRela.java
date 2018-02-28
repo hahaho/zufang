@@ -78,7 +78,11 @@ public class HouseInfoRela {
 	/**
 	 * 房屋 朝向， 1:东：2:南....
 	 */
-	private String chaoxiang;
+	private Byte chaoxiang;
+	/**
+	 * 房屋 朝向， 1:东：2:南....
+	 */
+	private String chaoxiangStr;
 	
 	/**
 	 * 房屋装修类型:1:豪华装修...
@@ -113,9 +117,17 @@ public class HouseInfoRela {
 	 */
 	private Byte rentType;
 	/**
+	 * 房屋 租赁类型 1:整租；2:合租
+	 */
+	private String rentTypeStr;
+	/**
 	 * 房屋租金类型
 	 */
 	private Byte zujinType;
+	/**
+	 * 房屋租金类型Str
+	 */
+	private String zujinTypeStr;
 	/**
 	 * 租金/月
 	 */
@@ -259,12 +271,28 @@ public class HouseInfoRela {
 		this.communityName = communityName;
 	}
 
-	public String getChaoxiang() {
+	public Byte getChaoxiang() {
 		return chaoxiang;
 	}
 
-	public void setChaoxiang(String chaoxiang) {
+	public void setChaoxiang(Byte chaoxiang) {
 		this.chaoxiang = chaoxiang;
+	}
+
+	public String getChaoxiangStr() {
+		return chaoxiangStr;
+	}
+
+	public void setChaoxiangStr(String chaoxiangStr) {
+		this.chaoxiangStr = chaoxiangStr;
+	}
+
+	public String getRentTypeStr() {
+		return rentTypeStr;
+	}
+
+	public void setRentTypeStr(String rentTypeStr) {
+		this.rentTypeStr = rentTypeStr;
 	}
 
 	public Long getApartmentId() {
@@ -433,6 +461,14 @@ public class HouseInfoRela {
 
 	public void setWei(Integer wei) {
 		this.wei = wei;
+	}
+
+	public String getZujinTypeStr() {
+		return zujinTypeStr;
+	}
+
+	public void setZujinTypeStr(String zujinTypeStr) {
+		this.zujinTypeStr = zujinTypeStr;
 	}
 
 }
