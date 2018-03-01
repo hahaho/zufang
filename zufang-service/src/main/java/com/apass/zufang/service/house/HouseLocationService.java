@@ -27,6 +27,9 @@ public class HouseLocationService {
 	@Autowired
 	private HouseLocationMapper locationMapper;
 	
+	@Autowired
+	private ObtainGaodeLocation gaodeLocation;
+	
 	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
 	public void deleteLocationByHouseId(Long houseId){
 		//根据房屋Id，查询状态为00 的地址信息
@@ -38,7 +41,7 @@ public class HouseLocationService {
 		}
 	}
 	
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void insertOrUpdateLocation(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo){
 			throw new BusinessException("地址参数不能为空!");
@@ -56,19 +59,15 @@ public class HouseLocationService {
 		}
 	}
 	
-	/**
-	 * 根据指定的位置获取经纬度
-	 * @param houseVo
-	 * @param location
-	 */
 	public void getAddressLngLat(HouseVo houseVo,HouseLocation location){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(houseVo.getProvince()).append(houseVo.getCity()).append(houseVo.getDistrict());
 		buffer.append(houseVo.getStreet()).append(houseVo.getDetailAddr());
-		String[] lnglat = ObtainGaodeLocation.getLocation(buffer.toString());
+		String[] lnglat = gaodeLocation.getLocation(buffer.toString());
 		if(null != lnglat){
 			location.setLongitude(Double.parseDouble(lnglat[0]));
 			location.setLatitude(Double.parseDouble(lnglat[1]));
 		}
+		
 	}
 }

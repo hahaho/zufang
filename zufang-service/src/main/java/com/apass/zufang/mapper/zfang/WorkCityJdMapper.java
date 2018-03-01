@@ -18,7 +18,4 @@ public interface WorkCityJdMapper extends GenericMapper<WorkCityJd, Long> {
 	 * @return
      */
 	List<WorkCityJd> selectDateByParentId(@Param("code") String code);
-	
-
-	
 }

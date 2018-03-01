@@ -25,11 +25,14 @@
 	        <if test="apartmentName!=null and apartmentName!=''">
 	            AND apart.name LIKE '%${apartmentName}%'
 	        </if>
-	        <if test="title!=null and title!=''"> 
-	            AND house.title LIKE '%${title}%'
+	        <if test="houseTitle!=null and houseTitle!=''"> 
+	            AND house.title LIKE '%${houseTitle}%'
 	        </if>
-	        <if test="code!=null and code!=''"> 
-	            AND house.code = #{code} 
+	        <if test="houseCode!=null and houseCode!=''"> 
+	            AND house.code = #{houseCode} 
+	        </if>
+	        <if test="province!=null and province!=''">
+	            AND location.province = #{province} 
 	        </if>
 	        <if test="city!=null and city!=''">
 	            AND location.city = #{city} 
@@ -102,18 +105,7 @@
     <select id ="getHouseListsCount" resultType="java.lang.Integer"
        parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
         SELECT 
-            apart.id apartId,
-            apart.name apartName,
-            house.id houseId,
-            house.code houseCode,
-            house.title title,
-            house.status status,
-            house.community_name communityName,
-            house.room room,
-            house.hall hall,
-            house.wei  wei,
-            house.rent_amt rentAmt,
-            house.zujin_type zujinType
+            COUNT(*)
         FROM t_zfang_house house 
         left join t_zfang_apartment apart on house.apartment_id = apart.id
         left join t_zfang_house_location location on house.id = location.house_id

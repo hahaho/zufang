@@ -62,13 +62,6 @@ public class Geocodes {
         this.citycode = citycode;  
     }  
   
-    public String getDistrict() {  
-        return district;  
-    }  
-  
-    public void setDistrict(String district) {  
-        this.district = district;  
-    }  
   
     public String getAdcode() {  
         return adcode;  

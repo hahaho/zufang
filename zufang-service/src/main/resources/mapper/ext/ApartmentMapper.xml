@@ -28,6 +28,18 @@
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
         </where>
     </sql>
+    <!-- getApartmentListCodeCount-->
+    <sql id="QueryConditionSqlBackupBackup">
+        <where>
+            <if test="code!=null and code!=''"> AND code like '%${code}%' </if>
+        </where>
+    </sql>
+    <!-- getApartmentListCodeCount -->
+    <select id ="getApartmentListCodeCount" resultType="java.lang.Integer"
+        parameterType="com.apass.zufang.domain.entity.Apartment">
+        SELECT COUNT(*) FROM t_zfang_apartment
+        <include refid="QueryConditionSqlBackupBackup" />
+    </select>
     <!-- 分页查询 -->
     <select id="getApartmentList" resultMap="BaseResultMap" 
         parameterType="com.apass.zufang.domain.entity.Apartment">

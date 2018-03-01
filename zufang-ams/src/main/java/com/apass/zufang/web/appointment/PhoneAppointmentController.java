@@ -105,7 +105,7 @@ public class PhoneAppointmentController {
     	Set<Entry<String, Object>> set = map.entrySet();
     	String key = null;
     	Object value =null;
-    	ReserveHouse entity = null;
+    	ReserveHouse entity = new ReserveHouse();
     	for(Entry<String, Object> entry : set){
     		key = entry.getKey();
     		value = entry.getValue();
@@ -114,7 +114,7 @@ public class PhoneAppointmentController {
     		}else{
     			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
     		}
-    		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(new ReserveHouse(), ReserveHouse.class, value, key);
+    		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
     	}
     	return entity;
 	}

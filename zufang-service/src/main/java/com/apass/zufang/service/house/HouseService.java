@@ -24,9 +24,10 @@ import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
-import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
@@ -36,7 +37,6 @@ import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
 import com.apass.zufang.search.dao.HouseEsDao;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
-import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
@@ -80,8 +80,8 @@ public class HouseService {
 	private HouseEsDao houseEsDao;
 
 	/*** 房屋信息管理列表 */
-	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
-		ResponsePageBody<House> body = new ResponsePageBody<>();
+	public ResponsePageBody<HouseBagVo> getHouseListExceptDelete(HouseQueryParams dto){
+		ResponsePageBody<HouseBagVo> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
@@ -89,7 +89,7 @@ public class HouseService {
 		status.add(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode());
 		status.add(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseLists(dto);
+		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
 		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
@@ -97,14 +97,14 @@ public class HouseService {
 	}
 	
 	/*** 房屋信息审核管理列表*/
-	public ResponsePageBody<House> getHouseAuditListExceptDelete(HouseQueryParams dto){
-		ResponsePageBody<House> body = new ResponsePageBody<>();
+	public ResponsePageBody<HouseBagVo> getHouseAuditListExceptDelete(HouseQueryParams dto){
+		ResponsePageBody<HouseBagVo> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
 		status.add(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseLists(dto);
+		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
 		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
@@ -112,7 +112,7 @@ public class HouseService {
 	}
 	
 	/*** 添加房屋信息* @throws BusinessException*/
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void addHouse(HouseVo houseVo) throws BusinessException{
 		
 		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
@@ -124,8 +124,8 @@ public class HouseService {
 		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		
 		/*** 添加房屋信息入库*/
-		Integer record = houseMapper.insertSelective(house);
-		houseVo.setHouseId(record.longValue());
+		houseMapper.insertSelective(house);
+		houseVo.setHouseId(house.getId());
 		
 		/*** 添加位置入库*/
 		locationService.insertOrUpdateLocation(houseVo);
@@ -140,7 +140,7 @@ public class HouseService {
 	 * @param houseVo
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void editHouse(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo.getHouseId()){
 			throw new BusinessException("房屋Id不能为空!");
