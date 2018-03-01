@@ -24,9 +24,9 @@ import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
-import com.apass.zufang.domain.enums.RentTypeEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
@@ -37,7 +37,6 @@ import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
 import com.apass.zufang.search.dao.HouseEsDao;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
-import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
@@ -86,9 +85,9 @@ public class HouseService {
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
-		status.add(RentTypeEnums.ZT_WSHAGNJIA_1.getCode());
-		status.add(RentTypeEnums.ZT_SHAGNJIA_2.getCode());
-		status.add(RentTypeEnums.ZT_XIAJIA_3.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode());
 		dto.setStatus(status);
 		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
@@ -103,7 +102,7 @@ public class HouseService {
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
-		status.add(RentTypeEnums.ZT_XIUGAI_5.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode());
 		dto.setStatus(status);
 		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
@@ -155,8 +154,8 @@ public class HouseService {
 		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		
 		/** 如果是首次添加，修改，状态不变，如果是下架，修改后，状态变为5*/
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
-			house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
+			house.setStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 		}
 		/*** 修改房屋信息*/
 		houseMapper.updateByPrimaryKeySelective(house);
@@ -189,13 +188,13 @@ public class HouseService {
 			throw new BusinessException("房屋信息不存在！");
 		}
 		/***房屋状态为上架或者删除时，不允许删除*/
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
 			throw new BusinessException("房屋状态不允许删除!");
 		}
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHAGNJIA_2.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode()){
 			throw new BusinessException("请将房源下架后重试!");
 		}
-		house.setStatus(RentTypeEnums.ZT_SHANGCHU_4.getCode().byteValue());
+		house.setStatus(BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode().byteValue());
 		house.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
@@ -236,14 +235,14 @@ public class HouseService {
 		if(null == house){
 			throw new BusinessException("房屋信息不存在！");
 		}
-		if(house.getStatus().intValue() != RentTypeEnums.ZT_XIUGAI_5.getCode()){
+		if(house.getStatus().intValue() != BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode()){
 			throw new BusinessException("房屋状态不允许操作!");
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
-			house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
 			houseAddEs(house.getId());
 		}else{
-			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
+			house.setStatus(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 		}
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
@@ -261,12 +260,12 @@ public class HouseService {
 			throw new BusinessException("房屋信息不存在！");
 		}
 		/***房屋状态为上架或者删除时，不允许删除*/
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
 			throw new BusinessException("房屋状态不允许进行上下架操作!");
 		}
 		
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHAGNJIA_2.getCode()){
-			house.setStatus(RentTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode()){
+			house.setStatus(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
 			houseMapper.updateByPrimaryKeySelective(house);
@@ -283,15 +282,15 @@ public class HouseService {
 		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
 		int status = house.getStatus().intValue();
 		//如果房屋的状态为待上架，正常上架
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
 			return "房屋状态不允许操作！";
 		}
-		if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode() 
-				|| house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
-			if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode()){
-				house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode() 
+				|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
+			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode()){
+				house.setStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 			}else{
-				house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+				house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
 				houseAddEs(house.getId());
 			}
 			house.setUpdatedTime(new Date());
@@ -315,17 +314,17 @@ public class HouseService {
 		for (String str : ids) {
 			House house = houseMapper.selectByPrimaryKey(Long.parseLong(str));
 			//如果房屋状态为删除，则跳过
-			if(house.getStatus().intValue() == RentTypeEnums.ZT_SHANGCHU_4.getCode()){
+			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
 				continue;
 			}
 			//如果房屋的状态为待上架，正常上架
-			if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode() 
-					|| house.getStatus().intValue() == RentTypeEnums.ZT_XIAJIA_3.getCode()){
-				if(house.getStatus().intValue() == RentTypeEnums.ZT_WSHAGNJIA_1.getCode()){
-					house.setStatus(RentTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode() 
+					|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
+				if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode()){
+					house.setStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 					others++;
 				}else{
-					house.setStatus(RentTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
 					houseAddEs(house.getId());
 					waitUp++;
 				}
@@ -386,7 +385,7 @@ public class HouseService {
 	public List<House> selectUpGoods(int index, int bach_size) {
 		HouseQueryParams dto = new HouseQueryParams();
 		List<Integer> statuList = Lists.newArrayList();
-		statuList.add(RentTypeEnums.ZT_SHAGNJIA_2.getCode());
+		statuList.add(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode());
 		dto.setStatus(statuList);
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		dto.setListTimeStr("yes");

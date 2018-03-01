@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +23,7 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.enums.RentTypeEnums;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
@@ -325,7 +322,7 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
     	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
 	    
-	    if(StringUtils.equals(RentTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	
 	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
 	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 99, "合租户数");
