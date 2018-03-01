@@ -1,4 +1,5 @@
 package com.apass.zufang.service.house;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -19,7 +20,7 @@ public class HousePeiZhiService {
 	 * deletePeiZhiByHouseId
 	 * @param houseId
 	 */
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void deletePeiZhiByHouseId(Long houseId){
 		peizhiMapper.deletePeiZhiByHouseId(houseId);
 	}
@@ -31,6 +32,9 @@ public class HousePeiZhiService {
 		}
 		for (String config : houseVo.getConfigs()) {
 			HousePeizhi peizhi = new HousePeizhi();
+			if(null == houseVo.getCreatedTime()){
+				houseVo.setCreatedTime(new Date());
+			}
 			peizhi.setHouseId(houseVo.getHouseId());
 			peizhi.setCreatedTime(houseVo.getCreatedTime());
 			peizhi.setUpdatedTime(houseVo.getUpdatedTime());

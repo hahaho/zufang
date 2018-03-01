@@ -59,11 +59,6 @@ public class HouseLocationService {
 		}
 	}
 	
-	/**
-	 * 根据指定的位置获取经纬度
-	 * @param houseVo
-	 * @param location
-	 */
 	public void getAddressLngLat(HouseVo houseVo,HouseLocation location){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(houseVo.getProvince()).append(houseVo.getCity()).append(houseVo.getDistrict());
@@ -73,5 +68,6 @@ public class HouseLocationService {
 			location.setLongitude(Double.parseDouble(lnglat[0]));
 			location.setLatitude(Double.parseDouble(lnglat[1]));
 		}
+		
 	}
 }

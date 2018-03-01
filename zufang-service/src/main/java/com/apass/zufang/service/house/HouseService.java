@@ -140,7 +140,7 @@ public class HouseService {
 	 * @param houseVo
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void editHouse(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo.getHouseId()){
 			throw new BusinessException("房屋Id不能为空!");

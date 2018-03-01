@@ -84,10 +84,10 @@ public class HouseControler {
 	public Response addHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("add house paramMap--->{}",GsonUtils.toJson(paramMap));
-			validateParams(paramMap);
+			validateParams(paramMap,false);
 			HouseVo vo = getVoByParams(paramMap);
 			houseService.addHouse(vo);
-			return Response.successResponse();
+			return Response.success("添加房屋信息成功!");
 		}catch (BusinessException e){
 			logger.error("add house businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
@@ -106,10 +106,10 @@ public class HouseControler {
 	public Response editHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("edit house paramMap--->{}",GsonUtils.toJson(paramMap));
-			validateParams(paramMap);
+			validateParams(paramMap,true);
 			HouseVo vo = getVoByParams(paramMap);
 			houseService.editHouse(vo);
-			return Response.success("");
+			return Response.success("修改房屋信息成功!");
 		}catch (BusinessException e){
 			logger.error("edit house businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
@@ -220,7 +220,7 @@ public class HouseControler {
 	 * @param paramMap
 	 * @throws BusinessException
 	 */
-	public void validateParams(Map<String, Object> paramMap) throws BusinessException{
+	public void validateParams(Map<String, Object> paramMap,boolean bl) throws BusinessException{
 		
 		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");//公寓Id
 		String phone = CommonUtils.getValue(paramMap,"phone");//管家联系方式
@@ -259,6 +259,12 @@ public class HouseControler {
 	    String title = CommonUtils.getValue(paramMap, "title");//房屋标题
 	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
 	    
+	    String houseId = CommonUtils.getValue(paramMap,"houseId");
+	    String locationId = CommonUtils.getValue(paramMap,"locationId");
+	    if(bl){//修改
+	    	ValidateUtils.isNotBlank(houseId, "房屋Id不能为!");
+		    ValidateUtils.isNotBlank(locationId, "地址编号不能为空");
+	    }
 	    ValidateUtils.isNotBlank(apartmentId, "请选择所属公寓");
 	    ValidateUtils.isNotBlank(phone, "请填写手机号码");
 	    if(!ListeningRegExpUtils.mobile(phone)){
@@ -395,12 +401,17 @@ public class HouseControler {
 	    String houseId = CommonUtils.getValue(paramMap,"houseId");
 	    Date date = new Date();
 	    String operateName = SpringSecurityUtils.getCurrentUser();
+	    
 	    house.setUpdatedTime(date);
 	    house.setUpdatedUser(operateName);
 	    if(StringUtils.isBlank(houseId)){
 	    	house.setCreatedTime(date);
 	    	house.setCreatedUser(operateName);
 	    	return house;
+	    }
+	    String locationId = CommonUtils.getValue(paramMap,"locationId");
+	    if(StringUtils.isNotBlank(locationId)){
+	    	house.setLocationId(locationId);
 	    }
 	    house.setHouseId(Long.parseLong(houseId));
 		return house;
