@@ -140,7 +140,7 @@ public class HouseService {
 	 * @param houseVo
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void editHouse(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo.getHouseId()){
 			throw new BusinessException("房屋Id不能为空!");
@@ -177,7 +177,7 @@ public class HouseService {
 	 * @param id 房屋Id
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void deleteHouse(String id,String updateUser) throws BusinessException{
 		if(StringUtils.isBlank(id)){
 			throw new BusinessException("房屋Id不能为空!");
@@ -199,6 +199,10 @@ public class HouseService {
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
 		houseMapper.updateByPrimaryKeySelective(house);
+		
+		locationService.deleteLocationByHouseId(house.getId());//删除地址记录
+		imgService.deleteImgByHouseId(house.getId());//删除图片记录
+		peizhiService.deletePeiZhiByHouseId(house.getId());//删除配置记录
 	}
 	
 	/*** 根据房屋Id,获取房屋信息*/
@@ -225,7 +229,7 @@ public class HouseService {
 		return values;
 	}
 	
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void auditHouse(String id,String status,String updateUser) throws BusinessException{
 		if(StringUtils.isBlank(id)){
 			throw new BusinessException("房屋Id不能为空!");
@@ -249,7 +253,7 @@ public class HouseService {
 		houseMapper.updateByPrimaryKeySelective(house);
 	}
 	
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void downHouse(String id,String updateUser) throws BusinessException{
 		if(StringUtils.isBlank(id)){
 			throw new BusinessException("房屋Id不能为空!");
@@ -273,7 +277,7 @@ public class HouseService {
 		}
 	}
 	
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public String upHouse(String id,String updateUser) throws BusinessException{
 		
 		if(StringUtils.isBlank(id)){
@@ -297,10 +301,10 @@ public class HouseService {
 			house.setUpdatedUser(updateUser);
 			houseMapper.updateByPrimaryKeySelective(house);
 		}
-		return status == 1 ? "房屋上架成功!":"首次录入房源需审核，通过后自动上架，请等待审核结果!";
+		return status == 1 ? "首次录入房源需审核，通过后自动上架，请等待审核结果!":"房屋上架成功!";
 	}
 	
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public String upHouses(String id,String updateUser) throws BusinessException{
 		
 		if(StringUtils.isBlank(id)){
@@ -347,7 +351,7 @@ public class HouseService {
 	}
 	
 	/*** 删除图片信息 * @throws BusinessException */
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void delPicture(String id) throws BusinessException{
 		
 		if(StringUtils.isBlank(id)){
@@ -356,11 +360,6 @@ public class HouseService {
 		HouseImg img = imgMapper.selectByPrimaryKey(Long.parseLong(id));
 		if(null == img){
 			throw new BusinessException("图片信息不存在!");
-		}
-		/*** 是否要删除原图片 */
-		File file = new File(img.getUrl());
-		if(file.exists()){
-			file.delete();
 		}
 		img.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
 		img.setUpdatedTime(new Date());

@@ -12,7 +12,6 @@ public interface WorkSubwayMapper extends GenericMapper<WorkSubway,Long> {
 	
 	/**
 	 * 根据parent查询子集
-	 * @param code
 	 * @return
      */
 	List<WorkSubway> querySubwayParentCodeList(WorkSubway domin);

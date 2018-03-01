@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 说明：根据地址code查相应省，市，区 通用方法
@@ -37,7 +38,8 @@ public class QueryAddressController {
 
 	@POST
 	@Path("/v1/queryNations")
-	public List<WorkCityJd> queryCity(String districtCode){
+	public List<WorkCityJd> queryCity(Map<String,String> paramMap){
+		String districtCode = paramMap.get("code");
 		//此时查询的是省份
 		if(StringUtils.isBlank(districtCode)){
 			districtCode = "0";

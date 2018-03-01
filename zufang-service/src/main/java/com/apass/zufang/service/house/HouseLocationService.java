@@ -30,7 +30,7 @@ public class HouseLocationService {
 	@Autowired
 	private ObtainGaodeLocation gaodeLocation;
 	
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void deleteLocationByHouseId(Long houseId){
 		//根据房屋Id，查询状态为00 的地址信息
 		HouseLocation location = locationMapper.getLocationByHouseId(houseId);
@@ -59,11 +59,6 @@ public class HouseLocationService {
 		}
 	}
 	
-	/**
-	 * 根据指定的位置获取经纬度
-	 * @param houseVo
-	 * @param location
-	 */
 	public void getAddressLngLat(HouseVo houseVo,HouseLocation location){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(houseVo.getProvince()).append(houseVo.getCity()).append(houseVo.getDistrict());
@@ -73,5 +68,6 @@ public class HouseLocationService {
 			location.setLongitude(Double.parseDouble(lnglat[0]));
 			location.setLatitude(Double.parseDouble(lnglat[1]));
 		}
+		
 	}
 }

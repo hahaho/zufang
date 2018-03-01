@@ -53,13 +53,14 @@ public class SecurityController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     public  Response login(HttpServletRequest request) {
-//        Map<String,String> resultMap = Maps.newHashMap();
+        Map<String,String> resultMap = Maps.newHashMap();
         if (SpringSecurityUtils.isAuthenticated()) {
             return main(request);
         }
+        resultMap.put("login","login_fail");
         String errMsg = SpringSecurityUtils.getLastExceptionMsg(request);
         HttpWebUtils.getSession(request).setAttribute("SPRING_SECURITY_LAST_EXCEPTION",null);
-        return Response.fail(errMsg);
+        return Response.fail(errMsg,resultMap);
     }
 
     /**
@@ -71,6 +72,7 @@ public class SecurityController {
         Map<String,String> resultMap = Maps.newHashMap();
         String userName = SpringSecurityUtils.getCurrentUser();
         resultMap.put("username",userName);
+        resultMap.put("login","login_success");
         return Response.success("登陆成功",resultMap);
     }
 
