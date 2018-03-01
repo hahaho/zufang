@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class HouseVo{
 
-	private Long id;
+	private Long houseId;
 	
     private String code;//编码（公寓编号【省市区地区码后两位+两位自增数字】后两位+5位随机数）
 
@@ -89,25 +89,25 @@ public class HouseVo{
 
     private Byte hezuResource;//出租介绍
 
-	private String longitude;//经度
+	private double longitude;//经度
 	
-	private String latitude;//维度
+	private double latitude;//维度
 	
 	private BigDecimal roomAcreage;//单间房屋面积
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
@@ -370,12 +370,13 @@ public class HouseVo{
 	public void setHouseCode(String houseCode) {
 		this.houseCode = houseCode;
 	}
-	public Long getId() {
-		return id;
+	
+	public Long getHouseId() {
+		return houseId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setHouseId(Long houseId) {
+		this.houseId = houseId;
 	}
 
 	public String getLocationId() {

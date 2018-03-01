@@ -25,11 +25,14 @@
 	        <if test="apartmentName!=null and apartmentName!=''">
 	            AND apart.name LIKE '%${apartmentName}%'
 	        </if>
-	        <if test="title!=null and title!=''"> 
-	            AND house.title LIKE '%${title}%'
+	        <if test="houseTitle!=null and houseTitle!=''"> 
+	            AND house.title LIKE '%${houseTitle}%'
 	        </if>
-	        <if test="code!=null and code!=''"> 
-	            AND house.code = #{code} 
+	        <if test="houseCode!=null and houseCode!=''"> 
+	            AND house.code = #{houseCode} 
+	        </if>
+	        <if test="province!=null and province!=''">
+	            AND location.province = #{province} 
 	        </if>
 	        <if test="city!=null and city!=''">
 	            AND location.city = #{city} 
@@ -102,18 +105,7 @@
     <select id ="getHouseListsCount" resultType="java.lang.Integer"
        parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
         SELECT 
-            apart.id apartId,
-            apart.name apartName,
-            house.id houseId,
-            house.code houseCode,
-            house.title title,
-            house.status status,
-            house.community_name communityName,
-            house.room room,
-            house.hall hall,
-            house.wei  wei,
-            house.rent_amt rentAmt,
-            house.zujin_type zujinType
+            COUNT(*)
         FROM t_zfang_house house 
         left join t_zfang_apartment apart on house.apartment_id = apart.id
         left join t_zfang_house_location location on house.id = location.house_id
@@ -204,6 +196,15 @@
    		&查询条件 
    		公寓名称  小区名称 房源标题（名称）房源编码  所在城 区 街 房源状态 
    		面积 上下限 是否独立厨、卫，创建时间上下限
+   		
+   		AND CASE x.rent_type
+       		WHEN '1' THEN 
+       			<if test="houseAcreageFloor!=null and houseAcreageFloor!=''"> <![CDATA[ AND x.acreage >= #{houseAcreageFloor} ]]></if>
+       			<if test="houseAcreageCeiling!=null and houseAcreageCeiling!=''"> <![CDATA[ AND x.acreage <= #{houseAcreageCeiling} ]]></if>
+       		WHEN '2' THEN 
+       			<if test="houseAcreageFloor!=null and houseAcreageFloor!=''"> <![CDATA[ AND x.room_acreage >= #{houseAcreageFloor} ]]></if>
+       			<if test="houseAcreageCeiling!=null and houseAcreageCeiling!=''"> <![CDATA[ AND x.room_acreage <= #{houseAcreageCeiling} ]]></if>
+       	ELSE '其他' END
     -->
     <select id="getHouseListForPhoneAppointment" resultType="com.apass.zufang.domain.vo.HouseAppointmentVo" 
         parameterType="com.apass.zufang.domain.dto.HouseAppointmentQueryParams">
@@ -243,22 +244,18 @@
         	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a.`name` = '可做饭'
        	WHERE 1=1 
        	]]>
-       	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` = #{apartmentName} </if>
-       	<if test="communityName!=null and communityName!=''"> AND x.community_name = #{communityName} </if>
+       	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>
+       	<if test="communityName!=null and communityName!=''"> AND x.community_name LIKE '%${communityName}%' </if>
        	<if test="houseTitle!=null and houseTitle!=''"> AND x.title = #{houseTitle} </if>
        	<if test="houseCode!=null and houseCode!=''"> AND x.`code` = #{houseCode} </if>
        	<if test="houseCity!=null and houseCity!=''"> AND z.city = #{houseCity} </if>
        	<if test="houseDistrict!=null and houseDistrict!=''"> AND z.district = #{houseDistrict} </if>
        	<if test="houseStreet!=null and houseStreet!=''"> AND z.street = #{houseStreet} </if>
        	<if test="houseStatus!=null and houseStatus!=''"> AND x.`status` = #{houseStatus} </if>
-       	AND CASE x.rent_type
-       		WHEN '1' THEN 
-       			<if test="houseAcreageFloor!=null and houseAcreageFloor!=''"> <![CDATA[ AND x.acreage >= #{houseAcreageFloor} ]]></if>
-       			<if test="houseAcreageCeiling!=null and houseAcreageCeiling!=''"> <![CDATA[ AND x.acreage <= #{houseAcreageCeiling} ]]></if>
-       		WHEN '2' THEN 
-       			<if test="houseAcreageFloor!=null and houseAcreageFloor!=''"> <![CDATA[ AND x.room_acreage >= #{houseAcreageFloor} ]]></if>
-       			<if test="houseAcreageCeiling!=null and houseAcreageCeiling!=''"> <![CDATA[ AND x.room_acreage <= #{houseAcreageCeiling} ]]></if>
-       	ELSE '其他' END
+       	
+       	<if test="houseAcreageFloor!=null and houseAcreageFloor!=''"> <![CDATA[ AND x.acreage >= #{houseAcreageFloor} ]]></if>
+    	<if test="houseAcreageCeiling!=null and houseAcreageCeiling!=''"> <![CDATA[ AND x.acreage <= #{houseAcreageCeiling} ]]></if>
+       			
        	<if test="houseCreatedFloor!=null and houseCreatedFloor!=''"> <![CDATA[ AND x.created_time >= #{houseCreatedFloor} ]]></if>
        	<if test="houseCreatedCeiling!=null and houseCreatedCeiling!=''"> <![CDATA[ AND x.created_time <= #{houseCreatedCeiling} ]]></if>
        	<if test="houseKitchenFalg!=null and houseKitchenFalg!=''"> AND (CASE WHEN a1.id >0 THEN '是' ELSE '否' END) = #{houseKitchenFalg} </if>

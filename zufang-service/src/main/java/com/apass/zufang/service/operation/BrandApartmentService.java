@@ -68,13 +68,13 @@ public class BrandApartmentService {
 		List<HouseVo> list = houseMapper.getHotHouseList(entity);
 		for(HouseVo vo : list){
 			if(vo.getSortNo()==sorNo-1){
-				houseD = houseService.readEntity(vo.getId());
+				houseD = houseService.readEntity(vo.getHouseId());
 				houseD.setSortNo(sorNo);
 				houseD.setUpdatedUser(user);
 				houseD.setUpdatedTime(new Date());
 			}
 			if(vo.getSortNo()==sorNo){
-				houseU = houseService.readEntity(vo.getId());
+				houseU = houseService.readEntity(vo.getHouseId());
 				houseU.setSortNo(sorNo);
 				houseU.setUpdatedUser(user);
 				houseU.setUpdatedTime(new Date());
@@ -111,13 +111,13 @@ public class BrandApartmentService {
 		List<HouseVo> list = houseMapper.getHotHouseList(entity);
 		for(HouseVo vo : list){
 			if(vo.getSortNo()==sorNo){
-				houseD = houseService.readEntity(vo.getId());
+				houseD = houseService.readEntity(vo.getHouseId());
 				houseD.setSortNo(sorNo+1);
 				houseD.setUpdatedUser(user);
 				houseD.setUpdatedTime(new Date());
 			}
 			if(vo.getSortNo()==sorNo+1){
-				houseU = houseService.readEntity(vo.getId());
+				houseU = houseService.readEntity(vo.getHouseId());
 				houseU.setSortNo(sorNo);
 				houseU.setUpdatedUser(user);
 				houseU.setUpdatedTime(new Date());
@@ -154,7 +154,7 @@ public class BrandApartmentService {
 		List<HouseVo> list = houseMapper.getHotHouseList(entity);
 		Integer sort = 0;
         for(HouseVo en : list){
-        	house = houseService.readEntity(en.getId());
+        	house = houseService.readEntity(en.getHouseId());
         	house.setSortNo(++sort);
         	house.setUpdatedTime(new Date());
         	house.setUpdatedUser(user);
@@ -209,10 +209,10 @@ public class BrandApartmentService {
 			}
 		}
         for(HouseVo en : list){
-            if(en.getSortNo()<sort||en.getId().equals(id)){
+            if(en.getSortNo()<sort||en.getHouseId().equals(id)){
                 continue;
             }
-            house = houseService.readEntity(en.getId());
+            house = houseService.readEntity(en.getHouseId());
             house.setSortNo(++sort2);
             house.setUpdatedTime(new Date());
             house.setUpdatedUser(user);
@@ -267,10 +267,10 @@ public class BrandApartmentService {
 		entity.setHouseType((byte)2);
 		List<HouseVo> list = houseMapper.getHotHouseList(entity);
         for(HouseVo en : list){
-            if(en.getSortNo()<sort||en.getId().equals(id)){
+            if(en.getSortNo()<sort||en.getHouseId().equals(id)){
                 continue;
             }
-            house = houseService.readEntity(en.getId());
+            house = houseService.readEntity(en.getHouseId());
             house.setSortNo(++sort2);
             house.setUpdatedTime(new Date());
             house.setUpdatedUser(user);

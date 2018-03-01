@@ -55,6 +55,7 @@ public class BaseMybatisRepository<T, ID extends Serializable> extends SqlSessio
     /**
      * @see org.springframework.dao.support.DaoSupport#initDao()
      */
+    @Override
     public void initDao() throws Exception {
         Type type = super.getClass().getGenericSuperclass();
         if (type != null && type instanceof ParameterizedType) {
@@ -77,6 +78,7 @@ public class BaseMybatisRepository<T, ID extends Serializable> extends SqlSessio
      * 
      * @see SqlSessionDaoSupport#setSqlSessionFactory(SqlSessionFactory)
      */
+    @Override
     @Autowired
     public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
         super.setSqlSessionFactory(sqlSessionFactory);

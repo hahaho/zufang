@@ -11,4 +11,6 @@ import com.apass.zufang.domain.entity.HousePeizhi;
 public interface HousePeizhiMapper extends GenericMapper<HousePeizhi,Long>{
 	
 	List<HousePeizhi> getPeiZhiByHouseId(Long houseId);
+	
+	void deletePeiZhiByHouseId(Long houseId);
 }

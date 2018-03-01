@@ -31,4 +31,10 @@ public interface HouseImgMapper extends GenericMapper<HouseImg,Long>{
 	 * @return
      */
 	public List<HouseImg> getImgByRealHouseId(Long houseId);
+	
+	/**
+	 * 根据房屋Id，删除图片信息
+	 * @param houseId
+	 */
+	void deleteImgByHouseId(Long houseId);
 }

@@ -55,12 +55,18 @@ public class BrandApartmentController {
         	String apartmentName = CommonUtils.getValue(map, "apartmentName");//公寓名称
         	String houseTitle = CommonUtils.getValue(map, "houseTitle");//房源名称
         	String houseCode = CommonUtils.getValue(map, "houseCode");//房源编码
-        	String houseArea = CommonUtils.getValue(map, "houseArea");//公寓所在区
+        	String province = CommonUtils.getValue(map, "province");//公寓所在省份
+        	String city = CommonUtils.getValue(map, "city");//公寓所在省份
+        	String district = CommonUtils.getValue(map, "district");//公寓所在省份
+        	String street = CommonUtils.getValue(map, "street");//公寓所在省份
         	HouseQueryParams entity = new HouseQueryParams();
         	entity.setApartmentName(apartmentName);
         	entity.setHouseTitle(houseTitle);
         	entity.setHouseCode(houseCode);
-        	entity.setHouseArea(houseArea);
+        	entity.setProvince(province);
+        	entity.setCity(city);
+        	entity.setDistrict(district);
+        	entity.setStreet(street);
         	if(StringUtils.isNotBlank(houseType)){
         		entity.setHouseType((byte)Integer.parseInt(houseType));
         	}
