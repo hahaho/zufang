@@ -3,6 +3,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.Apartment;
@@ -51,10 +52,16 @@ public class ApartmentService {
 	 * @param entity
 	 * @param username
 	 * @return
+	 * @throws BusinessException 
 	 */
 	@Transactional(rollbackFor = { Exception.class})
-	public Response addApartment(Apartment entity,String username) {
+	public Response addApartment(Apartment entity,String username,String code) throws BusinessException {
+		Apartment entity2 = new Apartment();
+		entity2.setCode(code);
+		Integer count = apartmentMapper.getApartmentListCodeCount(entity);
+		String cou = ++count<10?"0"+count:count.toString();
 		entity.fillAllField(username);
+		entity.setCode(code+cou);
 		if(createEntity(entity)==1){
 			return Response.success("公寓信息新增成功！");
 		}
