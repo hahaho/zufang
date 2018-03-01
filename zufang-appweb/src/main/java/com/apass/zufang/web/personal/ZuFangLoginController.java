@@ -86,20 +86,20 @@ public class ZuFangLoginController {
 	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password+" smsType—————>"+smsType+" code—————>"+code);
 	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
 	        		//用户id不合规
-	        		 return Response.success("用户id不合规");
+	        		 return Response.fail("用户id不合规");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
 	        		//手机号不合规
-	        		 return Response.success("手机号不合规");
+	        		 return Response.fail("手机号不合规");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(password)
 	        			&& password.length()>6 && password.length()<20){
 	        		//密码不合规
-	        		 return Response.success("密码不合规");
+	        		 return Response.fail("密码不合规");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(smsType)){
 	        		//手机号不合规
-	        		 return Response.success("类型不能为空");
+	        		 return Response.fail("类型不能为空");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(code)){
 	        		//手机号不合规
-	        		 return Response.success("验证码不能为空");
+	        		 return Response.fail("验证码不能为空");
 	        	}
 	        	
 	        	//验证码校验
@@ -208,7 +208,7 @@ public class ZuFangLoginController {
 		        		//生成token   
 		        		String token = tokenManager.createToken( String.valueOf(userId), mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
 		        		resultMap.put("token", token);
-		        		resultMap.put("ACCOUNT", mobile);
+		        		resultMap.put("account", mobile);
 		        		resultMap.put("userId", userId);
 		        		return Response.success("验证码真确登录成功",resultMap);
 	        		}else{
