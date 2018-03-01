@@ -38,7 +38,7 @@ public class HouseImgService {
 		return houseImgMapper.getImgByHouseId(houseImg);
 	}
 	
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void insertImg(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo || CollectionUtils.isEmpty(houseVo.getPictures())){
 			throw new BusinessException("图片参数不能为空!");
