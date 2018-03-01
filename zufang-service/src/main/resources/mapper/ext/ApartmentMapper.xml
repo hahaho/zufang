@@ -31,7 +31,7 @@
     <!-- getApartmentListCodeCount-->
     <sql id="QueryConditionSqlBackupBackup">
         <where>
-            <if test="code!=null and code!=''"> AND code = like '%${code}%' </if>
+            <if test="code!=null and code!=''"> AND code like '%${code}%' </if>
         </where>
     </sql>
     <!-- getApartmentListCodeCount -->
