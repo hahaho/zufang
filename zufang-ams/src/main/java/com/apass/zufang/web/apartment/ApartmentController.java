@@ -48,7 +48,11 @@ public class ApartmentController {
         ResponsePageBody<Apartment> respBody = new ResponsePageBody<Apartment>();
         try {
         	String name = CommonUtils.getValue(map, "name");//公寓名称
+        	String page = CommonUtils.getValue(map, "page");
+        	String rows = CommonUtils.getValue(map, "rows");
         	Apartment entity = new Apartment();
+        	entity.setPage(Integer.parseInt(page));
+        	entity.setRows(Integer.parseInt(rows));
         	entity.setName(name);
         	entity.setIsDelete("00");
         	respBody = apartmentService.getApartmentList(entity);
