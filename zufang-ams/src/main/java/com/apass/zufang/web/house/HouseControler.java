@@ -5,16 +5,16 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.common.ListeningRegExpUtils;
@@ -27,24 +27,14 @@ import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
-import com.apass.zufang.utils.FileUtilsCommons;
-import com.apass.zufang.utils.ImageTools;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-
-@Controller
-@RequestMapping("/house")
+@Path("/house")
+@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class HouseControler {
 
 	private static final Logger logger = LoggerFactory.getLogger(HouseControler.class);
-	
-	/** * 图片服务器地址*/
-    @Value("${nfs.rootPath}")
-    private String rootPath;
-    
-    /*** 房屋图片存放地址*/
-    @Value("${nfs.house}")
-    private String nfsHouse;
 	
 	@Autowired
 	private HouseService houseService;
@@ -53,11 +43,26 @@ public class HouseControler {
      * 房屋信息列表查询
      * @return
      */
-	@ResponseBody
-	@RequestMapping("/queryHouse")
-	public Response getHouseList(HouseQueryParams dto){
-		ResponsePageBody<HouseBagVo> respBody = new ResponsePageBody<HouseBagVo>();
+	@POST
+	@Path("/queryHouse")
+	public Response getHouseList(Map<String,Object> paramMap){
+		ResponsePageBody<HouseBagVo> respBody = new ResponsePageBody<>();
         try {
+        	String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");//公寓名称
+        	String houseTitle = CommonUtils.getValue(paramMap, "houseTitle");//房源名称
+        	String houseCode = CommonUtils.getValue(paramMap, "houseCode");//房源编码
+        	String province = CommonUtils.getValue(paramMap, "province");//公寓所在省份
+        	String city = CommonUtils.getValue(paramMap, "city");//公寓所在省份
+        	String district = CommonUtils.getValue(paramMap, "district");//公寓所在省份
+        	String street = CommonUtils.getValue(paramMap, "street");//公寓所在省份
+        	HouseQueryParams dto = new HouseQueryParams();
+        	dto.setApartmentName(apartmentName);
+        	dto.setHouseTitle(houseTitle);
+        	dto.setHouseCode(houseCode);
+        	dto.setProvince(province);
+        	dto.setCity(city);
+        	dto.setDistrict(district);
+        	dto.setStreet(street);
         	respBody = houseService.getHouseListExceptDelete(dto);
         	respBody.setMsg("房屋信息列表查询成功!");
         	return Response.success("查询房屋信息成功！", respBody);
@@ -74,8 +79,8 @@ public class HouseControler {
 	 * @param paramMap
 	 * @return
 	 */
-	@ResponseBody
-    @RequestMapping("/addHouse")
+	@POST
+	@Path("/addHouse")
 	public Response addHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("add house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -96,8 +101,8 @@ public class HouseControler {
 	 * 修改房屋信息
 	 * @return
 	 */
-	@ResponseBody
-	@RequestMapping("/editHouse")
+	@POST
+	@Path("/editHouse")
 	public Response editHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("edit house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -119,8 +124,8 @@ public class HouseControler {
 	 * @param paramMap
 	 * @return
 	 */
-	@ResponseBody
-	@RequestMapping("/delHouse")
+	@POST
+	@Path("/delHouse")
 	public Response delHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("del house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -138,8 +143,8 @@ public class HouseControler {
 	}
     
     
-	@ResponseBody
-	@RequestMapping("/downHouse")
+	@POST
+	@Path("/downHouse")
 	public Response downHouse(Map<String, Object> paramMap){
     	try {
     		logger.info("upOrDown house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -156,8 +161,8 @@ public class HouseControler {
 		}
     }
     
-	@ResponseBody
-	@RequestMapping("/upHouse")
+	@POST
+	@Path("/upHouse")
     public Response upHouse(Map<String, Object> paramMap){
     	try {
     		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -174,8 +179,8 @@ public class HouseControler {
 		}
     }
     
-	@ResponseBody
-	@RequestMapping("/bathUpHouse")
+	@POST
+	@Path("/bathUpHouse")
     public Response batchUp(Map<String, Object> paramMap){
     	try {
     		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -192,8 +197,8 @@ public class HouseControler {
 		}
     }
     
-	@ResponseBody
-	@RequestMapping("/delpicture")
+	@POST
+	@Path("/delpicture")
     public Response deletePicture(Map<String, Object> paramMap){
     	try {
     		logger.info("delpicture paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -210,39 +215,6 @@ public class HouseControler {
 		}
     }
 	
-    
-    @ResponseBody
-    @RequestMapping(value = "/uppicture", method = RequestMethod.POST)
-    public Response uploadPicture(MultipartFile file){
-    	try{
-    		if(null == file){
-        		throw new BusinessException("上传文件不能为空!");
-        	}
-    		boolean checkImgType = ImageTools.checkImgType(file);// 图片类型
-        	boolean checkImgSize320 = ImageTools.checkImgSize(file,750,320);// 尺寸
-        	boolean checkImgSize562 = ImageTools.checkImgSize(file, 750, 562);//尺寸
-        	int size = file.getInputStream().available();
-        	
-        	if(!((checkImgType && checkImgSize320) || (checkImgType && checkImgSize562))){
-        		throw new BusinessException("文件尺寸不符,上传图片尺寸必须是宽：750px,高：562px或者320px,格式：.jpg,.png");
-        	}else if(size > 1024 * 1024 * 2){
-        		file.getInputStream().close();
-        		throw new BusinessException("文件不能大于2MB!");
-        	}
-        	String fileName = "logo_" + System.currentTimeMillis() + file.getName();
-            String url = nfsHouse + fileName;
-            /*** 上传文件*/
-            FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
-            return Response.success("success",url);
-        }catch (BusinessException e){
-			logger.error("delpicture businessException---->{}",e);
-			return Response.fail(e.getErrorDesc());
-		}catch (Exception e) {
-			logger.error("上传house logo失败!", e);
-            return Response.fail("上传商品大图失败!");
-        }
-    }
-    
 	/**
 	 * 验证所传参数
 	 * @param paramMap
@@ -250,8 +222,8 @@ public class HouseControler {
 	 */
 	public void validateParams(Map<String, Object> paramMap) throws BusinessException{
 		
-		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");//公寓id
-		String phone = CommonUtils.getValue(paramMap,"phone");//管理员手机号
+		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");//公寓Id
+		String phone = CommonUtils.getValue(paramMap,"phone");//管家联系方式
 		String rentType = CommonUtils.getValue(paramMap, "rentType");//出租方式
 		String communityName = CommonUtils.getValue(paramMap, "communityName");//小区名称
 		
@@ -261,9 +233,6 @@ public class HouseControler {
 	    String district = CommonUtils.getValue(paramMap, "district"); //区
 	    String detailAddr = CommonUtils.getValue(paramMap, "detailAddr"); // 详细地址
 	    
-	    String acreage = CommonUtils.getValue(paramMap, "acreage");
-	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
-	    
 	    String room = CommonUtils.getValue(paramMap, "room"); //室
 	    String hall = CommonUtils.getValue(paramMap, "hall"); //厅
 	    String wei = CommonUtils.getValue(paramMap, "wei"); //卫
@@ -272,21 +241,22 @@ public class HouseControler {
 	    
 	    String liftType = CommonUtils.getValue(paramMap, "liftType");//有无电梯
 	    
+	    String chaoxiang = CommonUtils.getValue(paramMap, "chaoxiang");//房屋朝向
+	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");//装修情况
 	    
-	    String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
+	    String acreage = CommonUtils.getValue(paramMap, "acreage");//总面积
+	    
+	    String totalDoors = CommonUtils.getValue(paramMap, "totalDoors");//几户合租
 	    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
 	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
+	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
 	    
 	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
 	    
-	    String rentAmt = CommonUtils.getValue(paramMap, "rentAmt");
-	    String zujinType = CommonUtils.getValue(paramMap, "zujinType");
+	    String rentAmt = CommonUtils.getValue(paramMap, "rentAmt");//租金
+	    String zujinType = CommonUtils.getValue(paramMap, "zujinType");//租金支付方式
 	    
-	    String chaoxiang = CommonUtils.getValue(paramMap, "chaoxiang");
-	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");
-	    
-	    String title = CommonUtils.getValue(paramMap, "title");
-	    
+	    String title = CommonUtils.getValue(paramMap, "title");//房屋标题
 	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
 	    
 	    ValidateUtils.isNotBlank(apartmentId, "请选择所属公寓");
@@ -297,6 +267,7 @@ public class HouseControler {
 		ValidateUtils.isNotBlank(rentType, "请选择出租方式");
 		ValidateUtils.isNotBlank(communityName, "请填写小区名称");
 		ValidateUtils.checkLength(communityName, 2, 20, "2-20个字，可填写汉字，数字，不能填写特殊字符");
+
 	    ValidateUtils.isNotBlank(province, "请选择省份");
 	    ValidateUtils.isNotBlank(city, "请选择城市");
 	    ValidateUtils.isNotBlank(district, "请选择区域");
@@ -330,7 +301,7 @@ public class HouseControler {
 	    	ValidateUtils.isNotBlank(hezuResource, "请选择出租间介绍");
 	    	ValidateUtils.isNotBlank(hezuChaoxiang, "请选择出租间朝向");
 	    	
-	    	ValidateUtils.isNotBlank(roomAcreage, "请填写房屋面积");
+	    	ValidateUtils.isNotBlank(roomAcreage, "请填写出租间房屋面积");
 	    	ValidateUtils.checkNonNumberRange(roomAcreage, 1, 9999, "房屋面积");
 	    }
 	    

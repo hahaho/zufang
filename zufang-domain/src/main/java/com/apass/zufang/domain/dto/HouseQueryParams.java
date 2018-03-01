@@ -19,14 +19,12 @@ public class HouseQueryParams extends QueryParams{
 	private String apartmentName;//公寓名称
 	private String houseTitle;//房源名称
 	private String houseCode;//房源编码
-	private String houseArea;//公寓所在区
+	private String province;//公寓所在省份
+	private String city;//公寓所在城市
+	private String district;//公寓所在区
+	private String street;//公寓所在街道
 	private String isDelete;//房源是否删除
 	private List<Integer> status;//状态
-	private String province;//省
-	private String city;//市
-	private String district;//区
-	private String street;//街道
-	
 	/**
 	 *
 	 */
@@ -82,12 +80,7 @@ public class HouseQueryParams extends QueryParams{
 	public void setHouseCode(String houseCode) {
 		this.houseCode = houseCode;
 	}
-	public String getHouseArea() {
-		return houseArea;
-	}
-	public void setHouseArea(String houseArea) {
-		this.houseArea = houseArea;
-	}
+
 	public String getIsDelete() {
 		return isDelete;
 	}
