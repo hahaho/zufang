@@ -106,9 +106,14 @@ public class HouseInfoController {
 	public Response getNearHouseByCoordinate(Map<String, Object> paramMap) {
 		String latitude = CommonUtils.getValue(paramMap, "latitude");// 纬度
 		String longitude = CommonUtils.getValue(paramMap, "longitude");// 经度
-
+		String province = CommonUtils.getValue(paramMap, "province");// 纬度
+		String city = CommonUtils.getValue(paramMap, "city");// 经度
 		GfbLogUtils.info("根据houseId查询查询附近房源getNearHouseByCoordinate,全量参数信息:"
 				+ paramMap);
+		
+		if (StringUtils.isAnyEmpty(province,city)) {
+			return Response.fail("省和市不能为空");
+		}
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			if (StringUtils.isAnyBlank(latitude, longitude)) {
@@ -125,7 +130,7 @@ public class HouseInfoController {
 			// 附近房源信息
 			List<HouseInfoRela> nearlyHouseInfoList = houseInfoService
 					.getNearHouseByCoordinate(Double.parseDouble(latitude),
-							Double.parseDouble(longitude));
+							Double.parseDouble(longitude),province,city);
 			resultMap.put("nearlyHouseInfoList", nearlyHouseInfoList);
 			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {

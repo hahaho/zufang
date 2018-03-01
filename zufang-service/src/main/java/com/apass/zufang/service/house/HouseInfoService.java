@@ -116,61 +116,72 @@ public class HouseInfoService {
 	 * @return
 	 */
 	public List<HouseInfoRela> getNearHouseByCoordinate(Double latitude,
-			Double longitude) {
-		List<HouseInfoRela> result = new ArrayList<HouseInfoRela>();
+			Double longitude,String province,String city) {
 		try {
-			int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
 			// setp 1 查询房源
 			HouseInfoRela queryInfo = new HouseInfoRela();
-			// queryInfo.setProvince(houseInfo.getProvince());
-			// queryInfo.setCity(houseInfo.getCity());
+			 queryInfo.setProvince(province);
+			 queryInfo.setCity(city);
 			List<HouseInfoRela> houseInfoList = houseInfoRelaMapper
 					.getHouseInfoRelaList(queryInfo);
 			if (houseInfoList == null || houseInfoList.size() <= 0) {
 				return null;
 			}
-			// setp 3 计算目标房源和附近房源的距离，并绑定映射关系
-			Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
-			double[] resultArray = new double[houseInfoList.size()];
-			for (HouseInfoRela houseLocation : houseInfoList) {
-				double distance = this.distanceSimplify(latitude, longitude,
-						houseLocation.getLatitude(),
-						houseLocation.getLongitude());
-				if(houseDistanceMap.get(distance)!=null){
-					BigDecimal distanceBig = new BigDecimal(distance);
-					//  相同的距离 需要处理  （后一个加上0.0001）
-					distanceBig=distanceBig.add(new BigDecimal("0.0001"));
-					distance=distanceBig.doubleValue();
-				}
-				houseDistanceMap.put(distance, houseLocation.getHouseId());
-				Arrays.fill(resultArray, distance);
-			}
-			// setp 4 对距离按照升序排序
-			Arrays.sort(resultArray);
-			// setp 5 取得前number的houseId 的list
-			List<Long> houseIdList = new ArrayList<Long>();
-			int value = resultArray.length > number ? number
-					: resultArray.length;
-			for (int i = 0; i < value; i++) {
-				double disance = resultArray[i];
-				houseIdList.add(houseDistanceMap.get(disance));
-			}
-			// setp 6 根据list 查询附近房源的具体信息
-//			Map<String, Object> paraMap = new HashMap<String, Object>();
-//			paraMap.put("houseIdList", houseIdList);
-//			result = houseInfoRelaMapper.getHouseInfoByIdList(paraMap);
-			for(Long newHouseId:houseIdList){
-				HouseInfoRela finalHouseInfo = houseInfoRelaMapper.getHouseInfoByHouseId(newHouseId);
-				result.add(finalHouseInfo);
-			}
-			if (result != null && result.size() != 0) {
-				this.dealHouseRela(result);
-			}
-			return result;
+			// setp 2 根据目标经纬度和房源list 根据距离进行排序并取前number的房源数据
+			return calculateDistanceAndSort(latitude, longitude, houseInfoList);
 		} catch (Exception e) {
 			LOGGER.error("根据坐标查询附近房源getNearbyhouseInfo出错==》", e);
 			throw e;
 		}
+	}
+	
+    /**
+     * 根据目标经纬度和房源list 根据距离进行排序并取前number的房源数据
+     * 
+     * @param latitude
+     * @param longitude
+     * @param houseInfoList
+     * @return
+     */
+	public List<HouseInfoRela> calculateDistanceAndSort(Double latitude, Double longitude,
+			List<HouseInfoRela> houseInfoList) {
+		int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
+		List<HouseInfoRela> searchHouseInfoList = new ArrayList<HouseInfoRela>();
+		// setp 3 计算目标房源和附近房源的距离，并绑定映射关系
+		Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
+		double[] resultArray = new double[houseInfoList.size()];
+			for (int i=0 ;i< houseInfoList.size();i++) {
+				HouseInfoRela houseLocation=houseInfoList.get(i);
+			double distance = this.distanceSimplify(latitude, longitude,
+					houseLocation.getLatitude(), houseLocation.getLongitude());
+			if (houseDistanceMap.get(distance) != null) {
+				BigDecimal distanceBig = new BigDecimal(distance);
+				// 相同的距离 需要处理 （后一个加上0.0001）
+				distanceBig = distanceBig.add(new BigDecimal("0.0001"));
+				distance = distanceBig.doubleValue();
+			}
+			houseDistanceMap.put(distance, houseLocation.getHouseId());
+			resultArray[i]=distance;
+		}
+		// setp 4 对距离按照升序排序
+		Arrays.sort(resultArray);
+		// setp 5 取得前number的houseId 的list
+		List<Long> houseIdList = new ArrayList<Long>();
+		int value = resultArray.length > number ? number : resultArray.length;
+		for (int i = 0; i < value; i++) {
+			double disance = resultArray[i];
+			houseIdList.add(houseDistanceMap.get(disance));
+		}
+		// setp 6 根据list 查询附近房源的具体信息
+		for (Long newHouseId : houseIdList) {
+			HouseInfoRela finalHouseInfo = houseInfoRelaMapper
+					.getHouseInfoByHouseId(newHouseId);
+			searchHouseInfoList.add(finalHouseInfo);
+		}
+		if (searchHouseInfoList != null && searchHouseInfoList.size() != 0) {
+			this.dealHouseRela(searchHouseInfoList);
+		}
+		return searchHouseInfoList;
 	}
 
 	/**
@@ -183,9 +194,7 @@ public class HouseInfoService {
 	 * @return
 	 */
 	public List<HouseInfoRela> getNearbyhouseId(long houseId) {
-		List<HouseInfoRela> result = new ArrayList<HouseInfoRela>();
 		try {
-			int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
 			// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 			HouseInfoRela queryCondition = new HouseInfoRela();
 			queryCondition.setHouseId(houseId);
@@ -201,44 +210,8 @@ public class HouseInfoService {
 			if (houseInfoList == null || houseInfoList.size() <= 0) {
 				return null;
 			}
-			// setp 3 计算目标房源和附近房源的距离，并绑定映射关系
-			Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
-			double[] resultArray = new double[houseInfoList.size()];
-			for (HouseInfoRela houseLocation : houseInfoList) {
-				double distance = distanceSimplify(houseInfo.getLatitude(),
-						houseInfo.getLongitude(), houseLocation.getLatitude(),
-						houseLocation.getLongitude());
-				if(houseDistanceMap.get(distance)!=null){
-					BigDecimal distanceBig = new BigDecimal(distance);
-					//  相同的距离 需要处理  （后一个加上0.0001）
-					distanceBig=distanceBig.add(new BigDecimal("0.0001"));
-					distance=distanceBig.doubleValue();
-				}
-				houseDistanceMap.put(distance, houseLocation.getHouseId());
-				Arrays.fill(resultArray, distance);
-			}
-			// setp 4 对距离按照升序排序
-			Arrays.sort(resultArray);
-			// setp 5 取得前number的houseId 的list
-			List<Long> houseIdList = new ArrayList<Long>();
-			int value = resultArray.length > number ? number
-					: resultArray.length;
-			for (int i = 0; i < value; i++) {
-				double disance = resultArray[i];
-				houseIdList.add(houseDistanceMap.get(disance));
-			}
-			// setp 6 根据list 查询附近房源的具体信息
-//			Map<String, Object> paraMap = new HashMap<String, Object>();
-//			paraMap.put("houseIdList", houseIdList);
-			for(Long newHouseId:houseIdList){
-				HouseInfoRela finalHouseInfo = houseInfoRelaMapper.getHouseInfoByHouseId(newHouseId);
-				result.add(finalHouseInfo);
-			}
-//			result = houseInfoRelaMapper.getHouseInfoByHouseId(paraMap);
-			if (result != null && result.size() != 0) {
-				this.dealHouseRela(result);
-			}
-			return result;
+			// setp 3 根据目标经纬度和房源list 根据距离进行排序并取前number的房源数据
+			return calculateDistanceAndSort(houseInfo.getLatitude(), houseInfo.getLongitude(), houseInfoList);
 		} catch (Exception e) {
 			LOGGER.error("获取附近房源方法getNearbyhouseInfo出错==》", e);
 			throw e;
