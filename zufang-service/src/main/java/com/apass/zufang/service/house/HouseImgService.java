@@ -1,5 +1,6 @@
 
 package com.apass.zufang.service.house;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -21,7 +22,7 @@ public class HouseImgService {
 	 * deleteImgByHouseId
 	 * @param houseId
 	 */
-	@Transactional(rollbackFor = { Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void deleteImgByHouseId(Long houseId){
 		houseImgMapper.deleteImgByHouseId(houseId);
 	}
@@ -45,6 +46,9 @@ public class HouseImgService {
 		}
 		for (String pic : houseVo.getPictures()) {
 			HouseImg img = new HouseImg();
+			if(null == houseVo.getCreatedTime()){
+				houseVo.setCreatedTime(new Date());
+			}
 			img.setHouseId(houseVo.getHouseId());
 			img.setCreatedTime(houseVo.getCreatedTime());
 			img.setUpdatedTime(houseVo.getUpdatedTime());
