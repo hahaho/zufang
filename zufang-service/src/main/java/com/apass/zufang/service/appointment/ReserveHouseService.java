@@ -28,6 +28,23 @@ public class ReserveHouseService {
 		return reserveHouseMapper.insertSelective(entity);
 	}
 	/**
+	 * updateEntity
+	 * @param entity
+	 * @return
+	 */
+	@Transactional(rollbackFor = { Exception.class})
+	public int updateEntity(ReserveHouse entity) {
+		return reserveHouseMapper.updateByPrimaryKeySelective(entity);
+	}
+	/**
+	 * readEntity
+	 * @param id
+	 * @return
+	 */
+	public ReserveHouse readEntity(Long id) {
+		return reserveHouseMapper.selectByPrimaryKey(id);
+	}
+	/**
 	 * 电话预约管理 房源列表查询
 	 * @param entity
 	 * @return
