@@ -126,13 +126,19 @@
         	x.community_name communityName,x.room room,x.hall hall,x.wei wei
         FROM t_zfang_house x
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
+       	join t_zfang_house_location z on z.house_id = x.house_id
        	WHERE 1=1 
        	]]>
     	<if test="houseType!=null and houseType!=''"> AND x.type = #{houseType} </if>
-    	<if test="apartmentName!=null and apartmentName!=''"> AND x.name = #{apartmentName} </if>
-    	<if test="houseTitle!=null and houseTitle!=''"> AND x.title = #{houseTitle} </if>
+    	<if test="apartmentName!=null and apartmentName!=''"> AND x.name LIKE '%${apartmentName}%' </if>
+    	<if test="houseTitle!=null and houseTitle!=''"> AND x.title LIKE '%${houseTitle}%' </if>
     	<if test="houseCode!=null and houseCode!=''"> AND x.code = #{houseCode} </if>
-    	<if test="houseArea!=null and houseArea!=''"> AND x.area = #{houseArea} </if>
+    	
+		<if test="province!=null and province!=''"> AND z.province = #{province} </if>
+        <if test="city!=null and city!=''"> AND z.city = #{city} </if>
+        <if test="district!=null and district!=''"> AND z.district = #{district} </if>
+        <if test="street!=null and street!=''"> AND z.street = #{street} </if>
+	        
     	<if test="isDelete!=null and isDelete!=''"> AND x.is_delete = #{isDelete} AND y.is_delete = #{isDelete}</if>
         <![CDATA[ 
         	ORDER BY x.type DESC,x.sort_no ASC,x.created_time DESC

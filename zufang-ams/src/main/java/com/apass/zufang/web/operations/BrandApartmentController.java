@@ -59,6 +59,8 @@ public class BrandApartmentController {
         	String city = CommonUtils.getValue(map, "city");//公寓所在省份
         	String district = CommonUtils.getValue(map, "district");//公寓所在省份
         	String street = CommonUtils.getValue(map, "street");//公寓所在省份
+        	String page = CommonUtils.getValue(map, "page");
+        	String rows = CommonUtils.getValue(map, "rows");
         	HouseQueryParams entity = new HouseQueryParams();
         	entity.setApartmentName(apartmentName);
         	entity.setHouseTitle(houseTitle);
@@ -67,6 +69,8 @@ public class BrandApartmentController {
         	entity.setCity(city);
         	entity.setDistrict(district);
         	entity.setStreet(street);
+        	entity.setPage(Integer.parseInt(page));
+        	entity.setRows(Integer.parseInt(rows));
         	if(StringUtils.isNotBlank(houseType)){
         		entity.setHouseType((byte)Integer.parseInt(houseType));
         	}
