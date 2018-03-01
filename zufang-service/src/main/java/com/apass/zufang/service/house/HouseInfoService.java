@@ -1,5 +1,6 @@
 package com.apass.zufang.service.house;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -136,8 +137,10 @@ public class HouseInfoService {
 						houseLocation.getLatitude(),
 						houseLocation.getLongitude());
 				if(houseDistanceMap.get(distance)!=null){
-					// TODO 相同的距离 需要处理  （后一个加上0.0001）
-//					distance=distance+"0.000001"
+					BigDecimal distanceBig = new BigDecimal(distance);
+					//  相同的距离 需要处理  （后一个加上0.0001）
+					distanceBig=distanceBig.add(new BigDecimal("0.0001"));
+					distance=distanceBig.doubleValue();
 				}
 				houseDistanceMap.put(distance, houseLocation.getHouseId());
 				Arrays.fill(resultArray, distance);
@@ -206,8 +209,10 @@ public class HouseInfoService {
 						houseInfo.getLongitude(), houseLocation.getLatitude(),
 						houseLocation.getLongitude());
 				if(houseDistanceMap.get(distance)!=null){
-					// TODO 相同的距离 需要处理  （后一个加上0.0001）
-//					distance=distance+"0.000001"
+					BigDecimal distanceBig = new BigDecimal(distance);
+					//  相同的距离 需要处理  （后一个加上0.0001）
+					distanceBig=distanceBig.add(new BigDecimal("0.0001"));
+					distance=distanceBig.doubleValue();
 				}
 				houseDistanceMap.put(distance, houseLocation.getHouseId());
 				Arrays.fill(resultArray, distance);
