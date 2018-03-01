@@ -11,9 +11,6 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -21,14 +18,11 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
-
-import com.apass.zufang.domain.entity.House;
-
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-@Path("/house/audit")
+@Path("/application/house/audit")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class HouseAuditController {
@@ -74,7 +68,7 @@ public class HouseAuditController {
 	}
 	
 	@POST
-	@Path("/audit")
+	@Path("/review")
 	public Response auditHouse(Map<String,Object> paramMap){
 		try {
 			logger.info("audit house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -95,7 +89,6 @@ public class HouseAuditController {
 	@POST
 	@Path("/detail")
 	public Response detailHouse(Map<String,Object> paramMap){
-		
 		try {
 			String id = CommonUtils.getValue(paramMap, "id");
 			Map<String,Object> values = houseService.getHouseDetail(id);
