@@ -5,11 +5,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.common.CoordinateAddress;
@@ -17,24 +15,21 @@ import com.apass.zufang.domain.common.GaodeLocation;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
+@Component
 public class ObtainGaodeLocation {
-
-	private static final Logger logger = LoggerFactory.getLogger(ObtainGaodeLocation.class);
 
 	/**
 	 * key值
 	 */
 	@Value("${gaode.location.key}")
-	private static String KEY;
+	private String KEY;
 
-	private static Pattern pattern = Pattern.compile("\"location\":\"(\\d+\\.\\d+),(\\d+\\.\\d+)\"");
 	/**
 	 * 获取坐标信息
 	 * @param address
 	 * @return
 	 */
-	public static GaodeLocation addressToGPS(String address) {
+	public GaodeLocation addressToGPS(String address) {
 
 		try {
 
@@ -148,7 +143,7 @@ public class ObtainGaodeLocation {
 	 * @param address
 	 * @return
 	 */
-	public static String[] getLocation(String address) {
+	public String[] getLocation(String address) {
 
 		String[] result = null;
 		GaodeLocation resultDto = addressToGPS(address);
