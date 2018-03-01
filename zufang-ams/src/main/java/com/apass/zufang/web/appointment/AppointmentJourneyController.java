@@ -13,13 +13,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
+import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.common.utils.FarmartJavaBean;
+import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
+import com.apass.zufang.domain.entity.ReserveHouse;
+import com.apass.zufang.domain.entity.ReturnVisit;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
 import com.apass.zufang.service.appointment.AppointmentJourneyService;
 import com.apass.zufang.utils.ResponsePageBody;
+import com.apass.zufang.utils.ValidateUtils;
 /**
- * 预约行程
+ * 预约看房行程
  * @author Administrator
  *
  */
@@ -58,6 +65,60 @@ public class AppointmentJourneyController {
         return respBody;
     }
 	/**
+	 * 预约行程管理 预约看房记录编辑
+	 * @param map
+	 * @return
+	 */
+	@POST
+	@Path("/editReserveHouse")
+    public Response editReserveHouse(Map<String,Object> map) {
+        try {
+        	LOGGER.info("editReserveHouse map--->{}",GsonUtils.toJson(map));
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	ReserveHouse entity = validateParams2(map);
+        	return appointmentJourneyService.editReserveHouse(entity,username);
+        } catch (Exception e) {
+            LOGGER.error("editReserveHouse EXCEPTION --- --->{}", e);
+            return Response.fail("预约行程管理 预约看房记录编辑失败！");
+        }
+    }
+	/**
+	 * 预约行程管理 预约看房记录删除
+	 * @param map
+	 * @return
+	 */
+	@POST
+	@Path("/deleReserveHouse")
+    public Response deleReserveHouse(Map<String,Object> map) {
+        try {
+        	LOGGER.info("deleReserveHouse map--->{}",GsonUtils.toJson(map));
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	String reserveHouseId = CommonUtils.getValue(map, "id");//预约看房记录ID
+        	return appointmentJourneyService.deleReserveHouse(reserveHouseId,username);
+        } catch (Exception e) {
+            LOGGER.error("deleReserveHouse EXCEPTION --- --->{}", e);
+            return Response.fail("预约行程管理 预约看房记录删除失败！");
+        }
+    }
+	/**
+	 * 预约行程管理 客户回访记录新增
+	 * @param map
+	 * @return
+	 */
+	@POST
+	@Path("/addReturnVisit")
+    public Response addReturnVisit(Map<String,Object> map) {
+        try {
+        	LOGGER.info("addReturnVisit map--->{}",GsonUtils.toJson(map));
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	ReturnVisit entity = validateParams3(map);
+        	return appointmentJourneyService.addReturnVisit(entity,username);
+        } catch (Exception e) {
+            LOGGER.error("addReturnVisit EXCEPTION --- --->{}", e);
+            return Response.fail("预约行程管理 客户回访记录新增！");
+        }
+    }
+	/**
      * 验证参数
      * @param map
      * @throws BusinessException
@@ -75,6 +136,40 @@ public class AppointmentJourneyController {
     				entity = (ApprintmentJourneyQueryParams) FarmartJavaBean.farmartJavaB(entity, ApprintmentJourneyQueryParams.class, value, key);
     			}
     		}
+    	}
+    	return entity;
+	}
+    private ReserveHouse validateParams2(Map<String, Object> map) throws BusinessException{
+    	Set<Entry<String, Object>> set = map.entrySet();
+    	String key = null;
+    	Object value =null;
+    	ReserveHouse entity = new ReserveHouse();
+    	for(Entry<String, Object> entry : set){
+    		key = entry.getKey();
+    		value = entry.getValue();
+    		if(value==null){
+    			throw new BusinessException("参数" + key + "为空！");
+    		}else{
+    			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
+    		}
+    		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
+    	}
+    	return entity;
+	}
+    private ReturnVisit validateParams3(Map<String, Object> map) throws BusinessException{
+    	Set<Entry<String, Object>> set = map.entrySet();
+    	String key = null;
+    	Object value =null;
+    	ReturnVisit entity = new ReturnVisit();
+    	for(Entry<String, Object> entry : set){
+    		key = entry.getKey();
+    		value = entry.getValue();
+    		if(value==null){
+    			throw new BusinessException("参数" + key + "为空！");
+    		}else{
+    			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
+    		}
+    		entity = (ReturnVisit) FarmartJavaBean.farmartJavaB(entity, ReturnVisit.class, value, key);
     	}
     	return entity;
 	}

@@ -11,6 +11,9 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -18,7 +21,9 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
+
 import com.apass.zufang.domain.entity.House;
+
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;

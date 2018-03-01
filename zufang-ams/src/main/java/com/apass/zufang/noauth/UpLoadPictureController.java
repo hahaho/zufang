@@ -29,7 +29,7 @@ public class UpLoadPictureController {
 	
 	@ResponseBody
     @RequestMapping(value = "/uppicture", method = RequestMethod.POST)
-    public Response uploadPicture(MultipartFile file){
+	public Response uploadPicture(MultipartFile file){
     	try{
     		if(null == file){
         		throw new BusinessException("上传文件不能为空!");

@@ -23,14 +23,12 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-
 @Path("/house")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -81,8 +79,8 @@ public class HouseControler {
 	 * @param paramMap
 	 * @return
 	 */
-    @POST
-    @Path("/addHouse")
+	@POST
+	@Path("/addHouse")
 	public Response addHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("add house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -103,8 +101,8 @@ public class HouseControler {
 	 * 修改房屋信息
 	 * @return
 	 */
-    @POST
-    @Path("/editHouse")
+	@POST
+	@Path("/editHouse")
 	public Response editHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("edit house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -126,8 +124,8 @@ public class HouseControler {
 	 * @param paramMap
 	 * @return
 	 */
-    @POST
-    @Path("/delHouse")
+	@POST
+	@Path("/delHouse")
 	public Response delHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("del house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -145,8 +143,8 @@ public class HouseControler {
 	}
     
     
-    @POST
-    @Path("/downHouse")
+	@POST
+	@Path("/downHouse")
 	public Response downHouse(Map<String, Object> paramMap){
     	try {
     		logger.info("upOrDown house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -163,8 +161,8 @@ public class HouseControler {
 		}
     }
     
-    @POST
-    @Path("/upHouse")
+	@POST
+	@Path("/upHouse")
     public Response upHouse(Map<String, Object> paramMap){
     	try {
     		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -181,8 +179,8 @@ public class HouseControler {
 		}
     }
     
-    @POST
-    @Path("/bathUpHouse")
+	@POST
+	@Path("/bathUpHouse")
     public Response batchUp(Map<String, Object> paramMap){
     	try {
     		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -199,8 +197,8 @@ public class HouseControler {
 		}
     }
     
-    @POST
-    @Path("/delpicture")
+	@POST
+	@Path("/delpicture")
     public Response deletePicture(Map<String, Object> paramMap){
     	try {
     		logger.info("delpicture paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -269,7 +267,7 @@ public class HouseControler {
 		ValidateUtils.isNotBlank(rentType, "请选择出租方式");
 		ValidateUtils.isNotBlank(communityName, "请填写小区名称");
 		ValidateUtils.checkLength(communityName, 2, 20, "2-20个字，可填写汉字，数字，不能填写特殊字符");
-		
+
 	    ValidateUtils.isNotBlank(province, "请选择省份");
 	    ValidateUtils.isNotBlank(city, "请选择城市");
 	    ValidateUtils.isNotBlank(district, "请选择区域");
@@ -390,7 +388,7 @@ public class HouseControler {
 	    String title = CommonUtils.getValue(paramMap, "title");
 	    house.setTitle(title);
 		
-	    String houseId = CommonUtils.getValue(paramMap,"id");
+	    String houseId = CommonUtils.getValue(paramMap,"houseId");
 	    Date date = new Date();
 	    String operateName = SpringSecurityUtils.getCurrentUser();
 	    if(StringUtils.isBlank(houseId)){
