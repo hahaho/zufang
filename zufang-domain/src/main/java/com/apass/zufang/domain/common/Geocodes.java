@@ -15,7 +15,7 @@ public class Geocodes {
     // 城市编码  
     private String citycode;  
     // 地址所在的区  
-    private String district;  
+//    private String district;  
     // 区域编码  
     private String adcode;  
     // 坐标点  
@@ -46,24 +46,23 @@ public class Geocodes {
         this.province = province;  
     }  
   
-    public String getCity() {  
-        return city;  
-    }  
-  
-    public void setCity(String city) {  
-        this.city = city;  
-    }  
-  
-    public String getCitycode() {  
-        return citycode;  
-    }  
-  
-    public void setCitycode(String citycode) {  
-        this.citycode = citycode;  
-    }  
-  
-  
-    public String getAdcode() {  
+    public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCitycode() {
+		return citycode;
+	}
+
+	public void setCitycode(String citycode) {
+		this.citycode = citycode;
+	}
+
+	public String getAdcode() {  
         return adcode;  
     }  
   

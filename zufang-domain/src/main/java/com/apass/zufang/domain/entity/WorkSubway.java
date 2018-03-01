@@ -1,6 +1,7 @@
 package com.apass.zufang.domain.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class WorkSubway {
     private Long id;
@@ -20,8 +21,18 @@ public class WorkSubway {
     private Date createdTime;
 
     private Date updatedTime;
+    
+    private List<WorkSubway> resultList;
+    
+    public List<WorkSubway> getResultList() {
+		return resultList;
+	}
 
-    public Long getId() {
+	public void setResultList(List<WorkSubway> resultList) {
+		this.resultList = resultList;
+	}
+
+	public Long getId() {
         return id;
     }
 

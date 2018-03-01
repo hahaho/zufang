@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -235,7 +234,12 @@ public class ObtainGaodeLocation {
 		if (resultDto.getStatus().equals("0")) {
 			return result;
 		}
-		result = resultDto.getGeocodes().get(0).getLocation().split(",");
+		if(!resultDto.getGeocodes().isEmpty()){
+			result = resultDto.getGeocodes().get(0).getLocation().split(",");
+		}else{
+			result = "0.00,0.00".split(",");
+		}
+		
 
 		return result;
 	};
@@ -293,7 +297,7 @@ public class ObtainGaodeLocation {
 //		getWorksubwayObject("bsi", "289", "1519794878878");
 
 		// GaodeLocation data =
-		// ObtainGaodeLocation.addressToGPS("上海市东方明珠广播电视塔有限公司");
+//		 new ObtainGaodeLocation().addressToGPS("上海市东方明珠广播电视塔有限公司");
 		//
 		// CoordinateAddress add = getAdd("121.499361", "31.240229");
 		//
