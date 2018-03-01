@@ -199,6 +199,10 @@ public class HouseService {
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
 		houseMapper.updateByPrimaryKeySelective(house);
+		
+		locationService.deleteLocationByHouseId(house.getId());//删除地址记录
+		imgService.deleteImgByHouseId(house.getId());//删除图片记录
+		peizhiService.deletePeiZhiByHouseId(house.getId());//删除配置记录
 	}
 	
 	/*** 根据房屋Id,获取房屋信息*/
