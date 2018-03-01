@@ -7,4 +7,11 @@
         FROM t_zfang_house_peizhi
         WHERE is_delete = '00' AND house_id= #{houseId}
    </select>
+   
+   <update id="deletePeiZhiByHouseId" parameterType="java.lang.Long">
+       UPDATE t_zfang_house_peizhi
+            SET is_delete = '01',updated_time = now()
+       WHERE 
+         house_id=#{houseId} and is_delete = '00';
+   </update>
 </mapper>

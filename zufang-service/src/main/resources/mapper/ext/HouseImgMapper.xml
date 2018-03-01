@@ -43,4 +43,11 @@
         WHERE 
         	is_delete = '00' 
    </select>
+   
+   <update id="deleteImgByHouseId" parameterType="java.lang.Long">
+       UPDATE t_zfang_house_img
+            SET is_delete = '01',updated_time = now()
+       WHERE 
+         house_id=#{houseId} and is_delete = '00';
+   </update>
 </mapper>

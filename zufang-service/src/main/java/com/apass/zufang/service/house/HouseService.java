@@ -27,6 +27,7 @@ import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.enums.RentTypeEnums;
+import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
@@ -80,8 +81,8 @@ public class HouseService {
 	private HouseEsDao houseEsDao;
 
 	/*** 房屋信息管理列表 */
-	public ResponsePageBody<House> getHouseListExceptDelete(HouseQueryParams dto){
-		ResponsePageBody<House> body = new ResponsePageBody<>();
+	public ResponsePageBody<HouseBagVo> getHouseListExceptDelete(HouseQueryParams dto){
+		ResponsePageBody<HouseBagVo> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
@@ -89,7 +90,7 @@ public class HouseService {
 		status.add(RentTypeEnums.ZT_SHAGNJIA_2.getCode());
 		status.add(RentTypeEnums.ZT_XIAJIA_3.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseLists(dto);
+		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
 		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
@@ -97,14 +98,14 @@ public class HouseService {
 	}
 	
 	/*** 房屋信息审核管理列表*/
-	public ResponsePageBody<House> getHouseAuditListExceptDelete(HouseQueryParams dto){
-		ResponsePageBody<House> body = new ResponsePageBody<>();
+	public ResponsePageBody<HouseBagVo> getHouseAuditListExceptDelete(HouseQueryParams dto){
+		ResponsePageBody<HouseBagVo> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
 		status.add(RentTypeEnums.ZT_XIUGAI_5.getCode());
 		dto.setStatus(status);
-		List<House> houseList = houseMapper.getHouseLists(dto);
+		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
 		body.setTotal(houseMapper.getHouseListsCount(dto));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);

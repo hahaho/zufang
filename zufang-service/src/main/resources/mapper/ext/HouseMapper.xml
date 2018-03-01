@@ -25,11 +25,14 @@
 	        <if test="apartmentName!=null and apartmentName!=''">
 	            AND apart.name LIKE '%${apartmentName}%'
 	        </if>
-	        <if test="title!=null and title!=''"> 
-	            AND house.title LIKE '%${title}%'
+	        <if test="houseTitle!=null and houseTitle!=''"> 
+	            AND house.title LIKE '%${houseTitle}%'
 	        </if>
-	        <if test="code!=null and code!=''"> 
-	            AND house.code = #{code} 
+	        <if test="houseCode!=null and houseCode!=''"> 
+	            AND house.code = #{houseCode} 
+	        </if>
+	        <if test="province!=null and province!=''">
+	            AND location.province = #{province} 
 	        </if>
 	        <if test="city!=null and city!=''">
 	            AND location.city = #{city} 
