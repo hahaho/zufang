@@ -16,4 +16,9 @@ public interface WorkSubwayMapper extends GenericMapper<WorkSubway,Long> {
 	 * @return
      */
 	List<WorkSubway> querySubwayParentCodeList(WorkSubway domin);
+	/**
+	 * 获取最大的code
+	 * @return
+	 */
+	Integer selectByMaxDisplayCode();
 }

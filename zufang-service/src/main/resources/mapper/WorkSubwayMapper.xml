@@ -32,7 +32,7 @@
       created_time, updated_time)
     values (#{code,jdbcType=BIGINT}, #{lineName,jdbcType=VARCHAR}, #{siteName,jdbcType=VARCHAR}, 
       #{nearestPoint,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{parentCode,jdbcType=BIGINT}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.WorkSubway" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zufang_work_subway

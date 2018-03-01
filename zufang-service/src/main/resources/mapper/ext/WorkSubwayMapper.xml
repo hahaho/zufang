@@ -19,5 +19,14 @@
             <if test="level!=null and level!=''"> AND LEVEL = #{level,jdbcType=VARCHAR} </if>
         </where>
     </sql>
+    
+    <select id="selectByMaxDisplayCode" resultType="Integer">
+	<![CDATA[
+		SELECT
+			 MAX(code)
+		FROM
+			t_zufang_work_subway
+	]]>
+	</select>
 
 </mapper>
