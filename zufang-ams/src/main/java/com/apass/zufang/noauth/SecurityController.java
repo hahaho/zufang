@@ -1,5 +1,6 @@
 package com.apass.zufang.noauth;
 
+import com.apass.zufang.domain.Response;
 import com.apass.zufang.freemarker.ListeningAuthenticationManager;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.HttpWebUtils;
@@ -51,16 +52,14 @@ public class SecurityController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public  Map<String,String> login(HttpServletRequest request) {
-        Map<String,String> resultMap = Maps.newHashMap();
+    public  Response login(HttpServletRequest request) {
+//        Map<String,String> resultMap = Maps.newHashMap();
         if (SpringSecurityUtils.isAuthenticated()) {
             return main(request);
         }
         String errMsg = SpringSecurityUtils.getLastExceptionMsg(request);
-        resultMap.put("msg", errMsg);
-        resultMap.put("login", "login_fail");
         HttpWebUtils.getSession(request).setAttribute("SPRING_SECURITY_LAST_EXCEPTION",null);
-        return resultMap;
+        return Response.fail(errMsg);
     }
 
     /**
@@ -68,12 +67,11 @@ public class SecurityController {
      */
     @RequestMapping(value = "/main", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,String> main(HttpServletRequest request) {
+    public Response main(HttpServletRequest request) {
         Map<String,String> resultMap = Maps.newHashMap();
         String userName = SpringSecurityUtils.getCurrentUser();
         resultMap.put("username",userName);
-        resultMap.put("login","login_success");
-        return resultMap;
+        return Response.success("登陆成功",resultMap);
     }
 
     /**
