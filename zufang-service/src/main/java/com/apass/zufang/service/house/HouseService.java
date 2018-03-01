@@ -272,6 +272,7 @@ public class HouseService {
 			house.setStatus(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
+			house.setDelistTime(new Date());
 			houseMapper.updateByPrimaryKeySelective(house);
 			houseDeleteEs(house.getId());
 		}
@@ -295,6 +296,7 @@ public class HouseService {
 				house.setStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
 			}else{
 				house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+				house.setListTime(new Date());
 				houseAddEs(house.getId());
 			}
 			house.setUpdatedTime(new Date());
@@ -329,6 +331,7 @@ public class HouseService {
 					others++;
 				}else{
 					house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					house.setListTime(new Date());
 					houseAddEs(house.getId());
 					waitUp++;
 				}

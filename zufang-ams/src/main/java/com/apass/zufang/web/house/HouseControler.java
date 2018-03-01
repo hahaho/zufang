@@ -384,7 +384,7 @@ public class HouseControler {
 	    house.setPictures(Arrays.asList(pictures));
 	    
 	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
-	    	String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
+	    	String totalDoors = CommonUtils.getValue(paramMap, "totalDoors");//几户合租
 		    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
 		    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
 		    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
