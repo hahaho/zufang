@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.zufang.domain.common.Stops;
 import com.apass.zufang.domain.common.WorkCityJd;
@@ -40,13 +39,26 @@ public class WorkSubwaySevice {
 	}
 
 	/**
-	 * 获取当前位置下所有的子节点 地铁
+	 * 获取地铁及其站点
 	 * 
 	 * @param code
 	 * @return
 	 */
-	public List<WorkSubway> querySubwayParentCodeList(WorkSubway domin) {
-		return dao.querySubwayParentCodeList(domin);
+	public List<WorkSubway> getSubwayLineAndSiteOrAre(WorkSubway domin) {
+
+		List<WorkSubway> result = dao.querySubwayParentCodeList(domin);
+		if (!result.isEmpty()) {
+			for (WorkSubway workSubway : result) {
+				WorkSubway dominSon = new WorkSubway();
+				dominSon.setParentCode(workSubway.getCode());
+				List<WorkSubway> subset = dao.querySubwayParentCodeList(dominSon);
+				if (!subset.isEmpty()) {
+					workSubway.setResultList(subset);
+				}
+
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -71,7 +83,7 @@ public class WorkSubwaySevice {
 			if (null == order) {
 				order = 0;
 			}
-			Long parentCode=Long.valueOf(order + 1);
+			Long parentCode = Long.valueOf(order + 1);
 			workSubwayp.setCode(Long.valueOf(order + 1));
 			dao.insert(workSubwayp);
 
@@ -84,7 +96,6 @@ public class WorkSubwaySevice {
 				workSubways.setLevel("2");
 				// 获取坐标
 				String[] objstr = ObtainGaodeLocation.getLocationKey(city + stops.getName());
-				System.out.println(objstr.toString());
 				workSubways.setNearestPoint(objstr[0] + "," + objstr[1]);
 				workSubways.setParentCode(Long.valueOf(parentCode));
 
