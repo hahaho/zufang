@@ -29,7 +29,7 @@ import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-@Path("/house")
+@Path("/application/house")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class HouseControler {
@@ -229,8 +229,8 @@ public class HouseControler {
 		
 	    String province = CommonUtils.getValue(paramMap, "province"); // 省
 	    String city = CommonUtils.getValue(paramMap, "city"); // 市
-	    String street = CommonUtils.getValue(paramMap, "street"); // 街道
 	    String district = CommonUtils.getValue(paramMap, "district"); //区
+	    String street = CommonUtils.getValue(paramMap, "street"); // 街道
 	    String detailAddr = CommonUtils.getValue(paramMap, "detailAddr"); // 详细地址
 	    
 	    String room = CommonUtils.getValue(paramMap, "room"); //室
@@ -377,13 +377,17 @@ public class HouseControler {
 	    String[] pictures = StringUtils.split(picturs,",");
 	    house.setPictures(Arrays.asList(pictures));
 	    
-	    String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
-	    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
-	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
-	    
-	    house.setTotalDoors(totalDoors);
-	    house.setHezuResource(Byte.valueOf(hezuResource));
-	    house.setHezuChaoxiang(Byte.valueOf(hezuChaoxiang));
+	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    	String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
+		    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
+		    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
+		    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
+		    
+		    house.setTotalDoors(totalDoors);
+		    house.setHezuResource(Byte.valueOf(hezuResource));
+		    house.setHezuChaoxiang(Byte.valueOf(hezuChaoxiang));
+		    house.setRoomAcreage(new BigDecimal(roomAcreage));
+	    }
 	    
 	    String title = CommonUtils.getValue(paramMap, "title");
 	    house.setTitle(title);
@@ -391,12 +395,13 @@ public class HouseControler {
 	    String houseId = CommonUtils.getValue(paramMap,"houseId");
 	    Date date = new Date();
 	    String operateName = SpringSecurityUtils.getCurrentUser();
+	    house.setUpdatedTime(date);
+	    house.setUpdatedUser(operateName);
 	    if(StringUtils.isBlank(houseId)){
 	    	house.setCreatedTime(date);
 	    	house.setCreatedUser(operateName);
+	    	return house;
 	    }
-	    house.setUpdatedTime(date);
-	    house.setUpdatedUser(operateName);
 	    house.setHouseId(Long.parseLong(houseId));
 		return house;
 	}
