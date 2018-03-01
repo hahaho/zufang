@@ -11,6 +11,9 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -18,13 +21,12 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-@Path("/house/audit")
-@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Controller
+@RequestMapping("/house/audit")
 public class HouseAuditController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HouseAuditController.class);
@@ -36,21 +38,11 @@ public class HouseAuditController {
      * 房屋信息审核列表查询
      * @return
      */
-	@POST
-	@Path("/queryHouse")
-	public Response getHouseList(Map<String,Object> paramMap){
-		ResponsePageBody<House> respBody = new ResponsePageBody<House>();
+	@ResponseBody
+	@RequestMapping("/queryHouse")
+	public Response getHouseList(HouseQueryParams dto){
+		ResponsePageBody<HouseBagVo> respBody = new ResponsePageBody<HouseBagVo>();
         try {
-        	logger.info("query house paramMap--->{}",GsonUtils.toJson(paramMap));
-        	String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");//公寓名称
-        	String houseTitle = CommonUtils.getValue(paramMap, "houseTitle");//房源名称
-        	String houseCode = CommonUtils.getValue(paramMap, "houseCode");//房源编码
-        	String houseArea = CommonUtils.getValue(paramMap, "houseArea");//公寓所在区
-        	HouseQueryParams dto = new HouseQueryParams();
-        	dto.setApartmentName(apartmentName);
-        	dto.setHouseTitle(houseTitle);
-        	dto.setHouseCode(houseCode);
-        	dto.setHouseArea(houseArea);
         	respBody = houseService.getHouseAuditListExceptDelete(dto);
         	respBody.setMsg("房屋信息审核列表查询成功!");
         	return Response.success("查询房屋审核信息成功！", respBody);
@@ -61,8 +53,8 @@ public class HouseAuditController {
         }
 	}
 	
-	@POST
-	@Path("/audit")
+	@ResponseBody
+	@RequestMapping("/audit")
 	public Response auditHouse(Map<String,Object> paramMap){
 		try {
 			logger.info("audit house paramMap--->{}",GsonUtils.toJson(paramMap));
@@ -80,8 +72,8 @@ public class HouseAuditController {
 		}
 	}
 	
-	@POST
-	@Path("/detail")
+	@ResponseBody
+	@RequestMapping("/detail")
 	public Response detailHouse(Map<String,Object> paramMap){
 		
 		try {

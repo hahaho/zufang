@@ -22,6 +22,10 @@ public class HouseQueryParams extends QueryParams{
 	private String houseArea;//公寓所在区
 	private String isDelete;//房源是否删除
 	private List<Integer> status;//状态
+	private String province;//省
+	private String city;//市
+	private String district;//区
+	private String street;//街道
 	
 	/**
 	 *
@@ -126,5 +130,37 @@ public class HouseQueryParams extends QueryParams{
 
 	public void setListTime(Date listTime) {
 		this.listTime = listTime;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
 	}
 }
