@@ -25,6 +25,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -47,17 +48,23 @@ public class HouseControler {
 	@POST
 	@Path("/queryHouse")
 	public Response getHouseList(Map<String,Object> paramMap){
-		ResponsePageBody<House> respBody = new ResponsePageBody<House>();
+		ResponsePageBody<HouseBagVo> respBody = new ResponsePageBody<>();
         try {
         	String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");//公寓名称
         	String houseTitle = CommonUtils.getValue(paramMap, "houseTitle");//房源名称
         	String houseCode = CommonUtils.getValue(paramMap, "houseCode");//房源编码
-        	String houseArea = CommonUtils.getValue(paramMap, "houseArea");//公寓所在区
+        	String province = CommonUtils.getValue(paramMap, "province");//公寓所在省份
+        	String city = CommonUtils.getValue(paramMap, "city");//公寓所在省份
+        	String district = CommonUtils.getValue(paramMap, "district");//公寓所在省份
+        	String street = CommonUtils.getValue(paramMap, "street");//公寓所在省份
         	HouseQueryParams dto = new HouseQueryParams();
         	dto.setApartmentName(apartmentName);
         	dto.setHouseTitle(houseTitle);
         	dto.setHouseCode(houseCode);
-        	dto.setHouseArea(houseArea);
+        	dto.setProvince(province);
+        	dto.setCity(city);
+        	dto.setDistrict(district);
+        	dto.setStreet(street);
         	respBody = houseService.getHouseListExceptDelete(dto);
         	respBody.setMsg("房屋信息列表查询成功!");
         	return Response.success("查询房屋信息成功！", respBody);
@@ -217,19 +224,16 @@ public class HouseControler {
 	 */
 	public void validateParams(Map<String, Object> paramMap) throws BusinessException{
 		
-		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");
-		String phone = CommonUtils.getValue(paramMap,"phone");
-		String rentType = CommonUtils.getValue(paramMap, "rentType");
-		String communityName = CommonUtils.getValue(paramMap, "communityName");
+		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");//公寓Id
+		String phone = CommonUtils.getValue(paramMap,"phone");//管家联系方式
+		String rentType = CommonUtils.getValue(paramMap, "rentType");//出租方式
+		String communityName = CommonUtils.getValue(paramMap, "communityName");//小区名称
 		
 	    String province = CommonUtils.getValue(paramMap, "province"); // 省
 	    String city = CommonUtils.getValue(paramMap, "city"); // 市
 	    String street = CommonUtils.getValue(paramMap, "street"); // 街道
 	    String district = CommonUtils.getValue(paramMap, "district"); //区
 	    String detailAddr = CommonUtils.getValue(paramMap, "detailAddr"); // 详细地址
-	    
-	    String acreage = CommonUtils.getValue(paramMap, "acreage");
-	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
 	    
 	    String room = CommonUtils.getValue(paramMap, "room"); //室
 	    String hall = CommonUtils.getValue(paramMap, "hall"); //厅
@@ -239,21 +243,22 @@ public class HouseControler {
 	    
 	    String liftType = CommonUtils.getValue(paramMap, "liftType");//有无电梯
 	    
+	    String chaoxiang = CommonUtils.getValue(paramMap, "chaoxiang");//房屋朝向
+	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");//装修情况
 	    
-	    String totalDoors = CommonUtils.getValue(paramMap, "liftType");//几户合租
+	    String acreage = CommonUtils.getValue(paramMap, "acreage");//总面积
+	    
+	    String totalDoors = CommonUtils.getValue(paramMap, "totalDoors");//几户合租
 	    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
 	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
+	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
 	    
 	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
 	    
-	    String rentAmt = CommonUtils.getValue(paramMap, "rentAmt");
-	    String zujinType = CommonUtils.getValue(paramMap, "zujinType");
+	    String rentAmt = CommonUtils.getValue(paramMap, "rentAmt");//租金
+	    String zujinType = CommonUtils.getValue(paramMap, "zujinType");//租金支付方式
 	    
-	    String chaoxiang = CommonUtils.getValue(paramMap, "chaoxiang");
-	    String zhuangxiu = CommonUtils.getValue(paramMap, "zhuangxiu");
-	    
-	    String title = CommonUtils.getValue(paramMap, "title");
-	    
+	    String title = CommonUtils.getValue(paramMap, "title");//房屋标题
 	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
 	    
 	    ValidateUtils.isNotBlank(apartmentId, "请选择所属公寓");
@@ -264,21 +269,16 @@ public class HouseControler {
 		ValidateUtils.isNotBlank(rentType, "请选择出租方式");
 		ValidateUtils.isNotBlank(communityName, "请填写小区名称");
 		ValidateUtils.checkLength(communityName, 2, 20, "2-20个字，可填写汉字，数字，不能填写特殊字符");
-		if(!ListeningRegExpUtils.isChineseOrMath(communityName)){
-			throw new BusinessException("2-20个字，可填写汉字，数字，不能填写特殊字符");
-		}
+		
 	    ValidateUtils.isNotBlank(province, "请选择省份");
 	    ValidateUtils.isNotBlank(city, "请选择城市");
 	    ValidateUtils.isNotBlank(district, "请选择区域");
 	    ValidateUtils.isNotBlank(street, "请选择街道");
 	    ValidateUtils.isNotBlank(detailAddr, "请填写详细地址");
 	    ValidateUtils.checkLength(detailAddr, 2, 30, "2-30个字，可填写汉字，数字，不能填写特殊字符");
-	    if(!ListeningRegExpUtils.isChineseOrMath(detailAddr)){
-			throw new BusinessException("2-30个字，可填写汉字，数字，不能填写特殊字符");
-		}
 	    
 	    ValidateUtils.isNotBlank(room, "请填写室");
-	    ValidateUtils.checkNumberRange(room, 0, 0,"室");
+	    ValidateUtils.checkNumberRange(room, 1, 0,"室");
 	    ValidateUtils.isNotBlank(hall, "请填写厅");
 	    ValidateUtils.checkNumberRange(hall, 0, 0, "厅");
 	    ValidateUtils.isNotBlank(wei, "请填写卫");
@@ -303,7 +303,7 @@ public class HouseControler {
 	    	ValidateUtils.isNotBlank(hezuResource, "请选择出租间介绍");
 	    	ValidateUtils.isNotBlank(hezuChaoxiang, "请选择出租间朝向");
 	    	
-	    	ValidateUtils.isNotBlank(roomAcreage, "请填写房屋面积");
+	    	ValidateUtils.isNotBlank(roomAcreage, "请填写出租间房屋面积");
 	    	ValidateUtils.checkNonNumberRange(roomAcreage, 1, 9999, "房屋面积");
 	    }
 	    

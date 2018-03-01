@@ -19,6 +19,7 @@ import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
@@ -39,18 +40,24 @@ public class HouseAuditController {
 	@POST
 	@Path("/queryHouse")
 	public Response getHouseList(Map<String,Object> paramMap){
-		ResponsePageBody<House> respBody = new ResponsePageBody<House>();
+		ResponsePageBody<HouseBagVo> respBody = new ResponsePageBody<>();
         try {
         	logger.info("query house paramMap--->{}",GsonUtils.toJson(paramMap));
         	String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");//公寓名称
         	String houseTitle = CommonUtils.getValue(paramMap, "houseTitle");//房源名称
         	String houseCode = CommonUtils.getValue(paramMap, "houseCode");//房源编码
-        	String houseArea = CommonUtils.getValue(paramMap, "houseArea");//公寓所在区
+        	String province = CommonUtils.getValue(paramMap, "province");//公寓所在省份
+        	String city = CommonUtils.getValue(paramMap, "city");//公寓所在省份
+        	String district = CommonUtils.getValue(paramMap, "district");//公寓所在省份
+        	String street = CommonUtils.getValue(paramMap, "street");//公寓所在省份
         	HouseQueryParams dto = new HouseQueryParams();
         	dto.setApartmentName(apartmentName);
         	dto.setHouseTitle(houseTitle);
         	dto.setHouseCode(houseCode);
-        	dto.setHouseArea(houseArea);
+        	dto.setProvince(province);
+        	dto.setCity(city);
+        	dto.setDistrict(district);
+        	dto.setStreet(street);
         	respBody = houseService.getHouseAuditListExceptDelete(dto);
         	respBody.setMsg("房屋信息审核列表查询成功!");
         	return Response.success("查询房屋审核信息成功！", respBody);
