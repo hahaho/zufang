@@ -40,8 +40,10 @@ public class BrandApartmentService {
 	public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
 		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
         List<HouseVo> list = houseMapper.getHotHouseList(entity);
-        pageBody.setTotal(list.size());
         pageBody.setRows(list);
+        entity.setStartRecordIndex(null);
+        list = houseMapper.getHotHouseList(entity);
+        pageBody.setTotal(list.size());
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;
 	}
