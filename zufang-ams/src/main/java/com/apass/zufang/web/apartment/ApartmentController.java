@@ -9,6 +9,8 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
@@ -57,6 +59,9 @@ public class ApartmentController {
         	entity.setName(name);
         	entity.setIsDelete("00");
         	respBody = apartmentService.getApartmentList(entity);
+        } catch (BusinessException e) {
+            LOGGER.error("getApartmentList EXCEPTION --- --->{}", e);
+            respBody.setMsg("公寓信息列表查询失败");
         } catch (Exception e) {
             LOGGER.error("getApartmentList EXCEPTION --- --->{}", e);
             respBody.setMsg("公寓信息列表查询失败");
