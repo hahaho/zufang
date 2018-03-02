@@ -55,7 +55,7 @@ public class SearchTermsController {
 	 */
 	@POST
 	@Path("/getBrandApartment")
-	public Response getApartGongyu(Map<String, Object> paramMap) {
+	public Response getBrandApartment(Map<String, Object> paramMap) {
 		try {
 			String city = CommonUtils.getValue(paramMap, "city");// 区域
 			ValidateUtils.isNotBlank(city, "品牌名称无数据");
@@ -63,8 +63,7 @@ public class SearchTermsController {
 			Apartment apartment = new Apartment();
 			apartment.setCity(city);
 			
-			HashMap<String, Object> map = Maps.newHashMap();
-			List<ApartHouseList> resultApartment = apartHouseService.getApartByCity(map);
+			List<Apartment> resultApartment = apartHouseService.getApartmentBylistCity(apartment);
 
 			return Response.success("success", GsonUtils.toJson(resultApartment));
 		} catch (BusinessException e) {

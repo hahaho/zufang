@@ -53,8 +53,8 @@ public class HouseAuditController {
         	String rows =  CommonUtils.getValue(paramMap, "rows");
         	String page =  CommonUtils.getValue(paramMap, "page");
         	
-        	rows = StringUtils.isNotBlank(rows) ? rows: "1";
-        	page = StringUtils.isNotBlank(page) ? page: "10";
+        	rows = StringUtils.isNotBlank(rows) ? rows: "10";
+        	page = StringUtils.isNotBlank(page) ? page: "1";
         	HouseQueryParams dto = new HouseQueryParams();
         	dto.setApartmentName(apartmentName);
         	dto.setHouseTitle(houseTitle);
