@@ -119,4 +119,42 @@ public class UpLoadPictureController {
             }
         }
     }
+    @ResponseBody
+    @RequestMapping(value = "/upLoadHotHouseImg", method = RequestMethod.POST)
+    public Response upLoadHotHouseImg(@ModelAttribute("file") MultipartFile file) {
+        InputStream is = null;
+        try {
+        	if(file == null){
+        		throw new BusinessException("上传图片为空!");
+        	}
+            is = file.getInputStream();
+            int size = is.available();// 大小
+            String imgType = ImageTools.getImgType(file);
+            String fileName = "companyLogo_" + System.currentTimeMillis()+ "." + imgType;
+            String url = nfsHouse + fileName;
+            //图片校验
+            boolean checkHotHouseImgSize = ImageTools.checkHotHouseImgSize(file);// 尺寸
+            boolean checkImgType = ImageTools.checkImgType(file);// 类型
+            if (!checkHotHouseImgSize) {
+                return Response.fail("图片尺寸格式不符,尺寸要求：750*320");
+            }else if (!checkImgType) {
+                return Response.fail("图片尺寸格式不符,格式要求：.jpg,.png");
+            } else if (size > 1024 * 1024) {
+                return Response.fail("图片不能大于1024kb!");
+            }
+            FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
+            return Response.success("上传热门图片成功！",url);
+        } catch (Exception e) {
+        	logger.error("upLoadCompanyLogo Exception---->{}",e);
+            return Response.fail("上传热门图片失败!");
+        }finally{
+            try {
+                if(is!=null){
+                    is.close();
+                }
+            } catch (IOException e) {
+                logger.error("IOException businessException---->{}",e);
+            }
+        }
+    }
 }

@@ -47,6 +47,7 @@ public class ApartmentController {
     public ResponsePageBody<Apartment> getApartmentList(Map<String,Object> map) {
         ResponsePageBody<Apartment> respBody = new ResponsePageBody<Apartment>();
         try {
+        	LOGGER.info("getApartmentList map--->{}",GsonUtils.toJson(map));
         	String name = CommonUtils.getValue(map, "name");//公寓名称
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
