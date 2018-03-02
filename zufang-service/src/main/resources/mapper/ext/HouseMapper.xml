@@ -128,7 +128,7 @@
         	x.room room,x.hall hall,x.wei wei
         FROM t_zfang_house x
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
-       	join t_zfang_house_location z on z.house_id = x.house_id
+       	join t_zfang_house_location z on z.house_id = x.id
        	WHERE 1=1 
        	]]>
     	<if test="houseType!=null and houseType!=''"> AND x.type = #{houseType} </if>

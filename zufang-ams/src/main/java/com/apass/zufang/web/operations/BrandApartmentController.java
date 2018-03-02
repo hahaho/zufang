@@ -51,6 +51,7 @@ public class BrandApartmentController {
     public ResponsePageBody<HouseVo> getHotHouseList(Map<String,Object> map) {
         ResponsePageBody<HouseVo> respBody = new ResponsePageBody<HouseVo>();
         try {
+        	LOGGER.info("getHotHouseList map--->{}",GsonUtils.toJson(map));
         	String houseType = CommonUtils.getValue(map, "houseType");//房源是否热门
         	String apartmentName = CommonUtils.getValue(map, "apartmentName");//公寓名称
         	String houseTitle = CommonUtils.getValue(map, "houseTitle");//房源名称
@@ -159,13 +160,11 @@ public class BrandApartmentController {
         try {
         	LOGGER.info("hotHouseSet map--->{}",GsonUtils.toJson(map));
         	String houseId = CommonUtils.getValue(map, "houseId");
-        	String sortNo = CommonUtils.getValue(map, "sortNo");
         	String url = CommonUtils.getValue(map, "url");
         	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
-        	ValidateUtils.isNotBlank(sortNo, "热门房源排序为空！");
         	ValidateUtils.isNotBlank(url, "热门房源图片为空！");
         	String username = SpringSecurityUtils.getCurrentUser();
-        	return brandApartmentService.hotHouseSet(houseId,sortNo,url,username);
+        	return brandApartmentService.hotHouseSet(houseId,url,username);
         } catch (BusinessException e) {
             LOGGER.error("hotHouseSet EXCEPTION --- --->{}", e);
             return Response.fail("品牌公寓热门房源,"+e.getErrorDesc());
