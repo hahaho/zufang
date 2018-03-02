@@ -114,7 +114,8 @@
     </select>
     
     <!--品牌公寓热门房源列表查询  热门房源分页查询                
-     	查询列表字段    热门排序  公寓ID，公寓名称，房源ID，房源编码，房源标题（名称），小区名称，户型（室厅卫）租金 付款方式
+     	查询列表字段    
+     	热门排序  公寓ID，公寓名称，房源ID，房源编码,房源状态，房源标题（名称），小区名称，户型（室厅卫）租金 付款方式
    		查询条件 是否热门 公寓名称 房源标题（名称）房源编码 所在区域  -->
     <select id="getHotHouseList" resultType="com.apass.zufang.domain.vo.HouseVo"
     	parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
@@ -122,13 +123,14 @@
         SELECT 
         	x.sort_no sortNo,
         	y.id apartmentid,y.name apartmentName,
-        	x.id id,x.code houseCode,x.title title,
+        	x.id houseId,x.code houseCode,x.title title,
         	x.community_name communityName,
         	x.rent_amt rentAmt,x.zujin_type zujinType,
-        	x.room room,x.hall hall,x.wei wei
+        	x.room room,x.hall hall,x.wei wei,
+        	x.status houseStatus
         FROM t_zfang_house x
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
-       	join t_zfang_house_location z on z.house_id = x.house_id
+       	join t_zfang_house_location z on z.house_id = x.id
        	WHERE 1=1 
        	]]>
     	<if test="houseType!=null and houseType!=''"> AND x.type = #{houseType} </if>
