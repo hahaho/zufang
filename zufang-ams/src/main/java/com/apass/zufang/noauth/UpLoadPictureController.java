@@ -61,7 +61,7 @@ public class UpLoadPictureController {
         		file.getInputStream().close();
         		throw new BusinessException("文件不能大于2MB!");
         	}
-        	String fileName = "logo_" + System.currentTimeMillis() + file.getName();
+        	String fileName = "logo_" + System.currentTimeMillis()+"_"+ file.getName();
             String url = nfsHouse + fileName;
             /*** 上传文件*/
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
@@ -74,6 +74,7 @@ public class UpLoadPictureController {
 			throw new BusinessException("上传图片失败!");
         }
     }
+
 	/**
      * 编辑精选商品的排序和图片
      * @param siftGoodFileModel
