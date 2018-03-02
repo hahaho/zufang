@@ -52,6 +52,18 @@ public class BrandApartmentService {
         	}else{
         		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_3.getMessage());;
         	}
+        	Integer status = Integer.parseInt(vo.getHouseStatus());
+        	if(status==BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_XIAJIA_3.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_SHANGCHU_4.getMessage());
+        	}else{
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getMessage());
+        	}
         }
         pageBody.setRows(list);
         entity.setStartRecordIndex(null);
@@ -90,7 +102,7 @@ public class BrandApartmentService {
 			}
 			if(vo.getSortNo()==sorNo){
 				houseU = houseService.readEntity(vo.getHouseId());
-				houseU.setSortNo(sorNo);
+				houseU.setSortNo(sorNo-1);
 				houseU.setUpdatedUser(user);
 				houseU.setUpdatedTime(new Date());
 				break;
