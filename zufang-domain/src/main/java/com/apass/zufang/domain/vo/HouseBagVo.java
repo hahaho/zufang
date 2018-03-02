@@ -131,11 +131,11 @@ public class HouseBagVo {
 	}
 
 	public String getStatusMsg() {
-		return BusinessHouseTypeEnums.valueOf(this.status, "ZT").getMessage();
+		return BusinessHouseTypeEnums.valueOfZT(this.status).getMessage();
 	}
 
 	public String getZujinTypeMsg() {
-		return BusinessHouseTypeEnums.valueOf(this.zujinType, "YJLX").getMessage();
+		return BusinessHouseTypeEnums.valueOfYJLX(this.zujinType).getMessage();
 	}
 	
 }

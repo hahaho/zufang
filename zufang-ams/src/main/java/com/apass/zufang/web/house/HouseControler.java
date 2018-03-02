@@ -307,7 +307,7 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
     	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
 	    
-	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	
 	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
 	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 99, "合租户数");
@@ -391,7 +391,7 @@ public class HouseControler {
 	    String[] pictures = StringUtils.split(picturs,",");
 	    house.setPictures(Arrays.asList(pictures));
 	    
-	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	String totalDoors = CommonUtils.getValue(paramMap, "totalDoors");//几户合租
 		    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
 		    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
