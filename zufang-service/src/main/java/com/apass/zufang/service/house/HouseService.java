@@ -1,11 +1,8 @@
 package com.apass.zufang.service.house;
-
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
@@ -41,7 +37,6 @@ import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 /**
  * 房源管理
  * @author Administrator
@@ -49,36 +44,42 @@ import com.google.common.collect.Maps;
  */
 @Service
 public class HouseService {
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseService.class);
-	
 	@Autowired
 	private HouseMapper houseMapper;
-	
 	@Autowired
 	private ApartmentMapper apartmentMapper;
-	
 	@Autowired
 	private HouseLocationMapper locationMapper;
-	
 	@Autowired
 	private HousePeizhiMapper peizhiMapper; 
-	
 	@Autowired
 	private HouseImgMapper imgMapper;
-	
 	@Autowired
 	private HouseImgService imgService;
-	
 	@Autowired
 	private HousePeiZhiService peizhiService;
-	
 	@Autowired
 	private HouseLocationService  locationService;
-
 	@Autowired
 	private HouseEsDao houseEsDao;
-
+	/**
+	 * readEntity
+	 * @param id
+	 * @return
+	 */
+	public House readEntity(Long id){
+		return houseMapper.selectByPrimaryKey(id);
+	}
+	/**
+	 * updateEntity
+	 * @param entity
+	 * @return
+	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+	public Integer updateEntity(House entity){
+		return houseMapper.updateByPrimaryKeySelective(entity);
+	}
 	/*** 房屋信息管理列表 */
 	public ResponsePageBody<HouseBagVo> getHouseListExceptDelete(HouseQueryParams dto){
 		ResponsePageBody<HouseBagVo> body = new ResponsePageBody<>();
@@ -368,16 +369,6 @@ public class HouseService {
 		img.setUpdatedTime(new Date());
 		imgMapper.updateByPrimaryKey(img);
 	}
-	
-	
-	public House readEntity(Long id){
-		return houseMapper.selectByPrimaryKey(id);
-	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer updateEntity(House entity){
-		return houseMapper.updateByPrimaryKeySelective(entity);
-	}
-
 	/**
 	 * 查询要上传ES的数据库数据
 	 * @param index
