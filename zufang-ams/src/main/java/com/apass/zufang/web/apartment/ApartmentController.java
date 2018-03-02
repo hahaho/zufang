@@ -78,6 +78,7 @@ public class ApartmentController {
 			String code = provinceCode+cityCode+areaCode;
 			Apartment entity = (Apartment) FarmartJavaBean.map2entity(new Apartment(), Apartment.class, map);
 			String username = SpringSecurityUtils.getCurrentUser();
+			username = "admin";
 			return apartmentService.addApartment(entity,username,code);
 //		}catch(BusinessException e){
 //			LOGGER.error("addApartment EXCEPTION --- --->{}", e);
