@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +47,14 @@ public class HouseAuditController {
         	String houseTitle = CommonUtils.getValue(paramMap, "houseTitle");//房源名称
         	String houseCode = CommonUtils.getValue(paramMap, "houseCode");//房源编码
         	String province = CommonUtils.getValue(paramMap, "province");//公寓所在省份
-        	String city = CommonUtils.getValue(paramMap, "city");//公寓所在省份
-        	String district = CommonUtils.getValue(paramMap, "district");//公寓所在省份
-        	String street = CommonUtils.getValue(paramMap, "street");//公寓所在省份
+        	String city = CommonUtils.getValue(paramMap, "city");//公寓所在城市
+        	String district = CommonUtils.getValue(paramMap, "district");//公寓所在区
+        	String street = CommonUtils.getValue(paramMap, "street");//公寓所在街道
+        	String rows =  CommonUtils.getValue(paramMap, "rows");
+        	String page =  CommonUtils.getValue(paramMap, "page");
+        	
+        	rows = StringUtils.isNotBlank(rows) ? rows: "1";
+        	page = StringUtils.isNotBlank(page) ? page: "10";
         	HouseQueryParams dto = new HouseQueryParams();
         	dto.setApartmentName(apartmentName);
         	dto.setHouseTitle(houseTitle);
@@ -57,6 +63,8 @@ public class HouseAuditController {
         	dto.setCity(city);
         	dto.setDistrict(district);
         	dto.setStreet(street);
+        	dto.setRows(Integer.parseInt(rows));
+        	dto.setPage(Integer.parseInt(page));
         	respBody = houseService.getHouseAuditListExceptDelete(dto);
         	respBody.setMsg("房屋信息审核列表查询成功!");
         	return Response.success("查询房屋审核信息成功！", respBody);

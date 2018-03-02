@@ -25,19 +25,38 @@ public class UpLoadPictureController {
     @Value("${nfs.house}")
     private String nfsHouse;
 	@ResponseBody
-    @RequestMapping(value = "/uppicture", method = RequestMethod.POST)
-	public Response uploadPicture(MultipartFile file){
-    	try{
+    @RequestMapping(value = "/uppicture320", method = RequestMethod.POST)
+	public Response uploadPicture320(@ModelAttribute("file") MultipartFile file){
+		try {
+			String url = uploadImg(file, 750, 320);
+			return Response.success("success",url);
+		} catch (BusinessException e) {
+			return Response.fail(e.getErrorDesc());
+		}
+    }
+	
+	@ResponseBody
+    @RequestMapping(value = "/uppicture562", method = RequestMethod.POST)
+	public Response uploadPicture562(@ModelAttribute("file") MultipartFile file){
+		try {
+			String url = uploadImg(file, 750, 562);
+			return Response.success("success",url);
+		} catch (BusinessException e) {
+			return Response.fail(e.getErrorDesc());
+		}
+    }
+	
+	public String uploadImg(MultipartFile file,int widths,int heights) throws BusinessException{
+		try{
     		if(null == file){
         		throw new BusinessException("上传文件不能为空!");
         	}
     		boolean checkImgType = ImageTools.checkImgType(file);// 图片类型
-        	boolean checkImgSize320 = ImageTools.checkImgSize(file,750,320);// 尺寸
-        	boolean checkImgSize562 = ImageTools.checkImgSize(file, 750, 562);//尺寸
+        	boolean checkImgSize = ImageTools.checkImgSize(file,widths,heights);// 尺寸
         	int size = file.getInputStream().available();
         	
-        	if(!((checkImgType && checkImgSize320) || (checkImgType && checkImgSize562))){
-        		throw new BusinessException("文件尺寸不符,上传图片尺寸必须是宽：750px,高：562px或者320px,格式：.jpg,.png");
+        	if(!(checkImgType && checkImgSize)){
+        		throw new BusinessException("文件尺寸不符,上传图片尺寸必须是宽："+widths+"px,高："+heights+"px,格式：.jpg,.png");
         	}else if(size > 1024 * 1024 * 2){
         		file.getInputStream().close();
         		throw new BusinessException("文件不能大于2MB!");
@@ -46,13 +65,13 @@ public class UpLoadPictureController {
             String url = nfsHouse + fileName;
             /*** 上传文件*/
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
-            return Response.success("success",url);
+            return url;
         }catch (BusinessException e){
 			logger.error("delpicture businessException---->{}",e);
-			return Response.fail(e.getErrorDesc());
+			throw new BusinessException("上传图片失败!");
 		}catch (Exception e) {
 			logger.error("上传house logo失败!", e);
-            return Response.fail("上传商品大图失败!");
+			throw new BusinessException("上传图片失败!");
         }
     }
 	/**
