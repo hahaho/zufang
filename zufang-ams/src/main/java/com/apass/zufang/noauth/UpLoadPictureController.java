@@ -94,10 +94,12 @@ public class UpLoadPictureController {
             String fileName = "companyLogo_" + System.currentTimeMillis()+ "." + imgType;
             String url = nfsHouse + fileName;
             //图片校验
-            boolean checkSiftGoodsImgSize = ImageTools.checkSiftGoodsImgSize(file);// 尺寸
+            boolean checkCompanyLogoSize = ImageTools.checkCompanyLogoSize(file);// 尺寸
             boolean checkImgType = ImageTools.checkImgType(file);// 类型
-            if (!(checkSiftGoodsImgSize && checkImgType)) {
-                return Response.fail("图片尺寸格式不符,尺寸要求:120*120,格式要求：.jpg,.png");
+            if (!checkCompanyLogoSize) {
+                return Response.fail("图片尺寸格式不符,尺寸要求:120*120");
+            }else if (!checkImgType) {
+                return Response.fail("图片尺寸格式不符,格式要求：.jpg,.png");
             } else if (size > 1024 * 500) {
                 return Response.fail("图片不能大于501kb!");
             }
