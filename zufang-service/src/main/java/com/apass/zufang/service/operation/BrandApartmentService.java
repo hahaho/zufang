@@ -53,16 +53,16 @@ public class BrandApartmentService {
         		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_3.getMessage());;
         	}
         	Integer status = Integer.parseInt(vo.getHouseStatus());
-        	if(status==BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode()){
-        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getMessage());
-        	}else if(zujinType==BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode()){
-        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getMessage());
-        	}else if(zujinType==BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
-        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_XIAJIA_3.getMessage());
-        	}else if(zujinType==BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
-        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_SHANGCHU_4.getMessage());
+        	if(status==BusinessHouseTypeEnums.ZT_1.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_1.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_2.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_2.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_3.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_3.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_4.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_4.getMessage());
         	}else{
-        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getMessage());
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_5.getMessage());
         	}
         }
         pageBody.setRows(list);

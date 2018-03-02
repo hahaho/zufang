@@ -95,11 +95,11 @@ public class HouseinitService {
 		
 		// 获取房源
 		HashMap<String, String> map = Maps.newHashMap();
-		map.put("type", BusinessHouseTypeEnums.FY_JINGXUAN_2.getCode().toString());
+		map.put("type", BusinessHouseTypeEnums.FYLX_2.getCode().toString());
 		map.put("city", city);
 		List<HouseVo> setHouses = initHouseByCity(map);
 		finMap.put("finSize", setHouses.size());
-		map.put("type", BusinessHouseTypeEnums.FY_ZHENGCHANG_1.getCode().toString());
+		map.put("type", BusinessHouseTypeEnums.FYLX_1.getCode().toString());
 		List<HouseVo> norHouses = initHouseByCity(map);
 		
 		// 封装热门房源
