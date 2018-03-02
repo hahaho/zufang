@@ -26,4 +26,6 @@ public interface ApartmentMapper extends GenericMapper<Apartment,Long> {
 	 * @return
 	 */
 	public List<Apartment> getApartByCity(Apartment entity);
+	
+	public List<Apartment> getApartmentBylistCity(Apartment entity);
 }
