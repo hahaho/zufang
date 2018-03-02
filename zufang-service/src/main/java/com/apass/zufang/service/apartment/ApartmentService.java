@@ -54,7 +54,7 @@ public class ApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addApartment(Apartment entity,String username,String code) throws BusinessException {
 		Apartment entity2 = new Apartment();
 		entity2.setCode(code);
@@ -73,7 +73,7 @@ public class ApartmentService {
 	 * @param username
 	 * @return
 	 */
-	@Transactional(rollbackFor = { Exception.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response editApartment(Apartment entity,String username) {
 		entity.fillField(username);
 		if(updateEntity(entity)==1){
