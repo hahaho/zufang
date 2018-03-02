@@ -127,7 +127,8 @@
         	x.community_name communityName,
         	x.rent_amt rentAmt,x.zujin_type zujinType,
         	x.room room,x.hall hall,x.wei wei,
-        	x.status houseStatus,x.type houseType
+        	x.status houseStatus,
+        	CASE WHEN x.type = 1 THEN '设置为热门' ELSE '取消设置' END houseType
         FROM t_zfang_house x
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
        	join t_zfang_house_location z on z.house_id = x.id
