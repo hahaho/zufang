@@ -127,7 +127,7 @@
         	x.community_name communityName,
         	x.rent_amt rentAmt,x.zujin_type zujinType,
         	x.room room,x.hall hall,x.wei wei,
-        	x.status houseStatus
+        	x.status houseStatus,x.type houseType
         FROM t_zfang_house x
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
        	join t_zfang_house_location z on z.house_id = x.id
@@ -257,8 +257,8 @@
         FROM t_zfang_house_location z
 			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
-        	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id and a.`name` = '独卫'
-        	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a.`name` = '可做饭'
+        	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id and a1.`name` = '独卫'
+        	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a2.`name` = '可做饭'
        	WHERE 1=1 
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>

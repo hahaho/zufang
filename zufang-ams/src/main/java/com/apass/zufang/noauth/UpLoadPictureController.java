@@ -15,7 +15,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.utils.FileUtilsCommons;
 import com.apass.zufang.utils.ImageTools;
 @Controller
-@RequestMapping("/application/")
+@RequestMapping("/application")
 public class UpLoadPictureController {
 	private static final Logger logger = LoggerFactory.getLogger(UpLoadPictureController.class);
 	/** * 图片服务器地址*/
