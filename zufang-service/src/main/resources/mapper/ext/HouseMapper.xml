@@ -149,22 +149,25 @@
     </select>
     
     <!-- init城市 -->
-    <select id="initCity" resultType="com.apass.zufang.domain.vo.HouseVo">
+        <select id="initCity" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
         SELECT
 			l.city
 		FROM
 			t_zfang_house h,
-			t_zfang_house_location l
+			t_zfang_house_location l,
+			t_zfang_apartment a
 		WHERE
 			h.id = l.house_id
-		AND h.status = '3'
-		AND h.is_delete = '00'
-		GROUP BY l.city ASC
+			AND h.apartment_id = a.id
+			AND h.status = '3'
+			AND h.is_delete = '00'
+			AND a.is_delete = '00'
+			GROUP BY l.city ASC
         ]]>
     </select>
     <!-- 查询房源List -->
-    <select id="getHouseByCodes" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
+    <select id="getHouseById" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
         SELECT
 				h.id			id,
@@ -174,18 +177,22 @@
 				h.hall			hall,
 				h.wei			wei,
 				h.acreage		acreage,
-				i.url			pictures,
-				l.detail_addr	detailAddr
+				l.province		province,
+				l.city			city,
+				l.district		district,
+				l.street		street,
+				l.detail_addr	detailAddr,
+				l.longitude longitude,
+				l.latitude	latitude
 			FROM
 				t_zfang_house h,
-				t_zfang_house_img i,
-				t_zfang_house_location l,
-				t_zfang_apartment a
+				t_zfang_house_location l
 			WHERE
-				h.id = i.house_id = l.house_id = a.house_id
-				AND h.apartment_id = a.id
+				h.id = l.house_id
+				AND h.is_delete = '00'
+				AND l.is_delete = '00'
 				AND h.status = '3'
-				AND a.code in
+				AND h.apartment_id in
         ]]>
         <foreach collection="list" item="employeeId" index="index" open="(" separator="," close=")">
 				#{employeeId}

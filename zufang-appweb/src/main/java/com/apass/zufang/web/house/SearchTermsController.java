@@ -1,5 +1,6 @@
 package com.apass.zufang.web.house;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.common.WorkCityJd;
+import com.apass.zufang.domain.entity.ApartHouseList;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.domain.enums.PriceRangeEnum;
@@ -60,8 +62,9 @@ public class SearchTermsController {
 
 			Apartment apartment = new Apartment();
 			apartment.setCity(city);
-
-			List<Apartment> resultApartment = apartHouseService.getApartByCity(apartment);
+			
+			HashMap<String, Object> map = Maps.newHashMap();
+			List<ApartHouseList> resultApartment = apartHouseService.getApartByCity(map);
 
 			return Response.success("success", GsonUtils.toJson(resultApartment));
 		} catch (BusinessException e) {

@@ -1,5 +1,6 @@
 
 package com.apass.zufang.service.house;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +40,24 @@ public class HouseImgService {
 		return houseImgMapper.getImgByHouseId(houseImg);
 	}
 	
+	/**
+	 * 获取imgList
+	 * @param houseId
+	 * @param type
+	 * @return
+	 */
+	public List<String> getImgList(Long houseId, byte type) {
+		HouseImg houseImg = new HouseImg();
+		houseImg.setType(type);
+		houseImg.setHouseId(houseId);
+		List<HouseImg> houseImgList = houseImgMapper.getImgByHouseId(houseImg);
+		List<String> imgUrlList = new ArrayList<String>();
+		for (HouseImg Img : houseImgList) {
+			imgUrlList.add(Img.getUrl());
+		}
+
+		return imgUrlList;
+	}
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void insertImg(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo || CollectionUtils.isEmpty(houseVo.getPictures())){
