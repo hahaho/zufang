@@ -122,7 +122,7 @@
         SELECT 
         	x.sort_no sortNo,
         	y.id apartmentid,y.name apartmentName,
-        	x.id id,x.code houseCode,x.title title,
+        	x.id houseId,x.code houseCode,x.title title,
         	x.community_name communityName,
         	x.rent_amt rentAmt,x.zujin_type zujinType,
         	x.room room,x.hall hall,x.wei wei
