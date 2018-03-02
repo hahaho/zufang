@@ -167,10 +167,8 @@ public class HouseinitService {
 			}
 			}else{
 			//为空的情况 按照按浏览量（7天）降序排列房源
-			if (ValidateUtils.listIsTrue(setHouses)) {
-				if (size > 5) {
-					setHouses = setHouses.subList(0, 5);
-				}
+			if (ValidateUtils.listIsTrue(norHouses)) {
+				setHouses = new PageBean<>(1, 5, norHouses).getList();
 			}
 			//追加图片
 			for (HouseVo houseVo : setHouses) {
@@ -182,29 +180,33 @@ public class HouseinitService {
 	}
 	private String getSetHouse(List<HouseVo> setHouses, List<HouseVo> norHouses, Map<String, Object> paramMap, HashMap<String, Integer> finMap) throws BusinessException {
 		
+		List<HouseVo> nearHouses = null;
 		// 获取用户当前经纬度追加2公里经纬度,
 		String longitude = (String) paramMap.get("longitude");// 经度
 		String latitude = (String) paramMap.get("latitude");// 纬度
 		String pageNum = (String) paramMap.get("pageNum");// 页码
 		if (StringUtils.isAnyBlank(longitude, latitude)) {
 			// 去除按流量排进热门的数据
-			norHouses = removeHotHouse(setHouses, norHouses, finMap);
+			nearHouses = removeHotHouse(setHouses, norHouses, finMap);
 		}else{
 			ValidateUtils.isNotBlank("请求参数丢失数据", longitude, latitude);
 			Map<String, Double> returnLLSquarePoint = CommonService.renturnLngLat(new Double(longitude), new Double(latitude), new Double(2000));
-			norHouses = initNearLocation(returnLLSquarePoint);
+			nearHouses = initNearLocation(returnLLSquarePoint);
 			// 去除按流量排进热门的数据
-			norHouses = removeHotHouse(setHouses, norHouses, finMap);
-			if (ValidateUtils.listIsTrue(norHouses)) {
+//			norHouses = removeHotHouse(setHouses, norHouses, finMap);
+//			for (HouseVo houseVo : norHouses) {
+//				nearHouses.add(houseVo);
+//			}
+			if (ValidateUtils.listIsTrue(nearHouses)) {
 				// 使用冒泡排列经纬距离
-				for (int i = 1; i < norHouses.size(); i++) {
-					for (int j = 0; j < norHouses.size()-1; j++) {
-						double disOne = CommonService.distanceSimplify(new Double(longitude), new Double(latitude), norHouses.get(j).getLongitude(), norHouses.get(j).getLatitude());
-						double disTwo = CommonService.distanceSimplify(new Double(longitude), new Double(latitude), norHouses.get(j+1).getLongitude(), norHouses.get(j+1).getLatitude());
+				for (int i = 1; i < nearHouses.size(); i++) {
+					for (int j = 0; j < nearHouses.size()-1; j++) {
+						double disOne = CommonService.distanceSimplify(new Double(longitude), new Double(latitude), nearHouses.get(j).getLongitude(), nearHouses.get(j).getLatitude());
+						double disTwo = CommonService.distanceSimplify(new Double(longitude), new Double(latitude), nearHouses.get(j+1).getLongitude(), nearHouses.get(j+1).getLatitude());
 						if (disOne < disTwo) {
 							HouseVo temp = new HouseVo();
-							HouseVo temp1 = norHouses.get(j);
-							HouseVo temp2 = norHouses.get(j+1);
+							HouseVo temp1 = nearHouses.get(j);
+							HouseVo temp2 = nearHouses.get(j+1);
 							temp = temp1;
 							temp1 = temp2;
 							temp2 = temp;
@@ -213,17 +215,17 @@ public class HouseinitService {
 				}
 			}
 		}
-		if (ValidateUtils.listIsTrue(norHouses) && norHouses.size() > 10) {
-			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum)+1, 10, norHouses);
-			norHouses = pageBean.getList();
+		if (ValidateUtils.listIsTrue(nearHouses) && nearHouses.size() > 10) {
+			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum)+1, 10, nearHouses);
+			nearHouses = pageBean.getList();
 		}
 		
-		return GsonUtils.toJson(norHouses);
+		return GsonUtils.toJson(nearHouses);
 	}
 
 	private List<HouseVo> removeHotHouse(List<HouseVo> hotHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
 		
-		List<HouseVo> removeList = null;
+		List<HouseVo> removeList = norHouses;
 		try {
 			Integer currSize = finMap.get("finSize");
 
@@ -231,28 +233,21 @@ public class HouseinitService {
 			if (currSize > 5) {
 				List<HouseVo> subList = hotHouse.subList(5, currSize);
 				for (HouseVo houseVo : subList) {
-					norHouses.add(houseVo);
+					removeList.add(houseVo);
 				}
-				removeList = norHouses;
 			// 配置房源小于5
 			} else {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
-					List<HouseVo> subList = norHouses.subList(5 - currSize, norHouses.size());
-					for (HouseVo houseVo : subList) {
-						hotHouse.add(houseVo);
-					}
-					// @2:正常房源+配置房源<5
-					removeList = hotHouse;
+					removeList = norHouses.subList(5 - currSize, norHouses.size());
 				}
+				// @2:正常房源+配置房源<5
 			}
 
 			return removeList;
 		} catch (Exception e) {
-			//如果查询推荐房源数量小于热门房源不返回数据
-			hotHouse = null;
+			return null;
 		}
-		return hotHouse;
 	}
 
 }

@@ -33,7 +33,7 @@ public class HouseinitController {
      * @return
      */
 	@POST
-	@Path("/init")
+	@Path("/initCity")
 	public Response initCity() {
 		
 		try {
