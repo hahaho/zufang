@@ -41,7 +41,8 @@
             <include refid="Base_Column_List" />
         FROM t_zfang_house_img
         WHERE 
-        	is_delete = '00' 
+        	is_delete = '00'
+        	AND type= '1'
    </select>
    
    <update id="deleteImgByHouseId" parameterType="java.lang.Long">

@@ -33,11 +33,11 @@ public class PageBean<T> {
             this.totalPage = totalRecord / pageSize +1;
         }
         this.startIndex = (pageNum-1)*pageSize ;
-        if (totalRecord - pageNum > 0) {
+        if (totalPage - pageNum > 0) {
         	//开始索引
         	this.endIndex = startIndex + pageSize ;
         	list = totalList.subList(startIndex, endIndex);
-		}if (totalRecord - pageNum == 0) {
+		}if (totalPage - pageNum == 0) {
 			//开始索引
 			this.endIndex = startIndex + totalList.size() ;
 			list = totalList.subList(startIndex, endIndex);
