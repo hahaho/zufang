@@ -55,7 +55,7 @@ public class HouseVo{
 
     private Byte zujinType;//1:押一付三;2:押一付一；.....
     private String zujinTypeStr;//1:押一付三;2:押一付一；.....
-
+    private String houseStatus;
     private Byte chaoxiang;//朝向， 1:东：2:南....
 
     private Byte zhuangxiu;//装修情况:1:豪华装修...
@@ -425,5 +425,13 @@ public class HouseVo{
 	}
 	public void setZujinTypeStr(String zujinTypeStr) {
 		this.zujinTypeStr = zujinTypeStr;
+	}
+
+	public String getHouseStatus() {
+		return houseStatus;
+	}
+
+	public void setHouseStatus(String houseStatus) {
+		this.houseStatus = houseStatus;
 	}
 }
