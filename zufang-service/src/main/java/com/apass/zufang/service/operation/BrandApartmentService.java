@@ -11,6 +11,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -40,6 +41,18 @@ public class BrandApartmentService {
 	public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
 		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
         List<HouseVo> list = houseMapper.getHotHouseList(entity);
+        for(HouseVo vo : list){
+        	vo.setDescription(vo.getRoom()+"室"+vo.getHall()+"厅"+vo.getWei()+"卫");
+        	Byte zujintype = vo.getZujinType();
+        	Integer zujinType = Integer.parseInt(zujintype.toString());
+        	if(zujinType==BusinessHouseTypeEnums.YJLX_1.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_1.getMessage());;
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_2.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_2.getMessage());;
+        	}else{
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_3.getMessage());;
+        	}
+        }
         pageBody.setRows(list);
         entity.setStartRecordIndex(null);
         list = houseMapper.getHotHouseList(entity);

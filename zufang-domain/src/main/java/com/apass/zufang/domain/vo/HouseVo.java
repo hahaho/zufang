@@ -54,6 +54,7 @@ public class HouseVo{
     private BigDecimal rentAmt;//租金/月
 
     private Byte zujinType;//1:押一付三;2:押一付一；.....
+    private String zujinTypeStr;//1:押一付三;2:押一付一；.....
 
     private Byte chaoxiang;//朝向， 1:东：2:南....
 
@@ -417,5 +418,12 @@ public class HouseVo{
 
 	public void setRoomAcreage(BigDecimal roomAcreage) {
 		this.roomAcreage = roomAcreage;
+	}
+
+	public String getZujinTypeStr() {
+		return zujinTypeStr;
+	}
+	public void setZujinTypeStr(String zujinTypeStr) {
+		this.zujinTypeStr = zujinTypeStr;
 	}
 }
