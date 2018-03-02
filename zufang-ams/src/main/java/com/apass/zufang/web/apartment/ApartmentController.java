@@ -98,6 +98,8 @@ public class ApartmentController {
 		try{
 			LOGGER.info("editApartment map--->{}",GsonUtils.toJson(map));
 			Apartment entity = (Apartment) FarmartJavaBean.map2entity(new Apartment(), Apartment.class, map);
+			String apartmentId = CommonUtils.getValue(map, "id");
+			entity.setId(Long.parseLong(apartmentId));
 			String username = SpringSecurityUtils.getCurrentUser();
 			return apartmentService.editApartment(entity,username);
 		}catch(Exception e){
