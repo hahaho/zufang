@@ -15,8 +15,15 @@ public enum BusinessHouseTypeEnums {
 	HZ_HEZU_2(2, "合租","HZ"),
 	// 押金类型	'1:押一付三;2:押一付一;.....'
 	YJLX_1(1, "押一付一","YJLX"),
-	YJLX_2(2, "押一付三","YJLX"),
-	YJLX_3(3, "押一付六","YJLX"),
+	YJLX_2(2, "押一付二","YJLX"),
+	YJLX_3(3, "押一付三","YJLX"),
+	YJLX_4(4, "押二付一","YJLX"),
+	YJLX_5(5, "押二付二","YJLX"),
+	YJLX_6(6, "押二付三","YJLX"),
+	YJLX_7(7, "面议","YJLX"),
+	YJLX_8(8, "半年付","YJLX"),
+	YJLX_9(9, "半年付不押","YJLX"),
+	YJLX_10(10, "押一付半年","YJLX"),
 	// 朝向， 1:东 2:南 3:西 4:北
 	CX_EAST_1(1, "东","CX"),
 	CX_SOUTH_2(2, "南","CX"),
@@ -27,7 +34,7 @@ public enum BusinessHouseTypeEnums {
 	ZT_SHAGNJIA_2(2, "上架","ZT"),
 	ZT_XIAJIA_3(3, "下架","ZT"),
 	ZT_SHANGCHU_4(4, "删除","ZT"),
-	ZT_XIUGAI_5(5,"修改","ZT"),
+	ZT_XIUGAI_5(5,"审核中","ZT"),
 	// '装修情况:1:豪华装修...'
 	ZX_HAOHUA_1(1, "豪华装修","ZX"),
 	// '1:普通住宅...',
