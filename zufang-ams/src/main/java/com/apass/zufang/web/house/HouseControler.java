@@ -29,7 +29,7 @@ import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-@Path("/application/house")
+@Path("/house")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class HouseControler {
@@ -55,6 +55,7 @@ public class HouseControler {
         	String city = CommonUtils.getValue(paramMap, "city");//公寓所在省份
         	String district = CommonUtils.getValue(paramMap, "district");//公寓所在省份
         	String street = CommonUtils.getValue(paramMap, "street");//公寓所在省份
+        	
         	String rows =  CommonUtils.getValue(paramMap, "rows");
         	String page =  CommonUtils.getValue(paramMap, "page");
         	

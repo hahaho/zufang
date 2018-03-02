@@ -23,7 +23,7 @@ import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-@Path("/application/house/audit")
+@Path("/house/audit")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class HouseAuditController {
