@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.logstash.LOG;
-import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.ApartHouseList;
 import com.apass.zufang.domain.vo.HouseVo;
@@ -42,7 +41,7 @@ public class ApartHouseController {
 			// 获取市区
 			List<String> imgList = apartHouseService.initImg();
 			resultMap.put("initImg", imgList);
-			return Response.success("初始公寓轮播图成功！", GsonUtils.toJson(resultMap));
+			return Response.success("初始公寓轮播图成功！", resultMap);
 		} catch (Exception e) {
 			LOG.error("初始公寓轮播图失败！", e);
 			return Response.fail("初始公寓轮播图失败！");
@@ -62,7 +61,7 @@ public class ApartHouseController {
 			ArrayList<ApartHouseList> apartHouseList = apartHouseService.getApartByCity(paramMap);
 	
 			resultMap.put("apartHouse", apartHouseList);
-			return Response.success("查询公寓房源信息！", GsonUtils.toJson(resultMap));
+			return Response.success("查询公寓房源信息！", resultMap);
 			} catch (Exception e) {
 				LOG.error("查询公寓房源信息失败！", e);
 				return Response.fail("查询公寓房源信息失败！");
@@ -86,7 +85,7 @@ public class ApartHouseController {
 			
 			List<HouseVo> apartList = apartHouseService.getHouseById(houseId, pageNum);
 			resultMap.put("house", apartList);
-			return Response.success("查询房源List成功！", GsonUtils.toJson(resultMap));
+			return Response.success("查询房源List成功！", resultMap);
 		} catch (Exception e) {
 			LOG.error("查询房源List失败！", e);
 			return Response.fail("查询房源List失败！");
