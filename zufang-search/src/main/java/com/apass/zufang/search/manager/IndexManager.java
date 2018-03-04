@@ -18,6 +18,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
@@ -27,6 +28,7 @@ import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,46 +61,6 @@ public class IndexManager<T> {
         } finally {
             IOUtils.closeQuietly(esIn);
         }
-    }
-
-    /**
-     * http://blog.csdn.net/xiaohulunb/article/details/37877435
-     */
-    public static <Goods> Pagination<Goods> goodSearch(GoodsSearchCondition condition, String sortField, boolean desc, int from, int size) {
-        String value = condition.getGoodsName();
-        if (Pinyin4jUtil.isContainChinese(condition.getGoodsName())||Pinyin4jUtil.isContainSpecial(condition.getGoodsName())) {
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
-                     "categoryName3", "goodsName", "goodsSkuAttr").operator(Operator.AND);
-            multiMatchQueryBuilder.field("categoryName1", 0.8f);
-            multiMatchQueryBuilder.field("categoryName2", 1f);
-            multiMatchQueryBuilder.field("categoryName3", 1.5f);
-            multiMatchQueryBuilder.field("goodsName", 2f);
-            multiMatchQueryBuilder.field("goodsSkuAttr", 0.8f);
-            //TODO
-            Pagination<Goods> goodsPagination =
-                    search(multiMatchQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
-            if (!CollectionUtils.isEmpty(goodsPagination.getDataList())) {
-                return goodsPagination;
-            }
-        }
-        return boolSearch(sortField, desc, from, size, StringUtils.lowerCase(value));
-
-    }
-    /**
-     * 二级类目查询
-     * http://blog.csdn.net/xiaohulunb/article/details/37877435
-     */
-	public static <Goods> Pagination<Goods> goodSearchCategoryId2(String categoryId2, String sortField1, boolean desc,
-			int from, int size) {
-        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("categoryId2", categoryId2);
-		Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.HOUSE, desc, from, size, sortField1);
-        return goodsPagination;
-	}
-    public static <Goods> Pagination<Goods> goodSearchCategoryId2ForOtherCategory(String categoryId2, String sortField1,String sortField2, boolean desc,
-                                                                  int from, int size) {
-        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("categoryId2", categoryId2);
-        Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.HOUSE, desc, from, size, sortField1,sortField2);
-        return goodsPagination;
     }
 
     /**
@@ -151,7 +113,7 @@ public class IndexManager<T> {
     }
 
     /**
-     * 创建索引
+     * 批量创建索引：先delete再create
      *
      * @param datas
      * @param indexType
@@ -165,6 +127,7 @@ public class IndexManager<T> {
             bulkRequest.add(new DeleteRequest(esprop.getIndice(),indexType.getDataName(),t.getId() + ""));
             bulkRequest.add(new IndexRequest(esprop.getIndice(), indexType.getDataName(), t.getId() + "").source(json));
         }
+
 
         /**
          * 执行批量处理request
@@ -183,7 +146,7 @@ public class IndexManager<T> {
     }
 
     /**
-     * 添加索引
+     * 添加索引:单个添加索引包括document数据
      *
      * @param index
      * @param type
