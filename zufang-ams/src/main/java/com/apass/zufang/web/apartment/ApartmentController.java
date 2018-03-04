@@ -9,6 +9,8 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
@@ -47,6 +49,7 @@ public class ApartmentController {
     public ResponsePageBody<Apartment> getApartmentList(Map<String,Object> map) {
         ResponsePageBody<Apartment> respBody = new ResponsePageBody<Apartment>();
         try {
+        	LOGGER.info("getApartmentList map--->{}",GsonUtils.toJson(map));
         	String name = CommonUtils.getValue(map, "name");//公寓名称
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
@@ -56,6 +59,9 @@ public class ApartmentController {
         	entity.setName(name);
         	entity.setIsDelete("00");
         	respBody = apartmentService.getApartmentList(entity);
+        } catch (BusinessException e) {
+            LOGGER.error("getApartmentList EXCEPTION --- --->{}", e);
+            respBody.setMsg("公寓信息列表查询失败");
         } catch (Exception e) {
             LOGGER.error("getApartmentList EXCEPTION --- --->{}", e);
             respBody.setMsg("公寓信息列表查询失败");
@@ -98,6 +104,8 @@ public class ApartmentController {
 		try{
 			LOGGER.info("editApartment map--->{}",GsonUtils.toJson(map));
 			Apartment entity = (Apartment) FarmartJavaBean.map2entity(new Apartment(), Apartment.class, map);
+			String apartmentId = CommonUtils.getValue(map, "id");
+			entity.setId(Long.parseLong(apartmentId));
 			String username = SpringSecurityUtils.getCurrentUser();
 			return apartmentService.editApartment(entity,username);
 		}catch(Exception e){

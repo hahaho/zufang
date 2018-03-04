@@ -1,7 +1,7 @@
 package com.apass.zufang.web.house;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,16 +11,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.ApartHouseList;
-import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.ApartHouseService;
-import com.apass.zufang.utils.PageBean;
+import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Maps;
 
 @Path("/apartHouse")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -38,75 +37,59 @@ public class ApartHouseController {
 	@Path("/initImg")
 	public Response initImg() {
 		try {
+			HashMap<String, Object> resultMap = Maps.newHashMap();
 			// 获取市区
-			List<String> cityList = apartHouseService.initImg();
-			return Response.success("初始城市地址成功！", cityList);
+			List<String> imgList = apartHouseService.initImg();
+			resultMap.put("initImg", imgList);
+			return Response.success("初始公寓轮播图成功！", resultMap);
 		} catch (Exception e) {
-			LOG.error("初始城市地址失败！", e);
-			return Response.fail("初始城市地址失败！");
+			LOG.error("初始公寓轮播图失败！", e);
+			return Response.fail("初始公寓轮播图失败！");
 		}
 	}
 	
 	/**
-	 * 查询公寓Id
+	 * 查询公寓房源信息
 	 * @return
 	 */
 	@POST
-	@Path("/getApartCodes")
+	@Path("/getApartHouse")
 	public Response getApartByCity(Map<String, Object> paramMap) {
 		
+		HashMap<String, Object> resultMap = Maps.newHashMap();
 		try {
-			String city = (String) paramMap.get("city");
-			int pageNum = (int) paramMap.get("pageNum");
-			Apartment apartment = new Apartment();
-			apartment.setCity(city);
-			List<Apartment> resultApartment = apartHouseService.getApartByCity(apartment);
-			PageBean<Apartment> pageBean = new PageBean<Apartment>(pageNum+1, 4, resultApartment);
-			resultApartment = pageBean.getList();
-			ApartHouseList apartHouseList = new ApartHouseList();
-			for (Apartment eachApart : resultApartment) {
-				List<HouseVo> houseListByCode = apartHouseService.getHouseByCodes((ArrayList<String>) Arrays.asList(eachApart.getCode()));
-				PageBean<HouseVo> pageBean1 = new PageBean<HouseVo>(pageNum+1, 5, houseListByCode);
-				List<HouseVo> list = pageBean1.getList();
-				apartHouseList.setId(eachApart.getId());
-				apartHouseList.setCode(eachApart.getCode());
-				apartHouseList.setName(eachApart.getName());
-				apartHouseList.setRows(list);
-			}
+			ArrayList<ApartHouseList> apartHouseList = apartHouseService.getApartByCity(paramMap);
 	
-			return Response.success("success", apartHouseList);
+			resultMap.put("apartHouse", apartHouseList);
+			return Response.success("查询公寓房源信息！", resultMap);
 			} catch (Exception e) {
-				LOG.error("查询品牌公寓失败！", e);
-				return Response.fail("查询品牌公寓失败！");
+				LOG.error("查询公寓房源信息失败！", e);
+				return Response.fail("查询公寓房源信息失败！");
 			}
 	}
+
 	/**
 	 * 查询房源List
 	 * @return
 	 */
 	@POST
-	@Path("/getHouseByCodes")
-	public Response getHouseByCodes(Map<String, Object> paramMap) {
+	@Path("/getHouseById")
+	public Response getHouseById(Map<String, Object> paramMap) {
 		
+		HashMap<String, Object> resultMap = Maps.newHashMap();
 		try {
-			String str = (String) paramMap.get("codes");
-			int pageNum = (int) paramMap.get("pageNum");
-			if (StringUtils.isBlank(str)) {
-				return Response.fail("请求参数为空！");
-			}
-			String[] split = str.split(",");
-			ArrayList<String> list = new ArrayList<>();
-			for (int i = 0; i < split.length; i++) {
-				list.add(split[i]);
-			}
-			List<HouseVo> apartList = apartHouseService.getHouseByCodes(list);
-			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(pageNum+1, 20, apartList);
-			apartList = pageBean.getList();
-			return Response.success("success", apartList);
+			
+			String houseId = (String) paramMap.get("apartId");
+			String pageNum = (String) paramMap.get("pageNum");
+			ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", houseId, pageNum);
+			
+			List<HouseVo> apartList = apartHouseService.getHouseById(houseId, pageNum);
+			resultMap.put("house", apartList);
+			return Response.success("查询房源List成功！", resultMap);
 		} catch (Exception e) {
-			LOG.error("查询品牌公寓失败！", e);
-			return Response.fail("查询品牌公寓失败！");
+			LOG.error("查询房源List失败！", e);
+			return Response.fail("查询房源List失败！");
 		}
 	}
-	
+
 }

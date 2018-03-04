@@ -61,14 +61,35 @@
         <include refid="QueryConditionSqlBackup" />
     </select>
     <!-- 搜索所有公寓codes -->
-	<select id="getApartByCity" resultMap="BaseResultMap"
+		<select id="getApartByCity" resultMap="BaseResultMap"
 		parameterType="com.apass.zufang.domain.entity.Apartment">
-		SELECT a.id,a.code,a.name
+		SELECT a.id,a.name,a.area
 		FROM
-		t_zfang_apartment a
+		t_zfang_apartment a,
+		t_zfang_house h,
+		t_zfang_house_location l
 		WHERE
-		a.is_delete = '00'
+		a.id = h.apartment_id
+		AND h.id = l.house_id
 		AND a.city = #{city}
-		GROUP BY a.city ORDER BY a.created_time DESC;
+		AND a.is_delete = '00'
+		AND h.is_delete = '00'
+		AND l.is_delete = '00'
+		AND h.status = '3'
+		ORDER BY a.created_time DESC;
+	</select>
+	
+	 <!-- 搜索所有公寓codes -->
+		<select id="getApartmentBylistCity" resultMap="BaseResultMap"
+		parameterType="com.apass.zufang.domain.entity.Apartment">
+		SELECT a.id,a.code,a.name,a.area
+		FROM
+		t_zfang_apartment a,
+		t_zfang_house_location l
+		WHERE
+		a.city like '%${city}%'
+		AND a.is_delete = '00'
+		AND l.is_delete = '00'
+		ORDER BY a.created_time DESC;
 	</select>
 </mapper>

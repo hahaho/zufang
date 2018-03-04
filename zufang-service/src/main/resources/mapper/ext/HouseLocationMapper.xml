@@ -19,7 +19,6 @@
 				h.hall			hall,
 				h.wei			wei,
 				h.acreage		acreage,
-				i.url			pictures,
 				l.province		province,
 				l.city			city,
 				l.district		district,
@@ -29,18 +28,18 @@
 				l.latitude	latitude
 			FROM
 				t_zfang_house h,
-				t_zfang_house_img i,
-				t_zfang_house_location l
+				t_zfang_house_location l,
+				t_zfang_apartment a,
+				t_zufang_work_city_jd c
 			WHERE
-				h.id = i.house_id = l.house_id
+				h.id = l.house_id
+				AND h.apartment_id = a.id
 				AND h.is_delete = '00'
 				AND h.type = '1'
 				AND h.status = '3'
-				AND l.longitude >= #{minLng}
-				AND l.longitude <= #{maxLng}
-				AND l.latitude >= #{minLat}
-				AND l.latitude <= #{maxLat}
-	        	ORDER BY h.page_view DESC;
+				AND l.province = c.PROVINCE
+				AND c.CITY = #{city}
+	      ORDER BY h.page_view DESC;
        	]]>
     </select>
    	<!-- init附近房源Bycity -->
@@ -55,7 +54,6 @@
 				h.hall			hall,
 				h.wei			wei,
 				h.acreage		acreage,
-				i.url			pictures,
 				l.province		province,
 				l.city			city,
 				l.district		district,
@@ -65,10 +63,11 @@
 				l.latitude	latitude
 			FROM
 				t_zfang_house h,
-				t_zfang_house_img i,
-				t_zfang_house_location l
+				t_zfang_house_location l,
+				t_zfang_apartment a
 			WHERE
-				h.id = i.house_id = l.house_id
+				h.id = l.house_id
+				AND h.apartment_id = a.id
 				AND h.is_delete = '00'
 				AND h.type = #{type}
 				AND h.status = '3'

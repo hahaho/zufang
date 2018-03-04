@@ -11,6 +11,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -40,6 +41,30 @@ public class BrandApartmentService {
 	public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
 		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
         List<HouseVo> list = houseMapper.getHotHouseList(entity);
+        for(HouseVo vo : list){
+        	vo.setDescription(vo.getRoom()+"室"+vo.getHall()+"厅"+vo.getWei()+"卫");
+        	Byte zujintype = vo.getZujinType();
+        	Integer zujinType = Integer.parseInt(zujintype.toString());
+        	if(zujinType==BusinessHouseTypeEnums.YJLX_1.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_1.getMessage());;
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_2.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_2.getMessage());;
+        	}else{
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_3.getMessage());;
+        	}
+        	Integer status = Integer.parseInt(vo.getHouseStatus());
+        	if(status==BusinessHouseTypeEnums.ZT_1.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_1.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_2.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_2.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_3.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_3.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.ZT_4.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_4.getMessage());
+        	}else{
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_5.getMessage());
+        	}
+        }
         pageBody.setRows(list);
         entity.setStartRecordIndex(null);
         list = houseMapper.getHotHouseList(entity);
@@ -54,7 +79,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response hotHouseMoveUp(String houseId,String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
@@ -77,7 +102,7 @@ public class BrandApartmentService {
 			}
 			if(vo.getSortNo()==sorNo){
 				houseU = houseService.readEntity(vo.getHouseId());
-				houseU.setSortNo(sorNo);
+				houseU.setSortNo(sorNo-1);
 				houseU.setUpdatedUser(user);
 				houseU.setUpdatedTime(new Date());
 				break;
@@ -97,7 +122,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response hotHouseMoveDown(String houseId, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
@@ -140,7 +165,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response hotHouseCancel(String houseId, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
@@ -174,11 +199,9 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class})
-	public Response hotHouseSet(String houseId, String sortNo, String url, String user) throws BusinessException {
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+	public Response hotHouseSet(String houseId, String url, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
-		Integer sort = Integer.parseInt(sortNo);
-        Integer sort2 = sort;
         HouseQueryParams entity = new HouseQueryParams();
 		entity.setIsDelete("00");
 		entity.setHouseType((byte)2);
@@ -187,41 +210,32 @@ public class BrandApartmentService {
 			throw new BusinessException("热门房源设置失败,热门房源数量已达上限！");
 		}
         House house = houseService.readEntity(id);
-        house.setSortNo(sort);
+        if(list==null||list.size()==0){
+        	house.setSortNo(1);
+        }else{
+        	house.setSortNo(list.size()+1);
+        }
         house.setUpdatedTime(new Date());
 		house.setUpdatedUser(user);
 		if(houseService.updateEntity(house)!=1){
 			throw new BusinessException("热门房源设置失败！");
-		}else{
-			List<HouseImg> imglist = houseImgService.getHouseImgList(id,(byte)1);
-			if(imglist==null||imglist.size()==0){
-				HouseImg houseimg = new HouseImg();
-				houseimg.setHouseId(id);
-				houseimg.setIsDelete("00");
-				houseimg.setUrl(url);
-				houseimg.setType((byte)1);
-				houseimg.setCreatedTime(new Date());
-				houseimg.setUpdatedTime(new Date());
-				houseImgMapper.insertSelective(houseimg);
-			}else{
-				HouseImg houseimg = imglist.get(0);
-				houseimg.setUrl(url);
-				houseimg.setUpdatedTime(new Date());
-				houseImgMapper.updateByPrimaryKeySelective(houseimg);
-			}
 		}
-        for(HouseVo en : list){
-            if(en.getSortNo()<sort||en.getHouseId().equals(id)){
-                continue;
-            }
-            house = houseService.readEntity(en.getHouseId());
-            house.setSortNo(++sort2);
-            house.setUpdatedTime(new Date());
-            house.setUpdatedUser(user);
-            if(houseService.updateEntity(house)!=1){
-            	throw new BusinessException("热门房源设置失败,更新排序异常！");
-            }
-        }
+		List<HouseImg> imglist = houseImgService.getHouseImgList(id,(byte)1);
+		if(imglist==null||imglist.size()==0){
+			HouseImg houseimg = new HouseImg();
+			houseimg.setHouseId(id);
+			houseimg.setIsDelete("00");
+			houseimg.setUrl(url);
+			houseimg.setType((byte)1);
+			houseimg.setCreatedTime(new Date());
+			houseimg.setUpdatedTime(new Date());
+			houseImgMapper.insertSelective(houseimg);
+		}else{
+			HouseImg houseimg = imglist.get(0);
+			houseimg.setUrl(url);
+			houseimg.setUpdatedTime(new Date());
+			houseImgMapper.updateByPrimaryKeySelective(houseimg);
+		}
         return Response.success("热门房源设置成功！");
     }
 	/**
@@ -233,7 +247,7 @@ public class BrandApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	@Transactional(rollbackFor = { Exception.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response hotHouseEdit(String houseId, String sortNo, String url, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		Integer sort = Integer.parseInt(sortNo);

@@ -2,6 +2,8 @@ package com.apass.zufang.domain.vo;
 
 import java.math.BigDecimal;
 
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+
 public class HouseBagVo {
 	
 	private Long apartId;//公寓Id
@@ -16,6 +18,8 @@ public class HouseBagVo {
 	
 	private Integer status;//状态
 	
+	private String statusMsg;//状态Msg
+	
 	private String communityName;//小区名称
 	
 	private Integer room;//室
@@ -27,6 +31,8 @@ public class HouseBagVo {
 	private BigDecimal rentAmt;//租金
 	
 	private Integer zujinType;//租金支付方式
+	
+	private String zujinTypeMsg;//租金支付方式
 
 	public Long getApartId() {
 		return apartId;
@@ -123,4 +129,13 @@ public class HouseBagVo {
 	public void setZujinType(Integer zujinType) {
 		this.zujinType = zujinType;
 	}
+
+	public String getStatusMsg() {
+		return BusinessHouseTypeEnums.valueOfZT(this.status).getMessage();
+	}
+
+	public String getZujinTypeMsg() {
+		return BusinessHouseTypeEnums.valueOfYJLX(this.zujinType).getMessage();
+	}
+	
 }

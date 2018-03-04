@@ -29,7 +29,7 @@ import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
-@Path("/application/house")
+@Path("/house")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class HouseControler {
@@ -55,6 +55,12 @@ public class HouseControler {
         	String city = CommonUtils.getValue(paramMap, "city");//公寓所在省份
         	String district = CommonUtils.getValue(paramMap, "district");//公寓所在省份
         	String street = CommonUtils.getValue(paramMap, "street");//公寓所在省份
+        	
+        	String rows =  CommonUtils.getValue(paramMap, "rows");
+        	String page =  CommonUtils.getValue(paramMap, "page");
+        	
+        	rows = StringUtils.isNotBlank(rows) ? rows: "10";
+        	page = StringUtils.isNotBlank(page) ? page: "1";
         	HouseQueryParams dto = new HouseQueryParams();
         	dto.setApartmentName(apartmentName);
         	dto.setHouseTitle(houseTitle);
@@ -63,6 +69,8 @@ public class HouseControler {
         	dto.setCity(city);
         	dto.setDistrict(district);
         	dto.setStreet(street);
+        	dto.setRows(Integer.parseInt(rows));
+        	dto.setPage(Integer.parseInt(page));
         	respBody = houseService.getHouseListExceptDelete(dto);
         	respBody.setMsg("房屋信息列表查询成功!");
         	return Response.success("查询房屋信息成功！", respBody);
@@ -299,7 +307,7 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(acreage, "请填写房屋面积");
     	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
 	    
-	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	
 	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
 	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 99, "合租户数");
@@ -383,7 +391,7 @@ public class HouseControler {
 	    String[] pictures = StringUtils.split(picturs,",");
 	    house.setPictures(Arrays.asList(pictures));
 	    
-	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_HEZU_2.getCode()+"", rentType)){//如果出租类型为合租
+	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode()+"", rentType)){//如果出租类型为合租
 	    	String totalDoors = CommonUtils.getValue(paramMap, "totalDoors");//几户合租
 		    String hezuResource = CommonUtils.getValue(paramMap, "hezuResource");//出租介绍
 		    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向

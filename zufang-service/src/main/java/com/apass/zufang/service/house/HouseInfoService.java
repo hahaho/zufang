@@ -71,20 +71,20 @@ public class HouseInfoService {
 			orHouseImg.setHouseId(houseInfo.getHouseId());
 			// 处理租赁类型
 			if(houseInfo.getRentType()!=null){
-			BusinessHouseTypeEnums rentType = BusinessHouseTypeEnums.valueOf(
-					Integer.valueOf(houseInfo.getRentType()), "HZ");
+			BusinessHouseTypeEnums rentType = BusinessHouseTypeEnums.valueOfHZ(
+					Integer.valueOf(houseInfo.getRentType()));
 			houseInfo.setRentTypeStr(rentType.getMessage());
 			}
 			// 处理租金类型
 			if(houseInfo.getZujinType()!=null){
-			BusinessHouseTypeEnums zujinType = BusinessHouseTypeEnums.valueOf(
-					Integer.valueOf(houseInfo.getZujinType()), "YJLX");
+			BusinessHouseTypeEnums zujinType = BusinessHouseTypeEnums.valueOfYJLX(
+					Integer.valueOf(houseInfo.getZujinType()));
 			houseInfo.setZujinTypeStr(zujinType.getMessage());
 			}
 			// 处理朝向
 			if(houseInfo.getChaoxiang()!=null){
-				BusinessHouseTypeEnums chaoxiang = BusinessHouseTypeEnums.valueOf(
-						Integer.valueOf(houseInfo.getChaoxiang()), "CX");
+				BusinessHouseTypeEnums chaoxiang = BusinessHouseTypeEnums.valueOfCX(
+						Integer.valueOf(houseInfo.getChaoxiang()));
 				houseInfo.setChaoxiangStr(chaoxiang.getMessage());
 			}
 

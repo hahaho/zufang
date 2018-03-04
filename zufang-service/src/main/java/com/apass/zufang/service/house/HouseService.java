@@ -1,11 +1,8 @@
 package com.apass.zufang.service.house;
-
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
@@ -41,7 +37,6 @@ import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 /**
  * 房源管理
  * @author Administrator
@@ -49,45 +44,51 @@ import com.google.common.collect.Maps;
  */
 @Service
 public class HouseService {
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseService.class);
-	
 	@Autowired
 	private HouseMapper houseMapper;
-	
 	@Autowired
 	private ApartmentMapper apartmentMapper;
-	
 	@Autowired
 	private HouseLocationMapper locationMapper;
-	
 	@Autowired
 	private HousePeizhiMapper peizhiMapper; 
-	
 	@Autowired
 	private HouseImgMapper imgMapper;
-	
 	@Autowired
 	private HouseImgService imgService;
-	
 	@Autowired
 	private HousePeiZhiService peizhiService;
-	
 	@Autowired
 	private HouseLocationService  locationService;
-
 	@Autowired
 	private HouseEsDao houseEsDao;
-
+	/**
+	 * readEntity
+	 * @param id
+	 * @return
+	 */
+	public House readEntity(Long id){
+		return houseMapper.selectByPrimaryKey(id);
+	}
+	/**
+	 * updateEntity
+	 * @param entity
+	 * @return
+	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+	public Integer updateEntity(House entity){
+		return houseMapper.updateByPrimaryKeySelective(entity);
+	}
 	/*** 房屋信息管理列表 */
 	public ResponsePageBody<HouseBagVo> getHouseListExceptDelete(HouseQueryParams dto){
 		ResponsePageBody<HouseBagVo> body = new ResponsePageBody<>();
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
-		status.add(BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode());
-		status.add(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode());
-		status.add(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_1.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_2.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_3.getCode());
 		dto.setStatus(status);
 		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
@@ -102,7 +103,7 @@ public class HouseService {
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		
 		List<Integer> status = Lists.newArrayList();
-		status.add(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_5.getCode());
 		dto.setStatus(status);
 		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
@@ -154,8 +155,8 @@ public class HouseService {
 		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		
 		/** 如果是首次添加，修改，状态不变，如果是下架，修改后，状态变为5*/
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
-			house.setStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
+			house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 		}
 		/*** 修改房屋信息*/
 		houseMapper.updateByPrimaryKeySelective(house);
@@ -188,13 +189,13 @@ public class HouseService {
 			throw new BusinessException("房屋信息不存在！");
 		}
 		/***房屋状态为上架或者删除时，不允许删除*/
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_4.getCode()){
 			throw new BusinessException("房屋状态不允许删除!");
 		}
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_2.getCode()){
 			throw new BusinessException("请将房源下架后重试!");
 		}
-		house.setStatus(BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode().byteValue());
+		house.setStatus(BusinessHouseTypeEnums.ZT_4.getCode().byteValue());
 		house.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
@@ -239,14 +240,14 @@ public class HouseService {
 		if(null == house){
 			throw new BusinessException("房屋信息不存在！");
 		}
-		if(house.getStatus().intValue() != BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode()){
+		if(house.getStatus().intValue() != BusinessHouseTypeEnums.ZT_5.getCode()){
 			throw new BusinessException("房屋状态不允许操作!");
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
-			house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+			house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			houseAddEs(house.getId());
 		}else{
-			house.setStatus(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
+			house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
 		}
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
@@ -264,12 +265,12 @@ public class HouseService {
 			throw new BusinessException("房屋信息不存在！");
 		}
 		/***房屋状态为上架或者删除时，不允许删除*/
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_4.getCode()){
 			throw new BusinessException("房屋状态不允许进行上下架操作!");
 		}
 		
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode()){
-			house.setStatus(BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode().byteValue());
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_2.getCode()){
+			house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
 			house.setDelistTime(new Date());
@@ -287,15 +288,15 @@ public class HouseService {
 		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
 		int status = house.getStatus().intValue();
 		//如果房屋的状态为待上架，正常上架
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_4.getCode()){
 			return "房屋状态不允许操作！";
 		}
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode() 
-				|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
-			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode()){
-				house.setStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
+				|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
+			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()){
+				house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 			}else{
-				house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+				house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 				house.setListTime(new Date());
 				houseAddEs(house.getId());
 			}
@@ -320,17 +321,17 @@ public class HouseService {
 		for (String str : ids) {
 			House house = houseMapper.selectByPrimaryKey(Long.parseLong(str));
 			//如果房屋状态为删除，则跳过
-			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_SHANGCHU_4.getCode()){
+			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_4.getCode()){
 				continue;
 			}
 			//如果房屋的状态为待上架，正常上架
-			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode() 
-					|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_XIAJIA_3.getCode()){
-				if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_WSHAGNJIA_1.getCode()){
-					house.setStatus(BusinessHouseTypeEnums.ZT_XIUGAI_5.getCode().byteValue());
+			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
+					|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
+				if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()){
+					house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 					others++;
 				}else{
-					house.setStatus(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode().byteValue());
+					house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 					house.setListTime(new Date());
 					houseAddEs(house.getId());
 					waitUp++;
@@ -368,16 +369,6 @@ public class HouseService {
 		img.setUpdatedTime(new Date());
 		imgMapper.updateByPrimaryKey(img);
 	}
-	
-	
-	public House readEntity(Long id){
-		return houseMapper.selectByPrimaryKey(id);
-	}
-	@Transactional(rollbackFor = { Exception.class})
-	public Integer updateEntity(House entity){
-		return houseMapper.updateByPrimaryKeySelective(entity);
-	}
-
 	/**
 	 * 查询要上传ES的数据库数据
 	 * @param index
@@ -387,7 +378,7 @@ public class HouseService {
 	public List<House> selectUpGoods(int index, int bach_size) {
 		HouseQueryParams dto = new HouseQueryParams();
 		List<Integer> statuList = Lists.newArrayList();
-		statuList.add(BusinessHouseTypeEnums.ZT_SHAGNJIA_2.getCode());
+		statuList.add(BusinessHouseTypeEnums.ZT_2.getCode());
 		dto.setStatus(statuList);
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		dto.setListTimeStr("yes");

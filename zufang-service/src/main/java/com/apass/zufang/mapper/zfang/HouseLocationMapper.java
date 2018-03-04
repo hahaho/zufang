@@ -15,7 +15,7 @@ public interface HouseLocationMapper extends GenericMapper<HouseLocation,Long>{
 	
 	HouseLocation getLocationByHouseId(Long houseId);
 	
-	List<HouseVo> initNearLocation(Map<String, Double> returnLLSquarePoint);
+	List<HouseVo> initNearLocation(String city);
 
 	List<HouseVo> initHouseByCity(HashMap<String, String> map);
 	
