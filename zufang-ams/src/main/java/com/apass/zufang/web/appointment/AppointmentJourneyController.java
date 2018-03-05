@@ -145,6 +145,21 @@ public class AppointmentJourneyController {
         }
     }
 	/**
+	 * 预约行程管理 看房记录导出
+	 * @param map
+	 * @return
+	 */
+	public Response downLoadReserveHouseList(Map<String,Object> map){
+		try{
+			LOGGER.info("getReserveHouseList map--->{}",GsonUtils.toJson(map));
+			ApprintmentJourneyQueryParams entity = validateParams(map);
+	    	return appointmentJourneyService.downLoadReserveHouseList(entity);
+		}catch(Exception e){
+			LOGGER.error("downLoadReserveHouseList EXCEPTION --- --->{}", e);
+			return Response.fail("预约行程管理 看房记录导出失败！");
+		}
+	}
+	/**
      * 验证参数
      * @param map
      * @throws BusinessException

@@ -83,4 +83,19 @@ public class AppointmentJourneyService {
 		}
 		return Response.fail("预约行程管理 客户回访记录新增失败！");
 	}
+	/**
+	 * 预约行程管理 看房记录导出
+	 * @param entity
+	 * @return
+	 */
+	public Response downLoadReserveHouseList(ApprintmentJourneyQueryParams entity) {
+		List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(entity);
+        for(ReserveHouseVo vo : list){
+        	String reserveType = vo.getType()==(byte)1?"在线预约":"电话预约";
+        	vo.setReserveType(reserveType);
+        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
+        	vo.setReserveType(DateFormatUtil.dateToString(vo.getReserveDate()));
+        }
+		return Response.success("预约行程管理 看房记录导出成功！",list);
+	}
 }
