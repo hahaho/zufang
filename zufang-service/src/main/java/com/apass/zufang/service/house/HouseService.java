@@ -153,7 +153,7 @@ public class HouseService {
 		House house = houseMapper.selectByPrimaryKey(houseVo.getHouseId());
 		BeanUtils.copyProperties(houseVo, house);
 		
-		if(houseVo.getApartmentId().equals(house.getApartmentId())){
+		if(!houseVo.getApartmentId().equals(house.getApartmentId())){
 			house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		}
 		
