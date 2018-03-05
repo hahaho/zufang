@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
 import com.apass.zufang.domain.entity.ReserveHouse;
@@ -26,6 +27,12 @@ public class AppointmentJourneyService {
 	public ResponsePageBody<ReserveHouseVo> getReserveHouseList(ApprintmentJourneyQueryParams entity) {
 		ResponsePageBody<ReserveHouseVo> pageBody = new ResponsePageBody<ReserveHouseVo>();
         List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(entity);
+        for(ReserveHouseVo vo : list){
+        	String reserveType = vo.getType()==(byte)1?"在线预约":"电话预约";
+        	vo.setReserveType(reserveType);
+        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
+        	vo.setReserveType(DateFormatUtil.dateToString(vo.getReserveDate()));
+        }
         pageBody.setTotal(list.size());
         pageBody.setRows(list);
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
