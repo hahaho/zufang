@@ -8,6 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,12 +205,12 @@ public class ZuFangLoginController {
 	        			GfbRegisterInfoEntity gfbRegisterInfoEntity = new GfbRegisterInfoEntity();
 	        			gfbRegisterInfoEntity.setAccount(mobile);
 	        			//插入数据库
-	        			Long userId= zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
+	        			Long id= zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
 		        		//生成token   
-		        		String token = tokenManager.createToken( String.valueOf(userId), mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
+		        		String token = tokenManager.createToken( String.valueOf(id), mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
 		        		resultMap.put("token", token);
 		        		resultMap.put("account", mobile);
-		        		resultMap.put("userId", userId);
+		        		resultMap.put("userId", id);
 		        		return Response.success("验证码真确登录成功",resultMap);
 	        		}else{
 	        		//已注册用户
@@ -228,6 +229,34 @@ public class ZuFangLoginController {
 	            return Response.fail("操作失败");
 	        }
 	    }
-	
+	//发送验证码  时判断是不是新用户
+	@POST
+	@Path("/zfsend")
+	public Response zfsend(Map<String, Object> paramMap)throws BusinessException {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		String mobile = CommonUtils.getValue(paramMap, "mobile");// 微信号
+		String smsType = CommonUtils.getValue(paramMap, "smsType");// 微信号
+		logger.info("入参 mobile"+mobile+"smsType"+smsType);
+		
+		if (StringUtils.isAnyBlank(mobile, smsType)) {
+			return Response.fail("验证码接收手机号不能为空");
+		}
+		try {
+			mobileRandomService.sendMobileVerificationCode(smsType, mobile);
+			
+			 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
+			 if(zfselecetmobile == null){
+				 resultMap.put("user", "yes");
+			 }else{
+				 resultMap.put("user", "no");
+			 }
+			
+			return Response.success("验证码发送成功,请注意查收",resultMap);
+		} catch (BusinessException e) {
+			logger.error("mobile verification code send fail", e);
+			return Response.fail("网络异常,发送验证码失败,请稍后再试");
+		}
+	}
 
 }
