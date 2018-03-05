@@ -129,7 +129,7 @@ public class MobileSmsService {
 			map.put("currDate", String.valueOf(new Date().getTime() / 1000));
 
 			cacheManager.set(type + "_" + mobile, GsonUtils.toJson(map), 120);
-			String msg = "【安家趣花】验证码" + code + "（有效时间为2分钟）注意该验证码为重要信息，请勿泄露！";
+			String msg = "【安家派】您的验证码是:" + code + "(该验证码2分钟内有效)，如非本人操作，请忽略本短信。";
 			boolean flag = true;
 
 			String cacheCode = cacheManager.get(SHORT_MESSAGE_CHANNEL);
