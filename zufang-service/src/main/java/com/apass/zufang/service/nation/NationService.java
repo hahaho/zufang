@@ -22,18 +22,7 @@ import com.apass.zufang.mapper.zfang.WorkCityJdMapper;
  */
 @Service
 public class NationService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(NationService.class);
-    /**
-     * 直辖市
-     */
-    private static final String[] CENTRL_CITY_ARRAY = {"110000", "120000", "310000", "500000"};
-    private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
-
-    /**
-     * 新疆、西藏、甘肃省、宁夏、内蒙古、青海省、香港、澳门、台湾省
-     */
-    private static final List<String> FORBIDDEN_PROVINCE = Arrays.asList(
-            new String[]{"650000", "540000", "620000", "640000", "150000", "630000", "810000", "820000", "710000"});
+	
     @Autowired
     private WorkCityJdMapper cityJdMapper;
 
@@ -47,5 +36,5 @@ public class NationService {
     	return cityJdMapper.selectDateByParentId(districtCode);
     }
     
-
+    
 }
