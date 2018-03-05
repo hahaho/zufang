@@ -152,7 +152,10 @@ public class HouseService {
 		}
 		House house = houseMapper.selectByPrimaryKey(houseVo.getHouseId());
 		BeanUtils.copyProperties(houseVo, house);
-		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
+		
+		if(houseVo.getApartmentId().equals(house.getApartmentId())){
+			house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
+		}
 		
 		/** 如果是首次添加，修改，状态不变，如果是下架，修改后，状态变为5*/
 		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
