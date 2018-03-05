@@ -146,14 +146,14 @@ public class HouseService {
 		if(null == houseVo.getHouseId()){
 			throw new BusinessException("房屋Id不能为空!");
 		}
-		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
-		if(null == part || StringUtils.isBlank(part.getCode())){
-			throw new BusinessException("房屋所属公寓的编号不存在!");
-		}
 		House house = houseMapper.selectByPrimaryKey(houseVo.getHouseId());
 		BeanUtils.copyProperties(houseVo, house);
 		
 		if(!houseVo.getApartmentId().equals(house.getApartmentId())){
+			Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
+			if(null == part || StringUtils.isBlank(part.getCode())){
+				throw new BusinessException("房屋所属公寓的编号不存在!");
+			}
 			house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		}
 		
