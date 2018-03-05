@@ -66,7 +66,7 @@ public class UpLoadPictureController {
             Map<String,Object> values = Maps.newHashMap();
             values.put("url",url);
             values.put("fullurl",imageUri+url);
-            return Response.success("success",url);
+            return Response.success("success",values);
         }catch (BusinessException e){
 			logger.error("delpicture businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
