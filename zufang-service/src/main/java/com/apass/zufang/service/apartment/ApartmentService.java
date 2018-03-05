@@ -87,4 +87,14 @@ public class ApartmentService {
 		}
 		return Response.fail("公寓信息修改失败！");
 	}
+	/**
+	 * 新增房源专用   用于新增公寓下属房源
+	 * 根据登录人信息获取该个人归属公寓信息  
+	 * @param username
+	 * @return
+	 */
+	public Long getApartmentByCurrentUser(String username) {
+		return 1L;
+//		return apartmentMapper.selectByPrimaryKey(1L).getId();
+	}
 }
