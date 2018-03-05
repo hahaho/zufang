@@ -32,7 +32,7 @@ public class ReserveHouseService {
 	 * @param entity
 	 * @return
 	 */
-	@Transactional(rollbackFor = { Exception.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public int updateEntity(ReserveHouse entity) {
 		return reserveHouseMapper.updateByPrimaryKeySelective(entity);
 	}
