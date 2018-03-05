@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.exception.BusinessException;
@@ -45,6 +46,10 @@ import com.google.common.collect.Maps;
 @Service
 public class HouseService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseService.class);
+	
+	@Value("${zufang.image.uri}")
+    private String imageUri;
+	
 	@Autowired
 	private HouseMapper houseMapper;
 	@Autowired
@@ -229,7 +234,7 @@ public class HouseService {
 		values.put("location",location);
 		values.put("imgs",imgs);
 		values.put("peizhis",peizhis);
-		
+		values.put("imgProfix",imageUri);
 		return values;
 	}
 	
