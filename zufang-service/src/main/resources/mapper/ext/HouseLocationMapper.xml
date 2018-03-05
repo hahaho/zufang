@@ -12,7 +12,7 @@
     	parameterType="java.util.Map">
     	<![CDATA[
 			SELECT
-				h.id			id,
+				h.id			houseId,
 				h.title			title,
 				h.rent_amt		rentAmt,
 				h.room			room,
