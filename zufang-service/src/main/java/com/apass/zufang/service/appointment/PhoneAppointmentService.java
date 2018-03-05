@@ -27,6 +27,9 @@ public class PhoneAppointmentService {
 	public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(HouseAppointmentQueryParams entity) {
 		ResponsePageBody<HouseAppointmentVo> pageBody = new ResponsePageBody<HouseAppointmentVo>();
         List<HouseAppointmentVo> list = reserveHouseService.getHouseListForPhoneAppointment(entity);
+        for(HouseAppointmentVo vo : list){
+        	vo.setHouseAll(vo.getHouseRoom()+"室"+vo.getHouseHall()+"厅"+vo.getHouseWei()+"卫");
+        }
 //        list = checkHouseList(list);
         pageBody.setTotal(list.size());
         pageBody.setRows(list);
