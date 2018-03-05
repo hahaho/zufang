@@ -1,5 +1,6 @@
 package com.apass.zufang.web.house;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -118,9 +119,30 @@ public class SearchTermsController {
 			 */
 			List<WorkCityJd> resultJd = workSubwaySevice.queryCityJdParentCodeList(code);
 			
+			List<WorkSubway> resultJdJson=new ArrayList<WorkSubway>();
+			
+			for (WorkCityJd workCityJd : resultJd) {
+				List<WorkSubway> resultJdJsonTemp=new ArrayList<WorkSubway>();
+				WorkSubway temp=new WorkSubway(); 
+				temp.setId(workCityJd.getId());
+				temp.setCode(Long.valueOf(workCityJd.getCode()));
+				temp.setLineName(workCityJd.getCity());
+				if(!workCityJd.getResultList().isEmpty()){
+					for (WorkCityJd workSubwaysss : workCityJd.getResultList()) {
+						WorkSubway tempsss=new WorkSubway();
+						temp.setId(workSubwaysss.getId());
+						tempsss.setCode(Long.valueOf(workSubwaysss.getCode()));
+						tempsss.setSiteName(workSubwaysss.getDistrict());
+						resultJdJsonTemp.add(tempsss);
+					}
+					temp.setResultList(resultJdJsonTemp);
+				}
+				resultJdJson.add(temp);
+			}
+			
 			Map<String,Object> resultMap=Maps.newHashMap();
 			resultMap.put("workSubway", result);
-			resultMap.put("workCityJd", resultJd);
+			resultMap.put("workCityJd", resultJdJson);
 
 			return Response.success("success", resultMap);
 		} catch (BusinessException e) {
