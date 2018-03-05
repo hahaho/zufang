@@ -51,7 +51,8 @@ public class UpLoadPictureController {
         		file.getInputStream().close();
         		throw new BusinessException("文件不能大于2MB!");
         	}
-        	String fileName = "logo_" + System.currentTimeMillis()+"_"+ file.getName();
+        	String imgType = ImageTools.getImgType(file);
+        	String fileName = "logo_" + System.currentTimeMillis()+"_"+ file.getName()+ "." + imgType;
             String url = nfsHouse + fileName;
             /*** 上传文件*/
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
