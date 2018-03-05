@@ -48,7 +48,10 @@ public enum BusinessHouseTypeEnums {
 	CZJS_1(1, "出租主卧"),
 	CZJS_2(2, "出租次卧"),
 	CZJS_3(3, "出租隔断间"),
-	CZJS_4(4, "出租床位");
+	CZJS_4(4, "出租床位"),
+	
+	DT_1(1,"有电梯"),
+	DT_2(2,"无电梯");
 	
 
 	private Integer code;
