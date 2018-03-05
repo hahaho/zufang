@@ -29,18 +29,17 @@
 			FROM
 				t_zfang_house h,
 				t_zfang_house_location l,
-				t_zfang_apartment a
+				t_zfang_apartment a,
+				t_zufang_work_city_jd c
 			WHERE
 				h.id = l.house_id
 				AND h.apartment_id = a.id
 				AND h.is_delete = '00'
 				AND h.type = '1'
 				AND h.status = '3'
-				AND l.longitude >= #{minLng}
-				AND l.longitude <= #{maxLng}
-				AND l.latitude >= #{minLat}
-				AND l.latitude <= #{maxLat}
-	        	ORDER BY h.page_view DESC;
+				AND l.province = c.PROVINCE
+				AND c.CITY = #{city}
+	      ORDER BY h.page_view DESC;
        	]]>
     </select>
    	<!-- init附近房源Bycity -->

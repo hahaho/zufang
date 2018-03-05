@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
-import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.service.house.HouseinitService;
 import com.apass.zufang.utils.ValidateUtils;
@@ -38,7 +37,7 @@ public class HouseinitController {
 		
 		try {
 			HashMap<String, Object> init = houseinitService.init();
-			return Response.success("初始城市地址成功！", GsonUtils.toJson(init));
+			return Response.success("初始城市地址成功！", init);
 		} catch (Exception e) {
 			LOG.error("初始城市地址失败！", e);
 			return Response.fail("初始城市地址失败！");

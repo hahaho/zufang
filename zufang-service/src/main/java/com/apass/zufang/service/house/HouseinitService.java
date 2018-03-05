@@ -1,6 +1,8 @@
 package com.apass.zufang.service.house;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
-import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
@@ -35,39 +36,6 @@ public class HouseinitService {
     @Autowired
     private HouseLocationMapper HouseLocationMapper;
 
-    public static void main(String[] args) {
-    	List<Integer> test = new ArrayList<Integer>();  
-        //init list  
-        for (int i = 1; i < 10; i++) {  
-            test.add(i);    //auto boxing  
-        }  
-        PageBean<Integer> pageBean = new PageBean<>(1, 15, test);
-        List<Integer> list = pageBean.getList();
-        System.out.println("遍历超出数组的数据");
-        for (Integer integer : list) {
-			System.out.print(integer);
-		}
-        //display the list  
-        System.out.println();
-        System.out.println("the orginal list: ");  
-        for (int i = 0; i < test.size(); i++) {  
-            System.out.print(test.get(i) + " ");  
-        } 
-        System.out.println();
-        System.out.println("test.subList(5, test.size())");
-        List<Integer> subList2 = test.subList(5, test.size());
-        for (Integer integer : subList2) {
-			System.out.print(integer + " ");
-		}
-        System.out.println();
-        System.out.println("集合的size()" + "test.subList(list.size(), list.size())");
-        List<Integer> subList = test.subList(test.size(), test.size());
-        System.out.println(subList.size());
-        for (Integer integer : subList) {
-        	System.out.print(integer + " ");
-        }
-	}
-    
 	public HashMap<String, Object> init() {
 		
 		HashMap<String, Object> resultMap = Maps.newHashMap();
@@ -89,7 +57,7 @@ public class HouseinitService {
 		String city = (String) paramMap.get("city");// 城市
 		
 		// 获取url
-		String imgList = getUrl();
+		List<String> imgList = getUrl();
 		resultMap.put("initImg", imgList);
 		LOG.info("init首页接口_获取url成功");
 		
@@ -103,17 +71,17 @@ public class HouseinitService {
 		List<HouseVo> norHouses = initHouseByCity(map);
 		
 		// 封装热门房源
-		String hotHouse = getHotHouse(setHouses, norHouses);
+		List<HouseVo> hotHouse = getHotHouse(setHouses, norHouses);
 		resultMap.put("hotHouse", hotHouse);
 		LOG.info("init首页接口_获取热门房源成功");
 		// 封装配置房源
-		String setHouse = getSetHouse(setHouses, norHouses, paramMap, finMap);
+		List<HouseVo> setHouse = getSetHouse(setHouses, norHouses, paramMap, finMap);
 		resultMap.put("setHouse", setHouse);
 		LOG.info("init首页接口_获取配置房源成功");
 		return resultMap;
 	}
 
-	private String getUrl() {
+	private List<String> getUrl() {
 		
 		List<HouseImg> imgList = houseImgMapper.initImg();
 		PageBean<HouseImg> pageBean = new PageBean<>(1, 10, imgList);
@@ -122,16 +90,16 @@ public class HouseinitService {
 		for (int i = 0; i < imgList.size(); i++) {
 			initImg.add(imgList.get(i).getUrl());
 		}
-		return GsonUtils.toJson(initImg);
+		return initImg;
 	}
 	/**
 	 * init附近房源
 	 * @param returnLLSquarePoint
 	 * @return
 	 */
-	public List<HouseVo> initNearLocation(Map<String, Double> returnLLSquarePoint) {
+	public List<HouseVo> initNearLocation(String city) {
 		
-		List<HouseVo> initNearHouse = HouseLocationMapper.initNearLocation(returnLLSquarePoint);
+		List<HouseVo> initNearHouse = HouseLocationMapper.initNearLocation(city);
 		return initNearHouse;
 	}
 
@@ -146,100 +114,133 @@ public class HouseinitService {
 		return initHouse;
 	}
 
-	private String getHotHouse(List<HouseVo> setHouses, List<HouseVo> norHouses) throws BusinessException {
-		
-		// 从后台配置读取热门房源
-		int size = setHouses.size();
-		if(ValidateUtils.listIsTrue(setHouses)){
-			//不为空的情况
-			if (size < 5) {
-				if (!ValidateUtils.listIsTrue(norHouses)) {
-					int currsize = 5-size;
-					if (currsize > norHouses.size()) {
-						currsize = norHouses.size();
+	private List<HouseVo> getHotHouse(List<HouseVo> setHouses, List<HouseVo> norHouses) throws BusinessException {
+
+		List<HouseVo> hotHouse = null;
+		// 配置房源非空
+		if (ValidateUtils.listIsTrue(setHouses)) {
+
+			int size = setHouses.size();
+			// 配置房源为空
+			if (size >= 5) {
+				hotHouse = new PageBean<>(1, 5, setHouses).getList();
+			} else {
+				if (ValidateUtils.listIsTrue(norHouses)) {
+					hotHouse = setHouses;
+					List<HouseVo> list = new PageBean<>(1, 5 - size, norHouses).getList();
+					for (HouseVo houseVo : list) {
+						hotHouse.add(houseVo);
 					}
-				for (int i=0; i<currsize; i++) {
-					setHouses.add(norHouses.get(i));
 				}
+				// 配置房源为空
 			}
-			}else {
-				setHouses = setHouses.subList(0, 5);
-			}
-			}else{
-			//为空的情况 按照按浏览量（7天）降序排列房源
+		} else {
 			if (ValidateUtils.listIsTrue(norHouses)) {
-				setHouses = new PageBean<>(1, 5, norHouses).getList();
+				hotHouse = new PageBean<>(1, 5, norHouses).getList();
 			}
-			//追加图片
-			for (HouseVo houseVo : setHouses) {
-				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte)1);
+		}
+		if (ValidateUtils.listIsTrue(hotHouse)) {
+			// 追加图片
+			for (HouseVo houseVo : hotHouse) {
+				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
 				houseVo.setPictures(imgList);
 			}
-			}
-		return GsonUtils.toJson(setHouses);
+		}
+		return hotHouse;
 	}
-	private String getSetHouse(List<HouseVo> setHouses, List<HouseVo> norHouses, Map<String, Object> paramMap, HashMap<String, Integer> finMap) throws BusinessException {
-		
-		List<HouseVo> nearHouses = null;
+
+	private List<HouseVo> getSetHouse(List<HouseVo> setHouses, List<HouseVo> norHouses, Map<String, Object> paramMap,
+			HashMap<String, Integer> finMap) throws BusinessException {
+
+		List<HouseVo> nearHouses = new ArrayList<HouseVo>();
+		List<HouseVo> nearHouses1 = new ArrayList<HouseVo>();
 		// 获取用户当前经纬度追加2公里经纬度,
+		String city = (String) paramMap.get("city");// 城市
+		String pageNum = (String) paramMap.get("pageNum");// 页码
 		String longitude = (String) paramMap.get("longitude");// 经度
 		String latitude = (String) paramMap.get("latitude");// 纬度
-		String pageNum = (String) paramMap.get("pageNum");// 页码
 		if (StringUtils.isAnyBlank(longitude, latitude)) {
 			// 去除按流量排进热门的数据
-			nearHouses = removeHotHouse(setHouses, norHouses, finMap);
-		}else{
+			nearHouses = addSetHouse(setHouses, norHouses, finMap);
+		} else {
 			ValidateUtils.isNotBlank("请求参数丢失数据", longitude, latitude);
-			Map<String, Double> returnLLSquarePoint = CommonService.renturnLngLat(new Double(longitude), new Double(latitude), new Double(2000));
-			nearHouses = initNearLocation(returnLLSquarePoint);
+			nearHouses = initNearLocation(city);
 			// 去除按流量排进热门的数据
-//			norHouses = removeHotHouse(setHouses, norHouses, finMap);
-//			for (HouseVo houseVo : norHouses) {
-//				nearHouses.add(houseVo);
-//			}
+			nearHouses1 = removeSetHouse(setHouses, norHouses, finMap);
 			if (ValidateUtils.listIsTrue(nearHouses)) {
-				// 使用冒泡排列经纬距离
-				for (int i = 1; i < nearHouses.size(); i++) {
-					for (int j = 0; j < nearHouses.size()-1; j++) {
-						double disOne = CommonService.distanceSimplify(new Double(longitude), new Double(latitude), nearHouses.get(j).getLongitude(), nearHouses.get(j).getLatitude());
-						double disTwo = CommonService.distanceSimplify(new Double(longitude), new Double(latitude), nearHouses.get(j+1).getLongitude(), nearHouses.get(j+1).getLatitude());
-						if (disOne < disTwo) {
-							HouseVo temp = new HouseVo();
-							HouseVo temp1 = nearHouses.get(j);
-							HouseVo temp2 = nearHouses.get(j+1);
-							temp = temp1;
-							temp1 = temp2;
-							temp2 = temp;
+				if (ValidateUtils.listIsTrue(nearHouses1)) {
+					for (int i = 0; i < nearHouses.size(); i++) {
+						Long houseId = nearHouses.get(i).getHouseId();
+						for (int j = 0; j < nearHouses1.size(); j++) {
+							Long houseIdj = nearHouses1.get(j).getHouseId();
+							if (houseId.equals(houseIdj)) {
+								nearHouses.remove(i);
+								break;
+							}
 						}
 					}
 				}
-			}
-		}
+				// 按照房源距离由近到远排序
+				double[] disArray = new double[nearHouses.size()];
+				HashMap<Double, HouseVo> disMap = Maps.newHashMap();
+				for (int i = 0; i < nearHouses.size(); i++) {
+					double disOne = CommonService.distanceSimplify(new Double(longitude), new Double(latitude),
+							nearHouses.get(i).getLongitude(), nearHouses.get(i).getLatitude());
+					if (disMap.containsKey(disOne)) {
+						BigDecimal bigDecimal = new BigDecimal(disOne);
+						disOne = bigDecimal.add(new BigDecimal(0.00001)).doubleValue();
+					}
+					disMap.put(disOne, nearHouses.get(i));
+					disArray[i] = disOne;
+				}
+				Arrays.sort(disArray);
+				
+				if (disArray.length > 10) {
+					for (int i = 0; i < disArray.length; i++) {
+						double disance = disArray[i];
+						nearHouses.add(disMap.get(disance));
+					}
+				}
 		if (ValidateUtils.listIsTrue(nearHouses) && nearHouses.size() > 10) {
-			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum)+1, 10, nearHouses);
+			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
 			nearHouses = pageBean.getList();
 		}
-		
-		return GsonUtils.toJson(nearHouses);
+
+	}
+		}
+		return nearHouses;
 	}
 
-	private List<HouseVo> removeHotHouse(List<HouseVo> hotHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
+	private List<HouseVo> addSetHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
 		
-		List<HouseVo> removeList = norHouses;
+		try {
+			Integer currSize = finMap.get("finSize");
+			
+			List<HouseVo> addSetList = null;
+			// 配置房源大于5
+			if (currSize < 5) {
+				// @1:正常房源+配置房源>5
+				if (norHouses.size() + currSize > 5) {
+					addSetList = norHouses.subList(5 - currSize, norHouses.size());
+				}
+				// @2:正常房源+配置房源<5
+			}
+			return addSetList;
+		} catch (Exception e) {
+			return null;
+		}
+}
+	private List<HouseVo> removeSetHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
+		
+		List<HouseVo> removeList = null;
 		try {
 			Integer currSize = finMap.get("finSize");
 
 			// 配置房源大于5
-			if (currSize > 5) {
-				List<HouseVo> subList = hotHouse.subList(5, currSize);
-				for (HouseVo houseVo : subList) {
-					removeList.add(houseVo);
-				}
-			// 配置房源小于5
-			} else {
+			if (currSize < 5) {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
-					removeList = norHouses.subList(5 - currSize, norHouses.size());
+					removeList = norHouses.subList(0, 5 - currSize);
 				}
 				// @2:正常房源+配置房源<5
 			}
@@ -249,5 +250,4 @@ public class HouseinitService {
 			return null;
 		}
 	}
-
 }
