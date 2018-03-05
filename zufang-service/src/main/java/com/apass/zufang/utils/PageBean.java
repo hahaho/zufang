@@ -39,7 +39,7 @@ public class PageBean<T> {
         	list = totalList.subList(startIndex, endIndex);
 		}if (totalPage - pageNum == 0) {
 			//开始索引
-			this.endIndex = startIndex + totalList.size() ;
+			this.endIndex = totalRecord;
 			list = totalList.subList(startIndex, endIndex);
 		}
         

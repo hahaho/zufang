@@ -75,9 +75,9 @@ public class ApartHouseService {
 			eachAPH.setId(resultApartment.get(i).getId());
 			eachAPH.setName(resultApartment.get(i).getName());
 			eachAPH.setArea(resultApartment.get(i).getArea());
-			List<String> imgList = houseImgService.getImgList(resultApartment.get(i).getId(), (byte) 1);
+//			List<String> imgList = houseImgService.getImgList(resultApartment.get(i).getId(), (byte) 1);
 			eachAPH.setRows(houseListById);
-			eachAPH.setPictures(imgList);
+			eachAPH.setPictures(Arrays.asList(resultApartment.get(i).getCompanyLogo()));
 			apartHouseList.add(eachAPH);
 			}
 		}
