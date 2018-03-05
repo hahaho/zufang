@@ -45,7 +45,8 @@ public class AppointmentJourneyService {
 	 * @return
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response editReserveHouse(ReserveHouse entity, String username) {
+	public Response editReserveHouse(ReserveHouse entity, String username,Date reserveDate) {
+		entity.setReserveDate(reserveDate);
 		if(reserveHouseService.updateEntity(entity)==1){
 			return Response.success("预约行程管理 预约看房记录编辑成功！");
 		}
@@ -74,7 +75,9 @@ public class AppointmentJourneyService {
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addReturnVisit(ReturnVisit entity, String username) {
+		entity.setIsDelete("00");
 		entity.setCreatedTime(new Date());
+		entity.setUpdatedTime(new Date());
 		if(returnVisitService.createEntity(entity)==1){
 			return Response.success("预约行程管理 客户回访记录新增成功！");
 		}
