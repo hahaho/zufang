@@ -27,26 +27,16 @@ public class UpLoadPictureController {
 	@ResponseBody
     @RequestMapping(value = "/uppicture320", method = RequestMethod.POST)
 	public Response uploadPicture320(@ModelAttribute("file") MultipartFile file){
-		try {
-			String url = uploadImg(file, 750, 320);
-			return Response.success("success",url);
-		} catch (BusinessException e) {
-			return Response.fail(e.getErrorDesc());
-		}
+		return uploadImg(file, 750, 320);
     }
 	
 	@ResponseBody
     @RequestMapping(value = "/uppicture562", method = RequestMethod.POST)
 	public Response uploadPicture562(@ModelAttribute("file") MultipartFile file){
-		try {
-			String url = uploadImg(file, 750, 562);
-			return Response.success("success",url);
-		} catch (BusinessException e) {
-			return Response.fail(e.getErrorDesc());
-		}
+		return uploadImg(file, 750, 562);
     }
 	
-	public String uploadImg(MultipartFile file,int widths,int heights) throws BusinessException{
+	public Response uploadImg(MultipartFile file,int widths,int heights){
 		try{
     		if(null == file){
         		throw new BusinessException("上传文件不能为空!");
@@ -65,13 +55,13 @@ public class UpLoadPictureController {
             String url = nfsHouse + fileName;
             /*** 上传文件*/
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
-            return url;
+            return Response.success("success",url);
         }catch (BusinessException e){
 			logger.error("delpicture businessException---->{}",e);
-			throw new BusinessException("上传图片失败!");
+			return Response.fail(e.getErrorDesc());
 		}catch (Exception e) {
 			logger.error("上传house logo失败!", e);
-			throw new BusinessException("上传图片失败!");
+			return Response.fail("上传图片失败!");
         }
     }
 
