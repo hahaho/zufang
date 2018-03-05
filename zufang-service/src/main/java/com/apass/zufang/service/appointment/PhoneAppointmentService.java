@@ -1,8 +1,11 @@
 package com.apass.zufang.service.appointment;
+import java.util.Date;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
@@ -36,8 +39,12 @@ public class PhoneAppointmentService {
 	 * @param entity
 	 * @return
 	 */
-	public Response addReserveHouse(ReserveHouse entity,String user) {
-		entity.fillAllField(user);
+	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) {
+		entity.setType((byte)2);
+		entity.setReserveDate(reserveDate);
+		entity.setIsDelete("00");
+		entity.setCreatedTime(new Date());
+		entity.setUpdatedTime(new Date());
 		if(reserveHouseService.createEntity(entity)==1){
 			return Response.success("预约看房记录新增成功！");
 		}

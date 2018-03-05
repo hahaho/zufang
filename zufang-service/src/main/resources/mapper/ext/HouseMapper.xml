@@ -264,7 +264,7 @@
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>
        	<if test="communityName!=null and communityName!=''"> AND x.community_name LIKE '%${communityName}%' </if>
-       	<if test="houseTitle!=null and houseTitle!=''"> AND x.title = #{houseTitle} </if>
+       	<if test="houseTitle!=null and houseTitle!=''"> AND x.title LIKE '%${houseTitle}%' </if>
        	<if test="houseCode!=null and houseCode!=''"> AND x.`code` = #{houseCode} </if>
        	<if test="houseCity!=null and houseCity!=''"> AND z.city = #{houseCity} </if>
        	<if test="houseDistrict!=null and houseDistrict!=''"> AND z.district = #{houseDistrict} </if>
