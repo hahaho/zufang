@@ -13,6 +13,18 @@
                     "analyzer": "standard",
                     "search_analyzer": "standard"
                 },
+                "apartmentName": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "apartmentNamePinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
                 "houseTitle": {
                     "type": "text",
                     "index": "analyzed",

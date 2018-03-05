@@ -75,6 +75,8 @@ public class IndexManager<T> {
     private static <HousEs> Pagination<HousEs> boolSearch(String sortField, boolean desc, int from, int size, String value) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder
+                .should(QueryBuilders.wildcardQuery("apartmentName", "*" + value + "*").boost(1.5f))
+                .should(QueryBuilders.wildcardQuery("apartmentNamePinyin", "*" + value + "*").boost(1.5f))
                 .should(QueryBuilders.wildcardQuery("communityName", "*" + value + "*").boost(1.5f))
                 .should(QueryBuilders.wildcardQuery("communityNamePinyin", "*" + value + "*").boost(1.5f))
                 .should(QueryBuilders.wildcardQuery("houseTitle", "*" + value + "*").boost(2f))
@@ -244,14 +246,22 @@ public class IndexManager<T> {
         return results;
 	}
 
-    public static Pagination<HouseEs> HouseSearch(HouseSearchCondition condition, String sortField, boolean desc, int from, Integer size) {
+    public static Pagination<HouseEs> HouseSearch(HouseSearchCondition condition) {
+        String sortField = condition.getSortMode().getSortField();
+        boolean desc = condition.getSortMode().isDesc();
+        int from = condition.getOffset();
+        int size = condition.getPageSize();
+
         String value = condition.getHouseTitle();
-        if (Pinyin4jUtil.isContainChinese(condition.getHouseTitle())||Pinyin4jUtil.isContainSpecial(condition.getHouseTitle())) {
+
+        if (Pinyin4jUtil.isContainChinese(value)||Pinyin4jUtil.isContainSpecial(value)) {
             MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
-                    "communityName","houseTitle", "detailAddr","").operator(Operator.OR);
+                    "communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.OR);
             multiMatchQueryBuilder.field("communityName", 1.5f);
             multiMatchQueryBuilder.field("houseTitle", 2f);
             multiMatchQueryBuilder.field("detailAddr", 1f);
+            multiMatchQueryBuilder.field("apartmentName", 1f);
+
             //TODO
             Pagination<HouseEs> goodsPagination =
                     search(multiMatchQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);

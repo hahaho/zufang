@@ -94,7 +94,7 @@ public class HouseinitService {
 	}
 	/**
 	 * init附近房源
-	 * @param returnLLSquarePoint
+	 * @param city
 	 * @return
 	 */
 	public List<HouseVo> initNearLocation(String city) {

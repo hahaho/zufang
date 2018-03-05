@@ -434,6 +434,9 @@ public class HouseService {
 				houseEs.setCommunityNamePinyin(Pinyin4jUtil.converterToSpell(h.getCommunityName()));
 				houseEs.setAcreage(h.getAcreage());
 				houseEs.setRoom(h.getRoom());
+				if(h.getRoom()>4){
+					houseEs.setRoom(-1);
+				}
 				houseEs.setHall(h.getHall());
 				houseEs.setWei(h.getWei());
 				houseEs.setFloor(h.getFloor());
@@ -484,6 +487,7 @@ public class HouseService {
 			Apartment apartment = apartmentMapper.selectByPrimaryKey(h.getApartmentId());
 			if(apartment != null){
 				houseEs.setCompanyName(apartment.getCompanyName());
+				houseEs.setApartmentName(apartment.getName());
 			}
 
 			HouseLocation hLocation = locationMapper.getLocationByHouseId(houseId);
