@@ -93,17 +93,6 @@ public class HouseinitService {
 		return initImg;
 	}
 	/**
-	 * init附近房源
-	 * @param returnLLSquarePoint
-	 * @return
-	 */
-	public List<HouseVo> initNearLocation(String city) {
-		
-		List<HouseVo> initNearHouse = HouseLocationMapper.initNearLocation(city);
-		return initNearHouse;
-	}
-
-	/**
 	 * 通过城市查询热门房源
 	 * @param map
 	 * @return
@@ -153,9 +142,7 @@ public class HouseinitService {
 			HashMap<String, Integer> finMap) throws BusinessException {
 
 		List<HouseVo> nearHouses = new ArrayList<HouseVo>();
-		List<HouseVo> nearHouses1 = new ArrayList<HouseVo>();
 		// 获取用户当前经纬度追加2公里经纬度,
-		String city = (String) paramMap.get("city");// 城市
 		String pageNum = (String) paramMap.get("pageNum");// 页码
 		String longitude = (String) paramMap.get("longitude");// 经度
 		String latitude = (String) paramMap.get("latitude");// 纬度
@@ -164,22 +151,21 @@ public class HouseinitService {
 			nearHouses = addSetHouse(setHouses, norHouses, finMap);
 		} else {
 			ValidateUtils.isNotBlank("请求参数丢失数据", longitude, latitude);
-			nearHouses = initNearLocation(city);
 			// 去除按流量排进热门的数据
-			nearHouses1 = removeSetHouse(setHouses, norHouses, finMap);
+			nearHouses = removeSetHouse(setHouses, norHouses, finMap);
 			if (ValidateUtils.listIsTrue(nearHouses)) {
-				if (ValidateUtils.listIsTrue(nearHouses1)) {
-					for (int i = 0; i < nearHouses.size(); i++) {
-						Long houseId = nearHouses.get(i).getHouseId();
-						for (int j = 0; j < nearHouses1.size(); j++) {
-							Long houseIdj = nearHouses1.get(j).getHouseId();
-							if (houseId.equals(houseIdj)) {
-								nearHouses.remove(i);
-								break;
-							}
-						}
-					}
-				}
+				// if (ValidateUtils.listIsTrue(nearHouses1)) {
+				// for (int i = 0; i < nearHouses.size(); i++) {
+				// Long houseId = nearHouses.get(i).getHouseId();
+				// for (int j = 0; j < nearHouses1.size(); j++) {
+				// Long houseIdj = nearHouses1.get(j).getHouseId();
+				// if (houseId.equals(houseIdj)) {
+				// nearHouses.remove(i);
+				// break;
+				// }
+				// }
+				// }
+				// }
 				// 按照房源距离由近到远排序
 				double[] disArray = new double[nearHouses.size()];
 				HashMap<Double, HouseVo> disMap = Maps.newHashMap();
@@ -194,19 +180,24 @@ public class HouseinitService {
 					disArray[i] = disOne;
 				}
 				Arrays.sort(disArray);
-				
+
 				if (disArray.length > 10) {
 					for (int i = 0; i < disArray.length; i++) {
 						double disance = disArray[i];
 						nearHouses.add(disMap.get(disance));
 					}
 				}
-		if (ValidateUtils.listIsTrue(nearHouses) && nearHouses.size() > 10) {
-			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
-			nearHouses = pageBean.getList();
-		}
+				if (nearHouses.size() > 10) {
+					PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
+					nearHouses = pageBean.getList();
+				}
+				// 追加图片
+				for (HouseVo houseVo : nearHouses) {
+					List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+					houseVo.setPictures(imgList);
+				}
 
-	}
+			}
 		}
 		return nearHouses;
 	}
@@ -216,12 +207,16 @@ public class HouseinitService {
 		try {
 			Integer currSize = finMap.get("finSize");
 			
-			List<HouseVo> addSetList = null;
+			List<HouseVo> addSetList = setHouse;
 			// 配置房源大于5
 			if (currSize < 5) {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
 					addSetList = norHouses.subList(5 - currSize, norHouses.size());
+				}else {
+					for (HouseVo houseVo : norHouses) {
+						addSetList.add(houseVo);
+					}
 				}
 				// @2:正常房源+配置房源<5
 			}
