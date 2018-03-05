@@ -19,11 +19,6 @@ public class ReserveHouse extends CreatedUser{
     private String memo;
 
     private String isDelete;
-
-    private Date createdTime;
-
-    private Date updatedTime;
-
     public Long getId() {
         return id;
     }
@@ -94,21 +89,5 @@ public class ReserveHouse extends CreatedUser{
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
     }
 }

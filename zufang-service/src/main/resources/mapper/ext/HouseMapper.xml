@@ -127,7 +127,8 @@
         	x.community_name communityName,
         	x.rent_amt rentAmt,x.zujin_type zujinType,
         	x.room room,x.hall hall,x.wei wei,
-        	x.status houseStatus,x.type houseType
+        	x.status houseStatus,
+        	CASE WHEN x.type = 1 THEN '设置为热门' ELSE '取消设置' END houseType
         FROM t_zfang_house x
        	LEFT JOIN t_zfang_apartment y on y.id = x.apartment_id
        	join t_zfang_house_location z on z.house_id = x.id
@@ -263,7 +264,7 @@
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>
        	<if test="communityName!=null and communityName!=''"> AND x.community_name LIKE '%${communityName}%' </if>
-       	<if test="houseTitle!=null and houseTitle!=''"> AND x.title = #{houseTitle} </if>
+       	<if test="houseTitle!=null and houseTitle!=''"> AND x.title LIKE '%${houseTitle}%' </if>
        	<if test="houseCode!=null and houseCode!=''"> AND x.`code` = #{houseCode} </if>
        	<if test="houseCity!=null and houseCity!=''"> AND z.city = #{houseCity} </if>
        	<if test="houseDistrict!=null and houseDistrict!=''"> AND z.district = #{houseDistrict} </if>

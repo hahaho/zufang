@@ -1,4 +1,5 @@
 package com.apass.zufang.web.appointment;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
+import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.common.utils.FarmartJavaBean;
 import com.apass.zufang.domain.Response;
@@ -73,8 +76,11 @@ public class PhoneAppointmentController {
     	try {
     		LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
     		ReserveHouse entity = validateParams2(map);
+    		String reserveDate = CommonUtils.getValue(map, "reserveDate");
+    		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
+    		Date date = DateFormatUtil.string2date(reserveDate,DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
     		String username = SpringSecurityUtils.getCurrentUser();
-    		return phoneAppointmentService.addReserveHouse(entity,username);
+    		return phoneAppointmentService.addReserveHouse(entity,username,date);
     	} catch (Exception e) {
     		LOGGER.error("getHouseListForPhoneAppointment EXCEPTION --- --->{}", e);
     		return Response.fail("电话预约管理 预约看房失败！");
