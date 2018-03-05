@@ -260,7 +260,7 @@
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
         	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id and a1.`name` = '独卫'
         	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a2.`name` = '可做饭'
-       	WHERE 1=1 
+       	WHERE 1=1 AND x.is_delete = '00'
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>
        	<if test="communityName!=null and communityName!=''"> AND x.community_name LIKE '%${communityName}%' </if>

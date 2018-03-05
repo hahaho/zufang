@@ -57,6 +57,7 @@ public class PhoneAppointmentController {
     public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(Map<String,Object> map) {
         ResponsePageBody<HouseAppointmentVo> respBody = new ResponsePageBody<HouseAppointmentVo>();
         try {
+        	LOGGER.info("getHouseListForPhoneAppointment map--->{}",GsonUtils.toJson(map));
         	HouseAppointmentQueryParams entity = validateParams(map);
         	respBody = phoneAppointmentService.getHouseListForPhoneAppointment(entity);
         } catch (Exception e) {
@@ -115,6 +116,10 @@ public class PhoneAppointmentController {
     	for(Entry<String, Object> entry : set){
     		key = entry.getKey();
     		value = entry.getValue();
+    		if("memo".equals(key)){
+    			entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
+    			continue;
+    		}
     		if(value==null){
     			throw new BusinessException("参数" + key + "为空！");
     		}else{
