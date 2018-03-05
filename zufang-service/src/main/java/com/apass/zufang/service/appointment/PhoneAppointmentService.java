@@ -1,11 +1,10 @@
 package com.apass.zufang.service.appointment;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
@@ -39,6 +38,7 @@ public class PhoneAppointmentService {
 	 * @param entity
 	 * @return
 	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) {
 		entity.setType((byte)2);
 		entity.setReserveDate(reserveDate);
