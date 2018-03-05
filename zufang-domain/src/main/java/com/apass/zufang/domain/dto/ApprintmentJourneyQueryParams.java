@@ -14,6 +14,7 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	private String rentAmtFloor;//租金下限
 	private String rentAmtCeiling;//租金上限
 	private String houseCode;//房源编号
+	private String houseProvince;//房源省
 	private String houseCity;//房源城市
 	private String houseDistrict;//房源区域
 	private String houseStreet;//房源街道
@@ -66,6 +67,12 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	}
 	public void setHouseCode(String houseCode) {
 		this.houseCode = houseCode;
+	}
+	public String getHouseProvince() {
+		return houseProvince;
+	}
+	public void setHouseProvince(String houseProvince) {
+		this.houseProvince = houseProvince;
 	}
 	public String getHouseCity() {
 		return houseCity;

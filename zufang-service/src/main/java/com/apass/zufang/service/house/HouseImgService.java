@@ -14,6 +14,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
+import com.apass.zufang.utils.ValidateUtils;
 @Service
 public class HouseImgService {
 	@Autowired
@@ -52,10 +53,11 @@ public class HouseImgService {
 		houseImg.setHouseId(houseId);
 		List<HouseImg> houseImgList = houseImgMapper.getImgByHouseId(houseImg);
 		List<String> imgUrlList = new ArrayList<String>();
+		if (ValidateUtils.listIsTrue(houseImgList)) {
 		for (HouseImg Img : houseImgList) {
 			imgUrlList.add(Img.getUrl());
 		}
-
+		}
 		return imgUrlList;
 	}
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})

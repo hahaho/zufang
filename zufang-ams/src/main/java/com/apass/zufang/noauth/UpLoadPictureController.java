@@ -1,6 +1,8 @@
 package com.apass.zufang.noauth;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.utils.FileUtilsCommons;
 import com.apass.zufang.utils.ImageTools;
+import com.google.common.collect.Maps;
 @Controller
 @RequestMapping("/application")
 public class UpLoadPictureController {
@@ -24,29 +27,23 @@ public class UpLoadPictureController {
     /*** 房屋图片存放地址*/
     @Value("${nfs.house}")
     private String nfsHouse;
+    
+    @Value("${zufang.image.uri}")
+    private String imageUri;
+    
 	@ResponseBody
     @RequestMapping(value = "/uppicture320", method = RequestMethod.POST)
 	public Response uploadPicture320(@ModelAttribute("file") MultipartFile file){
-		try {
-			String url = uploadImg(file, 750, 320);
-			return Response.success("success",url);
-		} catch (BusinessException e) {
-			return Response.fail(e.getErrorDesc());
-		}
+		return uploadImg(file, 750, 320);
     }
 	
 	@ResponseBody
     @RequestMapping(value = "/uppicture562", method = RequestMethod.POST)
 	public Response uploadPicture562(@ModelAttribute("file") MultipartFile file){
-		try {
-			String url = uploadImg(file, 750, 562);
-			return Response.success("success",url);
-		} catch (BusinessException e) {
-			return Response.fail(e.getErrorDesc());
-		}
+		return uploadImg(file, 750, 562);
     }
 	
-	public String uploadImg(MultipartFile file,int widths,int heights) throws BusinessException{
+	public Response uploadImg(MultipartFile file,int widths,int heights){
 		try{
     		if(null == file){
         		throw new BusinessException("上传文件不能为空!");
@@ -61,17 +58,21 @@ public class UpLoadPictureController {
         		file.getInputStream().close();
         		throw new BusinessException("文件不能大于2MB!");
         	}
-        	String fileName = "logo_" + System.currentTimeMillis()+"_"+ file.getName();
+        	String imgType = ImageTools.getImgType(file);
+        	String fileName = "logo_" + System.currentTimeMillis()+"_"+ file.getName()+ "." + imgType;
             String url = nfsHouse + fileName;
             /*** 上传文件*/
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
-            return url;
+            Map<String,Object> values = Maps.newHashMap();
+            values.put("url",url);
+            values.put("fullurl",imageUri+url);
+            return Response.success("success",values);
         }catch (BusinessException e){
 			logger.error("delpicture businessException---->{}",e);
-			throw new BusinessException("上传图片失败!");
+			return Response.fail(e.getErrorDesc());
 		}catch (Exception e) {
 			logger.error("上传house logo失败!", e);
-			throw new BusinessException("上传图片失败!");
+			return Response.fail("上传图片失败!");
         }
     }
 

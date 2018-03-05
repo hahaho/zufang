@@ -2,7 +2,6 @@ package com.apass.zufang.mapper.zfang;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.entity.HouseLocation;
@@ -15,8 +14,6 @@ public interface HouseLocationMapper extends GenericMapper<HouseLocation,Long>{
 	
 	HouseLocation getLocationByHouseId(Long houseId);
 	
-	List<HouseVo> initNearLocation(String city);
-
 	List<HouseVo> initHouseByCity(HashMap<String, String> map);
 	
 }

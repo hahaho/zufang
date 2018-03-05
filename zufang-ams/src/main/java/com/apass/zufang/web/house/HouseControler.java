@@ -26,6 +26,7 @@ import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
@@ -38,6 +39,9 @@ public class HouseControler {
 	
 	@Autowired
 	private HouseService houseService;
+	
+	@Autowired
+	private ApartmentService apartmentService;
 	
 	/**
      * 房屋信息列表查询
@@ -94,6 +98,8 @@ public class HouseControler {
 			logger.info("add house paramMap--->{}",GsonUtils.toJson(paramMap));
 			validateParams(paramMap,false);
 			HouseVo vo = getVoByParams(paramMap);
+			Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
+			vo.setApartmentId(apartmentId);
 			houseService.addHouse(vo);
 			return Response.success("添加房屋信息成功!");
 		}catch (BusinessException e){
@@ -105,6 +111,21 @@ public class HouseControler {
 		}
 	}
 	
+	@POST
+	@Path("/detail/init")
+	public Response detailHouse(Map<String,Object> paramMap){
+		try {
+			String id = CommonUtils.getValue(paramMap, "id");
+			Map<String,Object> values = houseService.getHouseDetail(id);
+			return Response.success("初始化修改页面!", values);
+		}catch (BusinessException e){
+			logger.error("detail house businessException---->{}",e);
+			return Response.fail(e.getErrorDesc());
+		}catch (Exception e) {
+			logger.error("信息失败，错误原因", e);
+		    return Response.fail("初始化修改信息失败！");
+		}
+	}
 	/**
 	 * 修改房屋信息
 	 * @return
@@ -116,6 +137,8 @@ public class HouseControler {
 			logger.info("edit house paramMap--->{}",GsonUtils.toJson(paramMap));
 			validateParams(paramMap,true);
 			HouseVo vo = getVoByParams(paramMap);
+			Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
+			vo.setApartmentId(apartmentId);
 			houseService.editHouse(vo);
 			return Response.success("修改房屋信息成功!");
 		}catch (BusinessException e){
@@ -230,7 +253,6 @@ public class HouseControler {
 	 */
 	public void validateParams(Map<String, Object> paramMap,boolean bl) throws BusinessException{
 		
-		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");//公寓Id
 		String phone = CommonUtils.getValue(paramMap,"phone");//管家联系方式
 		String rentType = CommonUtils.getValue(paramMap, "rentType");//出租方式
 		String communityName = CommonUtils.getValue(paramMap, "communityName");//小区名称
@@ -273,7 +295,6 @@ public class HouseControler {
 	    	ValidateUtils.isNotBlank(houseId, "房屋Id不能为!");
 		    ValidateUtils.isNotBlank(locationId, "地址编号不能为空");
 	    }
-	    ValidateUtils.isNotBlank(apartmentId, "请选择所属公寓");
 	    ValidateUtils.isNotBlank(phone, "请填写手机号码");
 	    if(!ListeningRegExpUtils.mobile(phone)){
 	    	throw new BusinessException("请正确填写11位手机号码");
@@ -337,8 +358,6 @@ public class HouseControler {
 	public HouseVo getVoByParams(Map<String, Object> paramMap){
 		
 		HouseVo house = new HouseVo();
-		String apartmentId = CommonUtils.getValue(paramMap, "apartmentId");
-		house.setApartmentId(Long.parseLong(apartmentId));
 		String phone = CommonUtils.getValue(paramMap, "phone");
 		house.setHousekeeperTel(phone);
 		String rentType = CommonUtils.getValue(paramMap, "rentType");

@@ -1,5 +1,7 @@
 package com.apass.zufang.service.apartment;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,5 +88,19 @@ public class ApartmentService {
 			return Response.success("公寓信息修改成功！");
 		}
 		return Response.fail("公寓信息修改失败！");
+	}
+	/**
+	 * 新增房源专用   用于新增公寓下属房源
+	 * 根据登录人信息获取该个人归属公寓信息  
+	 * @param username
+	 * @return
+	 * @throws BusinessException 
+	 */
+	public Long getApartmentByCurrentUser(String username) throws BusinessException {
+		if(StringUtils.isBlank(username)){
+			throw new BusinessException("登录人为空，或者登录人未查找到公寓信息！");
+		}
+		return 1L;
+//		return apartmentMapper.selectByPrimaryKey(1L).getId();
 	}
 }

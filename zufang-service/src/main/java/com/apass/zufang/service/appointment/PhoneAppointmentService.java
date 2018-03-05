@@ -1,8 +1,10 @@
 package com.apass.zufang.service.appointment;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
@@ -25,6 +27,9 @@ public class PhoneAppointmentService {
 	public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(HouseAppointmentQueryParams entity) {
 		ResponsePageBody<HouseAppointmentVo> pageBody = new ResponsePageBody<HouseAppointmentVo>();
         List<HouseAppointmentVo> list = reserveHouseService.getHouseListForPhoneAppointment(entity);
+        for(HouseAppointmentVo vo : list){
+        	vo.setHouseAll(vo.getHouseRoom()+"室"+vo.getHouseHall()+"厅"+vo.getHouseWei()+"卫");
+        }
 //        list = checkHouseList(list);
         pageBody.setTotal(list.size());
         pageBody.setRows(list);
@@ -36,8 +41,13 @@ public class PhoneAppointmentService {
 	 * @param entity
 	 * @return
 	 */
-	public Response addReserveHouse(ReserveHouse entity,String user) {
-		entity.fillAllField(user);
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) {
+		entity.setType((byte)2);
+		entity.setReserveDate(reserveDate);
+		entity.setIsDelete("00");
+		entity.setCreatedTime(new Date());
+		entity.setUpdatedTime(new Date());
 		if(reserveHouseService.createEntity(entity)==1){
 			return Response.success("预约看房记录新增成功！");
 		}

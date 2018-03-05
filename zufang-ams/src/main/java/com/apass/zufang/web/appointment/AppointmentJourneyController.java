@@ -1,4 +1,5 @@
 package com.apass.zufang.web.appointment;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.common.utils.FarmartJavaBean;
 import com.apass.zufang.domain.Response;
@@ -30,7 +32,7 @@ import com.apass.zufang.utils.ValidateUtils;
  * @author Administrator
  *
  */
-@Path("/appointment/appointmentJourneyController")
+@Path("/application/appointment/appointmentJourneyController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class AppointmentJourneyController {
@@ -56,6 +58,7 @@ public class AppointmentJourneyController {
     public ResponsePageBody<ReserveHouseVo> getReserveHouseList(Map<String,Object> map) {
         ResponsePageBody<ReserveHouseVo> respBody = new ResponsePageBody<ReserveHouseVo>();
         try {
+        	LOGGER.info("getReserveHouseList map--->{}",GsonUtils.toJson(map));
         	ApprintmentJourneyQueryParams entity = validateParams(map);
         	respBody = appointmentJourneyService.getReserveHouseList(entity);
         } catch (Exception e) {
@@ -76,7 +79,10 @@ public class AppointmentJourneyController {
         	LOGGER.info("editReserveHouse map--->{}",GsonUtils.toJson(map));
         	String username = SpringSecurityUtils.getCurrentUser();
         	ReserveHouse entity = validateParams2(map);
-        	return appointmentJourneyService.editReserveHouse(entity,username);
+        	String reserveDate = CommonUtils.getValue(map, "reserveDate");
+    		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
+    		Date date = DateFormatUtil.string2date(reserveDate,DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+        	return appointmentJourneyService.editReserveHouse(entity,username,date);
         } catch (Exception e) {
             LOGGER.error("editReserveHouse EXCEPTION --- --->{}", e);
             return Response.fail("预约行程管理 预约看房记录编辑失败！");
@@ -111,13 +117,50 @@ public class AppointmentJourneyController {
         try {
         	LOGGER.info("addReturnVisit map--->{}",GsonUtils.toJson(map));
         	String username = SpringSecurityUtils.getCurrentUser();
-        	ReturnVisit entity = validateParams3(map);
+        	ReturnVisit entity = new ReturnVisit();
+        	
+        	String houseId = CommonUtils.getValue(map, "houseId");
+        	ValidateUtils.isNotBlank(houseId, "参数houseId为空！");
+        	String reserveHouseId = CommonUtils.getValue(map, "reserveHouseId");
+        	ValidateUtils.isNotBlank(reserveHouseId, "参数reserveHouseId为空！");
+        	entity.setHouseId(Long.parseLong(houseId));
+        	entity.setReserveHouseId(Long.parseLong(reserveHouseId));
+        	
+        	String visitStatus = CommonUtils.getValue(map, "visitStatus");
+        	ValidateUtils.isNotBlank(visitStatus, "参数visitStatus为空！");
+        	String rentStatus = CommonUtils.getValue(map, "rentStatus");
+        	ValidateUtils.isNotBlank(rentStatus, "参数rentStatus为空！");
+        	entity.setVisitStatus((byte)Integer.parseInt(visitStatus));
+        	entity.setRentStatus((byte)Integer.parseInt(rentStatus));
+        	
+        	String feedBack = CommonUtils.getValue(map, "feedBack");
+        	String memo = CommonUtils.getValue(map, "memo");
+        	entity.setFeedBack(feedBack);
+        	entity.setMemo(memo);
+        	
         	return appointmentJourneyService.addReturnVisit(entity,username);
         } catch (Exception e) {
             LOGGER.error("addReturnVisit EXCEPTION --- --->{}", e);
             return Response.fail("预约行程管理 客户回访记录新增！");
         }
     }
+	/**
+	 * 预约行程管理 看房记录导出
+	 * @param map
+	 * @return
+	 */
+	@POST
+	@Path("/downLoadReserveHouseList")
+	public Response downLoadReserveHouseList(Map<String,Object> map){
+		try{
+			LOGGER.info("getReserveHouseList map--->{}",GsonUtils.toJson(map));
+			ApprintmentJourneyQueryParams entity = validateParams(map);
+	    	return appointmentJourneyService.downLoadReserveHouseList(entity);
+		}catch(Exception e){
+			LOGGER.error("downLoadReserveHouseList EXCEPTION --- --->{}", e);
+			return Response.fail("预约行程管理 看房记录导出失败！");
+		}
+	}
 	/**
      * 验证参数
      * @param map
@@ -153,23 +196,6 @@ public class AppointmentJourneyController {
     			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
     		}
     		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
-    	}
-    	return entity;
-	}
-    private ReturnVisit validateParams3(Map<String, Object> map) throws BusinessException{
-    	Set<Entry<String, Object>> set = map.entrySet();
-    	String key = null;
-    	Object value =null;
-    	ReturnVisit entity = new ReturnVisit();
-    	for(Entry<String, Object> entry : set){
-    		key = entry.getKey();
-    		value = entry.getValue();
-    		if(value==null){
-    			throw new BusinessException("参数" + key + "为空！");
-    		}else{
-    			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
-    		}
-    		entity = (ReturnVisit) FarmartJavaBean.farmartJavaB(entity, ReturnVisit.class, value, key);
     	}
     	return entity;
 	}

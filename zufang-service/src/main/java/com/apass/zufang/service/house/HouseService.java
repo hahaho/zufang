@@ -11,12 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
+import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.dto.WorkCityJdParams;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
@@ -27,11 +30,13 @@ import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.domain.vo.WorkCityJdVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
+import com.apass.zufang.mapper.zfang.WorkCityJdMapper;
 import com.apass.zufang.search.dao.HouseEsDao;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
@@ -47,6 +52,10 @@ import com.google.common.collect.Maps;
 @Service
 public class HouseService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseService.class);
+	
+	@Value("${zufang.image.uri}")
+    private String imageUri;
+	
 	@Autowired
 	private HouseMapper houseMapper;
 	@Autowired
@@ -65,6 +74,8 @@ public class HouseService {
 	private HouseLocationService  locationService;
 	@Autowired
 	private HouseEsDao houseEsDao;
+	@Autowired
+    private WorkCityJdMapper cityJdMapper;
 	/**
 	 * readEntity
 	 * @param id
@@ -148,13 +159,16 @@ public class HouseService {
 		if(null == houseVo.getHouseId()){
 			throw new BusinessException("房屋Id不能为空!");
 		}
-		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
-		if(null == part || StringUtils.isBlank(part.getCode())){
-			throw new BusinessException("房屋所属公寓的编号不存在!");
-		}
 		House house = houseMapper.selectByPrimaryKey(houseVo.getHouseId());
 		BeanUtils.copyProperties(houseVo, house);
-		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
+		
+		if(!houseVo.getApartmentId().equals(house.getApartmentId())){
+			Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
+			if(null == part || StringUtils.isBlank(part.getCode())){
+				throw new BusinessException("房屋所属公寓的编号不存在!");
+			}
+			house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
+		}
 		
 		/** 如果是首次添加，修改，状态不变，如果是下架，修改后，状态变为5*/
 		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
@@ -220,16 +234,60 @@ public class HouseService {
 		
 		HouseLocation location = locationMapper.getLocationByHouseId(house.getId());
 		
+		WorkCityJdVo locationVo = getVoByPo(location);
+		
 		List<HouseImg> imgs = imgMapper.getImgByRealHouseId(house.getId());
 		
 		List<HousePeizhi> peizhis = peizhiMapper.getPeiZhiByHouseId(house.getId());
 		
 		values.put("house", house);
 		values.put("location",location);
+		values.put("locationVo",locationVo);
 		values.put("imgs",imgs);
 		values.put("peizhis",peizhis);
-		
+		values.put("imgProfix",imageUri);
 		return values;
+	}
+	
+	public WorkCityJdVo getVoByPo(HouseLocation location){
+		
+		if(null == location){
+			return null;
+		}
+		WorkCityJdParams provice = new WorkCityJdParams();
+		provice.setProvince(location.getProvince());
+		WorkCityJd p = cityJdMapper.selectCodeByName(provice);
+		
+		WorkCityJdParams city = new WorkCityJdParams();
+		city.setCity(location.getCity());
+		WorkCityJd c = cityJdMapper.selectCodeByName(city);
+		
+		WorkCityJdParams district = new WorkCityJdParams();
+		district.setDistrict(location.getDistrict());
+		WorkCityJd d = cityJdMapper.selectCodeByName(district);
+		
+		WorkCityJdParams street = new WorkCityJdParams();
+		street.setStreet(location.getStreet());
+		WorkCityJd t = cityJdMapper.selectCodeByName(street);
+		
+		WorkCityJdVo vo = new WorkCityJdVo();
+		if(p != null){
+			vo.setProvince(p.getProvince());
+			vo.setProvinceCode(p.getCode());
+		}
+		if(c != null){
+			vo.setCity(c.getCity());
+			vo.setCityCode(c.getCode());
+		}
+		if(d != null){
+			vo.setDistrict(d.getDistrict());
+			vo.setDistrictCode(d.getCode());
+		}
+		if(t != null){
+			vo.setStreet(t.getTowns());
+			vo.setStreetCode(t.getTowns());
+		}
+		return vo;
 	}
 	
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
