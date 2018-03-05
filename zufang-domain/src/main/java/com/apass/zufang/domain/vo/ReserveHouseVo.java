@@ -18,6 +18,8 @@ public class ReserveHouseVo{
     private String isDelete;
     private Date createdTime;
     private Date updatedTime;
+    private String reserveType;//预约看房新增字段 预约类型
+    private String createdDateTime;//预约看房新增字段 申请预约时间
     private String reserveDateTime;//预约看房新增字段 看房时间
     
     private Long apartmentId;//所属公寓ID
@@ -111,6 +113,18 @@ public class ReserveHouseVo{
 	}
 	public void setUpdatedTime(Date updatedTime) {
 		this.updatedTime = updatedTime;
+	}
+	public String getReserveType() {
+		return reserveType;
+	}
+	public void setReserveType(String reserveType) {
+		this.reserveType = reserveType;
+	}
+	public String getCreatedDateTime() {
+		return createdDateTime;
+	}
+	public void setCreatedDateTime(String createdDateTime) {
+		this.createdDateTime = createdDateTime;
 	}
 	public String getReserveDateTime() {
 		return reserveDateTime;
