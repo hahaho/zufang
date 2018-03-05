@@ -3,6 +3,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -537,5 +539,7 @@ public class HouseService {
 	}
 
 
-
+	public List<HouseAppSearchVo> queryHouseBasicEntityByEntity(HouseQueryParams houseQueryParams) {
+		return houseMapper.queryHouseBasicEntityByEntity(houseQueryParams);
+	}
 }
