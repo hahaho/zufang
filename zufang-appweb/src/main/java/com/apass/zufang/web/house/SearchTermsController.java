@@ -1,6 +1,5 @@
 package com.apass.zufang.web.house;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,16 +9,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.gfb.framework.utils.CommonUtils;
-import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.common.WorkCityJd;
-import com.apass.zufang.domain.entity.ApartHouseList;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.domain.enums.PriceRangeEnum;
@@ -27,8 +23,6 @@ import com.apass.zufang.service.house.ApartHouseService;
 import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
 import com.apass.zufang.utils.ValidateUtils;
 import com.google.common.collect.Maps;
-
-import net.sf.json.JSONArray;
 
 /**
  * 搜索项接口
@@ -65,7 +59,7 @@ public class SearchTermsController {
 			
 			List<Apartment> resultApartment = apartHouseService.getApartmentBylistCity(apartment);
 
-			return Response.success("success", GsonUtils.toJson(resultApartment));
+			return Response.success("success", resultApartment);
 		} catch (BusinessException e) {
 			LOG.error("查询品牌公寓失败！", e);
 			return Response.fail(e.getErrorDesc());
@@ -92,7 +86,7 @@ public class SearchTermsController {
 				resultMap.put(result[i].getVal(), result[i].getDesc());
 			}
 			
-			return Response.success("success", GsonUtils.toJson(resultMap));
+			return Response.success("success", resultMap);
 		} catch (Exception e) {
 			LOG.error("查询价格失败！", e);
 			return Response.fail("查询价格失败！");
@@ -128,7 +122,7 @@ public class SearchTermsController {
 			resultMap.put("workSubway", result);
 			resultMap.put("workCityJd", resultJd);
 
-			return Response.success("success", GsonUtils.toJson(resultMap));
+			return Response.success("success", resultMap);
 		} catch (BusinessException e) {
 			LOG.error("查询位置区域及地铁线路失败！", e);
 			return Response.fail(e.getErrorDesc());
