@@ -1,6 +1,8 @@
 package com.apass.zufang.noauth;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.utils.FileUtilsCommons;
 import com.apass.zufang.utils.ImageTools;
+import com.google.common.collect.Maps;
 @Controller
 @RequestMapping("/application")
 public class UpLoadPictureController {
@@ -24,6 +27,10 @@ public class UpLoadPictureController {
     /*** 房屋图片存放地址*/
     @Value("${nfs.house}")
     private String nfsHouse;
+    
+    @Value("${zufang.image.uri}")
+    private String imageUri;
+    
 	@ResponseBody
     @RequestMapping(value = "/uppicture320", method = RequestMethod.POST)
 	public Response uploadPicture320(@ModelAttribute("file") MultipartFile file){
@@ -56,6 +63,9 @@ public class UpLoadPictureController {
             String url = nfsHouse + fileName;
             /*** 上传文件*/
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
+            Map<String,Object> values = Maps.newHashMap();
+            values.put("url",url);
+            values.put("fullurl",imageUri+url);
             return Response.success("success",url);
         }catch (BusinessException e){
 			logger.error("delpicture businessException---->{}",e);
