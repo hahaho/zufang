@@ -149,6 +149,8 @@ public class AppointmentJourneyController {
 	 * @param map
 	 * @return
 	 */
+	@POST
+	@Path("/downLoadReserveHouseList")
 	public Response downLoadReserveHouseList(Map<String,Object> map){
 		try{
 			LOGGER.info("getReserveHouseList map--->{}",GsonUtils.toJson(map));
