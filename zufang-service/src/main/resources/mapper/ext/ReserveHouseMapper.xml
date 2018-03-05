@@ -61,6 +61,7 @@
        	<if test="rentAmtCeiling!=null and rentAmtCeiling!=''"> <![CDATA[ AND y.rent_amt <= #{rentAmtCeiling} ]]></if>
        	
        	<if test="houseCode!=null and houseCode!=''"> AND y.`code` = #{houseCode} </if>
+       	<if test="houseProvince!=null and houseProvince!=''"> AND a.province = #{houseProvince} </if>
        	<if test="houseCity!=null and houseCity!=''"> AND a.city = #{houseCity} </if>
        	<if test="houseDistrict!=null and houseDistrict!=''"> AND a.district = #{houseDistrict} </if>
        	<if test="houseStreet!=null and houseStreet!=''"> AND a.street = #{houseStreet} </if>
