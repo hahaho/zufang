@@ -3,6 +3,8 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
@@ -35,6 +37,7 @@ public class AppointmentJourneyService {
 	 * @param username
 	 * @return
 	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response editReserveHouse(ReserveHouse entity, String username) {
 		if(reserveHouseService.updateEntity(entity)==1){
 			return Response.success("预约行程管理 预约看房记录编辑成功！");
@@ -47,6 +50,7 @@ public class AppointmentJourneyService {
 	 * @param username
 	 * @return
 	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response deleReserveHouse(String reserveHouseId, String username) {
 		ReserveHouse entity = reserveHouseService.readEntity(Long.parseLong(reserveHouseId));
 		entity.setIsDelete("01");
@@ -61,6 +65,7 @@ public class AppointmentJourneyService {
 	 * @param map
 	 * @return
 	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addReturnVisit(ReturnVisit entity, String username) {
 		entity.setCreatedTime(new Date());
 		if(returnVisitService.createEntity(entity)==1){

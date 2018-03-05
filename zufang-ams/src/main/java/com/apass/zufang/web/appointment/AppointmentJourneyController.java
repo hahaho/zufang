@@ -30,7 +30,7 @@ import com.apass.zufang.utils.ValidateUtils;
  * @author Administrator
  *
  */
-@Path("/appointment/appointmentJourneyController")
+@Path("/application/appointment/appointmentJourneyController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class AppointmentJourneyController {
