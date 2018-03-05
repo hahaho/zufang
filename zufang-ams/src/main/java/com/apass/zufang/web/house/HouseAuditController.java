@@ -106,7 +106,7 @@ public class HouseAuditController {
 			return Response.fail(e.getErrorDesc());
 		}catch (Exception e) {
 			logger.error("信息失败，错误原因", e);
-		    return Response.fail("审核房屋信息失败！");
+		    return Response.fail("获取详情信息失败！");
 		}
 	}
 	
