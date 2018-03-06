@@ -16,7 +16,9 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.common.utils.FarmartJavaBean;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.ApprintmentQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.vo.ApartmentVo;
 import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
@@ -46,14 +48,14 @@ public class ApartmentController {
      */
     @POST
 	@Path("/getApartmentList")
-    public ResponsePageBody<Apartment> getApartmentList(Map<String,Object> map) {
-        ResponsePageBody<Apartment> respBody = new ResponsePageBody<Apartment>();
+    public ResponsePageBody<ApartmentVo> getApartmentList(Map<String,Object> map) {
+        ResponsePageBody<ApartmentVo> respBody = new ResponsePageBody<ApartmentVo>();
         try {
         	LOGGER.info("getApartmentList map--->{}",GsonUtils.toJson(map));
         	String name = CommonUtils.getValue(map, "name");//公寓名称
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
-        	Apartment entity = new Apartment();
+        	ApprintmentQueryParams entity = new ApprintmentQueryParams();
         	entity.setPage(Integer.parseInt(page));
         	entity.setRows(Integer.parseInt(rows));
         	entity.setName(name);

@@ -78,10 +78,24 @@ public class AppointmentJourneyController {
         try {
         	LOGGER.info("editReserveHouse map--->{}",GsonUtils.toJson(map));
         	String username = SpringSecurityUtils.getCurrentUser();
-        	ReserveHouse entity = validateParams2(map);
+        	
+        	String id = CommonUtils.getValue(map, "id");
+    		ValidateUtils.isNotBlank(id, "参数id为空！");
+    		
+        	String name = CommonUtils.getValue(map, "name");
+    		ValidateUtils.isNotBlank(name, "参数name为空！");
+    		
         	String reserveDate = CommonUtils.getValue(map, "reserveDate");
     		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
     		Date date = DateFormatUtil.string2date(reserveDate,DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+    		
+    		String memo = CommonUtils.getValue(map, "memo");
+    		
+    		ReserveHouse entity = new ReserveHouse();
+    		entity.setId(Long.parseLong(id));
+    		entity.setName(name);
+    		entity.setReserveDate(date);
+    		entity.setMemo(memo);
         	return appointmentJourneyService.editReserveHouse(entity,username,date);
         } catch (Exception e) {
             LOGGER.error("editReserveHouse EXCEPTION --- --->{}", e);
@@ -179,23 +193,6 @@ public class AppointmentJourneyController {
     				entity = (ApprintmentJourneyQueryParams) FarmartJavaBean.farmartJavaB(entity, ApprintmentJourneyQueryParams.class, value, key);
     			}
     		}
-    	}
-    	return entity;
-	}
-    private ReserveHouse validateParams2(Map<String, Object> map) throws BusinessException{
-    	Set<Entry<String, Object>> set = map.entrySet();
-    	String key = null;
-    	Object value =null;
-    	ReserveHouse entity = new ReserveHouse();
-    	for(Entry<String, Object> entry : set){
-    		key = entry.getKey();
-    		value = entry.getValue();
-    		if(value==null){
-    			throw new BusinessException("参数" + key + "为空！");
-    		}else{
-    			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
-    		}
-    		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
     	}
     	return entity;
 	}

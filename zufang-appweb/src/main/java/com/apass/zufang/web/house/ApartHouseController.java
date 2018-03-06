@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.entity.ApartHouseList;
+import com.apass.zufang.domain.dto.ApartHouseList;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.ApartHouseService;
 import com.apass.zufang.utils.ValidateUtils;
@@ -81,9 +81,10 @@ public class ApartHouseController {
 			
 			String houseId = (String) paramMap.get("apartId");
 			String pageNum = (String) paramMap.get("pageNum");
+			String pageSize = (String) paramMap.get("pageSize");
 			ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", houseId, pageNum);
 			
-			List<HouseVo> apartList = apartHouseService.getHouseById(houseId, pageNum);
+			List<HouseVo> apartList = apartHouseService.getHouseById(houseId, pageNum, pageSize);
 			resultMap.put("house", apartList);
 			return Response.success("查询房源List成功！", resultMap);
 		} catch (Exception e) {

@@ -30,7 +30,7 @@ public class AppointmentJourneyService {
         	String reserveType = vo.getType()==(byte)1?"在线预约":"电话预约";
         	vo.setReserveType(reserveType);
         	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
-        	vo.setReserveType(DateFormatUtil.dateToString(vo.getReserveDate()));
+        	vo.setReserveDateTime(DateFormatUtil.dateToString(vo.getReserveDate()));
         }
         pageBody.setTotal(list.size());
         pageBody.setRows(list);

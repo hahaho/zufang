@@ -18,13 +18,6 @@
     <sql id="QueryConditionSqlBackup">
         <where>
 			<if test="name!=null and name!=''"> AND name like '%${name}%' </if>
-            <if test="code!=null and code!=''"> AND code = #{code} </if>
-            <if test="companyName!=null and companyName!=''"> AND company_name = #{companyName} </if>
-            <if test="province!=null and province!=''"> AND province = #{province} </if>
-            <if test="city!=null and city!=''"> AND city = #{city} </if>
-            <if test="area!=null and area!=''"> AND area = #{area} </if>
-            <if test="bankName!=null and bankName!=''"> AND bank_name = #{bankName} </if>
-            <if test="bankCard!=null and bankCard!=''"> AND bank_card = #{bankCard} </if>
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
         </where>
     </sql>
@@ -36,13 +29,13 @@
     </sql>
     <!-- getApartmentListCodeCount -->
     <select id ="getApartmentListCodeCount" resultType="java.lang.Integer"
-        parameterType="com.apass.zufang.domain.entity.Apartment">
+        parameterType="com.apass.zufang.domain.dto.ApprintmentQueryParams">
         SELECT COUNT(*) FROM t_zfang_apartment
         <include refid="QueryConditionSqlBackupBackup" />
     </select>
     <!-- 分页查询 -->
-    <select id="getApartmentList" resultMap="BaseResultMap" 
-        parameterType="com.apass.zufang.domain.entity.Apartment">
+    <select id="getApartmentList" resultType="com.apass.zufang.domain.vo.ApartmentVo"
+        parameterType="com.apass.zufang.domain.dto.ApprintmentQueryParams">
         SELECT 
             <include refid="Base_Column_List" />
         FROM t_zfang_apartment
@@ -56,14 +49,14 @@
     </select>
     <!-- 分页查询数量 -->
     <select id ="getApartmentListCount" resultType="java.lang.Integer"
-        parameterType="com.apass.zufang.domain.entity.Apartment">
+        parameterType="com.apass.zufang.domain.dto.ApprintmentQueryParams">
         SELECT COUNT(*) FROM t_zfang_apartment
         <include refid="QueryConditionSqlBackup" />
     </select>
     <!-- 搜索所有公寓codes -->
 		<select id="getApartByCity" resultMap="BaseResultMap"
 		parameterType="com.apass.zufang.domain.entity.Apartment">
-		SELECT a.id,a.name,a.area,a.company_logo
+		SELECT a.id,a.name,a.area
 		FROM
 		t_zfang_apartment a,
 		t_zfang_house h,

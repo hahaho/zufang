@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.ApprintmentQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.vo.ApartmentVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
@@ -43,11 +45,11 @@ public class ApartmentService {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	public ResponsePageBody<Apartment> getApartmentList(Apartment entity) throws BusinessException {
-		ResponsePageBody<Apartment> pageBody = new ResponsePageBody<Apartment>();
+	public ResponsePageBody<ApartmentVo> getApartmentList(ApprintmentQueryParams entity) throws BusinessException {
+		ResponsePageBody<ApartmentVo> pageBody = new ResponsePageBody<ApartmentVo>();
         Integer count = apartmentMapper.getApartmentListCount(entity);
-        List<Apartment> list = apartmentMapper.getApartmentList(entity);
-        for(Apartment en : list){
+        List<ApartmentVo> list = apartmentMapper.getApartmentList(entity);
+        for(ApartmentVo en : list){
         	en.setCompanyLogo(imageService.getComplateUrl(en.getCompanyLogo()));
         }
         pageBody.setTotal(count);
@@ -64,9 +66,9 @@ public class ApartmentService {
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addApartment(Apartment entity,String username,String code) throws BusinessException {
-		Apartment entity2 = new Apartment();
+		ApprintmentQueryParams entity2 = new ApprintmentQueryParams();
 		entity2.setCode(code);
-		Integer count = apartmentMapper.getApartmentListCodeCount(entity);
+		Integer count = apartmentMapper.getApartmentListCodeCount(entity2);
 		String cou = ++count<10?"0"+count:count.toString();
 		entity.fillAllField(username);
 		entity.setCode(code+cou);
