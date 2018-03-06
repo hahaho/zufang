@@ -76,9 +76,27 @@ public class PhoneAppointmentController {
     public Response addReserveHouse(Map<String, Object> map) {
     	try {
     		LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
-    		ReserveHouse entity = validateParams2(map);
+    		String houseId = CommonUtils.getValue(map, "houseId");
+    		ValidateUtils.isNotBlank(houseId, "参数" + houseId + "为空！");
+    		String userId = CommonUtils.getValue(map, "userId");
+    		ValidateUtils.isNotBlank(userId, "参数" + userId + "为空！");
+    		
+    		String telphone = CommonUtils.getValue(map, "telphone");
+    		ValidateUtils.isNotBlank(telphone, "参数" + telphone + "为空！");
+    		String name = CommonUtils.getValue(map, "name");
+    		ValidateUtils.isNotBlank(name, "参数" + name + "为空！");
+    		
     		String reserveDate = CommonUtils.getValue(map, "reserveDate");
     		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
+    		String memo = CommonUtils.getValue(map, "memo");
+    		
+    		ReserveHouse entity = new ReserveHouse();
+    		entity.setHouseId(Long.parseLong(houseId));
+    		entity.setUserId(userId);
+    		
+    		entity.setTelphone(telphone);
+    		entity.setName(name);
+    		entity.setMemo(memo);
     		Date date = DateFormatUtil.string2date(reserveDate,DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
     		String username = SpringSecurityUtils.getCurrentUser();
     		return phoneAppointmentService.addReserveHouse(entity,username,date);
@@ -105,28 +123,6 @@ public class PhoneAppointmentController {
     				entity = (HouseAppointmentQueryParams) FarmartJavaBean.farmartJavaB(entity, HouseAppointmentQueryParams.class, value, key);
     			}
     		}
-    	}
-    	return entity;
-	}
-    private ReserveHouse validateParams2(Map<String, Object> map) throws BusinessException{
-    	Set<Entry<String, Object>> set = map.entrySet();
-    	String key = null;
-    	Object value =null;
-    	ReserveHouse entity = new ReserveHouse();
-    	for(Entry<String, Object> entry : set){
-    		key = entry.getKey();
-    		value = entry.getValue();
-    		if("memo".equals(key)){
-    			entity.setMemo(value==null?"":value.toString());
-//    			entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
-    			continue;
-    		}
-    		if(value==null){
-    			throw new BusinessException("参数" + key + "为空！");
-    		}else{
-    			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
-    		}
-    		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
     	}
     	return entity;
 	}
