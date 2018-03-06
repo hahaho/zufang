@@ -115,4 +115,8 @@ public class WorkSubwaySevice {
 			}
 		}
 	}
+
+	public WorkSubway selectSubwaybyCode(String subCode) {
+		return dao.selectSubwaybyCode(subCode);
+	}
 }

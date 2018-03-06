@@ -59,7 +59,7 @@ public class BsdiffinfoService {
 	 * @param bsdiffInfoEntity
 	 * @throws IOException
      */
-    @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void bsdiffUpload(BsdiffVo bsdiffVo, BsdiffInfoEntity bsdiffInfoEntity) throws IOException {
 		//如果版本号已存在，给出提示
         String bsdiffVer = bsdiffVo.getBsdiffVer();

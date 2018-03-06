@@ -93,7 +93,6 @@ public class HouseinitService {
 		return initImg;
 	}
 	/**
-<<<<<<< HEAD
 	 * init附近房源
 	 * @param city
 	 * @return

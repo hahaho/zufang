@@ -20,4 +20,6 @@ public interface WorkSubwayMapper extends GenericMapper<WorkSubway,Long> {
 	 * @return
 	 */
 	Integer selectByMaxDisplayCode();
+
+	WorkSubway selectSubwaybyCode(String subCode);
 }
