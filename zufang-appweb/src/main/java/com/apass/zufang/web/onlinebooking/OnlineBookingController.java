@@ -69,11 +69,7 @@ public class OnlineBookingController {
 
 		logger.info("入参 houseId" + houseId + " userId" + userId + " smsType" + smsType + " mobile" + mobile + " code"
 				+ code + "reserveDate" + reservedate);
-
-		if (StringUtils.isBlank(userId)) {
-			// 用户id不合规
-			return Response.fail("用户id不合规");
-		} else if (StringUtils.isBlank(mobile)) {
+		 if (StringUtils.isBlank(mobile)) {
 			// 手机号不合规
 			return Response.fail("手机号不合规");
 		} else if (StringUtils.isBlank(houseId)) {
