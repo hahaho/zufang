@@ -189,11 +189,13 @@
 				l.detail_addr	detailAddr,
 				l.longitude longitude,
 				l.latitude	latitude
-			FROM
+				FROM
 				t_zfang_house h,
-				t_zfang_house_location l
-			WHERE
+				t_zfang_house_location l,
+				t_zfang_apartment a
+				WHERE
 				h.id = l.house_id
+				AND h.apartment_id = a.id
 				AND h.is_delete = '00'
 				AND l.is_delete = '00'
 				AND h.status = '3'
