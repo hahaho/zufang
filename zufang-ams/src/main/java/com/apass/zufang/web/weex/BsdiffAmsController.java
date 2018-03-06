@@ -36,9 +36,9 @@ public class BsdiffAmsController {
     @ResponseBody
     @RequestMapping("/upload")
     public Response bsdiffUpload2(@ModelAttribute("bsdiffEntiry")BsdiffVo bsdiffVo) {
+        BsdiffInfoEntity bsdiffInfoEntity = new BsdiffInfoEntity();
         try{
             LOG.info("bsdiff增量更新开始上传,参数 版本号:{},文件名:{}",bsdiffVo.getBsdiffVer(),bsdiffVo.getBsdiffFile().getOriginalFilename());
-            BsdiffInfoEntity bsdiffInfoEntity = new BsdiffInfoEntity();
             bsdiffInfoEntity.setCreatedTime(new Date());
             bsdiffInfoEntity.setCreateUser(SpringSecurityUtils.getCurrentUser());
             bsdiffInfoEntity.setUpdatedTime(new Date());
@@ -49,6 +49,6 @@ public class BsdiffAmsController {
             LOG.error("增量添加上传失败",e);
             return Response.fail(e.getMessage());
         }
-        return Response.success("增量添加上传成功");
+        return Response.success("增量添加上传成功",bsdiffInfoEntity);
     }
 }

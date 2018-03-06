@@ -109,9 +109,14 @@ public class HouseSearchController {
 		try {
 			HouseSearchCondition houseSearchCondition = new HouseSearchCondition();
 			//搜索必传参数
-			String deviceId = CommonUtils.getValue(paramMap, "deviceId");// 设备号
-			String userId = CommonUtils.getValue(paramMap, "userId");// 用户号
-			String sort = CommonUtils.getValue(paramMap, "sort");// 排序字段(default:默认;pageView)
+			// 设备号
+			String deviceId = CommonUtils.getValue(paramMap, "deviceId");
+			// 用户号
+			String userId = CommonUtils.getValue(paramMap, "userId");
+			// 排序字段(default:默认;pageView)
+			String sort = CommonUtils.getValue(paramMap, "sort");
+
+			//页面和数量
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
 
