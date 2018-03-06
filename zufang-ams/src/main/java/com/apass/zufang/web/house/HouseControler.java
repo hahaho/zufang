@@ -348,6 +348,11 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(title, "请填写房源标题");
 		ValidateUtils.checkLength(title, 6, 30, "请填写6-30个字");
 		ValidateUtils.isNotBlank(picturs, "请上传图片");
+		
+		String[] pictures = StringUtils.split(picturs,",");
+		if(pictures.length > 8){
+			throw new BusinessException("上传图片最多8张!");
+		}
 	}
 	
 	/***
