@@ -85,14 +85,17 @@ public class SearchTermsController {
 	public Response getPrice(Map<String, Object> paramMap) {
 		try {
 
-			Map<Integer, Object> resultMap = Maps.newHashMap();
-
+			List<KeyValue> keyValueList = new ArrayList<KeyValue>();
 			PriceRangeEnum[] result = PriceRangeEnum.values();
 			for (int i = 0; i < result.length; i++) {
-				resultMap.put(result[i].getVal(), result[i].getDesc());
+				KeyValue keyValue = new KeyValue();
+				keyValue.setKey(result[i].getVal());
+				keyValue.setValue(result[i].getDesc());
+				keyValueList.add(keyValue);
 			}
-
-			return Response.success("success", resultMap);
+			JSONArray featuresJsonArray = JSONArray.fromObject(keyValueList);
+			
+			return Response.success("success", featuresJsonArray);
 		} catch (Exception e) {
 			LOG.error("查询价格失败！", e);
 			return Response.fail("查询价格失败！");
