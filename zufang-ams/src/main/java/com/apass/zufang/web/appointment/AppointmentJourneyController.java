@@ -28,8 +28,8 @@ import com.apass.zufang.service.appointment.AppointmentJourneyService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
 /**
- * 预约看房行程
- * @author Administrator
+ * 预约中心-看房行程
+ * @author haotian
  *
  */
 @Path("/application/appointment/appointmentJourneyController")
@@ -188,10 +188,8 @@ public class AppointmentJourneyController {
     	for(Entry<String, Object> entry : set){
     		key = entry.getKey();
     		value = entry.getValue();
-    		if(value!=null){
-    			if(StringUtils.isNotBlank(value.toString())){
-    				entity = (ApprintmentJourneyQueryParams) FarmartJavaBean.farmartJavaB(entity, ApprintmentJourneyQueryParams.class, value, key);
-    			}
+    		if(value!=null&&StringUtils.isNotBlank(value.toString())){
+				entity = (ApprintmentJourneyQueryParams) FarmartJavaBean.farmartJavaB(entity, ApprintmentJourneyQueryParams.class, value, key);
     		}
     	}
     	return entity;

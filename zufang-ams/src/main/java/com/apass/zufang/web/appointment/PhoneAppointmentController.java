@@ -27,8 +27,8 @@ import com.apass.zufang.service.appointment.PhoneAppointmentService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
 /**
- * 电话预约
- * @author Administrator
+ * 预约中心-电话预约
+ * @author haotian
  *
  */
 @Path("/application/appointment/phoneAppointmentController")
@@ -118,10 +118,8 @@ public class PhoneAppointmentController {
     	for(Entry<String, Object> entry : set){
     		key = entry.getKey();
     		value = entry.getValue();
-    		if(value!=null){
-    			if(StringUtils.isNotBlank(value.toString())){
-    				entity = (HouseAppointmentQueryParams) FarmartJavaBean.farmartJavaB(entity, HouseAppointmentQueryParams.class, value, key);
-    			}
+    		if(value!=null&&StringUtils.isNotBlank(value.toString())){
+				entity = (HouseAppointmentQueryParams) FarmartJavaBean.farmartJavaB(entity, HouseAppointmentQueryParams.class, value, key);
     		}
     	}
     	return entity;
