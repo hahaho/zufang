@@ -3,6 +3,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -490,6 +492,9 @@ public class HouseService {
 				houseEs.setCommunityNamePinyin(Pinyin4jUtil.converterToSpell(h.getCommunityName()));
 				houseEs.setAcreage(h.getAcreage());
 				houseEs.setRoom(h.getRoom());
+				if(h.getRoom()>4){
+					houseEs.setRoom(-1);
+				}
 				houseEs.setHall(h.getHall());
 				houseEs.setWei(h.getWei());
 				houseEs.setFloor(h.getFloor());
@@ -540,6 +545,7 @@ public class HouseService {
 			Apartment apartment = apartmentMapper.selectByPrimaryKey(h.getApartmentId());
 			if(apartment != null){
 				houseEs.setCompanyName(apartment.getCompanyName());
+				houseEs.setApartmentName(apartment.getName());
 			}
 
 			HouseLocation hLocation = locationMapper.getLocationByHouseId(houseId);
@@ -595,5 +601,7 @@ public class HouseService {
 	}
 
 
-
+	public List<HouseAppSearchVo> queryHouseBasicEntityByEntity(HouseQueryParams houseQueryParams) {
+		return houseMapper.queryHouseBasicEntityByEntity(houseQueryParams);
+	}
 }

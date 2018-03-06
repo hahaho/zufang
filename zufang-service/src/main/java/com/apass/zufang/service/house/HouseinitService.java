@@ -93,6 +93,18 @@ public class HouseinitService {
 		return initImg;
 	}
 	/**
+<<<<<<< HEAD
+	 * init附近房源
+	 * @param city
+	 * @return
+	 */
+	public List<HouseVo> initNearLocation(String city) {
+		//List<HouseVo> initNearHouse = HouseLocationMapper.initNearLocation(city);
+		//return initNearHouse;
+		return null;
+	}
+
+	/**
 	 * 通过城市查询热门房源
 	 * @param map
 	 * @return

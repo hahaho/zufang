@@ -285,4 +285,27 @@
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
     </select>
+
+    <select id="queryHouseBasicEntityByEntity" resultType="com.apass.zufang.domain.vo.HouseAppSearchVo">
+        SELECT
+            zhouseImg.url url,
+            zhouse.title houseTitle,
+            zhouse.description description,
+        location.detail_addr detailAddr,
+        zhouse.room room,
+        zhouse.hall hall,
+        zhouse.wei wei,
+        zhouse.floor floor,
+        zhouse.acreage acreage,
+        zhouse.rent_amt rentAmt,
+        CONCAT(room,hall,wei,'-',acreage,'m2') houseDes
+        from t_zfang_house zhouse
+        LEFT JOIN t_zfang_house_img zhouseImg ON zhouse.id = zhouseImg.house_id
+        LEFT JOIN t_zfang_house_location location ON zhouse.id = location.house_id
+        WHERE zhouse.title = #{} or zhouse.community_name = #{} or location.detail_addr = #{}
+        ORDER BY zhouse.page_view
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
 </mapper>

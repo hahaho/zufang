@@ -25,7 +25,7 @@
 	</select>
 	
 	<!-- 用户id查询-->
-	<select id="queryCustomerIdHistory" parameterType="String" resultType="com.apass.zufang.domain.entity.SearchKeys">
+	<select id="queryUserIdHistory" parameterType="String" resultType="com.apass.zufang.domain.entity.SearchKeys">
 	<![CDATA[
 		SELECT
 			ID				id,
@@ -59,12 +59,23 @@
 	
 	
 	<!--  用户id删除 -->
-	<update id="deleteCustomerIdHistory" parameterType="String" >
+	<update id="deleteUserIdHistory" parameterType="String" >
 	<![CDATA[
 		UPDATE   t_zfang_search_keys
 		SET   key_status = '1'
 		WHERE  user_id = #{userId};
 	]]>
 	</update>
-    
+
+	<!--根据设备id删除对应搜索记录-->
+	<delete id="deleteSearchKey">
+		delete from t_esp_search_keys where  1 = 1
+		<if test="userId != null and userId != ''">
+			<![CDATA[  and user_id = #{userId} ]]>
+		</if>
+		<if test="deviceId != null and deviceId != ''">
+			<![CDATA[  and device_id = #{deviceId} ]]>
+		</if>
+	</delete>
+
 </mapper>

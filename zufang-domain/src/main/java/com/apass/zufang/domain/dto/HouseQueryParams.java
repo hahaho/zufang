@@ -25,9 +25,7 @@ public class HouseQueryParams extends QueryParams{
 	private String street;//公寓所在街道
 	private String isDelete;//房源是否删除
 	private List<Integer> status;//状态
-	/**
-	 *
-	 */
+	private String communityName;//小区名称
 	private Long apartmentId;
 
 	private Byte type;
@@ -41,6 +39,16 @@ public class HouseQueryParams extends QueryParams{
 	private String listTimeStr;
 
 	private Date listTime;
+
+	private String detailAddr;
+
+	public String getDetailAddr() {
+		return detailAddr;
+	}
+
+	public void setDetailAddr(String detailAddr) {
+		this.detailAddr = detailAddr;
+	}
 
 	public String getListTimeStr() {
 		return listTimeStr;
@@ -151,6 +159,14 @@ public class HouseQueryParams extends QueryParams{
 
 	public String getStreet() {
 		return street;
+	}
+
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
 	}
 
 	public void setStreet(String street) {

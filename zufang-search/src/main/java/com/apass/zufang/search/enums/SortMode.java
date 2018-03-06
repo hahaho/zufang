@@ -14,16 +14,27 @@ import java.io.Serializable;
 public enum SortMode implements Serializable {
     ID_ASC("id", false),
     ID_DESC("id", true),
-    SALEVALUE_ASC("saleNum", false),//销量
-    SALEVALUE_DESC("saleNum", true),
-    ORDERVALUE_ASC("listTime", false),//上架时间
+
+    /**
+     * 浏览量
+     */
+    PAGEVIEW_ASC("pageView", false),
+    PAGEVIEW_DESC("pageView", true),
+    /**
+     * 上架时间
+     */
+    ORDERVALUE_ASC("listTime", false),
     ORDERVALUE_DESC("listTime", true),
-    TIMECREATED_ASC("createDate", false),//创建时间
-    TIMECREATED_DESC("createDate", true),
-    PRICE_ASC("goodsPrice", false),//商品价格
-    PRICE_DESC("goodsPrice", true),
-    SORD_ASC("sordNo",false),//排序字段
-    SORD_DESC("sordNo",true);
+    /**
+     * 创建时间
+     */
+    TIMECREATED_ASC("createdTime", false),
+    TIMECREATED_DESC("createdTime", true),
+    /**
+     * 租金
+     */
+    RENTAMT_ASC("rentAmt", false),
+    RENTAMT_DESC("rentAmt", true);
 
 
     private final String sortField;
@@ -40,14 +51,5 @@ public enum SortMode implements Serializable {
 
     public boolean isDesc() {
         return desc;
-    }
-
-    public static SortMode toSortMode(String value) {
-        for (SortMode sortMode : SortMode.values()) {
-            if (sortMode.name().equals(value)) {
-                return sortMode;
-            }
-        }
-        return null;
     }
 }
