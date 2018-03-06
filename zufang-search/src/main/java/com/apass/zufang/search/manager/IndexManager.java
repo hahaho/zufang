@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.apass.zufang.search.condition.HouseSearchCondition;
+import com.apass.zufang.search.entity.HouseEs;
+import com.apass.zufang.search.utils.Pinyin4jUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,24 +21,17 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.Operator;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.apass.zufang.search.condition.GoodsSearchCondition;
 import com.apass.zufang.search.entity.IdAble;
 import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.search.utils.ESDataUtil;
 import com.apass.zufang.search.utils.Esprop;
-import com.apass.zufang.search.utils.Pinyin4jUtil;
 import com.apass.zufang.search.utils.PropertiesUtils;
 import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -62,46 +58,6 @@ public class IndexManager<T> {
     }
 
     /**
-     * http://blog.csdn.net/xiaohulunb/article/details/37877435
-     */
-    public static <Goods> Pagination<Goods> goodSearch(GoodsSearchCondition condition, String sortField, boolean desc, int from, int size) {
-        String value = condition.getGoodsName();
-        if (Pinyin4jUtil.isContainChinese(condition.getGoodsName())||Pinyin4jUtil.isContainSpecial(condition.getGoodsName())) {
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
-                     "categoryName3", "goodsName", "goodsSkuAttr").operator(Operator.AND);
-            multiMatchQueryBuilder.field("categoryName1", 0.8f);
-            multiMatchQueryBuilder.field("categoryName2", 1f);
-            multiMatchQueryBuilder.field("categoryName3", 1.5f);
-            multiMatchQueryBuilder.field("goodsName", 2f);
-            multiMatchQueryBuilder.field("goodsSkuAttr", 0.8f);
-            //TODO
-            Pagination<Goods> goodsPagination =
-                    search(multiMatchQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
-            if (!CollectionUtils.isEmpty(goodsPagination.getDataList())) {
-                return goodsPagination;
-            }
-        }
-        return boolSearch(sortField, desc, from, size, StringUtils.lowerCase(value));
-
-    }
-    /**
-     * 二级类目查询
-     * http://blog.csdn.net/xiaohulunb/article/details/37877435
-     */
-	public static <Goods> Pagination<Goods> goodSearchCategoryId2(String categoryId2, String sortField1, boolean desc,
-			int from, int size) {
-        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("categoryId2", categoryId2);
-		Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.HOUSE, desc, from, size, sortField1);
-        return goodsPagination;
-	}
-    public static <Goods> Pagination<Goods> goodSearchCategoryId2ForOtherCategory(String categoryId2, String sortField1,String sortField2, boolean desc,
-                                                                  int from, int size) {
-        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("categoryId2", categoryId2);
-        Pagination<Goods> goodsPagination = search(termQueryBuilder, IndexType.HOUSE, desc, from, size, sortField1,sortField2);
-        return goodsPagination;
-    }
-
-    /**
      * 根据skuId查询ES中的记录
      * @param goodId
      * @param <Goods>
@@ -116,24 +72,29 @@ public class IndexManager<T> {
 		return null;
 	}
     
-    private static <Goods> Pagination<Goods> boolSearch(String sortField, boolean desc, int from, int size, String value) {
+    private static <HousEs> Pagination<HousEs> boolSearch(String sortField, boolean desc, int from, int size, String value) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder
-                .should(QueryBuilders.wildcardQuery("goodsNamePinyin", "*" + value + "*").boost(2f))
-                .should(QueryBuilders.wildcardQuery("categoryName1Pinyin", "*" + value + "*").boost(0.8f))
-                .should(QueryBuilders.wildcardQuery("categoryName2Pinyin", "*" + value + "*").boost(1f))
-                .should(QueryBuilders.wildcardQuery("categoryName3Pinyin", "*" + value + "*").boost(1.5f))
-                .should(QueryBuilders.wildcardQuery("goodsSkuAttrPinyin", "*" + value + "*").boost(0.8f))
-                .should(QueryBuilders.queryStringQuery(value).field("goodsNamePinyin", 2f)
-                        .field("categoryName1Pinyin", 0.8f)
-                        .field("categoryName2Pinyin", 1f)
-                        .field("categoryName3Pinyin", 1.5f)
-                        .field("goodsSkuAttrPinyin", 0.8f))
-                .should(QueryBuilders.termQuery("goodsNamePinyin", value).boost(2f))
-                .should(QueryBuilders.termQuery("categoryName1Pinyin", value).boost(0.8f))
-                .should(QueryBuilders.termQuery("categoryName2Pinyin", value).boost(1f))
-                .should(QueryBuilders.termQuery("categoryName3Pinyin", value).boost(1.5f))
-                .should(QueryBuilders.termQuery("goodsSkuAttrPinyin", value).boost(0.8f));
+                .should(QueryBuilders.wildcardQuery("apartmentName", "*" + value + "*").boost(1.5f))
+                .should(QueryBuilders.wildcardQuery("apartmentNamePinyin", "*" + value + "*").boost(1.5f))
+                .should(QueryBuilders.wildcardQuery("communityName", "*" + value + "*").boost(1.5f))
+                .should(QueryBuilders.wildcardQuery("communityNamePinyin", "*" + value + "*").boost(1.5f))
+                .should(QueryBuilders.wildcardQuery("houseTitle", "*" + value + "*").boost(2f))
+                .should(QueryBuilders.wildcardQuery("houseTitlePinyin", "*" + value + "*").boost(2f))
+                .should(QueryBuilders.wildcardQuery("detailAddr", "*" + value + "*").boost(1f))
+                .should(QueryBuilders.wildcardQuery("detailAddrPinyin", "*" + value + "*").boost(1f))
+                .should(QueryBuilders.queryStringQuery(value).field("communityName", 1.5f)
+                        .field("communityNamePinyin", 1.5f)
+                        .field("houseTitle", 2f)
+                        .field("houseTitlePinyin", 2f)
+                        .field("detailAddr", 1f)
+                        .field("detailAddrPinyin", 1f))
+                .should(QueryBuilders.termQuery("communityName", value).boost(1.5f))
+                .should(QueryBuilders.termQuery("communityNamePinyin", value).boost(1.5f))
+                .should(QueryBuilders.termQuery("houseTitle", value).boost(2f))
+                .should(QueryBuilders.termQuery("houseTitlePinyin", value).boost(2f))
+                .should(QueryBuilders.termQuery("detailAddr", value).boost(1f))
+                .should(QueryBuilders.termQuery("detailAddrPinyin", value).boost(1f));
         return search(boolQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
     }
 
@@ -151,7 +112,7 @@ public class IndexManager<T> {
     }
 
     /**
-     * 创建索引
+     * 批量创建索引：先delete再create
      *
      * @param datas
      * @param indexType
@@ -165,6 +126,7 @@ public class IndexManager<T> {
             bulkRequest.add(new DeleteRequest(esprop.getIndice(),indexType.getDataName(),t.getId() + ""));
             bulkRequest.add(new IndexRequest(esprop.getIndice(), indexType.getDataName(), t.getId() + "").source(json));
         }
+
 
         /**
          * 执行批量处理request
@@ -183,7 +145,7 @@ public class IndexManager<T> {
     }
 
     /**
-     * 添加索引
+     * 添加索引:单个添加索引包括document数据
      *
      * @param index
      * @param type
@@ -223,7 +185,7 @@ public class IndexManager<T> {
 
 
     /**
-     * 查询
+     * 根据条件分页查询，且按照指定字段排序
      *
      * @param queryBuilder 查询字段
      * @param type 类型
@@ -235,16 +197,13 @@ public class IndexManager<T> {
     private static <T> Pagination<T> search(QueryBuilder queryBuilder, IndexType type, boolean desc, int from, int size, String ...sortFields) {
         List<T> results = new ArrayList<>();
         /**
-         * 不同的索引 变量 代码通用
+         * 不同的索引、变量 代码通用
          */
         SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch(esprop.getIndice())
                 .setTypes(type.getDataName())
                 .setQuery(queryBuilder);
         if (sortFields != null) {
             for (int i = 0; i <sortFields.length ; i++) {
-                if(StringUtils.equals("sordNo",sortFields[i])){
-                    serachBuilder.addSort(sortFields[i],SortOrder.ASC);
-                }
                 serachBuilder.addSort(sortFields[i], desc ? SortOrder.DESC : SortOrder.ASC);
             }
         }
@@ -252,6 +211,7 @@ public class IndexManager<T> {
         if (0 != size) {
             serachBuilder.setFrom(from).setSize(size);
         }
+
         SearchResponse response = serachBuilder.execute().actionGet();
         SearchHits searchHits = response.getHits();
         SearchHit[] hits = searchHits.getHits();
@@ -268,8 +228,8 @@ public class IndexManager<T> {
     /**
      * 根据条件查询ES中的消息
      */
-	public static <Goods> List<Goods> goodSearchFromES(QueryBuilder queryBuilder) {
-		List<Goods> results = new ArrayList<>();
+	public static <HouseEs> List<HouseEs> goodSearchFromES(QueryBuilder queryBuilder) {
+		List<HouseEs> results = new ArrayList<>();
         /**
          * 不同的索引  变量代   码通用
          */
@@ -281,8 +241,35 @@ public class IndexManager<T> {
 		SearchHits searchHits = response.getHits();
 		SearchHit[] hits = searchHits.getHits();
 		for (SearchHit hit : hits) {
-			results.add((Goods) ESDataUtil.readValue(hit.source(), IndexType.HOUSE.getTypeClass()));
+			results.add((HouseEs) ESDataUtil.readValue(hit.source(), IndexType.HOUSE.getTypeClass()));
 		}
         return results;
 	}
+
+    public static Pagination<HouseEs> HouseSearch(HouseSearchCondition condition) {
+        String sortField = condition.getSortMode().getSortField();
+        boolean desc = condition.getSortMode().isDesc();
+        int from = condition.getOffset();
+        int size = condition.getPageSize();
+
+        String value = condition.getHouseTitle();
+
+        //如果是汉字走此流程
+        if (Pinyin4jUtil.isContainChinese(value)||Pinyin4jUtil.isContainSpecial(value)) {
+            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
+                    "communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
+            multiMatchQueryBuilder.field("communityName", 1.5f);
+            multiMatchQueryBuilder.field("houseTitle", 2f);
+            multiMatchQueryBuilder.field("detailAddr", 1f);
+            multiMatchQueryBuilder.field("apartmentName", 1f);
+
+            //TODO
+            Pagination<HouseEs> goodsPagination =
+                    search(multiMatchQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
+            if (!CollectionUtils.isEmpty(goodsPagination.getDataList())) {
+                return goodsPagination;
+            }
+        }
+        return boolSearch(sortField, desc, from, size, StringUtils.lowerCase(value));
+    }
 }

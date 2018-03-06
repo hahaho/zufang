@@ -27,9 +27,14 @@ public class HouseEs implements IdAble{
     private Long apartmentId;
 
     /**
-     * 公寓名称
+     * 所属公司
      */
     private String companyName;
+
+    /**
+     * 公寓名称
+     */
+    private String apartmentName;
 
     /**
      * 热门房源类型：1：正常，2:精选
@@ -671,5 +676,13 @@ public class HouseEs implements IdAble{
 
     public void setPriceFlag(Integer priceFlag) {
         this.priceFlag = priceFlag;
+    }
+
+    public String getApartmentName() {
+        return apartmentName;
+    }
+
+    public void setApartmentName(String apartmentName) {
+        this.apartmentName = apartmentName;
     }
 }
