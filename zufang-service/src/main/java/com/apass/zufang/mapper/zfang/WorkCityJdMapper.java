@@ -25,4 +25,6 @@ public interface WorkCityJdMapper extends GenericMapper<WorkCityJd, Long> {
 	 * @return
 	 */
 	WorkCityJd selectCodeByName(WorkCityJdParams entity);
+
+	WorkCityJd selectWorkCityByCode(String areaCode);
 }

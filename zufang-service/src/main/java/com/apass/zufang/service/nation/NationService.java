@@ -35,6 +35,9 @@ public class NationService {
     public List<WorkCityJd> queryDistrictForAms(String districtCode){
     	return cityJdMapper.selectDateByParentId(districtCode);
     }
-    
-    
+
+
+    public WorkCityJd selectWorkCityByCode(String areaCode) {
+        return cityJdMapper.selectWorkCityByCode(areaCode);
+    }
 }
