@@ -22,8 +22,8 @@ import com.apass.zufang.domain.vo.ApartmentVo;
 import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
- * 公寓信息管理
- * @author Administrator
+ * 公寓管理-公寓信息管理
+ * @author haotian
  *
  */
 @Path("/application/apartment/apartmentController")
