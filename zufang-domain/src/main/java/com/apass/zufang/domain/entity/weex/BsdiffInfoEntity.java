@@ -1,4 +1,4 @@
-package com.apass.zufang.domain.entity;
+package com.apass.zufang.domain.entity.weex;
 
 import java.util.Date;
 
