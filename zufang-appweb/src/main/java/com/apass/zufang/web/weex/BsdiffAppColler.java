@@ -43,7 +43,7 @@ public class BsdiffAppColler {
     @Autowired
     private BsdiffinfoService bsdiffinfoService;
 
-    @RequestMapping(value = "bsdiff/download")
+    @RequestMapping(value = "/bsdiff/download")
     @ResponseBody
     public Response downLoad(@RequestBody(required=true) String jsonArr) throws IOException {
         LOGGER.info("bsdiff下载开始执行了,参数:{}", jsonArr);
@@ -107,8 +107,8 @@ public class BsdiffAppColler {
                 }
             }
         }catch (Exception e){
-            LOGGER.error("下载失败",e);
-            return Response.fail("下载失败");
+            LOGGER.error("下载失败"+e.getMessage(),e);
+            return Response.fail("下载失败"+e.getMessage());
         }
 
         return Response.success("下载成功",responses);
