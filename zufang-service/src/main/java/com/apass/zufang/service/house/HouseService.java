@@ -283,7 +283,7 @@ public class HouseService {
 		}
 		if(t != null){
 			vo.setStreet(t.getTowns());
-			vo.setStreetCode(t.getTowns());
+			vo.setStreetCode(t.getCode());
 		}
 		return vo;
 	}
