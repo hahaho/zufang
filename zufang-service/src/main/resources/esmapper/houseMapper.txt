@@ -1,0 +1,78 @@
+{
+        "house": {
+            "properties": {
+                "communityName": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "communityNamePinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
+                "apartmentName": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "apartmentNamePinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
+                "houseTitle": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "houseTitlePinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
+                "description": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "descriptionPinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
+                "detailAddr": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "detailAddrPinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                },
+                "configName": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "configNamePinyin": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "standard",
+                    "search_analyzer": "standard"
+                }
+            }
+        }
+}

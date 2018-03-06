@@ -141,7 +141,7 @@ public class HouseSearchController {
 				houseSearchCondition.setOffset(offset);
 				houseSearchCondition.setPageSize(row);
 
-				searchValue = Pinyin4jUtil.converterToSpell(searchValue);
+				//searchValue = Pinyin4jUtil.converterToSpell(searchValue);
 				houseSearchCondition.setSortMode(SortMode.PAGEVIEW_DESC);
 				houseSearchCondition.setApartmentName(searchValue);
 				houseSearchCondition.setCommunityName(searchValue);

@@ -254,9 +254,10 @@ public class IndexManager<T> {
 
         String value = condition.getHouseTitle();
 
+        //如果是汉字走此流程
         if (Pinyin4jUtil.isContainChinese(value)||Pinyin4jUtil.isContainSpecial(value)) {
             MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
-                    "communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.OR);
+                    "communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
             multiMatchQueryBuilder.field("communityName", 1.5f);
             multiMatchQueryBuilder.field("houseTitle", 2f);
             multiMatchQueryBuilder.field("detailAddr", 1f);
