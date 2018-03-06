@@ -19,6 +19,9 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.WorkSubway;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.FeaturesConfigurationEnums;
+import com.apass.zufang.domain.enums.HuxingEnums;
 import com.apass.zufang.domain.enums.PriceRangeEnum;
 import com.apass.zufang.service.house.ApartHouseService;
 import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
@@ -153,4 +156,44 @@ public class SearchTermsController {
 			return Response.fail("查询位置区域及地铁线路失败！");
 		}
 	}
+	
+	/**
+	 * 筛选
+	 * 
+	 * @return
+	 */
+	@POST
+	@Path("/getSelectFilter")
+	public Response getSelectFilter(Map<String, Object> paramMap) {
+		try {
+			
+			Map<String,Object> resultMap=Maps.newHashMap();
+			//类型 合租 整租
+			Map<Integer,Object> sharedType=Maps.newHashMap();
+			sharedType.put(BusinessHouseTypeEnums.HZ_1.getCode(), BusinessHouseTypeEnums.HZ_1.getMessage());
+			sharedType.put(BusinessHouseTypeEnums.HZ_2.getCode(), BusinessHouseTypeEnums.HZ_2.getMessage());
+			//户型
+			Map<Integer,Object> huxingType=Maps.newHashMap();
+			HuxingEnums[] resultHuxingEnums = HuxingEnums.values();
+			for (int i = 0; i < resultHuxingEnums.length; i++) {
+				huxingType.put(resultHuxingEnums[i].getCode(), resultHuxingEnums[i].getMessage());
+			}
+			//特色配置
+			Map<Integer,Object> FeaturesConfigurationType=Maps.newHashMap();
+			FeaturesConfigurationEnums[] featuresEnums = FeaturesConfigurationEnums.values();
+			for (int i = 0; i < featuresEnums.length; i++) {
+				FeaturesConfigurationType.put(featuresEnums[i].getCode(), featuresEnums[i].getMessage());
+			}
+			
+			resultMap.put("sharedType", sharedType);
+			resultMap.put("roomType", huxingType);
+			resultMap.put("FeaturesConfiguration", FeaturesConfigurationType);
+			
+			return Response.success("success", resultMap);
+		}catch (Exception e) {
+			LOG.error("查询位置区域及地铁线路失败！", e);
+			return Response.fail("查询位置区域及地铁线路失败！");
+		}
+	}
+	
 }
