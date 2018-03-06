@@ -264,10 +264,10 @@ public class IndexManager<T> {
             multiMatchQueryBuilder.field("apartmentName", 1f);
 
             //TODO
-            Pagination<HouseEs> goodsPagination =
+            Pagination<HouseEs> housePagination =
                     search(multiMatchQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
-            if (!CollectionUtils.isEmpty(goodsPagination.getDataList())) {
-                return goodsPagination;
+            if (!CollectionUtils.isEmpty(housePagination.getDataList())) {
+                return housePagination;
             }
         }
         return boolSearch(sortField, desc, from, size, StringUtils.lowerCase(value));

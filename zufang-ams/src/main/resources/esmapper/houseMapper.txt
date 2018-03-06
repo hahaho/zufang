@@ -28,8 +28,8 @@
                 "houseTitle": {
                     "type": "text",
                     "index": "analyzed",
-                    "analyzer": "standard",
-                    "search_analyzer": "standard"
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
                 },
                 "houseTitlePinyin": {
                     "type": "text",
