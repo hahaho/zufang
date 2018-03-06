@@ -19,7 +19,7 @@ import java.util.Date;
  * Created by xiaohai on 2018/3/6.
  */
 @Controller
-@RequestMapping("/application/system/param")
+@RequestMapping("/noauth/bsdiff")
 public class BsdiffAmsController {
     /**
      * 日志
@@ -34,7 +34,7 @@ public class BsdiffAmsController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/bsdiffUpload")
+    @RequestMapping("/upload")
     public Response bsdiffUpload2(@ModelAttribute("bsdiffEntiry")BsdiffVo bsdiffVo) {
         try{
             LOG.info("bsdiff增量更新开始上传,参数 版本号:{},文件名:{}",bsdiffVo.getBsdiffVer(),bsdiffVo.getBsdiffFile().getOriginalFilename());
