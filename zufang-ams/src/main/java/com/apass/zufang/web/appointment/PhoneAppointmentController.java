@@ -77,14 +77,14 @@ public class PhoneAppointmentController {
     	try {
     		LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
     		String houseId = CommonUtils.getValue(map, "houseId");
-    		ValidateUtils.isNotBlank(houseId, "参数" + houseId + "为空！");
+    		ValidateUtils.isNotBlank(houseId, "参数houseId为空！");
     		String userId = CommonUtils.getValue(map, "userId");
-    		ValidateUtils.isNotBlank(userId, "参数" + userId + "为空！");
+    		ValidateUtils.isNotBlank(userId, "参数userId为空！");
     		
     		String telphone = CommonUtils.getValue(map, "telphone");
-    		ValidateUtils.isNotBlank(telphone, "参数" + telphone + "为空！");
+    		ValidateUtils.isNotBlank(telphone, "参数telphone为空！");
     		String name = CommonUtils.getValue(map, "name");
-    		ValidateUtils.isNotBlank(name, "参数" + name + "为空！");
+    		ValidateUtils.isNotBlank(name, "参数name为空！");
     		
     		String reserveDate = CommonUtils.getValue(map, "reserveDate");
     		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
