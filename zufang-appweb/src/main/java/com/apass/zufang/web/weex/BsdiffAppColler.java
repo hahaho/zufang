@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Controller
 public class BsdiffAppColler {
-    @Value("${esp.image.uri}")
+    @Value("${zufang.image.uri}")
     private String appWebDomain;
     @Value("${nfs.rootPath}")
     private String rootPath;
@@ -154,7 +154,7 @@ public class BsdiffAppColler {
             bsr.setMd5_merge(md5_merge);
 
             //patch文件url
-            String patch_url = appWebDomain+"/static"+nfsBsdiffPath+PATCHPATH+"/"+bs.getLineId()+"/"+bs.getBsdiffVer()+"/"+patch_name;
+            String patch_url = appWebDomain+nfsBsdiffPath+PATCHPATH+"/"+bs.getLineId()+"/"+bs.getBsdiffVer()+"/"+patch_name;
 
             bsr.setFileurl(patch_url);
         }

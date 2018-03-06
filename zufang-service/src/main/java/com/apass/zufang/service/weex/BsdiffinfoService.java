@@ -34,7 +34,7 @@ public class BsdiffinfoService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BsdiffinfoService.class);
 	private static final Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-	@Value("${esp.image.uri}")
+	@Value("${zufang.image.uri}")
 	private String appWebDomain;
 
 	@Value("${nfs.rootPath}")
@@ -191,7 +191,7 @@ public class BsdiffinfoService {
 
 				countEnd = countStart+file.length();
 				fileContent.setExcursionSize(String.valueOf(countStart)+","+String.valueOf(countEnd));
-				fileContent.setUrl(appWebDomain+"/static"+zipPath+file.getName());
+				fileContent.setUrl(appWebDomain+zipPath+file.getName());
 				fileEntitis.setFileContent(fileContent);
 				list.add(fileEntitis);
 				countStart = countEnd;
@@ -218,7 +218,7 @@ public class BsdiffinfoService {
 			File merFile = new File(descDir,"merge");
 			bos = new BufferedOutputStream(new FileOutputStream(merFile));
 
-			bsdiffInfoEntity.setMergeFilePath(appWebDomain+"/static"+zipPath+merFile.getName());
+			bsdiffInfoEntity.setMergeFilePath(appWebDomain+zipPath+merFile.getName());
 			byte[] buf = new byte[SIZE];
 			int len = 0;
 			while((len = sis.read(buf))!=-1){
