@@ -155,7 +155,7 @@ public class AppointmentJourneyController {
         		visit = (byte)4;
         	}
         	byte rent = (byte)1;
-        	if(StringUtils.equals("未", rentStatus)){
+        	if(StringUtils.equals("否", rentStatus)){
         		rent = (byte)0;
         	}else if(StringUtils.equals("是", rentStatus)){
         		rent = (byte)1;
