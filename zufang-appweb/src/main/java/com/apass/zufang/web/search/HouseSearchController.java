@@ -1,24 +1,20 @@
 package com.apass.zufang.web.search;
 
-import com.apass.esp.common.code.BusinessErrorCode;
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.mybatis.page.Pagination;
-import com.apass.gfb.framework.utils.CommonUtils;
-import com.apass.gfb.framework.utils.GsonUtils;
-import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.vo.HouseAppSearchVo;
-import com.apass.zufang.search.condition.HouseSearchCondition;
-import com.apass.zufang.search.entity.HouseEs;
-import com.apass.zufang.search.enums.SortMode;
-import com.apass.zufang.search.manager.ESClientManager;
-import com.apass.zufang.search.manager.IndexManager;
-import com.apass.zufang.search.utils.ESDataUtil;
-import com.apass.zufang.search.utils.Pinyin4jUtil;
-import com.apass.zufang.service.house.HouseService;
-import com.apass.zufang.service.search.SearchKeyService;
-import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
-import com.google.common.collect.Lists;
+import static com.apass.zufang.search.enums.IndexType.HOUSE;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -30,19 +26,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.apass.zufang.search.enums.IndexType.HOUSE;
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.mybatis.page.Pagination;
+import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.GsonUtils;
+import com.apass.zufang.common.code.BusinessErrorCode;
+import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
+import com.apass.zufang.search.condition.HouseSearchCondition;
+import com.apass.zufang.search.entity.HouseEs;
+import com.apass.zufang.search.enums.SortMode;
+import com.apass.zufang.search.manager.ESClientManager;
+import com.apass.zufang.search.manager.IndexManager;
+import com.apass.zufang.search.utils.ESDataUtil;
+import com.apass.zufang.service.house.HouseService;
+import com.apass.zufang.service.search.SearchKeyService;
+import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
+import com.google.common.collect.Lists;
 
 /**
  * 商品搜索类
