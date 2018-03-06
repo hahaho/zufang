@@ -117,7 +117,8 @@ public class PhoneAppointmentController {
     		key = entry.getKey();
     		value = entry.getValue();
     		if("memo".equals(key)){
-    			entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
+    			entity.setMemo(value==null?"":value.toString());
+//    			entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
     			continue;
     		}
     		if(value==null){
