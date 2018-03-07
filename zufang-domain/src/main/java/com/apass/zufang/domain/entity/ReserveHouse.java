@@ -1,15 +1,13 @@
 package com.apass.zufang.domain.entity;
 import java.util.Date;
-<<<<<<< .merge_file_a01536
+
 
 
 import com.apass.zufang.common.model.QueryParams;
 public class ReserveHouse extends QueryParams{
 
 
-=======
-public class ReserveHouse {
->>>>>>> .merge_file_a18940
+
     private Long id;
 
     private Long houseId;
@@ -27,18 +25,15 @@ public class ReserveHouse {
     private String memo;
 
     private String isDelete;
-<<<<<<< .merge_file_a01536
+
 
     
-    private Date createdTime;
-    
-    private Date updatedTime;
-    
 
-=======
+
+
     private Date createdTime;
     private Date updatedTime;
->>>>>>> .merge_file_a18940
+
     public Date getCreatedTime() {
 		return createdTime;
 	}
