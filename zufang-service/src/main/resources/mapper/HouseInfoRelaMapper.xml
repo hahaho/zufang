@@ -43,7 +43,6 @@
              AND t1.is_delete NOT IN ('01')
              AND t2.is_delete NOT IN ('01')
              AND t2.list_time < CURRENT_TIMESTAMP ()
-             AND t2.delist_time > CURRENT_TIMESTAMP ()
 	]]>
 	<if test="apartmentId!=null and apartmentId!=''"> AND t1.id = #{apartmentId}  </if>
 	<if test="houseId!=null and houseId!=''"> AND t2.id = #{houseId} </if>
@@ -100,7 +99,6 @@
              AND t1.is_delete NOT IN ('01')
              AND t2.is_delete NOT IN ('01')
              AND t2.list_time < CURRENT_TIMESTAMP ()
-             AND t2.delist_time > CURRENT_TIMESTAMP ()
 	]]>
 			AND t2.id  = #{houseId}
 			LIMIT 1

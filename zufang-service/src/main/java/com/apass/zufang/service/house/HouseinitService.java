@@ -147,7 +147,7 @@ public class HouseinitService {
 		if (ValidateUtils.listIsTrue(hotHouse)) {
 			// 追加图片
 			for (HouseVo houseVo : hotHouse) {
-				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
 				houseVo.setPictures(imgList);
 			}
 		}
@@ -218,16 +218,12 @@ public class HouseinitService {
 		try {
 			Integer currSize = finMap.get("finSize");
 			
-			List<HouseVo> addSetList = setHouse;
+			List<HouseVo> addSetList = null;
 			// 配置房源大于5
 			if (currSize < 5) {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
 					addSetList = norHouses.subList(5 - currSize, norHouses.size());
-				}else {
-					for (HouseVo houseVo : norHouses) {
-						addSetList.add(houseVo);
-					}
 				}
 				// @2:正常房源+配置房源<5
 			}
