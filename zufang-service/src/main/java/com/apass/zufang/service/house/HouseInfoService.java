@@ -110,10 +110,6 @@ public class HouseInfoService {
 	/**
 	 * 根据坐标查询附近房源
 	 * 
-	 * @param houseId
-	 *            目标房源
-	 * @param number
-	 *            附近房源数量
 	 * @return
 	 */
 	public List<HouseInfoRela> getNearHouseByCoordinate(Double latitude,
@@ -254,11 +250,16 @@ public class HouseInfoService {
 			HouseAppSearchVo vo=houseInfoList.get(i);
 			double distance = this.distanceSimplify(latitude, longitude,
 					vo.getLatitude(), vo.getLongitude());
-			if (houseDistanceMap.get(distance) != null) {
-				BigDecimal distanceBig = new BigDecimal(distance);
-				// 相同的距离 需要处理 （后一个加上0.0001）
-				distanceBig = distanceBig.add(new BigDecimal("0.0001"));
-				distance = distanceBig.doubleValue();
+					BigDecimal distanceBig = new BigDecimal(distance);
+			while(true){
+				if (houseDistanceMap.get(distance) != null) {
+					// 相同的距离 需要处理 （后一个加上0.0001）
+					distanceBig = distanceBig.add(new BigDecimal("0.0001"));
+					distance = distanceBig.doubleValue();
+				}else {
+					break;
+				}
+
 			}
 			houseDistanceMap.put(distance, vo);
 			resultArray[i]=distance;
@@ -266,7 +267,7 @@ public class HouseInfoService {
 		//对距离按照升序排序
 		Arrays.sort(resultArray);
 
-		int value = resultArray.length > number ? number : resultArray.length;
+		int value = resultArray.length < number ? number : resultArray.length;
 		for (int i = 0; i < value; i++) {
 			double disance = resultArray[i];
 			voList.add(houseDistanceMap.get(disance));

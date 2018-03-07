@@ -258,7 +258,6 @@ public class HouseSearchController {
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
-//				boolQueryBuilder.must(QueryBuilders.wildcardQuery("apartmentName","*" + apartmentName + "*").boost(2.5f));
 			}
 			if(StringUtils.isNotEmpty(priceFlag)){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(1.5f));
@@ -271,7 +270,8 @@ public class HouseSearchController {
 				}
 			}
 			if(StringUtils.isNotEmpty(room)){
-				boolQueryBuilder.must(QueryBuilders.termQuery("room",room).boost(1.5f));
+				String[] roomArr = room.split(",");
+				boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0], roomArr[1]).boost(1.5f));
 			}
 			if(StringUtils.isNotEmpty(configName)){
 				boolQueryBuilder.must(QueryBuilders.termQuery("configName",configName).boost(1.5f));
@@ -327,7 +327,6 @@ public class HouseSearchController {
 					}
 				}
 			}
-
 
 			if(StringUtils.isNotEmpty(subCode) || StringUtils.isNotEmpty(areaCode)){
 				List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
