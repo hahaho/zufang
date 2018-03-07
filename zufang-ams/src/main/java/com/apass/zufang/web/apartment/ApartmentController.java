@@ -26,7 +26,7 @@ import com.apass.zufang.utils.ResponsePageBody;
  * @author haotian
  *
  */
-@Path("/application/apartment/apartmentController")
+@Path("/apartment/apartmentController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class ApartmentController {
