@@ -3,6 +3,7 @@ import java.util.Date;
 import com.apass.zufang.common.model.QueryParams;
 
 public class ReserveHouse extends QueryParams{
+	private Long id;
 
     private Long houseId;
 
