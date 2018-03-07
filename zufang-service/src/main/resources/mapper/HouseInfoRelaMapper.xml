@@ -36,13 +36,14 @@
 			t4.detail_addr detailAddr,
 			t2.created_time houseCreatedTime
             FROM t_zfang_apartment t1,
-			     t_zfang_house t2
-            LEFT JOIN t_zfang_house_location t4 ON t4.house_id = t2.id
-             AND t4.is_delete NOT IN ('01')
+				 t_zfang_house t2,
+				 t_zfang_house_location t4
             WHERE t1.id = t2.apartment_id
+			 AND t2.id = t4.house_id
+			 AND t4.is_delete NOT IN ('01')
              AND t1.is_delete NOT IN ('01')
              AND t2.is_delete NOT IN ('01')
-             AND t2.list_time < CURRENT_TIMESTAMP ()
+             AND t2.status = '2'
 	]]>
 	<if test="apartmentId!=null and apartmentId!=''"> AND t1.id = #{apartmentId}  </if>
 	<if test="houseId!=null and houseId!=''"> AND t2.id = #{houseId} </if>

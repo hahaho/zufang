@@ -16,13 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.TokenManager;
+import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.ajp.entity.GfbRegisterInfoEntity;
 import com.apass.zufang.domain.constants.ConstantsUtil;
+import com.apass.zufang.domain.entity.HouseShowingsEntity;
+import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.service.common.MobileSmsService;
 import com.apass.zufang.service.onlinebooking.OnlineBookingService;
 import com.apass.zufang.service.personal.ZuFangLoginSevice;
+import com.apass.zufang.utils.ResponsePageBody;
 
 /**
  * 在线预约看房
@@ -104,7 +108,7 @@ public class OnlineBookingController {
 			        			// 插入数据库
 			        			Long saveRegisterInfo = zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
 			        			
-			        			onlineBookingService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,
+			        			Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,
 			        					memo);
 			        			// 生成token
 								String token = tokenManager.createToken(String.valueOf(saveRegisterInfo), mobile,
@@ -112,12 +116,17 @@ public class OnlineBookingController {
 								returnMap.put("token", token);
 								returnMap.put("account", mobile);
 								returnMap.put("userId", saveRegisterInfo);
-								return Response.success("在线预约成功", returnMap);
+								if(insetReserveHouse == 1){
+									return Response.success("在线预约成功", returnMap);
+								}else{
+									return Response.fail("您近期行程已排满，暂时不能预约。");
+								}
+								
 			        		}else{
 			        			//已经注册    未登录
 			        			GfbRegisterInfoEntity zfselecetmobile2 = zuFangLoginSevice.zfselecetmobile(mobile);
 			        			
-			        			onlineBookingService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,
+			        			Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,
 			        					memo);
 			        			// 生成token
 								String token = tokenManager.createToken(String.valueOf(zfselecetmobile2.getId()), mobile,
@@ -125,7 +134,11 @@ public class OnlineBookingController {
 								returnMap.put("token", token);
 								returnMap.put("account", mobile);
 								returnMap.put("userId", zfselecetmobile2.getId());
-								return Response.success("在线预约成功", returnMap);
+								if(insetReserveHouse == 1){
+									return Response.success("在线预约成功", returnMap);
+								}else{
+									return Response.fail("您近期行程已排满，暂时不能预约。");
+								}
 			        		}
 							
 	        	}
@@ -146,6 +159,58 @@ public class OnlineBookingController {
 			logger.error("mobile verification code send fail", e);
 			return Response.fail("网络异常,请稍后再试");
 		}
+	}
+	
+	
+	/**
+	 * 预约看房Reservations
+	 * @param paramMap
+	 * @return
+	 */
+	@POST
+	@Path("/reservationsshowings")
+	public Response reservationsShowings(Map<String, Object> paramMap) {
+		ResponsePageBody<ReserveHouse> respBody = new ResponsePageBody<ReserveHouse>();
+		
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		
+		try {
+			// 页码
+			String page = CommonUtils.getValue(paramMap, "page");
+			// 每页显示条数
+			String rows = CommonUtils.getValue(paramMap, "rows");
+			rows = StringUtils.isNotBlank(rows) ? "20": rows;
+        	page = StringUtils.isNotBlank(page) ? page: "1";
+			
+            String userid = CommonUtils.getValue(paramMap, "userid");//用户id
+            String telphone = CommonUtils.getValue(paramMap, "telphone");//电话
+            
+            ReserveHouse crmety = new ReserveHouse();
+            if (null != telphone && !telphone.trim().isEmpty()) {
+            	crmety.setTelphone(telphone);
+            }
+            if (null != userid && !userid.trim().isEmpty()) {
+            	crmety.setUserId(userid);
+            }
+            crmety.setRows(Integer.parseInt(rows));
+            crmety.setPage(Integer.parseInt(page));
+            
+
+            ResponsePageBody<HouseShowingsEntity> resultPage = onlineBookingService.queryReservations(crmety);
+			
+            if (resultPage == null) {
+                respBody.setTotal(0);
+                respBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+                return Response.success("在线预约成功", returnMap);
+            }
+            returnMap.put("total", resultPage.getTotal());
+            returnMap.put("rows", resultPage.getRows());
+		} catch (Exception e) {
+			logger.error("预约看房查询失败", e);
+	            respBody.setStatus(BaseConstants.CommonCode.FAILED_CODE);
+	            respBody.setMsg("预约看房查询失败");
+		}
+		return Response.success("在线预约成功", returnMap);
 	}
 
 }

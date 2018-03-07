@@ -28,7 +28,7 @@ public interface ApartmentMapper extends GenericMapper<Apartment,Long> {
 	 * 公寓初始图片
 	 * @return
 	 */
-	public List<Apartment> getApartmentList();
+	public List<ApartmentVo> getApartmentList();
 	/**
 	 * 获取公寓Id
 	 * @return

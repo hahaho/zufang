@@ -6,6 +6,7 @@ package com.apass.zufang.domain.enums;
  */
 public enum HuxingEnums {
 	
+	HUXING_0(0, "不限"),
     HUXING_1(1, "一室户"),
     HUXING_2(2, "二室户"),
     HUXING_3(3, "三室户"),
