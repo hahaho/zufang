@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.BsdiffInfoEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.weex.BsdiffInfoEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="bsdiff_ver" property="bsdiffVer" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="line_id" property="lineId" jdbcType="VARCHAR" />
+    <result column="source_file_path" property="sourceFilePath" jdbcType="VARCHAR" />
+    <result column="merge_file_path" property="mergeFilePath" jdbcType="VARCHAR" />
+    <result column="file_list_path" property="fileListPath" jdbcType="VARCHAR" />
+    <result column="if_compel_update" property="ifCompelUpdate" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bsdiff_ver, created_time, updated_time, create_user, update_user, line_id, source_file_path, merge_file_path, file_list_path,if_compel_update
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zfang_bsdiff_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_zfang_bsdiff_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.entity.weex.BsdiffInfoEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_bsdiff_info (bsdiff_ver, created_time,
+      updated_time, create_user, update_user,line_id,source_file_path,
+      merge_file_path, file_list_path,if_compel_update)
+    values (#{bsdiffVer,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
+      #{updateDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR},
+      #{lineId,jdbcType=VARCHAR}, #{sourceFilePath,jdbcType=VARCHAR}, #{mergeFilePath,jdbcType=VARCHAR},
+      #{fileListPath,jdbcType=VARCHAR},#{ifCompelUpdate}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.weex.BsdiffInfoEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_bsdiff_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bsdiffVer != null" >
+        bsdiff_ver,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="lineId != null" >
+        line_id,
+      </if>
+      <if test="sourceFilePath != null" >
+        source_file_path,
+      </if>
+      <if test="mergeFilePath != null" >
+        merge_file_path,
+      </if>
+      <if test="fileListPath != null" >
+        file_list_path,
+      </if>
+      <if test="ifCompelUpdate != null" >
+        if_compel_update
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bsdiffVer != null" >
+        #{bsdiffVer,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lineId != null" >
+        #{lineId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceFilePath != null" >
+        #{sourceFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="mergeFilePath != null" >
+        #{mergeFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="fileListPath != null" >
+        #{fileListPath,jdbcType=VARCHAR},
+      </if>
+      <if test="ifCompelUpdate != null" >
+        #{ifCompelUpdate}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.weex.BsdiffInfoEntity" >
+    update t_zfang_bsdiff_info
+    <set >
+      <if test="bsdiffVer != null" >
+        bsdiff_ver = #{bsdiffVer,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lineId != null" >
+        #{lineId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceFilePath != null" >
+        #{sourceFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="mergeFilePath != null" >
+        #{mergeFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="fileListPath != null" >
+        #{fileListPath,jdbcType=VARCHAR},
+      </if>
+      <if test="ifCompelUpdate != null" >
+        #{ifCompelUpdate}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.weex.BsdiffInfoEntity" >
+    update t_zfang_bsdiff_info
+    set bsdiff_ver = #{bsdiffVer,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      line_id = #{lineId,jdbcType=VARCHAR},
+      source_file_path = #{sourceFilePath,jdbcType=VARCHAR},
+      merge_file_path = #{mergeFilePath,jdbcType=VARCHAR},
+      file_list_path = #{fileListPath,jdbcType=VARCHAR},
+      if_compel_update = #{ifCompelUpdate}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

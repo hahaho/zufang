@@ -33,4 +33,11 @@
             AND towns = #{street} 
         </if>
     </select>
+
+    <select id="selectWorkCityByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_zufang_work_city_jd
+        where code = #{code}
+    </select>
 </mapper>

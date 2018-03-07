@@ -15,12 +15,24 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.apass.zufang.domain.common.WorkCityJd;
+import com.apass.zufang.domain.entity.HouseInfoRela;
+import com.apass.zufang.domain.entity.WorkSubway;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.service.house.HouseInfoService;
+import com.apass.zufang.service.nation.NationService;
+import com.apass.zufang.utils.ObtainGaodeLocation;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +72,10 @@ public class HouseSearchController {
 	private HouseService houseService;
 	@Autowired
 	private WorkSubwaySevice workSubwaySevice;
+	@Autowired
+	private HouseInfoService houseInfoService;
+	@Autowired
+	private NationService nationService;
 
 	/**
 	 * 添加致搜索记录表
@@ -109,9 +125,11 @@ public class HouseSearchController {
 		try {
 			HouseSearchCondition houseSearchCondition = new HouseSearchCondition();
 			//搜索必传参数
-			String deviceId = CommonUtils.getValue(paramMap, "deviceId");// 设备号
-			String userId = CommonUtils.getValue(paramMap, "userId");// 用户号
-			String sort = CommonUtils.getValue(paramMap, "sort");// 排序字段(default:默认;pageView)
+			// 设备号
+			String deviceId = CommonUtils.getValue(paramMap, "deviceId");
+			// 用户号
+			String userId = CommonUtils.getValue(paramMap, "userId");
+			//页面和数量
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
 
@@ -119,37 +137,39 @@ public class HouseSearchController {
 			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
 			//点击整租合租所传参数
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
+			String regex = "^[a-zA-Z0-9\\u4e00-\\u9fa5\\ ()（）.\\[\\]+=/\\-_\\【\\】]+$";
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(searchValue);
+			Boolean searchValueFalge = false;
+			if (matcher.matches()) {
+				searchValueFalge = true;
+				// 插入数据:搜索记录
+				searchKeyService.addCommonSearchKeys(searchValue, userId, deviceId);
+			}
+
+			Integer pages = null;
+			Integer row = null;
+			if (StringUtils.isNotEmpty(rows)) {
+				row = Integer.valueOf(rows);
+			} else {
+				row = 20;
+			}
+			pages = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
+			Integer offset = (pages-1)*row;
+			houseSearchCondition.setOffset(offset);
+			houseSearchCondition.setPageSize(row);
+
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			List<HouseAppSearchVo> list = new ArrayList<HouseAppSearchVo>();
 			if(StringUtils.isEmpty(rentType)){
-				String regex = "^[a-zA-Z0-9\\u4e00-\\u9fa5\\ ()（）.\\[\\]+=/\\-_\\【\\】]+$";
-				Pattern pattern = Pattern.compile(regex);
-				Matcher matcher = pattern.matcher(searchValue);
-				Boolean searchValueFalge = false;
-				if (matcher.matches()) {
-					searchValueFalge = true;
-					// 插入数据:搜索记录
-					searchKeyService.addCommonSearchKeys(searchValue, userId, deviceId);
+				if(StringUtils.isEmpty(searchValue)){
+					throw new RuntimeException("输入关键字才能搜索哦");
 				}
-
-				Integer pages = null;
-				Integer row = null;
-				if (StringUtils.isNotEmpty(rows)) {
-					row = Integer.valueOf(rows);
-				} else {
-					row = 20;
-				}
-				pages = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
-				Integer offset = (pages-1)*row;
-				houseSearchCondition.setOffset(offset);
-				houseSearchCondition.setPageSize(row);
-
-				//searchValue = Pinyin4jUtil.converterToSpell(searchValue);
 				houseSearchCondition.setSortMode(SortMode.PAGEVIEW_DESC);
 				houseSearchCondition.setApartmentName(searchValue);
 				houseSearchCondition.setCommunityName(searchValue);
 				houseSearchCondition.setDetailAddr(searchValue);
 				houseSearchCondition.setHouseTitle(searchValue);
-
-				Map<String, Object> returnMap = new HashMap<String, Object>();
 
 				long before = System.currentTimeMillis();
 				Pagination<HouseEs> pagination = new Pagination<>();
@@ -157,7 +177,6 @@ public class HouseSearchController {
 					pagination = IndexManager.HouseSearch(houseSearchCondition);
 				}
 
-				List<HouseAppSearchVo> list = new ArrayList<HouseAppSearchVo>();
 				for (HouseEs houseEs : pagination.getDataList()) {
 					list.add(houseEsToHouseAppSearchVo(houseEs));
 				}
@@ -170,12 +189,25 @@ public class HouseSearchController {
 				returnMap.put("houseDataList", list);
 				return Response.successResponse(returnMap);
 			}else {
-				return null;
+				TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("rentType", rentType);
+				SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
+						.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
+						.setTypes(HOUSE.getDataName())
+						.setQuery(termQueryBuilder)
+						.setFrom(offset).setSize(row);
+				SearchResponse response = serachBuilder.execute().actionGet();
+
+				SearchHits searchHits = response.getHits();
+				for (SearchHit hit : searchHits.getHits()) {
+					HouseEs houseEs =(HouseEs) ESDataUtil.readValue(hit.source(), IndexType.HOUSE.getTypeClass());
+					list.add(houseEsToHouseAppSearchVo(houseEs));
+				}
+				int total = (int) searchHits.getTotalHits();
+
+				returnMap.put("totalCount", total);
+				returnMap.put("houseDataList", list);
+				return Response.successResponse(returnMap);
 			}
-
-			// 当查询结果为空时，返回热卖单品
-//
-
 		} catch (Exception e) {
 			LOGGER.error("ES查询，出现异常,--Exception--:{}",e);
 			// 当用ES查询时出错时查询数据库的数据
@@ -184,6 +216,7 @@ public class HouseSearchController {
 				returnMap2 = searchMysqlDate(paramMap);
 				return Response.successResponse(returnMap2);
 			} catch (Exception e1) {
+				LOGGER.error("查询数据库存失败,Exception:{}",e1);
 				return Response.fail(BusinessErrorCode.LOAD_INFO_FAILED.getMsg());
 			}
 		}
@@ -229,8 +262,11 @@ public class HouseSearchController {
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(1.5f));
 			}
 			//如果户型选不限，则不加此条件
-			if(StringUtils.isNotEmpty(rentType) && (StringUtils.equals("1",rentType)|| StringUtils.equals("2",rentType)) ){
-				boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(1.5f));
+			if(StringUtils.isNotEmpty(rentType)){
+				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
+						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
+					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(1.5f));
+				}
 			}
 			if(StringUtils.isNotEmpty(room)){
 				boolQueryBuilder.must(QueryBuilders.termQuery("room",room).boost(1.5f));
@@ -240,32 +276,70 @@ public class HouseSearchController {
 			}
 
 			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
+					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
 					.setTypes(HOUSE.getDataName())
-					.setQuery(boolQueryBuilder);
+					.setQuery(boolQueryBuilder)
+					.setFrom(pages).setSize(row);
 			serachBuilder.setFrom(offset).setSize(row);
 			SearchResponse response = serachBuilder.execute().actionGet();
 			SearchHit[] hits = response.getHits().getHits();
 
 			List<HouseEs> houseList = Lists.newArrayList();
+			String[] location = null;
 			for(SearchHit hit: hits){
 				//如果位置筛选不为空，计算所查结果与目标经纬度的距离
 				HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
 				if(StringUtils.isNotEmpty(subCode)){
-					//根据code查询经纬度，计算距离 TODO
+					//根据code查询经纬度，计算距离
+					WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
+					String nearestPoint = workSubway.getNearestPoint();
+					location = nearestPoint.split(",");
+					double longitude = houseEs.getLongitude();
+					double latitude = houseEs.getLatitude();
 
+					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
+					if(distance>5000d){
+						houseList.add(houseEs);
+					}
 				}
 				if(StringUtils.isNotEmpty(areaCode)){
-					//根据code查询经纬度，计算距离 TODO
+					//根据code查询经纬度，计算距离
+					WorkCityJd workCityJd = nationService.selectWorkCityByCode(areaCode);
+					StringBuffer sb = new StringBuffer();
+					String address = sb.append(workCityJd.getProvince()).append(workCityJd.getCity())
+							.append(workCityJd.getDistrict()).append(workCityJd.getTowns()).toString();
+					location = new ObtainGaodeLocation().getLocation(address);
+					double longitude = houseEs.getLongitude();
+					double latitude = houseEs.getLatitude();
+
+					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
+					if(distance>5000d){
+						houseList.add(houseEs);
+					}
 				}
-				houseList.add(houseEs);
 				System.out.println(GsonUtils.toJson(houseEs));
 			}
-			return Response.success("ES查询成功",houseList);
+
+			List<HouseInfoRela> houseRelas = Lists.newArrayList();
+			for (HouseEs houseEs : houseList){
+				houseRelas.add(houseEsToHouseRElas(houseEs));
+			}
+			List<HouseInfoRela> list = houseInfoService.calculateDistanceAndSort(Double.valueOf(location[0]),Double.valueOf(location[1]),houseRelas);
+
+			return Response.success("ES查询成功",list);
 		}catch (Exception e){
 			LOGGER.error("ES查询失败！",e);
 			return Response.fail("ES查询失败");
 		}
 
+	}
+
+	private HouseInfoRela houseEsToHouseRElas(HouseEs houseEs) {
+		HouseInfoRela houseInfoRela = new HouseInfoRela();
+		houseInfoRela.setHouseId(houseEs.getHouseId());
+		houseInfoRela.setLatitude(houseEs.getLatitude());
+		houseInfoRela.setLongitude(houseEs.getLongitude());
+		return  houseInfoRela;
 	}
 
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
@@ -279,6 +353,7 @@ public class HouseSearchController {
 		vo.setWei(houseEs.getWei());
 		vo.setFloor(houseEs.getFloor());
 		vo.setAcreage(houseEs.getAcreage());
+		vo.setRoomAcreage(houseEs.getRoomAcreage());
 		vo.setRentAmt(houseEs.getRentAmt());
 
 		StringBuffer sb = new StringBuffer();
@@ -295,17 +370,18 @@ public class HouseSearchController {
      */
 	public Map<String, Object> searchMysqlDate(Map<String, Object> paramMap) throws Exception {
 		String searchValue = CommonUtils.getValue(paramMap, "searchValue");
-		String sort = CommonUtils.getValue(paramMap, "sort");// 排序字段(default:默认;amount:销量;new:新品;price：价格)
-		String order = CommonUtils.getValue(paramMap, "order");// 顺序(desc（降序），asc（升序）)
+		// 顺序(desc（降序），asc（升序）)
+		String order = CommonUtils.getValue(paramMap, "order");
 		String page = CommonUtils.getValue(paramMap, "page");
 		String rows = CommonUtils.getValue(paramMap, "rows");
 
 		if (StringUtils.isEmpty(order)) {
-			order = "DESC";// 降序
+			// 降序
+			order = "DESC";
 		}
-		List<HouseAppSearchVo> list = Lists.newArrayList();//存储返回数据
+		//存储返回数据
+		List<HouseAppSearchVo> list = Lists.newArrayList();
 		HouseQueryParams houseQueryParams = new HouseQueryParams();
-//		houseQueryParams.setApartmentName(searchValue);
 		houseQueryParams.setHouseTitle(searchValue);
 		houseQueryParams.setCommunityName(searchValue);
 		houseQueryParams.setDetailAddr(searchValue);

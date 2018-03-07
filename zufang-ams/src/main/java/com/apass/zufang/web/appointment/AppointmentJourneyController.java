@@ -28,11 +28,11 @@ import com.apass.zufang.service.appointment.AppointmentJourneyService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
 /**
- * 预约看房行程
- * @author Administrator
+ * 预约中心-看房行程
+ * @author haotian
  *
  */
-@Path("/application/appointment/appointmentJourneyController")
+@Path("/appointment/appointmentJourneyController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class AppointmentJourneyController {
@@ -144,8 +144,24 @@ public class AppointmentJourneyController {
         	ValidateUtils.isNotBlank(visitStatus, "参数visitStatus为空！");
         	String rentStatus = CommonUtils.getValue(map, "rentStatus");
         	ValidateUtils.isNotBlank(rentStatus, "参数rentStatus为空！");
-        	entity.setVisitStatus((byte)Integer.parseInt(visitStatus));
-        	entity.setRentStatus((byte)Integer.parseInt(rentStatus));
+        	byte visit = (byte)1;
+        	if(StringUtils.equals("未看房", visitStatus)){
+        		visit = (byte)1;
+        	}else if(StringUtils.equals("不满意", visitStatus)){
+        		visit = (byte)2;
+        	}else if(StringUtils.equals("满意", visitStatus)){
+        		visit = (byte)3;
+        	}else if(StringUtils.equals("时间延后 ", visitStatus)){
+        		visit = (byte)4;
+        	}
+        	byte rent = (byte)1;
+        	if(StringUtils.equals("否", rentStatus)){
+        		rent = (byte)0;
+        	}else if(StringUtils.equals("是", rentStatus)){
+        		rent = (byte)1;
+        	}
+        	entity.setVisitStatus(visit);
+        	entity.setRentStatus(rent);
         	
         	String feedBack = CommonUtils.getValue(map, "feedBack");
         	String memo = CommonUtils.getValue(map, "memo");
@@ -167,7 +183,7 @@ public class AppointmentJourneyController {
 	@Path("/downLoadReserveHouseList")
 	public Response downLoadReserveHouseList(Map<String,Object> map){
 		try{
-			LOGGER.info("getReserveHouseList map--->{}",GsonUtils.toJson(map));
+			LOGGER.info("downLoadReserveHouseList map--->{}",GsonUtils.toJson(map));
 			ApprintmentJourneyQueryParams entity = validateParams(map);
 	    	return appointmentJourneyService.downLoadReserveHouseList(entity);
 		}catch(Exception e){
@@ -188,10 +204,8 @@ public class AppointmentJourneyController {
     	for(Entry<String, Object> entry : set){
     		key = entry.getKey();
     		value = entry.getValue();
-    		if(value!=null){
-    			if(StringUtils.isNotBlank(value.toString())){
-    				entity = (ApprintmentJourneyQueryParams) FarmartJavaBean.farmartJavaB(entity, ApprintmentJourneyQueryParams.class, value, key);
-    			}
+    		if(value!=null&&StringUtils.isNotBlank(value.toString())){
+				entity = (ApprintmentJourneyQueryParams) FarmartJavaBean.farmartJavaB(entity, ApprintmentJourneyQueryParams.class, value, key);
     		}
     	}
     	return entity;

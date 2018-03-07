@@ -21,11 +21,11 @@ import com.apass.zufang.service.operation.BrandApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
 /**
- * 品牌公寓热门房源配置
- * @author Administrator
+ * 品牌公寓-热门房源管理
+ * @author haotian
  *
  */
-@Path("/application/operations/brandApartmentController")
+@Path("/operations/brandApartmentController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class BrandApartmentController {

@@ -530,6 +530,7 @@ public class HouseService {
 				houseEs.setHezuChaoxiang(h.getHezuChaoxiang());
 				houseEs.setHezuResource(h.getHezuResource());
 				houseEs.setAcreage(h.getAcreage());
+				houseEs.setRoomAcreage(h.getRoomAcreage());
 
 				//增加价格区间标记priceFlag
 				int priceFlag = 6;
