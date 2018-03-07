@@ -247,9 +247,9 @@ public class ZuFangLoginController {
 			
 			 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 			 if(zfselecetmobile == null){
-				 resultMap.put("user", "yes");
+				 resultMap.put("user", "xinyonghu");
 			 }else{
-				 resultMap.put("user", "no");
+				 resultMap.put("user", "laoyonghu");
 			 }
 			
 			return Response.success("验证码发送成功,请注意查收",resultMap);

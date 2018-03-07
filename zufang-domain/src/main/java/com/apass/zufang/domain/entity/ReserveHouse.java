@@ -1,7 +1,8 @@
 package com.apass.zufang.domain.entity;
 import java.util.Date;
-public class ReserveHouse {
-    private Long id;
+import com.apass.zufang.common.model.QueryParams;
+
+public class ReserveHouse extends QueryParams{
 
     private Long houseId;
 
@@ -12,14 +13,13 @@ public class ReserveHouse {
     private String telphone;
 
     private String name;
-
     private Date reserveDate;
-
     private String memo;
 
     private String isDelete;
     private Date createdTime;
     private Date updatedTime;
+
     public Date getCreatedTime() {
 		return createdTime;
 	}
@@ -107,4 +107,5 @@ public class ReserveHouse {
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
     }
+
 }
