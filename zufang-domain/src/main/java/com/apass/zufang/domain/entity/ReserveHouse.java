@@ -1,7 +1,8 @@
 package com.apass.zufang.domain.entity;
 import java.util.Date;
 import com.apass.zufang.common.model.CreatedUser;
-public class ReserveHouse extends CreatedUser{
+import com.apass.zufang.common.model.QueryParams;
+public class ReserveHouse extends QueryParams{
     private Long id;
 
     private Long houseId;
@@ -19,7 +20,29 @@ public class ReserveHouse extends CreatedUser{
     private String memo;
 
     private String isDelete;
-    public Long getId() {
+    
+    private Date createdTime;
+    
+    private Date updatedTime;
+    
+    
+    public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -90,4 +113,5 @@ public class ReserveHouse extends CreatedUser{
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
     }
+
 }

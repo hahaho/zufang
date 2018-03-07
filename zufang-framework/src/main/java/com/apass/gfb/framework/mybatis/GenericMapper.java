@@ -3,7 +3,7 @@ package com.apass.gfb.framework.mybatis;
 /**
  * Created by jie.xu on 17/4/14.
  */
-public interface GenericMapper<T,PK> {
+public interface GenericMapper<T,PK>  {
   int deleteByPrimaryKey(PK id);
 
   int insert(T record);
@@ -15,6 +15,5 @@ public interface GenericMapper<T,PK> {
   int updateByPrimaryKeySelective(T record);
 
   int updateByPrimaryKey(T record);
-
 
 }

@@ -56,7 +56,7 @@
     </sql>
     
 	<!-- 初始化es查询 -->
-    <select id="getHouseList" resultMap="BaseResultMap" 
+    <select id="getReserveHouseLists" resultMap="BaseResultMap" 
         parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
         SELECT 
             <include refid="Base_Column_List" />

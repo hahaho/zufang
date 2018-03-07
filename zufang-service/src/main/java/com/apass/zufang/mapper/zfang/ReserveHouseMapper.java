@@ -14,4 +14,25 @@ public interface ReserveHouseMapper extends GenericMapper<ReserveHouse,Long> {
 	 * @return
 	 */
 	public List<ReserveHouseVo> getReserveHouseList(ApprintmentJourneyQueryParams entity);
+
+	/**
+	 * 
+	 * @param telphone
+	 */
+	public Integer selectrepeat(String telphone);
+	/**
+	 * 分页查询
+	 * @param crmety
+	 * @return
+	 */
+	public List<ReserveHouse> getHouseLists(ReserveHouse crmety);
+	/**
+	 * 记录数
+	 * @param crmety
+	 * @return
+	 */
+	public Integer getCount(String telphone);
+
+	
+	
 }
