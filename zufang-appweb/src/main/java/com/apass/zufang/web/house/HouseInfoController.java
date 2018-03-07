@@ -20,7 +20,6 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.service.house.HouseInfoService;
-import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.GfbLogUtils;
 
 @Path("/house")
@@ -30,9 +29,6 @@ public class HouseInfoController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(HouseInfoController.class);
-
-	@Autowired
-	private HouseService houseService;
 
 	@Autowired
 	private HouseInfoService houseInfoService;
