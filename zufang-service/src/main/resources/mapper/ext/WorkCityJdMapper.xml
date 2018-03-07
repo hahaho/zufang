@@ -16,20 +16,17 @@
           DISTRICT district,
           TOWNS towns
         from t_zufang_work_city_jd
-        where 1=1
+        where 1=1 AND PARENT = #{parentCode}
         <if test="province!=null and province!=''">
             AND province = #{province} 
         </if>
         <if test="city!=null and city!=''">
-        	AND PARENT = #{province}
             AND city = #{city} 
         </if>
         <if test="district!=null and district!=''">
-            AND PARENT = #{city}
             AND district = #{district} 
         </if>
         <if test="street!=null and street!=''">
-            AND PARENT = #{district}
             AND towns = #{street} 
         </if>
     </select>

@@ -256,21 +256,22 @@ public class HouseService {
 		}
 		WorkCityJdParams provice = new WorkCityJdParams();
 		provice.setProvince(location.getProvince());
+		provice.setParentCode("0");
 		WorkCityJd p = cityJdMapper.selectCodeByName(provice);
 		
 		WorkCityJdParams city = new WorkCityJdParams();
 		city.setCity(location.getCity());
-		city.setProvince(p.getCode());
+		city.setParentCode(p.getCode());
 		WorkCityJd c = cityJdMapper.selectCodeByName(city);
 		
 		WorkCityJdParams district = new WorkCityJdParams();
 		district.setDistrict(location.getDistrict());
-		district.setCity(c.getCode());
+		district.setParentCode(c.getCode());
 		WorkCityJd d = cityJdMapper.selectCodeByName(district);
 		
 		WorkCityJdParams street = new WorkCityJdParams();
 		street.setStreet(location.getStreet());
-		street.setDistrict(d.getCode());
+		street.setParentCode(d.getCode());
 		WorkCityJd t = cityJdMapper.selectCodeByName(street);
 		
 		WorkCityJdVo vo = new WorkCityJdVo();
