@@ -35,7 +35,7 @@
 				AND h.apartment_id = a.id
 				AND h.is_delete = '00'
 				AND h.type = #{type}
-				AND h.status = '3'
+				AND h.status = '2'
 				AND l.city = #{city}
 	        	ORDER BY h.page_view DESC;
        	]]>

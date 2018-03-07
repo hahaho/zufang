@@ -68,7 +68,7 @@
 		AND a.is_delete = '00'
 		AND h.is_delete = '00'
 		AND l.is_delete = '00'
-		AND h.status = '3'
+		AND h.status = '2'
 		ORDER BY a.created_time DESC;
 	</select>
 	
@@ -80,7 +80,7 @@
 		t_zfang_apartment a,
 		t_zfang_house_location l
 		WHERE
-		a.city like '%${city}%'
+		a.city like '${city}'
 		AND a.is_delete = '00'
 		AND l.is_delete = '00'
 		ORDER BY a.created_time DESC;
