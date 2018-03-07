@@ -1,8 +1,10 @@
 package com.apass.zufang.domain.entity;
 import java.util.Date;
 
+
 import com.apass.zufang.common.model.QueryParams;
 public class ReserveHouse extends QueryParams{
+
 
     private Long id;
 
@@ -27,6 +29,7 @@ public class ReserveHouse extends QueryParams{
     
     private Date updatedTime;
     
+
     public Date getCreatedTime() {
 		return createdTime;
 	}
