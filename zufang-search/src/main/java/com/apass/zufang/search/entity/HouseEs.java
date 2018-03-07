@@ -178,15 +178,29 @@ public class HouseEs implements IdAble{
     private Long pageView;
 
     /**
-     *
+     *管家联系方式
      */
     private String housekeeperTel;
 
+    /**
+     * 几户合租
+     */
     private String totalDoors;
 
+    /**
+     * 朝向， 1:东：2:南....
+     */
     private Byte hezuChaoxiang;
 
+    /**
+     * 出租介绍， 1:出租主卧；2：出租次卧；3：出租隔断；4：出租床位
+     */
     private Byte hezuResource;
+
+    /**
+     * 出租面积
+     */
+    private BigDecimal roomAcreage;
 
     /**
      * 所属省份
@@ -242,6 +256,14 @@ public class HouseEs implements IdAble{
      * @return
      */
     private Integer priceFlag;
+
+    public BigDecimal getRoomAcreage() {
+        return roomAcreage;
+    }
+
+    public void setRoomAcreage(BigDecimal roomAcreage) {
+        this.roomAcreage = roomAcreage;
+    }
 
     @Override
     public Integer getId() {

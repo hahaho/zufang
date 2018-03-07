@@ -42,10 +42,14 @@ public class HouseAppSearchVo {
     private Integer floor;
 
     /**
-     * 面积
+     * 房屋总面积
      */
     private BigDecimal acreage;
 
+    /**
+     * 出租面积
+     */
+    private BigDecimal roomAcreage;
     /**
      * 租金
      */
@@ -141,5 +145,13 @@ public class HouseAppSearchVo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getRoomAcreage() {
+        return roomAcreage;
+    }
+
+    public void setRoomAcreage(BigDecimal roomAcreage) {
+        this.roomAcreage = roomAcreage;
     }
 }

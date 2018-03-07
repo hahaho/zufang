@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.WorkSubway;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.nation.NationService;
@@ -128,9 +129,6 @@ public class HouseSearchController {
 			String deviceId = CommonUtils.getValue(paramMap, "deviceId");
 			// 用户号
 			String userId = CommonUtils.getValue(paramMap, "userId");
-			// 排序字段(default:默认;pageView)
-			String sort = CommonUtils.getValue(paramMap, "sort");
-
 			//页面和数量
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
@@ -164,6 +162,9 @@ public class HouseSearchController {
 			Map<String, Object> returnMap = new HashMap<String, Object>();
 			List<HouseAppSearchVo> list = new ArrayList<HouseAppSearchVo>();
 			if(StringUtils.isEmpty(rentType)){
+				if(StringUtils.isEmpty(searchValue)){
+					throw new RuntimeException("输入关键字才能搜索哦");
+				}
 				houseSearchCondition.setSortMode(SortMode.PAGEVIEW_DESC);
 				houseSearchCondition.setApartmentName(searchValue);
 				houseSearchCondition.setCommunityName(searchValue);
@@ -215,6 +216,7 @@ public class HouseSearchController {
 				returnMap2 = searchMysqlDate(paramMap);
 				return Response.successResponse(returnMap2);
 			} catch (Exception e1) {
+				LOGGER.error("查询数据库存失败,Exception:{}",e1);
 				return Response.fail(BusinessErrorCode.LOAD_INFO_FAILED.getMsg());
 			}
 		}
@@ -260,8 +262,11 @@ public class HouseSearchController {
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(1.5f));
 			}
 			//如果户型选不限，则不加此条件
-			if(StringUtils.isNotEmpty(rentType) && (StringUtils.equals("1",rentType)|| StringUtils.equals("2",rentType)) ){
-				boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(1.5f));
+			if(StringUtils.isNotEmpty(rentType)){
+				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
+						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
+					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(1.5f));
+				}
 			}
 			if(StringUtils.isNotEmpty(room)){
 				boolQueryBuilder.must(QueryBuilders.termQuery("room",room).boost(1.5f));
@@ -285,7 +290,7 @@ public class HouseSearchController {
 				//如果位置筛选不为空，计算所查结果与目标经纬度的距离
 				HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
 				if(StringUtils.isNotEmpty(subCode)){
-					//根据code查询经纬度，计算距离 TODO
+					//根据code查询经纬度，计算距离
 					WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
 					String nearestPoint = workSubway.getNearestPoint();
 					location = nearestPoint.split(",");
@@ -348,6 +353,7 @@ public class HouseSearchController {
 		vo.setWei(houseEs.getWei());
 		vo.setFloor(houseEs.getFloor());
 		vo.setAcreage(houseEs.getAcreage());
+		vo.setRoomAcreage(houseEs.getRoomAcreage());
 		vo.setRentAmt(houseEs.getRentAmt());
 
 		StringBuffer sb = new StringBuffer();
@@ -364,17 +370,18 @@ public class HouseSearchController {
      */
 	public Map<String, Object> searchMysqlDate(Map<String, Object> paramMap) throws Exception {
 		String searchValue = CommonUtils.getValue(paramMap, "searchValue");
-		String sort = CommonUtils.getValue(paramMap, "sort");// 排序字段(default:默认;amount:销量;new:新品;price：价格)
-		String order = CommonUtils.getValue(paramMap, "order");// 顺序(desc（降序），asc（升序）)
+		// 顺序(desc（降序），asc（升序）)
+		String order = CommonUtils.getValue(paramMap, "order");
 		String page = CommonUtils.getValue(paramMap, "page");
 		String rows = CommonUtils.getValue(paramMap, "rows");
 
 		if (StringUtils.isEmpty(order)) {
-			order = "DESC";// 降序
+			// 降序
+			order = "DESC";
 		}
-		List<HouseAppSearchVo> list = Lists.newArrayList();//存储返回数据
+		//存储返回数据
+		List<HouseAppSearchVo> list = Lists.newArrayList();
 		HouseQueryParams houseQueryParams = new HouseQueryParams();
-//		houseQueryParams.setApartmentName(searchValue);
 		houseQueryParams.setHouseTitle(searchValue);
 		houseQueryParams.setCommunityName(searchValue);
 		houseQueryParams.setDetailAddr(searchValue);

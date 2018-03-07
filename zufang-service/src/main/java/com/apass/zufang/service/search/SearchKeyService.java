@@ -30,7 +30,7 @@ public class SearchKeyService {
 			record.setDeviceId(deviceId);
 		}
 		record.setCreatedTime(new Date());
-		record.setCreatedTime(new Date());
+		record.setUpdatedTime(new Date());
 		keysMapper.insertSelective(record);
 	}
 	

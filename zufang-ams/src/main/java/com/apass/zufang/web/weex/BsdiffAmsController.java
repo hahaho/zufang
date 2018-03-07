@@ -24,7 +24,7 @@ import java.util.List;
  * Created by xiaohai on 2018/3/6.
  */
 @Controller
-@RequestMapping("/noauth/bsdiff")
+@RequestMapping("/noauth/bsdiff") //TODO
 public class BsdiffAmsController {
     /**
      * 日志
