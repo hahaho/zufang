@@ -150,10 +150,10 @@ public class HouseInfoService {
 		// setp 3 计算目标房源和附近房源的距离，并绑定映射关系
 		Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
 		double[] resultArray = new double[houseInfoList.size()];
-			for (int i=0 ;i< houseInfoList.size();i++) {
-				HouseInfoRela houseLocation=houseInfoList.get(i);
+		for (int i=0 ;i< houseInfoList.size();i++) {
+			HouseInfoRela houseLocation=houseInfoList.get(i);
 			double distance = this.distanceSimplify(latitude, longitude,
-					houseLocation.getLatitude(), houseLocation.getLongitude());
+			houseLocation.getLatitude(), houseLocation.getLongitude());
 			if (houseDistanceMap.get(distance) != null) {
 				BigDecimal distanceBig = new BigDecimal(distance);
 				// 相同的距离 需要处理 （后一个加上0.0001）
@@ -189,7 +189,6 @@ public class HouseInfoService {
 	 * 
 	 * @param houseId
 	 *            目标房源
-	 * @param number
 	 *            附近房源数量
 	 * @return
 	 */

@@ -15,9 +15,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.apass.zufang.domain.common.WorkCityJd;
+import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.service.house.HouseInfoService;
+import com.apass.zufang.service.nation.NationService;
+import com.apass.zufang.utils.ObtainGaodeLocation;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -65,6 +71,10 @@ public class HouseSearchController {
 	private HouseService houseService;
 	@Autowired
 	private WorkSubwaySevice workSubwaySevice;
+	@Autowired
+	private HouseInfoService houseInfoService;
+	@Autowired
+	private NationService nationService;
 
 	/**
 	 * 添加致搜索记录表
@@ -263,32 +273,68 @@ public class HouseSearchController {
 			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
 					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
 					.setTypes(HOUSE.getDataName())
-					.setQuery(boolQueryBuilder);
+					.setQuery(boolQueryBuilder)
+					.setFrom(pages).setSize(row);
 			serachBuilder.setFrom(offset).setSize(row);
 			SearchResponse response = serachBuilder.execute().actionGet();
 			SearchHit[] hits = response.getHits().getHits();
 
 			List<HouseEs> houseList = Lists.newArrayList();
+			String[] location = null;
 			for(SearchHit hit: hits){
 				//如果位置筛选不为空，计算所查结果与目标经纬度的距离
 				HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
 				if(StringUtils.isNotEmpty(subCode)){
 					//根据code查询经纬度，计算距离 TODO
 					WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
+					String nearestPoint = workSubway.getNearestPoint();
+					location = nearestPoint.split(",");
+					double longitude = houseEs.getLongitude();
+					double latitude = houseEs.getLatitude();
 
+					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
+					if(distance>5000d){
+						houseList.add(houseEs);
+					}
 				}
 				if(StringUtils.isNotEmpty(areaCode)){
-					//根据code查询经纬度，计算距离 TODO
+					//根据code查询经纬度，计算距离
+					WorkCityJd workCityJd = nationService.selectWorkCityByCode(areaCode);
+					StringBuffer sb = new StringBuffer();
+					String address = sb.append(workCityJd.getProvince()).append(workCityJd.getCity())
+							.append(workCityJd.getDistrict()).append(workCityJd.getTowns()).toString();
+					location = new ObtainGaodeLocation().getLocation(address);
+					double longitude = houseEs.getLongitude();
+					double latitude = houseEs.getLatitude();
+
+					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
+					if(distance>5000d){
+						houseList.add(houseEs);
+					}
 				}
-				houseList.add(houseEs);
 				System.out.println(GsonUtils.toJson(houseEs));
 			}
-			return Response.success("ES查询成功",houseList);
+
+			List<HouseInfoRela> houseRelas = Lists.newArrayList();
+			for (HouseEs houseEs : houseList){
+				houseRelas.add(houseEsToHouseRElas(houseEs));
+			}
+			List<HouseInfoRela> list = houseInfoService.calculateDistanceAndSort(Double.valueOf(location[0]),Double.valueOf(location[1]),houseRelas);
+
+			return Response.success("ES查询成功",list);
 		}catch (Exception e){
 			LOGGER.error("ES查询失败！",e);
 			return Response.fail("ES查询失败");
 		}
 
+	}
+
+	private HouseInfoRela houseEsToHouseRElas(HouseEs houseEs) {
+		HouseInfoRela houseInfoRela = new HouseInfoRela();
+		houseInfoRela.setHouseId(houseEs.getHouseId());
+		houseInfoRela.setLatitude(houseEs.getLatitude());
+		houseInfoRela.setLongitude(houseEs.getLongitude());
+		return  houseInfoRela;
 	}
 
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
