@@ -13,10 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
-import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.service.commons.CommonService;
@@ -31,8 +29,6 @@ public class HouseinitService {
 	private HouseImgService houseImgService;
 	@Autowired
 	private HouseMapper houseMapper;
-	@Autowired
-	private HouseImgMapper houseImgMapper;
     @Autowired
     private HouseLocationMapper HouseLocationMapper;
 
@@ -57,7 +53,7 @@ public class HouseinitService {
 		String city = (String) paramMap.get("city");// 城市
 		
 		// 获取url
-		List<String> imgList = getUrl();
+		List<String> imgList = houseImgService.initImg();;
 		resultMap.put("initImg", imgList);
 		LOG.info("init首页接口_获取url成功");
 		
@@ -81,17 +77,6 @@ public class HouseinitService {
 		return resultMap;
 	}
 
-	private List<String> getUrl() {
-		
-		List<HouseImg> imgList = houseImgMapper.initImg();
-		PageBean<HouseImg> pageBean = new PageBean<>(1, 10, imgList);
-		imgList = pageBean.getList();
-		List<String> initImg = new ArrayList<>();
-		for (int i = 0; i < imgList.size(); i++) {
-			initImg.add(imgList.get(i).getUrl());
-		}
-		return initImg;
-	}
 	/**
 	 * init附近房源
 	 * @param city
@@ -147,7 +132,7 @@ public class HouseinitService {
 		if (ValidateUtils.listIsTrue(hotHouse)) {
 			// 追加图片
 			for (HouseVo houseVo : hotHouse) {
-				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
 				houseVo.setPictures(imgList);
 			}
 		}
@@ -218,16 +203,12 @@ public class HouseinitService {
 		try {
 			Integer currSize = finMap.get("finSize");
 			
-			List<HouseVo> addSetList = setHouse;
+			List<HouseVo> addSetList = null;
 			// 配置房源大于5
 			if (currSize < 5) {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
 					addSetList = norHouses.subList(5 - currSize, norHouses.size());
-				}else {
-					for (HouseVo houseVo : norHouses) {
-						addSetList.add(houseVo);
-					}
 				}
 				// @2:正常房源+配置房源<5
 			}

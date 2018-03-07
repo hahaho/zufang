@@ -4,6 +4,8 @@ public class WorkCityJdParams {
 
 	private String province;
 	
+	private String parentCode;
+	
 	private String city;
 	
 	private String district;
@@ -41,4 +43,13 @@ public class WorkCityJdParams {
 	public void setStreet(String street) {
 		this.street = street;
 	}
+
+	public String getParentCode() {
+		return parentCode;
+	}
+
+	public void setParentCode(String parentCode) {
+		this.parentCode = parentCode;
+	}
+	
 }

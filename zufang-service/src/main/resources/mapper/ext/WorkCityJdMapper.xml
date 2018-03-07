@@ -16,7 +16,7 @@
           DISTRICT district,
           TOWNS towns
         from t_zufang_work_city_jd
-        where 1=1
+        where 1=1 AND PARENT = #{parentCode}
         <if test="province!=null and province!=''">
             AND province = #{province} 
         </if>
