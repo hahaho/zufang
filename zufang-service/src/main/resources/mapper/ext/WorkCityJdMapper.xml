@@ -21,12 +21,15 @@
             AND province = #{province} 
         </if>
         <if test="city!=null and city!=''">
+        	AND PARENT = #{province}
             AND city = #{city} 
         </if>
         <if test="district!=null and district!=''">
+            AND PARENT = #{city}
             AND district = #{district} 
         </if>
         <if test="street!=null and street!=''">
+            AND PARENT = #{district}
             AND towns = #{street} 
         </if>
     </select>
