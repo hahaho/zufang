@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
