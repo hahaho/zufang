@@ -21,6 +21,7 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.ajp.entity.GfbRegisterInfoEntity;
 import com.apass.zufang.domain.constants.ConstantsUtil;
+import com.apass.zufang.domain.entity.HouseShowingsEntity;
 import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.service.common.MobileSmsService;
 import com.apass.zufang.service.onlinebooking.OnlineBookingService;
@@ -168,8 +169,11 @@ public class OnlineBookingController {
 	 */
 	@POST
 	@Path("/reservationsshowings")
-	public ResponsePageBody<ReserveHouse> reservationsShowings(Map<String, Object> paramMap) {
+	public Response reservationsShowings(Map<String, Object> paramMap) {
 		ResponsePageBody<ReserveHouse> respBody = new ResponsePageBody<ReserveHouse>();
+		
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		
 		try {
 			// 页码
 			String page = CommonUtils.getValue(paramMap, "page");
@@ -192,22 +196,21 @@ public class OnlineBookingController {
             crmety.setPage(Integer.parseInt(page));
             
 
-            ResponsePageBody<ReserveHouse> resultPage = onlineBookingService.queryReservations(crmety);
+            ResponsePageBody<HouseShowingsEntity> resultPage = onlineBookingService.queryReservations(crmety);
 			
             if (resultPage == null) {
                 respBody.setTotal(0);
                 respBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
-                return respBody;
+                return Response.success("在线预约成功", returnMap);
             }
-            respBody.setTotal(resultPage.getTotal());
-            respBody.setRows(resultPage.getRows());
-            respBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+            returnMap.put("total", resultPage.getTotal());
+            returnMap.put("rows", resultPage.getRows());
 		} catch (Exception e) {
 			logger.error("预约看房查询失败", e);
 	            respBody.setStatus(BaseConstants.CommonCode.FAILED_CODE);
 	            respBody.setMsg("预约看房查询失败");
 		}
-		return respBody;
+		return Response.success("在线预约成功", returnMap);
 	}
 
 }

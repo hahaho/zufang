@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.zufang.domain.entity.HouseShowingsEntity;
 import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.mapper.zfang.ReserveHouseMapper;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -60,9 +61,9 @@ public class OnlineBookingService {
 	}
 	
 	
-	public ResponsePageBody<ReserveHouse> queryReservations(ReserveHouse crmety) {
-		ResponsePageBody<ReserveHouse> body = new ResponsePageBody<>();
-		List<ReserveHouse> houseList = reserveHouseMapper.getHouseLists(crmety);
+	public ResponsePageBody<HouseShowingsEntity> queryReservations(ReserveHouse crmety) {
+		ResponsePageBody<HouseShowingsEntity> body = new ResponsePageBody<>();
+		List<HouseShowingsEntity> houseList = reserveHouseMapper.getHouseLists(crmety);
 		body.setRows(houseList);
 		body.setTotal(reserveHouseMapper.getCount(crmety.getTelphone()));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
