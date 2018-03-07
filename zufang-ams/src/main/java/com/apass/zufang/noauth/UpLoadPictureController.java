@@ -34,7 +34,7 @@ public class UpLoadPictureController {
 	@ResponseBody
     @RequestMapping(value = "/uppicture320", method = RequestMethod.POST)
 	public Response uploadPicture320(@ModelAttribute("file") MultipartFile file){
-		return uploadImg(file, 757, 562);
+		return uploadImg(file, 750, 320);
     }
 	
 	@ResponseBody
