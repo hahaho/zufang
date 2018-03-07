@@ -58,21 +58,16 @@ public class IndexManager<T> {
     }
 
     /**
-     * 根据skuId查询ES中的记录
-     * @param goodId
-     * @param <Goods>
+     * 组合条件查询
+     * @param sortField 排序字段
+     * @param desc 是否降序
+     * @param from 从哪里开始
+     * @param size 一共搜索多少条
+     * @param value 查询内容
+     * @param <T>
      * @return
      */
-	public static <Goods> Goods goodSearchFromESBySkuId(Long goodId) {
-		TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("goodId", goodId);
-		List<Goods> goodsList = goodSearchFromES(termQueryBuilder);
-		if(CollectionUtils.isNotEmpty(goodsList) && goodsList.size()==1){
-			return goodsList.get(0);
-		}
-		return null;
-	}
-    
-    private static <HousEs> Pagination<HousEs> boolSearch(String sortField, boolean desc, int from, int size, String value) {
+    private static <T> Pagination<T> boolSearch(String sortField, boolean desc, int from, int size, String value) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder
                 .should(QueryBuilders.wildcardQuery("apartmentName", "*" + value + "*").boost(1.5f))
@@ -85,10 +80,14 @@ public class IndexManager<T> {
                 .should(QueryBuilders.wildcardQuery("detailAddrPinyin", "*" + value + "*").boost(1f))
                 .should(QueryBuilders.queryStringQuery(value).field("communityName", 1.5f)
                         .field("communityNamePinyin", 1.5f)
+                        .field("apartmentName", 1.5f)
+                        .field("apartmentNamePinyin", 1.5f)
                         .field("houseTitle", 2f)
                         .field("houseTitlePinyin", 2f)
                         .field("detailAddr", 1f)
                         .field("detailAddrPinyin", 1f))
+                .should(QueryBuilders.termQuery("apartmentName", value).boost(1.5f))
+                .should(QueryBuilders.termQuery("apartmentNamePinyin", value).boost(1.5f))
                 .should(QueryBuilders.termQuery("communityName", value).boost(1.5f))
                 .should(QueryBuilders.termQuery("communityNamePinyin", value).boost(1.5f))
                 .should(QueryBuilders.termQuery("houseTitle", value).boost(2f))
@@ -97,6 +96,31 @@ public class IndexManager<T> {
                 .should(QueryBuilders.termQuery("detailAddrPinyin", value).boost(1f));
         return search(boolQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
     }
+
+    /**
+     * 获取ES house索引下document总数
+     * @return
+     */
+    public static long getTotalCount(){
+        return ESClientManager.getClient().prepareSearch(esprop.getIndice())
+                .setTypes(IndexType.HOUSE.getDataName())
+                .setSize(0)
+                .setQuery(QueryBuilders.matchAllQuery()).get().getHits().getTotalHits();
+    }
+
+    /**
+     * 获取包含某个搜索关键字的所有document总数
+     * @param value
+     * @return
+     */
+    public static long getTotalCount(String value){
+        return ESClientManager.getClient().prepareSearch(esprop.getIndice())
+                .setTypes(IndexType.HOUSE.getDataName())
+                .setSize(0)
+                .setQuery(QueryBuilders.queryStringQuery(value)).get().getHits().getTotalHits();
+    }
+
+
 
     /**
      * 更新索引，如果新增的时候index存在，就是更新操作
@@ -272,4 +296,6 @@ public class IndexManager<T> {
         }
         return boolSearch(sortField, desc, from, size, StringUtils.lowerCase(value));
     }
+
+
 }

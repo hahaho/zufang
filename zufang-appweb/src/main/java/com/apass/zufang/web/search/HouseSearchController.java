@@ -28,6 +28,7 @@ import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
@@ -236,8 +237,8 @@ public class HouseSearchController {
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
 			String room = CommonUtils.getValue(paramMap, "room");
 			String configName = CommonUtils.getValue(paramMap, "configName");
-			String areaCode = CommonUtils.getValue("areaCode");
-			String subCode = CommonUtils.getValue("subCode");
+			String areaCode = CommonUtils.getValue(paramMap, "areaCode");
+			String subCode = CommonUtils.getValue(paramMap, "subCode");
 
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
@@ -256,7 +257,8 @@ public class HouseSearchController {
 			 */
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 			if(StringUtils.isNotEmpty(apartmentName)){
-				boolQueryBuilder.must(QueryBuilders.wildcardQuery("apartmentName", "*" + apartmentName + "*").boost(1.5f));
+				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
+//				boolQueryBuilder.must(QueryBuilders.wildcardQuery("apartmentName","*" + apartmentName + "*").boost(2.5f));
 			}
 			if(StringUtils.isNotEmpty(priceFlag)){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(1.5f));
@@ -284,11 +286,18 @@ public class HouseSearchController {
 			SearchResponse response = serachBuilder.execute().actionGet();
 			SearchHit[] hits = response.getHits().getHits();
 
-			List<HouseEs> houseList = Lists.newArrayList();
+			//查询出的总房源：未先地点时返回
+			List<HouseAppSearchVo> houseList = Lists.newArrayList();
+			//5公里内的房源
+			List<HouseAppSearchVo> houseList2 = Lists.newArrayList();
+			//附近房源排序calculateDistanceAndSort方法需要此参数
+			List<HouseInfoRela> houseRelas = Lists.newArrayList();
 			String[] location = null;
 			for(SearchHit hit: hits){
 				//如果位置筛选不为空，计算所查结果与目标经纬度的距离
 				HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
+				houseRelas.add(houseEsToHouseRElas(houseEs));
+				houseList.add(houseEsToHouseAppSearchVo(houseEs));
 				if(StringUtils.isNotEmpty(subCode)){
 					//根据code查询经纬度，计算距离
 					WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
@@ -299,7 +308,7 @@ public class HouseSearchController {
 
 					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
 					if(distance>5000d){
-						houseList.add(houseEs);
+						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
 					}
 				}
 				if(StringUtils.isNotEmpty(areaCode)){
@@ -314,19 +323,18 @@ public class HouseSearchController {
 
 					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
 					if(distance>5000d){
-						houseList.add(houseEs);
+						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
 					}
 				}
-				System.out.println(GsonUtils.toJson(houseEs));
 			}
 
-			List<HouseInfoRela> houseRelas = Lists.newArrayList();
-			for (HouseEs houseEs : houseList){
-				houseRelas.add(houseEsToHouseRElas(houseEs));
-			}
-			List<HouseInfoRela> list = houseInfoService.calculateDistanceAndSort(Double.valueOf(location[0]),Double.valueOf(location[1]),houseRelas);
 
-			return Response.success("ES查询成功",list);
+			if(StringUtils.isNotEmpty(subCode) || StringUtils.isNotEmpty(areaCode)){
+				List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
+				return Response.success("ES查询成功",list);
+			}
+
+			return Response.success("ES查询成功",houseList);
 		}catch (Exception e){
 			LOGGER.error("ES查询失败！",e);
 			return Response.fail("ES查询失败");
@@ -334,14 +342,28 @@ public class HouseSearchController {
 
 	}
 
+	/**
+	 * HouseEs-->HouseInfoRela
+	 * @param houseEs
+	 * @return
+     */
 	private HouseInfoRela houseEsToHouseRElas(HouseEs houseEs) {
 		HouseInfoRela houseInfoRela = new HouseInfoRela();
+		houseInfoRela.setApartmentId(houseEs.getApartmentId());
 		houseInfoRela.setHouseId(houseEs.getHouseId());
+		houseInfoRela.setProvince(houseEs.getProvince());
+		houseInfoRela.setCity(houseEs.getCity());
+
 		houseInfoRela.setLatitude(houseEs.getLatitude());
 		houseInfoRela.setLongitude(houseEs.getLongitude());
 		return  houseInfoRela;
 	}
 
+	/**
+	 * HouseEs-->HouseAppSearchVo
+	 * @param houseEs
+	 * @return
+	 */
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
 		HouseAppSearchVo vo = new HouseAppSearchVo();
 		vo.setUrl(houseEs.getUrl());
@@ -355,6 +377,9 @@ public class HouseSearchController {
 		vo.setAcreage(houseEs.getAcreage());
 		vo.setRoomAcreage(houseEs.getRoomAcreage());
 		vo.setRentAmt(houseEs.getRentAmt());
+		vo.setHouseId(houseEs.getHouseId());
+		vo.setLatitude(houseEs.getLatitude());
+		vo.setLongitude(houseEs.getLongitude());
 
 		StringBuffer sb = new StringBuffer();
 		String houseDes = sb.append(houseEs.getRoom()).append(houseEs.getHall())

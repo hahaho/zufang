@@ -1,5 +1,7 @@
 package com.apass.zufang.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 
 /**
@@ -58,6 +60,22 @@ public class HouseAppSearchVo {
      * 整合室、厅、卫字段，显示：一室一厅一卫-55㎡
      */
     private String houseDes;
+
+    /**
+     * 房屋id
+     */
+    @JsonIgnore
+    private Long houseId;
+    /**
+     * 房屋所在经度
+     */
+    @JsonIgnore
+    private double longitude;
+    /**
+     * 房屋所在纬度
+     */
+    @JsonIgnore
+    private double latitude;
 
     public String getUrl() {
         return url;
@@ -153,5 +171,29 @@ public class HouseAppSearchVo {
 
     public void setRoomAcreage(BigDecimal roomAcreage) {
         this.roomAcreage = roomAcreage;
+    }
+
+    public Long getHouseId() {
+        return houseId;
+    }
+
+    public void setHouseId(Long houseId) {
+        this.houseId = houseId;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 }
