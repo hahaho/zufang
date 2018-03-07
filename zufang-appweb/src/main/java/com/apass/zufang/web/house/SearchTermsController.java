@@ -175,6 +175,10 @@ public class SearchTermsController {
 			Map<String, Object> resultMap = Maps.newHashMap();
 			// 类型 合租 整租
 			List<KeyValue> sharedType = new ArrayList<KeyValue>();
+			KeyValue HZ_0 = new KeyValue();
+			HZ_0.setKey(BusinessHouseTypeEnums.HZ_0.getCode());
+			HZ_0.setValue(BusinessHouseTypeEnums.HZ_0.getMessage());
+			sharedType.add(HZ_0);
 			KeyValue HZ_1 = new KeyValue();
 			HZ_1.setKey(BusinessHouseTypeEnums.HZ_1.getCode());
 			HZ_1.setValue(BusinessHouseTypeEnums.HZ_1.getMessage());
