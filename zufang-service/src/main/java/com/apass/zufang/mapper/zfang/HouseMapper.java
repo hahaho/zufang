@@ -5,6 +5,7 @@ import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
@@ -64,4 +65,6 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	 * @return
 	 */
 	public List<HouseAppointmentVo> getHouseListForPhoneAppointment(HouseAppointmentQueryParams entity);
+
+	List<HouseAppSearchVo> queryHouseBasicEntityByEntity(HouseQueryParams houseQueryParams);
 }

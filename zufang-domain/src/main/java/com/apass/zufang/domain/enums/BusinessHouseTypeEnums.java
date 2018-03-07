@@ -11,6 +11,7 @@ public enum BusinessHouseTypeEnums {
 	FYLX_1(1, "正常"),
 	FYLX_2(2, "精选"),
 	//合租类型	'1:整租；2:合租',
+	HZ_0(0, "不限"),
 	HZ_1(1, "整租"),
 	HZ_2(2, "合租"),
 	// 押金类型	'1:押一付三;2:押一付一;.....'
@@ -48,7 +49,10 @@ public enum BusinessHouseTypeEnums {
 	CZJS_1(1, "出租主卧"),
 	CZJS_2(2, "出租次卧"),
 	CZJS_3(3, "出租隔断间"),
-	CZJS_4(4, "出租床位");
+	CZJS_4(4, "出租床位"),
+	
+	DT_1(1,"有电梯"),
+	DT_2(2,"无电梯");
 	
 
 	private Integer code;

@@ -1,4 +1,4 @@
-package com.apass.zufang.domain.entity;
+package com.apass.zufang.domain.dto;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +8,6 @@ public class ApartHouseList{
     private Long id;
     private String area;
     private String name;
-    private List<String> pictures;//图片
     
     private List<HouseVo> rows = new ArrayList<HouseVo>();
 
@@ -34,14 +33,6 @@ public class ApartHouseList{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<String> getPictures() {
-		return pictures;
-	}
-
-	public void setPictures(List<String> pictures) {
-		this.pictures = pictures;
 	}
 
 	public List<HouseVo> getRows() {

@@ -164,7 +164,7 @@ public class ObtainGaodeLocation {
 		result = resultDto.getGeocodes().get(0).getLocation().split(",");
 
 		return result;
-	};
+	}
 	
 	
 	public static GaodeLocation addressToGPSKey(String address) {

@@ -48,6 +48,10 @@ public class ESClientManager {
     private ESClientManager() {
     }
 
+    /**
+     * 创建一个java操作Es的客户端，已经设置好了，索引、type、_mapping
+     * @return
+     */
     public static Client getClient() {
         if (client == null) {
             synchronized (ESClientManager.class) {
@@ -79,7 +83,7 @@ public class ESClientManager {
 
     /**
      * 初始化索引
-     *
+     *创建索引，type。设置_mapping内容
      * @throws Exception
      */
     private static void initIndex() throws Exception {

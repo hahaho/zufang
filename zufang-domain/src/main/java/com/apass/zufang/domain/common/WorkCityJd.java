@@ -1,6 +1,7 @@
 package com.apass.zufang.domain.common;
 
 import java.util.Date;
+import java.util.List;
 
 public class WorkCityJd {
     /**
@@ -35,15 +36,24 @@ public class WorkCityJd {
      * 首字母
      */
     private String prefix;
-    /**
-     * 第几级
-     */
-    private String level;
+  
+    private List<WorkCityJd> resultList;
 
     private Date createDate;
     private Date updateDate;
+    
+    private String level;
+    
 
-    public String getPrefix() {
+	public List<WorkCityJd> getResultList() {
+		return resultList;
+	}
+
+	public void setResultList(List<WorkCityJd> resultList) {
+		this.resultList = resultList;
+	}
+
+	public String getPrefix() {
         return prefix;
     }
 

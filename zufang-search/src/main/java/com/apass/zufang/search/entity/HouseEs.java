@@ -27,9 +27,14 @@ public class HouseEs implements IdAble{
     private Long apartmentId;
 
     /**
-     * 公寓名称
+     * 所属公司
      */
     private String companyName;
+
+    /**
+     * 公寓名称
+     */
+    private String apartmentName;
 
     /**
      * 热门房源类型：1：正常，2:精选
@@ -173,15 +178,29 @@ public class HouseEs implements IdAble{
     private Long pageView;
 
     /**
-     *
+     *管家联系方式
      */
     private String housekeeperTel;
 
+    /**
+     * 几户合租
+     */
     private String totalDoors;
 
+    /**
+     * 朝向， 1:东：2:南....
+     */
     private Byte hezuChaoxiang;
 
+    /**
+     * 出租介绍， 1:出租主卧；2：出租次卧；3：出租隔断；4：出租床位
+     */
     private Byte hezuResource;
+
+    /**
+     * 出租面积
+     */
+    private BigDecimal roomAcreage;
 
     /**
      * 所属省份
@@ -237,6 +256,14 @@ public class HouseEs implements IdAble{
      * @return
      */
     private Integer priceFlag;
+
+    public BigDecimal getRoomAcreage() {
+        return roomAcreage;
+    }
+
+    public void setRoomAcreage(BigDecimal roomAcreage) {
+        this.roomAcreage = roomAcreage;
+    }
 
     @Override
     public Integer getId() {
@@ -671,5 +698,13 @@ public class HouseEs implements IdAble{
 
     public void setPriceFlag(Integer priceFlag) {
         this.priceFlag = priceFlag;
+    }
+
+    public String getApartmentName() {
+        return apartmentName;
+    }
+
+    public void setApartmentName(String apartmentName) {
+        this.apartmentName = apartmentName;
     }
 }

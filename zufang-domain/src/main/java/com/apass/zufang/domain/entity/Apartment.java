@@ -1,6 +1,11 @@
 package com.apass.zufang.domain.entity;
-import com.apass.zufang.common.model.CreatedUser;
-public class Apartment extends CreatedUser{
+import java.util.Date;
+/**
+ * 公寓对象持久化类
+ * @author Administrator
+ *
+ */
+public class Apartment {
     private Long id;
 
     private String code;
@@ -103,4 +108,54 @@ public class Apartment extends CreatedUser{
 	public void setCompanyLogo(String companyLogo) {
 		this.companyLogo = companyLogo;
 	}
+	private Date createdTime;
+    private Date updatedTime;
+    private String createdUser;
+    private String updatedUser;
+    public String getCreatedUser() {
+        return createdUser;
+    }
+    public void setCreatedUser(String createdUser) {
+        this.createdUser = createdUser;
+    }
+    public String getUpdatedUser() {
+        return updatedUser;
+    }
+    public void setUpdatedUser(String createdUser) {
+        this.createdUser = createdUser;
+    }
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+    public Date getUpdatedTime() {
+        return updatedTime;
+    }
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+    public void fillUser(String user){
+        setUpdatedUser(user);
+    }
+    public void fillTime(){
+        setUpdatedTime(new Date());
+    }
+    public void fillAllUser(String user){
+        setCreatedUser(user);
+        setUpdatedUser(user);
+    }
+    public void fillAllTime(){
+        setCreatedTime(new Date());
+        setUpdatedTime(new Date());
+    }
+    public void fillAllField(String user){
+        fillAllUser(user);
+        fillAllTime();
+    }
+    public void fillField(String user){
+        fillUser(user);
+        fillTime();
+    }
 }

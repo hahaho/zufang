@@ -39,7 +39,7 @@ public class EsInitScheduleTask {
     /**
      * 0 0 12 ? * WED 表示每个星期三中午12点
      */
-//    @Scheduled(cron = "0 0 12 ? * WED")
+//    @Scheduled(cron = "0 0 12 ? * WED") TODO
     @RequestMapping("/init")
     public void esInitScheduleTask() {
         int index = 1;

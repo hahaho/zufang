@@ -3,18 +3,23 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
+import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.dto.WorkCityJdParams;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseImg;
@@ -25,11 +30,13 @@ import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.domain.vo.WorkCityJdVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
+import com.apass.zufang.mapper.zfang.WorkCityJdMapper;
 import com.apass.zufang.search.dao.HouseEsDao;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
@@ -45,6 +52,10 @@ import com.google.common.collect.Maps;
 @Service
 public class HouseService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HouseService.class);
+	
+	@Value("${zufang.image.uri}")
+    private String imageUri;
+	
 	@Autowired
 	private HouseMapper houseMapper;
 	@Autowired
@@ -63,6 +74,8 @@ public class HouseService {
 	private HouseLocationService  locationService;
 	@Autowired
 	private HouseEsDao houseEsDao;
+	@Autowired
+    private WorkCityJdMapper cityJdMapper;
 	/**
 	 * readEntity
 	 * @param id
@@ -221,16 +234,65 @@ public class HouseService {
 		
 		HouseLocation location = locationMapper.getLocationByHouseId(house.getId());
 		
+		WorkCityJdVo locationVo = getVoByPo(location);
+		
 		List<HouseImg> imgs = imgMapper.getImgByRealHouseId(house.getId());
 		
 		List<HousePeizhi> peizhis = peizhiMapper.getPeiZhiByHouseId(house.getId());
 		
 		values.put("house", house);
 		values.put("location",location);
+		values.put("locationVo",locationVo);
 		values.put("imgs",imgs);
 		values.put("peizhis",peizhis);
-		
+		values.put("imgProfix",imageUri);
 		return values;
+	}
+	
+	public WorkCityJdVo getVoByPo(HouseLocation location){
+		
+		if(null == location){
+			return null;
+		}
+		WorkCityJdParams provice = new WorkCityJdParams();
+		provice.setProvince(location.getProvince());
+		provice.setParentCode("0");
+		WorkCityJd p = cityJdMapper.selectCodeByName(provice);
+		
+		WorkCityJdParams city = new WorkCityJdParams();
+		city.setCity(location.getCity());
+		city.setParentCode(p.getCode());
+		WorkCityJd c = cityJdMapper.selectCodeByName(city);
+		
+		WorkCityJdParams district = new WorkCityJdParams();
+		district.setDistrict(location.getDistrict());
+		district.setParentCode(c.getCode());
+		WorkCityJd d = cityJdMapper.selectCodeByName(district);
+		
+		WorkCityJdParams street = new WorkCityJdParams();
+		street.setStreet(location.getStreet());
+		street.setParentCode(d.getCode());
+		WorkCityJd t = cityJdMapper.selectCodeByName(street);
+		
+		WorkCityJdVo vo = new WorkCityJdVo();
+		if(p != null){
+			vo.setProvince(p.getProvince());
+			vo.setProvinceCode(p.getCode());
+		}
+		if(c != null){
+			vo.setCity(c.getCity());
+			vo.setCityCode(c.getCode());
+		}
+		if(d != null){
+			vo.setDistrict(d.getDistrict());
+			vo.setDistrictCode(d.getCode());
+		}
+		if(t != null){
+			vo.setStreet(t.getTowns());
+			vo.setStreetCode(t.getCode());
+		}
+		
+		return vo;
 	}
 	
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
@@ -435,6 +497,9 @@ public class HouseService {
 				houseEs.setCommunityNamePinyin(Pinyin4jUtil.converterToSpell(h.getCommunityName()));
 				houseEs.setAcreage(h.getAcreage());
 				houseEs.setRoom(h.getRoom());
+				if(h.getRoom()>4){
+					houseEs.setRoom(-1);
+				}
 				houseEs.setHall(h.getHall());
 				houseEs.setWei(h.getWei());
 				houseEs.setFloor(h.getFloor());
@@ -466,6 +531,7 @@ public class HouseService {
 				houseEs.setHezuChaoxiang(h.getHezuChaoxiang());
 				houseEs.setHezuResource(h.getHezuResource());
 				houseEs.setAcreage(h.getAcreage());
+				houseEs.setRoomAcreage(h.getRoomAcreage());
 
 				//增加价格区间标记priceFlag
 				int priceFlag = 6;
@@ -485,6 +551,7 @@ public class HouseService {
 			Apartment apartment = apartmentMapper.selectByPrimaryKey(h.getApartmentId());
 			if(apartment != null){
 				houseEs.setCompanyName(apartment.getCompanyName());
+				houseEs.setApartmentName(apartment.getName());
 			}
 
 			HouseLocation hLocation = locationMapper.getLocationByHouseId(houseId);
@@ -540,5 +607,7 @@ public class HouseService {
 	}
 
 
-
+	public List<HouseAppSearchVo> queryHouseBasicEntityByEntity(HouseQueryParams houseQueryParams) {
+		return houseMapper.queryHouseBasicEntityByEntity(houseQueryParams);
+	}
 }

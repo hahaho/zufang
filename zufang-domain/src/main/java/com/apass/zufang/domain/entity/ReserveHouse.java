@@ -1,8 +1,9 @@
 package com.apass.zufang.domain.entity;
 import java.util.Date;
-import com.apass.zufang.common.model.CreatedUser;
+
 import com.apass.zufang.common.model.QueryParams;
 public class ReserveHouse extends QueryParams{
+
     private Long id;
 
     private Long houseId;
@@ -20,11 +21,11 @@ public class ReserveHouse extends QueryParams{
     private String memo;
 
     private String isDelete;
+
     
     private Date createdTime;
     
     private Date updatedTime;
-    
     
     public Date getCreatedTime() {
 		return createdTime;

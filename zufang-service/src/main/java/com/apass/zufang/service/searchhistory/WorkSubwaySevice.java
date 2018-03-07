@@ -35,7 +35,14 @@ public class WorkSubwaySevice {
 	 * @return
 	 */
 	public List<WorkCityJd> queryCityJdParentCodeList(String code) {
-		return cityJddao.selectDateByParentId(code);
+		List<WorkCityJd> result=cityJddao.selectDateByParentId(code);
+		for (WorkCityJd workCityJd : result) {
+			List<WorkCityJd> subworkCityJd = cityJddao.selectDateByParentId(workCityJd.getCode());
+			if (!subworkCityJd.isEmpty()) {
+				workCityJd.setResultList(subworkCityJd);
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -107,5 +114,9 @@ public class WorkSubwaySevice {
 				dao.insert(workSubways);
 			}
 		}
+	}
+
+	public WorkSubway selectSubwaybyCode(String subCode) {
+		return dao.selectSubwaybyCode(subCode);
 	}
 }

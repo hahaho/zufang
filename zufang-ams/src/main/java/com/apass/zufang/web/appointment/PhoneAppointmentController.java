@@ -27,11 +27,11 @@ import com.apass.zufang.service.appointment.PhoneAppointmentService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
 /**
- * 电话预约
- * @author Administrator
+ * 预约中心-电话预约
+ * @author haotian
  *
  */
-@Path("/application/appointment/phoneAppointmentController")
+@Path("/appointment/phoneAppointmentController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class PhoneAppointmentController {
@@ -57,6 +57,7 @@ public class PhoneAppointmentController {
     public ResponsePageBody<HouseAppointmentVo> getHouseListForPhoneAppointment(Map<String,Object> map) {
         ResponsePageBody<HouseAppointmentVo> respBody = new ResponsePageBody<HouseAppointmentVo>();
         try {
+        	LOGGER.info("getHouseListForPhoneAppointment map--->{}",GsonUtils.toJson(map));
         	HouseAppointmentQueryParams entity = validateParams(map);
         	respBody = phoneAppointmentService.getHouseListForPhoneAppointment(entity);
         } catch (Exception e) {
@@ -75,9 +76,27 @@ public class PhoneAppointmentController {
     public Response addReserveHouse(Map<String, Object> map) {
     	try {
     		LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
-    		ReserveHouse entity = validateParams2(map);
+    		String houseId = CommonUtils.getValue(map, "houseId");
+    		ValidateUtils.isNotBlank(houseId, "参数houseId为空！");
+    		String userId = CommonUtils.getValue(map, "userId");
+    		ValidateUtils.isNotBlank(userId, "参数userId为空！");
+    		
+    		String telphone = CommonUtils.getValue(map, "telphone");
+    		ValidateUtils.isNotBlank(telphone, "参数telphone为空！");
+    		String name = CommonUtils.getValue(map, "name");
+    		ValidateUtils.isNotBlank(name, "参数name为空！");
+    		
     		String reserveDate = CommonUtils.getValue(map, "reserveDate");
     		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
+    		String memo = CommonUtils.getValue(map, "memo");
+    		
+    		ReserveHouse entity = new ReserveHouse();
+    		entity.setHouseId(Long.parseLong(houseId));
+    		entity.setUserId(userId);
+    		
+    		entity.setTelphone(telphone);
+    		entity.setName(name);
+    		entity.setMemo(memo);
     		Date date = DateFormatUtil.string2date(reserveDate,DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
     		String username = SpringSecurityUtils.getCurrentUser();
     		return phoneAppointmentService.addReserveHouse(entity,username,date);
@@ -99,28 +118,9 @@ public class PhoneAppointmentController {
     	for(Entry<String, Object> entry : set){
     		key = entry.getKey();
     		value = entry.getValue();
-    		if(value!=null){
-    			if(StringUtils.isNotBlank(value.toString())){
-    				entity = (HouseAppointmentQueryParams) FarmartJavaBean.farmartJavaB(entity, HouseAppointmentQueryParams.class, value, key);
-    			}
+    		if(value!=null&&StringUtils.isNotBlank(value.toString())){
+				entity = (HouseAppointmentQueryParams) FarmartJavaBean.farmartJavaB(entity, HouseAppointmentQueryParams.class, value, key);
     		}
-    	}
-    	return entity;
-	}
-    private ReserveHouse validateParams2(Map<String, Object> map) throws BusinessException{
-    	Set<Entry<String, Object>> set = map.entrySet();
-    	String key = null;
-    	Object value =null;
-    	ReserveHouse entity = new ReserveHouse();
-    	for(Entry<String, Object> entry : set){
-    		key = entry.getKey();
-    		value = entry.getValue();
-    		if(value==null){
-    			throw new BusinessException("参数" + key + "为空！");
-    		}else{
-    			ValidateUtils.isNotBlank(value.toString(), "参数" + key + "为空！");
-    		}
-    		entity = (ReserveHouse) FarmartJavaBean.farmartJavaB(entity, ReserveHouse.class, value, key);
     	}
     	return entity;
 	}

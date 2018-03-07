@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,10 +151,10 @@ public class HouseInfoService {
 		// setp 3 计算目标房源和附近房源的距离，并绑定映射关系
 		Map<Double, Long> houseDistanceMap = new HashMap<Double, Long>();
 		double[] resultArray = new double[houseInfoList.size()];
-			for (int i=0 ;i< houseInfoList.size();i++) {
-				HouseInfoRela houseLocation=houseInfoList.get(i);
+		for (int i=0 ;i< houseInfoList.size();i++) {
+			HouseInfoRela houseLocation=houseInfoList.get(i);
 			double distance = this.distanceSimplify(latitude, longitude,
-					houseLocation.getLatitude(), houseLocation.getLongitude());
+			houseLocation.getLatitude(), houseLocation.getLongitude());
 			if (houseDistanceMap.get(distance) != null) {
 				BigDecimal distanceBig = new BigDecimal(distance);
 				// 相同的距离 需要处理 （后一个加上0.0001）
@@ -189,7 +190,6 @@ public class HouseInfoService {
 	 * 
 	 * @param houseId
 	 *            目标房源
-	 * @param number
 	 *            附近房源数量
 	 * @return
 	 */
@@ -240,5 +240,37 @@ public class HouseInfoService {
 				* Math.cos(Math.toRadians(b)); // 东西距离
 		double Ly = EARTH_RADIUS * Math.toRadians(dy); // 南北距离
 		return Math.sqrt(Lx * Lx + Ly * Ly); // 用平面的矩形对角距离公式计算总距离
+	}
+
+
+	public List<HouseAppSearchVo> calculateDistanceAndSort2(Double latitude, Double longitude,
+														List<HouseAppSearchVo> houseInfoList) {
+		int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
+		List<HouseAppSearchVo> voList = new ArrayList<HouseAppSearchVo>();
+		//计算目标房源和附近房源的距离，并绑定映射关系
+		Map<Double, HouseAppSearchVo> houseDistanceMap = new HashMap<Double, HouseAppSearchVo>();
+		double[] resultArray = new double[houseInfoList.size()];
+		for (int i=0 ;i< houseInfoList.size();i++) {
+			HouseAppSearchVo vo=houseInfoList.get(i);
+			double distance = this.distanceSimplify(latitude, longitude,
+					vo.getLatitude(), vo.getLongitude());
+			if (houseDistanceMap.get(distance) != null) {
+				BigDecimal distanceBig = new BigDecimal(distance);
+				// 相同的距离 需要处理 （后一个加上0.0001）
+				distanceBig = distanceBig.add(new BigDecimal("0.0001"));
+				distance = distanceBig.doubleValue();
+			}
+			houseDistanceMap.put(distance, vo);
+			resultArray[i]=distance;
+		}
+		//对距离按照升序排序
+		Arrays.sort(resultArray);
+
+		int value = resultArray.length > number ? number : resultArray.length;
+		for (int i = 0; i < value; i++) {
+			double disance = resultArray[i];
+			voList.add(houseDistanceMap.get(disance));
+		}
+		return voList;
 	}
 }

@@ -165,7 +165,7 @@
 		WHERE
 			h.id = l.house_id
 			AND h.apartment_id = a.id
-			AND h.status = '3'
+			AND h.status = '2'
 			AND h.is_delete = '00'
 			AND a.is_delete = '00'
 			GROUP BY l.city ASC
@@ -175,7 +175,7 @@
     <select id="getHouseById" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
         SELECT
-				h.id			id,
+				h.id			houseId,
 				h.title			title,
 				h.rent_amt		rentAmt,
 				h.room			room,
@@ -189,14 +189,16 @@
 				l.detail_addr	detailAddr,
 				l.longitude longitude,
 				l.latitude	latitude
-			FROM
+				FROM
 				t_zfang_house h,
-				t_zfang_house_location l
-			WHERE
+				t_zfang_house_location l,
+				t_zfang_apartment a
+				WHERE
 				h.id = l.house_id
+				AND h.apartment_id = a.id
 				AND h.is_delete = '00'
 				AND l.is_delete = '00'
-				AND h.status = '3'
+				AND h.status = '2'
 				AND h.apartment_id in
         ]]>
         <foreach collection="list" item="employeeId" index="index" open="(" separator="," close=")">
@@ -260,7 +262,7 @@
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
         	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id and a1.`name` = '独卫'
         	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a2.`name` = '可做饭'
-       	WHERE 1=1 
+       	WHERE 1=1 AND x.is_delete = '00'
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>
        	<if test="communityName!=null and communityName!=''"> AND x.community_name LIKE '%${communityName}%' </if>
@@ -281,6 +283,29 @@
         <![CDATA[ 
         ORDER BY x.created_time DESC
         ]]>
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+
+    <select id="queryHouseBasicEntityByEntity" resultType="com.apass.zufang.domain.vo.HouseAppSearchVo">
+        SELECT
+            zhouseImg.url url,
+            zhouse.title houseTitle,
+            zhouse.description description,
+        location.detail_addr detailAddr,
+        zhouse.room room,
+        zhouse.hall hall,
+        zhouse.wei wei,
+        zhouse.floor floor,
+        zhouse.acreage acreage,
+        zhouse.rent_amt rentAmt,
+        CONCAT(room,hall,wei,'-',acreage,'m2') houseDes
+        from t_zfang_house zhouse
+        LEFT JOIN t_zfang_house_img zhouseImg ON zhouse.id = zhouseImg.house_id
+        LEFT JOIN t_zfang_house_location location ON zhouse.id = location.house_id
+        WHERE zhouse.title = #{} or zhouse.community_name = #{} or location.detail_addr = #{}
+        ORDER BY zhouse.page_view
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>

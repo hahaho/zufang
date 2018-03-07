@@ -1,21 +1,17 @@
 package com.apass.zufang.web.house;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.common.ListeningRegExpUtils;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -30,6 +26,11 @@ import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
+/**
+ * 房源管理-房源信息管理
+ * @author pyc
+ *
+ */
 @Path("/house")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -111,6 +112,21 @@ public class HouseControler {
 		}
 	}
 	
+	@POST
+	@Path("/detail/init")
+	public Response detailHouse(Map<String,Object> paramMap){
+		try {
+			String id = CommonUtils.getValue(paramMap, "id");
+			Map<String,Object> values = houseService.getHouseDetail(id);
+			return Response.success("初始化修改页面!", values);
+		}catch (BusinessException e){
+			logger.error("detail house businessException---->{}",e);
+			return Response.fail(e.getErrorDesc());
+		}catch (Exception e) {
+			logger.error("信息失败，错误原因", e);
+		    return Response.fail("初始化修改信息失败！");
+		}
+	}
 	/**
 	 * 修改房屋信息
 	 * @return
@@ -333,6 +349,11 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(title, "请填写房源标题");
 		ValidateUtils.checkLength(title, 6, 30, "请填写6-30个字");
 		ValidateUtils.isNotBlank(picturs, "请上传图片");
+		
+		String[] pictures = StringUtils.split(picturs,",");
+		if(pictures.length > 8){
+			throw new BusinessException("上传图片最多8张!");
+		}
 	}
 	
 	/***

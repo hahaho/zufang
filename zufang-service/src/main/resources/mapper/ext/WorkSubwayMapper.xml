@@ -28,5 +28,12 @@
 			t_zufang_work_subway
 	]]>
 	</select>
+    <select id="selectSubwaybyCode" resultType="Integer">
+		SELECT
+			 <include refid="Base_List" />
+		FROM
+			t_zufang_work_subway
+        WHERE code = #{VALUE}
+	</select>
 
 </mapper>

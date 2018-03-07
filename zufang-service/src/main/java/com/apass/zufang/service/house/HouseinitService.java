@@ -13,10 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
-import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.service.commons.CommonService;
@@ -31,8 +29,6 @@ public class HouseinitService {
 	private HouseImgService houseImgService;
 	@Autowired
 	private HouseMapper houseMapper;
-	@Autowired
-	private HouseImgMapper houseImgMapper;
     @Autowired
     private HouseLocationMapper HouseLocationMapper;
 
@@ -57,7 +53,7 @@ public class HouseinitService {
 		String city = (String) paramMap.get("city");// 城市
 		
 		// 获取url
-		List<String> imgList = getUrl();
+		List<String> imgList = houseImgService.initImg();;
 		resultMap.put("initImg", imgList);
 		LOG.info("init首页接口_获取url成功");
 		
@@ -81,26 +77,15 @@ public class HouseinitService {
 		return resultMap;
 	}
 
-	private List<String> getUrl() {
-		
-		List<HouseImg> imgList = houseImgMapper.initImg();
-		PageBean<HouseImg> pageBean = new PageBean<>(1, 10, imgList);
-		imgList = pageBean.getList();
-		List<String> initImg = new ArrayList<>();
-		for (int i = 0; i < imgList.size(); i++) {
-			initImg.add(imgList.get(i).getUrl());
-		}
-		return initImg;
-	}
 	/**
 	 * init附近房源
-	 * @param returnLLSquarePoint
+	 * @param city
 	 * @return
 	 */
 	public List<HouseVo> initNearLocation(String city) {
-		
-		List<HouseVo> initNearHouse = HouseLocationMapper.initNearLocation(city);
-		return initNearHouse;
+		//List<HouseVo> initNearHouse = HouseLocationMapper.initNearLocation(city);
+		//return initNearHouse;
+		return null;
 	}
 
 	/**
@@ -139,23 +124,25 @@ public class HouseinitService {
 				hotHouse = new PageBean<>(1, 5, norHouses).getList();
 			}
 		}
+		gitImg(hotHouse);
+		return hotHouse;
+	}
+
+	private void gitImg(List<HouseVo> hotHouse) {
 		if (ValidateUtils.listIsTrue(hotHouse)) {
 			// 追加图片
 			for (HouseVo houseVo : hotHouse) {
-				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
 				houseVo.setPictures(imgList);
 			}
 		}
-		return hotHouse;
 	}
 
 	private List<HouseVo> getSetHouse(List<HouseVo> setHouses, List<HouseVo> norHouses, Map<String, Object> paramMap,
 			HashMap<String, Integer> finMap) throws BusinessException {
 
 		List<HouseVo> nearHouses = new ArrayList<HouseVo>();
-		List<HouseVo> nearHouses1 = new ArrayList<HouseVo>();
 		// 获取用户当前经纬度追加2公里经纬度,
-		String city = (String) paramMap.get("city");// 城市
 		String pageNum = (String) paramMap.get("pageNum");// 页码
 		String longitude = (String) paramMap.get("longitude");// 经度
 		String latitude = (String) paramMap.get("latitude");// 纬度
@@ -164,22 +151,21 @@ public class HouseinitService {
 			nearHouses = addSetHouse(setHouses, norHouses, finMap);
 		} else {
 			ValidateUtils.isNotBlank("请求参数丢失数据", longitude, latitude);
-			nearHouses = initNearLocation(city);
 			// 去除按流量排进热门的数据
-			nearHouses1 = removeSetHouse(setHouses, norHouses, finMap);
+			nearHouses = removeSetHouse(setHouses, norHouses, finMap);
 			if (ValidateUtils.listIsTrue(nearHouses)) {
-				if (ValidateUtils.listIsTrue(nearHouses1)) {
-					for (int i = 0; i < nearHouses.size(); i++) {
-						Long houseId = nearHouses.get(i).getHouseId();
-						for (int j = 0; j < nearHouses1.size(); j++) {
-							Long houseIdj = nearHouses1.get(j).getHouseId();
-							if (houseId.equals(houseIdj)) {
-								nearHouses.remove(i);
-								break;
-							}
-						}
-					}
-				}
+				// if (ValidateUtils.listIsTrue(nearHouses1)) {
+				// for (int i = 0; i < nearHouses.size(); i++) {
+				// Long houseId = nearHouses.get(i).getHouseId();
+				// for (int j = 0; j < nearHouses1.size(); j++) {
+				// Long houseIdj = nearHouses1.get(j).getHouseId();
+				// if (houseId.equals(houseIdj)) {
+				// nearHouses.remove(i);
+				// break;
+				// }
+				// }
+				// }
+				// }
 				// 按照房源距离由近到远排序
 				double[] disArray = new double[nearHouses.size()];
 				HashMap<Double, HouseVo> disMap = Maps.newHashMap();
@@ -194,20 +180,21 @@ public class HouseinitService {
 					disArray[i] = disOne;
 				}
 				Arrays.sort(disArray);
-				
+
 				if (disArray.length > 10) {
 					for (int i = 0; i < disArray.length; i++) {
 						double disance = disArray[i];
 						nearHouses.add(disMap.get(disance));
 					}
 				}
-		if (ValidateUtils.listIsTrue(nearHouses) && nearHouses.size() > 10) {
-			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
-			nearHouses = pageBean.getList();
-		}
+				if (nearHouses.size() > 10) {
+					PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
+					nearHouses = pageBean.getList();
+				}
 
-	}
+			}
 		}
+		gitImg(nearHouses);
 		return nearHouses;
 	}
 
