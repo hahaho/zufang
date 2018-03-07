@@ -7,16 +7,15 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.dto.ApartHouseList;
 import com.apass.zufang.domain.entity.Apartment;
-import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.utils.PageBean;
 import com.apass.zufang.utils.ValidateUtils;
@@ -30,20 +29,22 @@ public class ApartHouseService {
 	private ApartmentMapper apartmentMapper;
 	@Autowired
 	private HouseMapper houseMapper;
-	@Autowired
-	private HouseImgMapper houseImgMapper;
+    @Value("${zufang.image.uri}")
+    private String imageUri;
 
     /**
      * initImg
      * @return
      */
     public List<String> initImg() {
-    	List<HouseImg> initImg = houseImgMapper.initImg();
-    	PageBean<HouseImg> pageBean = new PageBean<>(1, 10, initImg);
+    	List<Apartment> initImg = apartmentMapper.getApartmentList();
+    	PageBean<Apartment> pageBean = new PageBean<>(1, 10, initImg);
     	initImg = pageBean.getList();
     	List<String> initCity = new ArrayList<>();
+    	for (Apartment string : initImg) {
+    		initCity.add(imageUri + "/static" +string.getCompanyLogo());
+		}
     	for (int i = 0; i < initImg.size(); i++) {
-    		initCity.add(initImg.get(i).getUrl());
     	}
     	return initCity;
     }
@@ -58,8 +59,8 @@ public class ApartHouseService {
 		ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", city, pageNum);
 		Apartment apartment = new Apartment();
 		apartment.setCity(city);
-		List<Apartment> resultApartment = apartmentMapper.getApartByCity(apartment);
 		ArrayList<ApartHouseList> apartHouseList = new ArrayList<ApartHouseList>();
+		List<Apartment> resultApartment = apartmentMapper.getApartByCity(apartment);
 		if (ValidateUtils.listIsTrue(resultApartment)) {
 		if (resultApartment.size() > 4) {
 			PageBean<Apartment> pageBean = new PageBean<Apartment>(new Integer(pageNum)+1, 4, resultApartment);
@@ -74,7 +75,7 @@ public class ApartHouseService {
 				houseListById = pageBean1.getList();
 				}
 			for (HouseVo houseVo : houseListById) {
-				houseVo.setPictures(houseImgService.getImgList(resultApartment.get(i).getId(), (byte) 1));
+				houseVo.setPictures(houseImgService.getImgList(resultApartment.get(i).getId(), (byte) 0));
 			}
 			}
 			ApartHouseList eachAPH = new ApartHouseList();
@@ -98,7 +99,7 @@ public class ApartHouseService {
 		apartList = pageBean.getList();
 		LOG.info("查询房源List_获取房源信息成功！");
 		for (HouseVo houseVo : apartList) {
-			List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+			List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
 			houseVo.setPictures(imgList);
 		}
 		return apartList;

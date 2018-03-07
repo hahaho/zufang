@@ -1,5 +1,6 @@
 package com.apass.zufang.mapper.zfang;
 import java.util.List;
+
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.dto.ApprintmentQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
@@ -24,10 +25,19 @@ public interface ApartmentMapper extends GenericMapper<Apartment,Long> {
 	 */
 	public Integer getApartmentListCodeCount(ApprintmentQueryParams entity);
 	/**
+	 * 公寓初始图片
+	 * @return
+	 */
+	public List<Apartment> getApartmentList();
+	/**
 	 * 获取公寓Id
 	 * @return
 	 */
 	public List<Apartment> getApartByCity(Apartment entity);
-	
+	/**
+	 * 获取公寓下房源
+	 * @param entity
+	 * @return
+	 */
 	public List<Apartment> getApartmentBylistCity(Apartment entity);
 }
