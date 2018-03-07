@@ -246,15 +246,14 @@ public class HouseInfoService {
 			double distance = this.distanceSimplify(latitude, longitude,
 					vo.getLatitude(), vo.getLongitude());
 					BigDecimal distanceBig = new BigDecimal(distance);
-			while(true){
-				if (houseDistanceMap.get(distance) != null) {
-					// 相同的距离 需要处理 （后一个加上0.0001）
-					distanceBig = distanceBig.add(new BigDecimal("0.0001"));
-					distance = distanceBig.doubleValue();
-				}else {
+
+			for (int j = 0; j < houseInfoList.size(); j++) {
+				if (houseDistanceMap.containsKey(distance)) {
+					BigDecimal bigDecimal = new BigDecimal(distance);
+					distance = bigDecimal.add(new BigDecimal(0.1)).doubleValue();
+				} else {
 					break;
 				}
-
 			}
 			houseDistanceMap.put(distance, vo);
 			resultArray[i]=distance;
