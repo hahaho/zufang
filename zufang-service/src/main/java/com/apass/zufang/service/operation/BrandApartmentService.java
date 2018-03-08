@@ -169,6 +169,7 @@ public class BrandApartmentService {
 	public Response hotHouseCancel(String houseId, String user) throws BusinessException {
 		Long id = Long.parseLong(houseId);
 		House house = houseService.readEntity(id);
+		house.setType((byte)1);
 		house.setSortNo(0);
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(user);
@@ -215,6 +216,7 @@ public class BrandApartmentService {
         }else{
         	house.setSortNo(list.size()+1);
         }
+        house.setType((byte)2);
         house.setUpdatedTime(new Date());
 		house.setUpdatedUser(user);
 		if(houseService.updateEntity(house)!=1){
