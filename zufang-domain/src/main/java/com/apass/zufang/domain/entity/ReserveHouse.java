@@ -1,6 +1,5 @@
 package com.apass.zufang.domain.entity;
 import java.util.Date;
-import com.apass.zufang.common.model.QueryParams;
 
 public class ReserveHouse {
 	private Long id;
