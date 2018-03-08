@@ -85,10 +85,11 @@ public class ZuFangLoginController {
 	        	String smsType = CommonUtils.getValue(paramMap, "smsType");// 类型
 	        	String code = CommonUtils.getValue(paramMap, "code");// 验证码
 	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password+" smsType—————>"+smsType+" code—————>"+code);
-	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
-	        		//用户id不合规
-	        		 return Response.fail("用户id不合规");
-	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
+//	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
+//	        		//用户id不合规
+//	        		 return Response.fail("用户id不合规");
+//	        	}else 
+	        		if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
 	        		//手机号不合规
 	        		 return Response.fail("手机号不合规");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(password)
@@ -153,10 +154,11 @@ public class ZuFangLoginController {
 	        	String password = CommonUtils.getValue(paramMap, "password");
 	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password);
 	        	
-	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
-	        		//用户id不能为空
-	        		 return Response.success("用户id不能为空");
-	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
+//	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
+//	        		//用户id不能为空
+//	        		 return Response.success("用户id不能为空");
+//	        	}else 
+	        	if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
 	        		//手机号不能为空
 	        		 return Response.success("手机号不能为空");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(password)){
