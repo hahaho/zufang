@@ -14,6 +14,7 @@ import com.apass.zufang.service.house.ApartHouseService;
 import com.apass.zufang.service.rbac.UsersService;
 import com.apass.zufang.utils.PaginationManage;
 import com.apass.zufang.utils.ResponsePageBody;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -340,10 +342,12 @@ public class UsersController {
 	 * 加载所有公寓信息
 	 */
 	@POST
-	@Path("/list/apartment")
+	@Path("/apartmentList")
 	public Response locadAllApartment(){
 		try{
-			List<Apartment> apartList = apartHouseService.listAllApartment();
+			Map<String,String> paramMap = Maps.newHashMap();
+			paramMap.put("isDelete","00");
+			List<Apartment> apartList = apartHouseService.listAllValidApartment(paramMap);
 			return Response.success("查询公寓列表成功！",apartList);
 		}catch (Exception e){
 			LOG.error("查询公寓列表失败,-----Exception---->{}",e);

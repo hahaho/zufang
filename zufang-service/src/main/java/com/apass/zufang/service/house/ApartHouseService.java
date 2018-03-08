@@ -120,7 +120,12 @@ public class ApartHouseService {
 		return apartmentMapper.getApartmentBylistCity(apartment);
 	}
 
-	public List<Apartment> listAllApartment() {
-		return null;
+	/**
+	 * 查询所有未被删除公寓
+	 * @param paramMap
+	 * @return
+     */
+	public List<Apartment> listAllValidApartment(Map<String,String> paramMap) {
+		return apartmentMapper.listAllValidApartment(paramMap);
 	}
 }
