@@ -1,5 +1,7 @@
 package com.apass.zufang.domain.entity;
 
+import java.util.Date;
+
 public class HouseShowingsEntity {
 	
 	  private String  houseId;		//'房源主键',
@@ -26,6 +28,22 @@ public class HouseShowingsEntity {
 	  private String  idImg; // 图片id
 	  private String  url; // '图片url',
 	  private String  type;//'类型,0普通房源照片,1热门房源照片',
+	  private Date 	  reserveDate;//预约时间
+	  private String  detailAddr;
+	  
+	  
+	public Date getReserveDate() {
+		return reserveDate;
+	}
+	public void setReserveDate(Date reserveDate) {
+		this.reserveDate = reserveDate;
+	}
+	public String getDetailAddr() {
+		return detailAddr;
+	}
+	public void setDetailAddr(String detailAddr) {
+		this.detailAddr = detailAddr;
+	}
 	public String getHouseId() {
 		return houseId;
 	}

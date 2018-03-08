@@ -1,5 +1,6 @@
 package com.apass.zufang.mapper.zfang;
 import java.util.List;
+import java.util.Map;
 
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.dto.ApprintmentQueryParams;
@@ -40,4 +41,6 @@ public interface ApartmentMapper extends GenericMapper<Apartment,Long> {
 	 * @return
 	 */
 	public List<Apartment> getApartmentBylistCity(Apartment entity);
+
+	List<Apartment> listAllValidApartment(Map<String, String> paramMap);
 }
