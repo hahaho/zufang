@@ -57,6 +57,7 @@
 		AND h.is_delete = '00'
 		AND l.is_delete = '00'
 		AND h.status = '2'
+		GROUP BY a.id
 		ORDER BY a.created_time DESC;
 	</select>
 	

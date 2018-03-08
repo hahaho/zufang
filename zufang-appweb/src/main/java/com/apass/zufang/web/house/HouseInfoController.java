@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.constants.ConstantsUtil;
+import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.utils.GfbLogUtils;
@@ -55,7 +56,15 @@ public class HouseInfoController {
 			queryCondition.setHouseId(Long.valueOf(houseId));
 			List<HouseInfoRela> targetHouseInfoList = houseInfoService
 					.queryHouseInfoRela(queryCondition);
-			resultMap.put("targetHouseInfo", targetHouseInfoList.get(0));
+			HouseInfoRela houseInfoRela = targetHouseInfoList.get(0);
+			if (houseInfoRela != null) {
+				Long pageview = houseInfoRela.getPageView();
+				House house = new House();
+				house.setId(Long.valueOf(houseId));
+				house.setPageView(pageview + new Long(1));
+				houseInfoService.addPageView(house);
+			}
+			resultMap.put("targetHouseInfo", houseInfoRela);
 			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

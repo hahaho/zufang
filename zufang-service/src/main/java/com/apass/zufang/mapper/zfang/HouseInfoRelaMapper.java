@@ -1,7 +1,6 @@
 package com.apass.zufang.mapper.zfang;
 
 import java.util.List;
-import java.util.Map;
 
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.entity.HouseInfoRela;

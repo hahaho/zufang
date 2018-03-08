@@ -166,7 +166,11 @@ public class HouseInfoRela {
 	 */
 	private Integer sortField;
 	
-
+	/**
+	 * 浏览量
+	 */
+	private Long pageView;
+	
 	public Long getHouseId() {
 		return houseId;
 	}
@@ -469,6 +473,14 @@ public class HouseInfoRela {
 
 	public void setZujinTypeStr(String zujinTypeStr) {
 		this.zujinTypeStr = zujinTypeStr;
+	}
+
+	public Long getPageView() {
+		return pageView;
+	}
+
+	public void setPageView(Long pageView) {
+		this.pageView = pageView;
 	}
 
 }
