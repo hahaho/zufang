@@ -2,6 +2,7 @@ package com.apass.zufang.service.house;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +15,13 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.dto.ApartHouseList;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.vo.ApartmentVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.utils.PageBean;
 import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Maps;
 
 @Component
 public class ApartHouseService {
@@ -37,12 +40,12 @@ public class ApartHouseService {
      * @return
      */
     public List<String> initImg() {
-    	List<Apartment> initImg = apartmentMapper.getApartmentList();
-    	PageBean<Apartment> pageBean = new PageBean<>(1, 10, initImg);
+    	List<ApartmentVo> initImg = apartmentMapper.getApartmentList();
+    	PageBean<ApartmentVo> pageBean = new PageBean<>(1, 10, initImg);
     	initImg = pageBean.getList();
     	List<String> initCity = new ArrayList<>();
-    	for (Apartment string : initImg) {
-    		initCity.add(imageUri + "/static" +string.getCompanyLogo());
+    	for (ApartmentVo img : initImg) {
+    		initCity.add(imageUri + "/static" +img.getCompanyLogo());
 		}
     	for (int i = 0; i < initImg.size(); i++) {
     	}
@@ -53,7 +56,14 @@ public class ApartHouseService {
 	 * 获取公寓Id
 	 * @return
 	 */
-	public ArrayList<ApartHouseList> getApartByCity(Map<String, Object> paramMap) throws BusinessException {
+	public HashMap<String, Object> getApartByCity(Map<String, Object> paramMap) throws BusinessException {
+		
+		// 获取公寓循环图
+		HashMap<String, Object> resultMap = Maps.newHashMap();
+		List<String> initImg = initImg();
+		resultMap.put("initImg", initImg);
+		
+		// 获取公寓列表以及对应房源
 		String city = (String) paramMap.get("city");
 		String pageNum = (String) paramMap.get("pageNum");
 		ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", city, pageNum);
@@ -86,8 +96,9 @@ public class ApartHouseService {
 			eachAPH.setRows(houseListById);
 			apartHouseList.add(eachAPH);
 			}
+		resultMap.put("apartHouses",apartHouseList);
 		}
-		return apartHouseList;
+		return resultMap;
 	}
 	
 	public List<HouseVo> getHouseById(String houseId, String pageNum, String pageSize) {
@@ -108,5 +119,8 @@ public class ApartHouseService {
 	public List<Apartment> getApartmentBylistCity(Apartment apartment) {
 		return apartmentMapper.getApartmentBylistCity(apartment);
 	}
-	
+
+	public List<Apartment> listAllApartment() {
+		return null;
+	}
 }

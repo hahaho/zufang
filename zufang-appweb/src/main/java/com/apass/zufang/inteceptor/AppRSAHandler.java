@@ -1,9 +1,10 @@
 package com.apass.zufang.inteceptor;
+
+import com.apass.esp.common.utils.JsonUtil;
 import com.apass.gfb.framework.utils.AESUtils;
 import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.gfb.framework.utils.RSAUtils;
-import com.apass.zufang.common.utils.JsonUtil;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,9 +18,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
 /**
  * 
  * @description RSA 加解密拦截器
@@ -30,11 +33,13 @@ import java.util.Map;
 @Aspect
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 5)
-public class EspAppRSAHandler {
+
+
+public class AppRSAHandler {
 	/**
 	 * 日志
 	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(EspAppRSAHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppRSAHandler.class);
 	/**
 	 * RSA 私钥
 	 */
@@ -49,13 +54,12 @@ public class EspAppRSAHandler {
 	 * @throws Throwable
 	 */
 
-//	@Around("execution(* com.apass.zufang.web..*.*(..))")
+	@Around("execution(* com.apass.zufang.web..*.*(..))")
 	private Object handleRSAInteceptor(ProceedingJoinPoint point) throws Throwable {
 		return inteceptorMethod(point);
 	}
 
-	@SuppressWarnings("all")
-	public Object inteceptorMethod(ProceedingJoinPoint point) throws Throwable {
+	private Object inteceptorMethod(ProceedingJoinPoint point) throws Throwable {
 		Object[] arr = point.getArgs();
 		if (arr == null || arr.length == 0) {
 			return point.proceed();

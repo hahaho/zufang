@@ -171,7 +171,7 @@ public class UsersService {
 		usersRepository.updateAll(usersDO);
 	}
 
-	public int relevanceMerchant(UsersDO usersDO) {
+	public int relevanceApart(UsersDO usersDO) {
 		return usersRepository.update(usersDO);
 	}
 }

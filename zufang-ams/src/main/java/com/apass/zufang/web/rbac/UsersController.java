@@ -1,17 +1,19 @@
 package com.apass.zufang.web.rbac;
 
-import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.entity.rbac.RolesDO;
-import com.apass.zufang.domain.entity.rbac.UsersDO;
-import com.apass.zufang.service.rbac.UsersService;
-import com.apass.zufang.utils.PaginationManage;
-import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.mybatis.page.Page;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
 import com.apass.gfb.framework.utils.HttpWebUtils;
 import com.apass.gfb.framework.utils.RegExpUtils;
+import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.entity.rbac.RolesDO;
+import com.apass.zufang.domain.entity.rbac.UsersDO;
+import com.apass.zufang.service.house.ApartHouseService;
+import com.apass.zufang.service.rbac.UsersService;
+import com.apass.zufang.utils.PaginationManage;
+import com.apass.zufang.utils.ResponsePageBody;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +44,16 @@ public class UsersController {
 	private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
 	@Autowired
 	private UsersService usersService;
+	@Autowired
+	private ApartHouseService apartHouseService;
+
 	private static final String USER_PAGE = "rbac/users-page";
 
 	private static final String SUCCESS = "success";
 	private static final String USERNAME = "username";
 	private static final String RESETPWD_FAIL = "重置密码失败";
 	private static final String USER_ID = "userId";
+	private static final String APARTMENT_CODE = "apartmentCode";
 	private static final String LOADROLES_FAIL = "加载可用角色列表失败";
 
 	/**
@@ -329,6 +335,45 @@ public class UsersController {
 			return Response.fail("保存用户角色记录失败");
 		}
 	}
+
+	/**
+	 * 加载所有公寓信息
+	 */
+	@POST
+	@Path("/list/apartment")
+	public Response locadAllApartment(){
+		try{
+			List<Apartment> apartList = apartHouseService.listAllApartment();
+			return Response.success("查询公寓列表成功！",apartList);
+		}catch (Exception e){
+			LOG.error("查询公寓列表失败,-----Exception---->{}",e);
+			return Response.fail("查询公寓列表失败!");
+		}
+	}
+
+	/**
+	 * 用户关联
+	 */
+	@POST
+	@Path("/relevanceApart")
+	public Response relevanceApart(HttpServletRequest request){
+		try{
+			UsersDO usersDO = new UsersDO();
+			String userId = HttpWebUtils.getValue(request,USER_ID);
+			String apartmentCode = HttpWebUtils.getValue(request,APARTMENT_CODE);
+			usersDO.setId(userId);
+			usersDO.setApartmentCode(apartmentCode);
+			usersDO.setUpdatedBy(SpringSecurityUtils.getCurrentUser());
+
+			usersService.relevanceApart(usersDO);
+
+			return Response.success("查询公寓列表成功！","");
+		}catch (Exception e){
+			LOG.error("用户关联公寓失败,-----Exception---->{}",e);
+			return Response.fail("用户关联公寓失败!");
+		}
+	}
+
 
 
 

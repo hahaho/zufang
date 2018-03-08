@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.Index;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -258,7 +259,6 @@ public class HouseSearchController {
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
-//				boolQueryBuilder.must(QueryBuilders.wildcardQuery("apartmentName","*" + apartmentName + "*").boost(2.5f));
 			}
 			if(StringUtils.isNotEmpty(priceFlag)){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(1.5f));
@@ -271,15 +271,60 @@ public class HouseSearchController {
 				}
 			}
 			if(StringUtils.isNotEmpty(room)){
-				boolQueryBuilder.must(QueryBuilders.termQuery("room",room).boost(1.5f));
+				String[] roomArr = room.split(",");
+				switch(roomArr.length)
+				{
+					case 1:
+						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
+						break;
+					case 2:
+						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
+						break;
+					case 3:
+						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
+						break;
+					case 4:
+						boolQueryBuilder.must(QueryBuilders
+								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+						break;
+					case 5:
+						boolQueryBuilder.must(QueryBuilders
+								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3],roomArr[4]).boost(1.5f));
+						break;
+					default:
+						break;
+				}
+
 			}
 			if(StringUtils.isNotEmpty(configName)){
-				boolQueryBuilder.must(QueryBuilders.termQuery("configName",configName).boost(1.5f));
+				String[] configArr = configName.split(",");
+				switch(configArr.length)
+				{
+					case 1:
+						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0]).boost(1.5f));
+						break;
+					case 2:
+						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0],configArr[1]).boost(1.5f));
+						break;
+					case 3:
+						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0],configArr[1],configArr[2]).boost(1.5f));
+						break;
+					case 4:
+						boolQueryBuilder.must(QueryBuilders
+								.termsQuery("configName", configArr[0],configArr[1],configArr[2],configArr[3]).boost(1.5f));
+						break;
+					case 5:
+						boolQueryBuilder.must(QueryBuilders
+								.termsQuery("configName", configArr[0],configArr[1],configArr[2],configArr[3],configArr[4]).boost(1.5f));
+						break;
+					default:
+						break;
+				}
 			}
 
 			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
 					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
-					.setTypes(HOUSE.getDataName())
+					.setTypes(IndexType.HOUSE.getDataName())
 					.setQuery(boolQueryBuilder)
 					.setFrom(pages).setSize(row);
 			serachBuilder.setFrom(offset).setSize(row);
@@ -327,7 +372,6 @@ public class HouseSearchController {
 					}
 				}
 			}
-
 
 			if(StringUtils.isNotEmpty(subCode) || StringUtils.isNotEmpty(areaCode)){
 				List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
