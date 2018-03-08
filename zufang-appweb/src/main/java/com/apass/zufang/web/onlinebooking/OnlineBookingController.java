@@ -22,7 +22,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.ajp.entity.GfbRegisterInfoEntity;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.HouseShowingsEntity;
-import com.apass.zufang.domain.entity.ReserveHouse;
+import com.apass.zufang.domain.vo.ReservationsShowingsEntity;
 import com.apass.zufang.service.common.MobileSmsService;
 import com.apass.zufang.service.onlinebooking.OnlineBookingService;
 import com.apass.zufang.service.personal.ZuFangLoginSevice;
@@ -170,7 +170,7 @@ public class OnlineBookingController {
 	@POST
 	@Path("/reservationsshowings")
 	public Response reservationsShowings(Map<String, Object> paramMap) {
-		ResponsePageBody<ReserveHouse> respBody = new ResponsePageBody<ReserveHouse>();
+		ResponsePageBody<ReservationsShowingsEntity> respBody = new ResponsePageBody<ReservationsShowingsEntity>();
 		
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		
@@ -185,7 +185,7 @@ public class OnlineBookingController {
             String userid = CommonUtils.getValue(paramMap, "userid");//用户id
             String telphone = CommonUtils.getValue(paramMap, "telphone");//电话
             
-            ReserveHouse crmety = new ReserveHouse();
+            ReservationsShowingsEntity crmety = new ReservationsShowingsEntity();
             if (null != telphone && !telphone.trim().isEmpty()) {
             	crmety.setTelphone(telphone);
             }
