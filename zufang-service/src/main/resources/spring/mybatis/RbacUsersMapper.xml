@@ -147,14 +147,10 @@
 
 	<!-- 更新 -->
 	<update id="update" parameterType="UsersDO">
-	<![CDATA[
-		UPDATE LS_RBAC_USERS 
-	]]>
+		UPDATE LS_RBAC_USERS
 		<set>
-		<![CDATA[
 			UPDATED_BY = #{updatedBy, jdbcType=VARCHAR},
 			UPDATED_DATE = CURRENT_TIMESTAMP,
-		]]>
 			<if test="userName != null and userName != ''">
 				USER_NAME = #{userName, jdbcType=VARCHAR},
 			</if>

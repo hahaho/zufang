@@ -66,7 +66,7 @@ public class MybatisAutoConfiguration {
 				.size()]));
 		sessionFactory
 				.setMapperLocations(parseClasspathResources(MAPPER_RESOURCES));
-		setMyBatisPlugins(sessionFactory);
+//		setMyBatisPlugins(sessionFactory);
 		return sessionFactory;
 	}
 
