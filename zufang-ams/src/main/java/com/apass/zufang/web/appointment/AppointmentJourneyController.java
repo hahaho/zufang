@@ -60,6 +60,10 @@ public class AppointmentJourneyController {
         try {
         	LOGGER.info("getReserveHouseList map--->{}",GsonUtils.toJson(map));
         	ApprintmentJourneyQueryParams entity = validateParams(map);
+        	String page = CommonUtils.getValue(map, "page");
+        	String rows = CommonUtils.getValue(map, "rows");
+        	entity.setPage(Integer.parseInt(page));
+        	entity.setRows(Integer.parseInt(rows));
         	respBody = appointmentJourneyService.getReserveHouseList(entity);
         } catch (Exception e) {
             LOGGER.error("getReserveHouseList EXCEPTION --- --->{}", e);
