@@ -37,7 +37,6 @@ public class BsdiffAppColler {
     private String nfsBsdiffPath;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BsdiffAppColler.class);
-    private static final String VERPATH = "/verzip";
     private static final String PATCHPATH = "/patchzip";
 
     @Autowired

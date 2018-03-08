@@ -64,7 +64,6 @@ public class HouseAppSearchVo {
     /**
      * 房屋id
      */
-    @JsonIgnore
     private Long houseId;
     /**
      * 房屋所在经度
