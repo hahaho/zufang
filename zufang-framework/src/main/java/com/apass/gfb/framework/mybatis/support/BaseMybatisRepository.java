@@ -166,7 +166,7 @@ public class BaseMybatisRepository<T, ID extends Serializable> extends SqlSessio
     public Pagination<T> page(T domain, Page page) {
         Integer offSet = (page.getPage() - 1) * page.getLimit();
         Integer maxRow = page.getLimit();
-        List<T> dataList = getSqlSession().selectList(this.select, domain);
+        List<T> dataList = getSqlSession().selectList(this.select, domain, new RowBounds(offSet, maxRow));
 
         Pagination<T> pageResult = new Pagination<T>();
         pageResult.setTotalCount(count(domain));

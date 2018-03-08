@@ -21,6 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Map;
 
 /**
  * 
@@ -57,18 +58,18 @@ public class PermissionsController {
      */
     @POST
     @Path("/pagelist")
-    public ResponsePageBody<PermissionsDO> handlePageList(HttpServletRequest request) {
+    public ResponsePageBody<PermissionsDO> handlePageList(Map<String,String> paramMap) {
         ResponsePageBody<PermissionsDO> respBody = new ResponsePageBody<PermissionsDO>();
         try {
-            String pageNo = HttpWebUtils.getValue(request, "page");
-            String pageSize = HttpWebUtils.getValue(request, "rows");
+            String pageNo = paramMap.get("page");
+            String pageSize = paramMap.get("rows");
             Integer pageNoNum = Integer.parseInt(pageNo);
             Integer pageSizeNum = Integer.parseInt(pageSize);
             Page page = new Page();
             page.setPage(pageNoNum <= 0 ? 1 : pageNoNum);
             page.setLimit(pageSizeNum <= 0 ? 1 : pageSizeNum);
-            String permissionCode = HttpWebUtils.getValue(request, "permissionCode");
-            String permissionName = HttpWebUtils.getValue(request, "permissionName");
+            String permissionCode = paramMap.get("permissionCode");
+            String permissionName = paramMap.get("permissionName");
             PermissionsDO paramDO = new PermissionsDO();
             paramDO.setPermissionCode(StringUtils.isBlank(permissionCode) ? null : permissionCode);
             paramDO.setPermissionName(StringUtils.isBlank(permissionName) ? null : permissionName);
@@ -88,9 +89,9 @@ public class PermissionsController {
      */
     @POST
     @Path("/load")
-    public Response handleLoad(HttpServletRequest request) {
+    public Response handleLoad(Map<String,String> paramMap) {
         try {
-            String permissionId = HttpWebUtils.getValue(request, "permissionId", null);
+            String permissionId = paramMap.get("permissionId");
             if (StringUtils.isBlank(permissionId)) {
                 return Response.fail("资源ID不能为空");
             }
@@ -113,12 +114,12 @@ public class PermissionsController {
      */
     @POST
     @Path("/save")
-    public Response handleSave(HttpServletRequest request) {
+    public Response handleSave(Map<String,String> paramMap) {
         try {
-            String permissionId = HttpWebUtils.getValue(request, "id", null);
-            String permissionCode = HttpWebUtils.getValue(request, "permissionCode");
-            String permissionName = HttpWebUtils.getValue(request, "permissionName");
-            String description = HttpWebUtils.getValue(request, "description");
+            String permissionId = paramMap.get("id");
+            String permissionCode = paramMap.get("permissionCode");
+            String permissionName = paramMap.get("permissionName");
+            String description = paramMap.get("description");
             if (StringUtils.isAnyBlank(permissionCode, permissionName)) {
                 return Response.fail("资源编码或资源名称不能为空");
             }
@@ -153,9 +154,9 @@ public class PermissionsController {
      */
     @POST
     @Path("/delete")
-    public Response handleDelete(HttpServletRequest request) {
+    public Response handleDelete(Map<String,String> paramMap) {
         try {
-            String permissionId = HttpWebUtils.getValue(request, "permissionId");
+            String permissionId = paramMap.get("permissionId");
             if (StringUtils.isBlank(permissionId)) {
                 return Response.fail("资源ID不能为空");
             }

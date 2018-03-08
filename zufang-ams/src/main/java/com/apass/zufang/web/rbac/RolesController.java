@@ -24,6 +24,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -60,18 +61,18 @@ public class RolesController {
      */
     @POST
     @Path("/pagelist")
-    public ResponsePageBody<RolesDO> handlePageList(HttpServletRequest request) {
+    public ResponsePageBody<RolesDO> handlePageList(Map<String,String> paramMap) {
         ResponsePageBody<RolesDO> respBody = new ResponsePageBody<RolesDO>();
         try {
-            String pageNo = HttpWebUtils.getValue(request, "page");
-            String pageSize = HttpWebUtils.getValue(request, "rows");
+            String pageNo = paramMap.get("page");
+            String pageSize = paramMap.get( "rows");
             Integer pageNoNum = Integer.parseInt(pageNo);
             Integer pageSizeNum = Integer.parseInt(pageSize);
             Page page = new Page();
             page.setPage(pageNoNum <= 0 ? 1 : pageNoNum);
             page.setLimit(pageSizeNum <= 0 ? 1 : pageSizeNum);
-            String roleCode = HttpWebUtils.getValue(request, "roleCode");
-            String roleName = HttpWebUtils.getValue(request, "roleName");
+            String roleCode = paramMap.get( "roleCode");
+            String roleName = paramMap.get( "roleName");
             RolesDO paramDO = new RolesDO();
             paramDO.setRoleCode(roleCode);
             paramDO.setRoleName(roleName);
@@ -91,12 +92,12 @@ public class RolesController {
      */
     @POST
     @Path("/save")
-    public Response handleSave(HttpServletRequest request) {
+    public Response handleSave(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "id", null);
-            String roleCode = HttpWebUtils.getValue(request, "roleCode");
-            String roleName = HttpWebUtils.getValue(request, "roleName");
-            String description = HttpWebUtils.getValue(request, "description");
+            String roleId = paramMap.get("id");
+            String roleCode = paramMap.get("roleCode");
+            String roleName = paramMap.get("roleName");
+            String description = paramMap.get("description");
             if (StringUtils.isAnyBlank(roleCode, roleName)) {
                 return Response.fail("编码或角色名称不能为空");
             }
@@ -131,9 +132,9 @@ public class RolesController {
      */
     @POST
     @Path("/delete")
-    public Response handleDelete(HttpServletRequest request) {
+    public Response handleDelete(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "roleId");
+            String roleId = paramMap.get( "roleId");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
             }
@@ -151,9 +152,9 @@ public class RolesController {
      */
     @POST
     @Path("/load")
-    public Response handleLoad(HttpServletRequest request) {
+    public Response handleLoad(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "roleId");
+            String roleId = paramMap.get( "roleId");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
             }
@@ -177,9 +178,9 @@ public class RolesController {
      */
     @POST
     @Path("/load/rolemenu/settings")
-    public Response handleLoadRoleMenuSettings(HttpServletRequest request) {
+    public Response handleLoadRoleMenuSettings(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "roleId");
+            String roleId = paramMap.get( "roleId");
             List<MenusSettingDO> menuList = rolesService.selectRoleMenuSettings(roleId);
             return Response.success("success", menuList);
         } catch (Exception e) {
@@ -193,10 +194,10 @@ public class RolesController {
      */
     @POST
     @Path("/save/rolemenu/settings")
-    public Response handleSaveRoleMenuSettings(HttpServletRequest request) {
+    public Response handleSaveRoleMenuSettings(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "roleId");
-            String menus = HttpWebUtils.getValue(request, "menus");
+            String roleId = paramMap.get( "roleId");
+            String menus = paramMap.get( "menus");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
             }
@@ -213,9 +214,9 @@ public class RolesController {
      */
     @POST
     @Path("/load/available/permissions")
-    public Response handleLoadAvailablePermissions(HttpServletRequest request) {
+    public Response handleLoadAvailablePermissions(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "roleId");
+            String roleId = paramMap.get( "roleId");
             if (StringUtils.isBlank(roleId)) {
                 return null;
             }
@@ -232,9 +233,9 @@ public class RolesController {
      */
     @POST
     @Path("/load/assigned/permissions")
-    public Response handleLoadAssignedPermissions(HttpServletRequest request) {
+    public Response handleLoadAssignedPermissions(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "roleId");
+            String roleId = paramMap.get( "roleId");
             if (StringUtils.isBlank(roleId)) {
                 return null;
             }
@@ -251,10 +252,10 @@ public class RolesController {
      */
     @POST
     @Path("/save/assigned/permissions")
-    public Response handleSaveAssignedPermissions(HttpServletRequest request) {
+    public Response handleSaveAssignedPermissions(Map<String,String> paramMap) {
         try {
-            String roleId = HttpWebUtils.getValue(request, "roleId");
-            String permissions = HttpWebUtils.getValue(request, "permissions");
+            String roleId = paramMap.get( "roleId");
+            String permissions = paramMap.get( "permissions");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
             }

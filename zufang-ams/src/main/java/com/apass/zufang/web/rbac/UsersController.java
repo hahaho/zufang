@@ -112,11 +112,11 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/resetpwd")
-	public Response handleResetPassword(HttpServletRequest request) {
+	public Response handleResetPassword(Map<String,String> paramMap) {
 		try {
-			String oldpassword = HttpWebUtils.getValue(request, "oldpassword");
-			String newpassword = HttpWebUtils.getValue(request, "newpassword");
-			String renewpassword = HttpWebUtils.getValue(request, "renewpassword");
+			String oldpassword = paramMap.get("oldpassword");
+			String newpassword = paramMap.get("newpassword");
+			String renewpassword = paramMap.get("renewpassword");
 			if (StringUtils.isAnyBlank(oldpassword, newpassword, renewpassword)) {
 				return Response.fail("旧密码、新密码、确认密码不能为空");
 			}
@@ -140,11 +140,11 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/forceresetpwd")
-	public Response handleForceResetPassword(HttpServletRequest request) {
+	public Response handleForceResetPassword(Map<String,String> paramMap) {
 		try {
-			String username = HttpWebUtils.getValue(request, USERNAME);
-			String newpassword = HttpWebUtils.getValue(request, "newpassword");
-			String renewpassword = HttpWebUtils.getValue(request, "renewpassword");
+			String username = paramMap.get(USERNAME);
+			String newpassword = paramMap.get("newpassword");
+			String renewpassword = paramMap.get("renewpassword");
 			if (StringUtils.isAnyBlank(username, newpassword, renewpassword)) {
 				return Response.fail("用户账号、新密码、确认密码不能为空");
 			}
@@ -181,11 +181,11 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/savebasic")
-	public Response handleSaveBasic(HttpServletRequest request) {
+	public Response handleSaveBasic(Map<String,String> paramMap) {
 		try {
-			String realName = HttpWebUtils.getValue(request, "realname");
-			String mobile = HttpWebUtils.getValue(request, "mobile");
-			String email = HttpWebUtils.getValue(request, "email");
+			String realName = paramMap.get("realname");
+			String mobile = paramMap.get("mobile");
+			String email = paramMap.get("email");
 			if (!RegExpUtils.length(realName, 1, 100)) {
 				return Response.fail("真实姓名长度不合法");
 			}
@@ -212,14 +212,14 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/save")
-	public Response handleSave(HttpServletRequest request) {
+	public Response handleSave(Map<String,String> paramMap) {
 		try {
-			String username = HttpWebUtils.getValue(request, USERNAME);
-			String password = HttpWebUtils.getValue(request, "password");
-			String repassword = HttpWebUtils.getValue(request, "repassword");
-			String realName = HttpWebUtils.getValue(request, "realName");
-			String mobile = HttpWebUtils.getValue(request, "mobile");
-			String email = HttpWebUtils.getValue(request, "email");
+			String username = paramMap.get(USERNAME);
+			String password = paramMap.get("password");
+			String repassword = paramMap.get("repassword");
+			String realName = paramMap.get("realName");
+			String mobile = paramMap.get("mobile");
+			String email = paramMap.get("email");
 			if (!RegExpUtils.length(username, 1, 50)) {
 				return Response.fail("用户账号长度不合法");
 			}
@@ -263,9 +263,9 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/delete")
-	public Response handleDelete(HttpServletRequest request) {
+	public Response handleDelete(Map<String,String> paramMap) {
 		try {
-			String userId = HttpWebUtils.getValue(request, USER_ID);
+			String userId = paramMap.get(USER_ID);
 			if (StringUtils.isBlank(userId)) {
 				return Response.fail("要删除的用户ID不能为空");
 			}
@@ -285,9 +285,9 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/load/available/roles")
-	public Response handleLoadAvailableRoles(HttpServletRequest request) {
+	public Response handleLoadAvailableRoles(Map<String,String> paramMap) {
 		try {
-			String userId = HttpWebUtils.getValue(request, USER_ID);
+			String userId = paramMap.get(USER_ID);
 			if (StringUtils.isBlank(userId)) {
 				return null;
 			}
@@ -304,9 +304,9 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/load/assigned/roles")
-	public Response handleLoadAssignedRoles(HttpServletRequest request) {
+	public Response handleLoadAssignedRoles(Map<String,String> paramMap) {
 		try {
-			String userId = HttpWebUtils.getValue(request, USER_ID);
+			String userId = paramMap.get(USER_ID);
 			if (StringUtils.isBlank(userId)) {
 				return null;
 			}
@@ -323,10 +323,10 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/save/assigned/roles")
-	public Response handleSaveAssignedRoles(HttpServletRequest request) {
+	public Response handleSaveAssignedRoles(Map<String,String> paramMap) {
 		try {
-			String userId = HttpWebUtils.getValue(request, USER_ID);
-			String roles = HttpWebUtils.getValue(request, "roles");
+			String userId = paramMap.get(USER_ID);
+			String roles = paramMap.get("roles");
 			if (StringUtils.isBlank(userId)) {
 				return Response.fail("用户ID不能为空");
 			}

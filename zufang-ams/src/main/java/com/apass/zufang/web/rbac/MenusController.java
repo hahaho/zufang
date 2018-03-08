@@ -20,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -56,7 +57,7 @@ public class MenusController {
      */
     @POST
     @Path("/treejson")
-    public Response handleTreeJson(HttpServletRequest request) {
+    public Response handleTreeJson(Map<String,String> paramMap) {
         try {
             List<MenusDO> menuList = menusService.selectPermitTreeJson();
             return Response.success("success", menuList);
@@ -71,9 +72,9 @@ public class MenusController {
      */
     @POST
     @Path("/pagelist")
-    public Response handlePageList(HttpServletRequest request) {
+    public Response handlePageList(Map<String,String> paramMap) {
         try {
-            String menuName = HttpWebUtils.getValue(request, "menuName");
+            String menuName = paramMap.get("menuName");
             if (StringUtils.isNoneBlank(menuName)) {
                 menuName = URLDecoder.decode(menuName, "utf-8");
             }
@@ -91,14 +92,14 @@ public class MenusController {
      */
     @POST
     @Path("/save")
-    public Response handleSave(HttpServletRequest request) {
+    public Response handleSave(Map<String,String> paramMap) {
         try {
-            String menuId = HttpWebUtils.getValue(request, "id", null);
-            String text = HttpWebUtils.getValue(request, "text");
-            String url = HttpWebUtils.getValue(request, "url");
-            String iconCls = HttpWebUtils.getValue(request, "iconCls");
-            String display = HttpWebUtils.getValue(request, "display");
-            String parentId = HttpWebUtils.getValue(request, "parentId");
+            String menuId = paramMap.get("id");
+            String text = paramMap.get("text");
+            String url = paramMap.get("url");
+            String iconCls = paramMap.get("iconCls");
+            String display = paramMap.get("display");
+            String parentId = paramMap.get("parentId");
             if (!RegExpUtils.length(text, 1, 50)) {
                 return Response.fail("菜单名称长度不合法");
             }
@@ -137,9 +138,9 @@ public class MenusController {
      */
     @POST
     @Path("/delete")
-    public Response handleDelete(HttpServletRequest request) {
+    public Response handleDelete(Map<String,String> paramMap) {
         try {
-            String menuId = HttpWebUtils.getValue(request, "menuId");
+            String menuId = paramMap.get("menuId");
             if (StringUtils.isBlank(menuId)) {
                 return Response.fail("菜单ID不能为空");
             }
@@ -157,9 +158,9 @@ public class MenusController {
      */
     @POST
     @Path("/load")
-    public Response handleLoad(HttpServletRequest request) {
+    public Response handleLoad(Map<String,String> paramMap) {
         try {
-            String menuId = HttpWebUtils.getValue(request, "menuId", null);
+            String menuId = paramMap.get("menuId");
             if (StringUtils.isBlank(menuId)) {
                 return Response.fail("菜单ID不能为空");
             }
