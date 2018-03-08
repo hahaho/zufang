@@ -42,7 +42,8 @@
 			CREATED_BY,
 			CREATED_DATE,
 			UPDATED_BY,
-			UPDATED_DATE
+			UPDATED_DATE,
+			APARTMENT_CODE
 		)
 		VALUES
 		(
@@ -57,7 +58,8 @@
 			#{createdBy, jdbcType=VARCHAR}, 
 			CURRENT_TIMESTAMP, 
 			#{updatedBy, jdbcType=VARCHAR}, 
-			CURRENT_TIMESTAMP
+			CURRENT_TIMESTAMP,
+			#{apartmentCode, jdbcType=VARCHAR}
 		)
 	]]>
 		<selectKey resultType="String" keyProperty="id" order="BEFORE">
@@ -79,6 +81,7 @@
 				 t_uses.CREATED_DATE     CREATEDDATE,
 				 t_uses.UPDATED_BY       UPDATEDBY,
 				 t_uses.UPDATED_DATE     UPDATEDDATE,
+				 t_uses.APARTMENT_CODE   apartmentCode
 		FROM LS_RBAC_USERS t_uses
 	]]>
 		<include refid="QueryConditionSql" />
@@ -108,7 +111,8 @@
 				 CREATED_BY       CREATEDBY,
 				 CREATED_DATE     CREATEDDATE,
 				 UPDATED_BY       UPDATEDBY,
-				 UPDATED_DATE     UPDATEDDATE 
+				 UPDATED_DATE     UPDATEDDATE,
+				 APARTMENT_CODE   apartmentCode
 		FROM LS_RBAC_USERS WHERE ID = #{value}
 	]]>
 	</select>
@@ -129,6 +133,7 @@
 				 UPDATED_BY       UPDATEDBY,
 				 UPDATED_DATE     UPDATEDDATE,
 				 UPDATED_DATE     UPDATEDDATE,
+				 APARTMENT_CODE   apartmentCode
 		FROM LS_RBAC_USERS WHERE USER_NAME = #{value}
 	]]>
 	</select>
@@ -169,6 +174,10 @@
 			<if test="status != null and status != ''">
 				STATUS = #{status, jdbcType=VARCHAR},
 			</if>
+
+			<if test="apartmentCode != null and apartmentCode != ''">
+				APARTMENT_CODE = #{apartmentCode, jdbcType=VARCHAR},
+			</if>
 		</set>
 	<![CDATA[
 		WHERE ID = #{id, jdbcType=VARCHAR} 
@@ -185,7 +194,8 @@
 				MOBILE         = #{mobile, jdbcType=VARCHAR},  
 				EMAIL          = #{email, jdbcType=VARCHAR},
 				DEPARTMENT     = #{department, jdbcType=VARCHAR},    
-				STATUS         = #{status, jdbcType=VARCHAR} 
+				STATUS         = #{status, jdbcType=VARCHAR},
+				APARTMENT_CODE     = #{apartmentCode, jdbcType=VARCHAR}
 		 WHERE ID = #{id, jdbcType=VARCHAR}
 	]]>
 	</update>

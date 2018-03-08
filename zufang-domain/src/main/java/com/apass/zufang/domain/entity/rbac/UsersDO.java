@@ -67,6 +67,11 @@ public class UsersDO {
 	@JsonIgnore
 	private Date updatedDate;
 
+	/**
+	 *  公寓code
+	 */
+	private String apartmentCode;
+
 	public String getId() {
 		return id;
 	}
@@ -163,4 +168,11 @@ public class UsersDO {
 		this.updatedDate = updatedDate;
 	}
 
+	public String getApartmentCode() {
+		return apartmentCode;
+	}
+
+	public void setApartmentCode(String apartmentCode) {
+		this.apartmentCode = apartmentCode;
+	}
 }

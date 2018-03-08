@@ -119,5 +119,8 @@ public class ApartHouseService {
 	public List<Apartment> getApartmentBylistCity(Apartment apartment) {
 		return apartmentMapper.getApartmentBylistCity(apartment);
 	}
-	
+
+	public List<Apartment> listAllApartment() {
+		return null;
+	}
 }
