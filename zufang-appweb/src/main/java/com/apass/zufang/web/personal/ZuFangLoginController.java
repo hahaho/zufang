@@ -166,7 +166,7 @@ public class ZuFangLoginController {
 	        		 return Response.success("密码不能为空");
 	        	}
 	        	
-	        	returnMap  = zuFangLoginSevice.zufangpasswordlogin(userId,mobile,password);
+	        	returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
 	        	
 	        	if(returnMap==null){
 	        		return Response.fail("请设置好密码",returnMap);

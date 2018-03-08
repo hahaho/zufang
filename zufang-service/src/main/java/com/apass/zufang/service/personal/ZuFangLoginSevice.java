@@ -78,11 +78,10 @@ public class ZuFangLoginSevice {
 	 * @param password
 	 * @return
 	 */
-	public  Map<String, Object> zufangpasswordlogin(String userId, String mobile, String password)throws BusinessException {
+	public  Map<String, Object> zufangpasswordlogin( String mobile, String password)throws BusinessException {
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		try {
 			GfbRegisterInfoEntity zuFangLogin = new GfbRegisterInfoEntity();
-			zuFangLogin.setId(Long.parseLong(userId));
 			zuFangLogin.setAccount(mobile);
 			zuFangLogin.setPassword(password);
 			//查询
