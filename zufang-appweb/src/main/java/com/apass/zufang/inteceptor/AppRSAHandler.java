@@ -33,11 +33,11 @@ import java.util.Map;
 @Aspect
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 5)
-public class EspAppRSAHandler {
+public class AppRSAHandler {
 	/**
 	 * 日志
 	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(EspAppRSAHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppRSAHandler.class);
 	/**
 	 * RSA 私钥
 	 */
