@@ -75,9 +75,8 @@ public class UpLoadPictureController {
 			return Response.fail("上传图片失败!");
         }
     }
-
 	/**
-     * 编辑精选商品的排序和图片
+     * 上传公司LOGO成功
      * @param siftGoodFileModel
      * @return
 	 * @throws BusinessException 
@@ -106,7 +105,10 @@ public class UpLoadPictureController {
                 return Response.fail("图片不能大于501kb!");
             }
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
-            return Response.success("上传公司LOGO成功！",url);
+            Map<String,Object> map = Maps.newHashMap();
+            map.put("url",url);
+            map.put("fullurl",imageUri+url);
+            return Response.success("上传公司LOGO成功！",map);
         } catch (Exception e) {
         	logger.error("upLoadCompanyLogo Exception---->{}",e);
             return Response.fail("上传公司LOGO失败!");
@@ -120,6 +122,11 @@ public class UpLoadPictureController {
             }
         }
     }
+    /**
+     * 热门房源图片上传
+     * @param file
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/upLoadHotHouseImg", method = RequestMethod.POST)
     public Response upLoadHotHouseImg(@ModelAttribute("file") MultipartFile file) {

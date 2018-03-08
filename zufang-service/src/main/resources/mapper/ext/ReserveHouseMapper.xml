@@ -95,38 +95,41 @@
     
     
     <!-- 分页查询 -->
-	<select id="getHouseLists"  resultType="com.apass.zufang.domain.entity.HouseShowingsEntity" parameterType="com.apass.zufang.domain.entity.ReserveHouse">
+	<select id="getHouseLists"  resultType="com.apass.zufang.domain.entity.HouseShowingsEntity" parameterType="ReservationsShowingsEntity">
 	<![CDATA[
 		SELECT 
-			  x.id								houseId,
-			  x.`code`		 				houseCode ,
+			  x.id						houseId,
+			  x.`code`		 			houseCode ,
 			  x.apartment_id			apartmentId	,
 			  x.rent_type  				rentType,
-			  x.community_name		communityName,
+			  x.community_name			communityName,
 			  x.acreage   				acreage,
-			  x.room							room,
-			  x.hall							hall, 
-			  x.wei								wei,
-			  x.floor							floor,
+			  x.room					room,
+			  x.hall					hall, 
+			  x.wei						wei,
+			  x.floor					floor,
 			  x.total_floor				totalFloor,
-			  x.lift_type					liftType,
-			  x.rent_amt					rentAmt,
+			  x.lift_type				liftType,
+			  x.rent_amt				rentAmt,
 			  x.zujin_type				zujinType,
-			  x.`status`         	houseStatus,
-			  x.title							title	,
+			  x.`status`         		houseStatus,
+			  x.title					title	,
 			  x.description				description,
-			  x.housekeeper_tel		housekeeperTel,
+			  x.housekeeper_tel			housekeeperTel,
 			  x.total_doors				totalDoors,
 			  x.room_acreage			room_acreage,
-			  y.id								idImg,
-			  y.url								url,
-			  y.type							type,
-			  z.reserve_date		reserveDate
+			  y.id						idImg,
+			  y.url						url,
+			  y.type					type,
+			  z.reserve_date			reserveDate,
+			  w.detail_addr				detailAddr
+
 		FROM (SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00') z 
 		LEFT JOIN 
 			(SELECT * FROM t_zfang_house_img where  is_delete = '00') y on y.house_id = z.house_id
 		LEFT JOIN 
 			(SELECT * FROM t_zfang_house where  is_delete = '00')  x on  z.house_id = x.id
+		LEFT JOIN		t_zfang_house_location w on z.house_id = w.house_id
 		where x.`status`='2' 
 
 		  ]]>

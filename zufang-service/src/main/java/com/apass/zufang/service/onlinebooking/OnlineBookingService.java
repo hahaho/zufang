@@ -13,6 +13,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.entity.HouseShowingsEntity;
 import com.apass.zufang.domain.entity.ReserveHouse;
+import com.apass.zufang.domain.vo.ReservationsShowingsEntity;
 import com.apass.zufang.mapper.zfang.ReserveHouseMapper;
 import com.apass.zufang.utils.ResponsePageBody;
 
@@ -61,7 +62,7 @@ public class OnlineBookingService {
 	}
 	
 	
-	public ResponsePageBody<HouseShowingsEntity> queryReservations(ReserveHouse crmety) {
+	public ResponsePageBody<HouseShowingsEntity> queryReservations(ReservationsShowingsEntity crmety) {
 		ResponsePageBody<HouseShowingsEntity> body = new ResponsePageBody<>();
 		List<HouseShowingsEntity> houseList = reserveHouseMapper.getHouseLists(crmety);
 		body.setRows(houseList);
