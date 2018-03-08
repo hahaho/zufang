@@ -5,6 +5,7 @@ import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
 import com.apass.zufang.domain.entity.HouseShowingsEntity;
 import com.apass.zufang.domain.entity.ReserveHouse;
+import com.apass.zufang.domain.vo.ReservationsShowingsEntity;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
 /**
  * Created by DELL on 2018/2/26.
@@ -27,7 +28,7 @@ public interface ReserveHouseMapper extends GenericMapper<ReserveHouse,Long> {
 	 * @param crmety
 	 * @return
 	 */
-	public List<HouseShowingsEntity> getHouseLists(ReserveHouse crmety);
+	public List<HouseShowingsEntity> getHouseLists(ReservationsShowingsEntity crmety);
 	/**
 	 * 记录数
 	 * @param crmety
