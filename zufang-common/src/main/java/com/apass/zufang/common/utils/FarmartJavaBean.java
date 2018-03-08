@@ -1,7 +1,10 @@
 package com.apass.zufang.common.utils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -124,42 +127,47 @@ public class FarmartJavaBean{
      * @return
      */
     public static Object farmartJavaB(Object o, Class< ? > c , Object value , String name){
-        // 获取父类，判断是否为相同对象  
-        // 获取类中的所有定义字段  
-        Field[ ] fields = c.getDeclaredFields( );  
+        // 获取父类，判断是否为相同对象   判断字段值有效性
+    	if(!o.getClass().equals(c)||!(value!=null&&value!="")){
+    		return o;
+    	}
+        List<Field> fields = new ArrayList<Field>() ;
+        //当父类为null的时候说明到达了最上层的父类(Object类).  剔除Object
+        while (c !=null && !c.getName().toLowerCase().equals("java.lang.object")) {
+        	fields.addAll(Arrays.asList(c .getDeclaredFields()));
+        	//得到父类,然后赋给自己
+        	c = c.getSuperclass(); 
+        }
         // 循环遍历字段，获取字段对应的属性值  
         for ( Field field : fields ) {  
-            // 如果不为空，设置可见性，然后返回  
+        	// 设置字段可见，即可调用get、set方法  
             field.setAccessible( true );  
+            // 如果不为空，设置可见性，然后返回  
             try {  
-                // 设置字段可见，即可用get方法获取属性值。  
-//                if(value!=null&&value!=""){
-//                    if(field.getName().equals(name)){
-//                        field.set(o, value);
-//                        break;
-//                    }
-//                }
-                if(value!=null&&value!=""){
-                    switch(field.getGenericType().toString()){
-                        case "class java.lang.String":
-                            if(field.getName().equals(name)){
-                                field.set(o, value);
-                            }
-                            break;
-                        case "long":
-                            if(field.getName().equals(name)){
-                                field.setLong(o, (long) value);
-                            }
-                            break;
-                        case "class java.math.BigDecimal":
-                            if(field.getName().equals(name)){
-                                field.set(o, new BigDecimal(value.toString()));
-                            }
-                            break;
-                        default:
-                            break;                           
-                    } 
-                }
+                switch(field.getGenericType().toString()){
+                    case "class java.lang.String":
+                        if(field.getName().equals(name)){
+                            field.set(o, value);
+                        }
+                        break;
+                    case "class java.lang.Integer":
+                        if(field.getName().equals(name)){
+                            field.setInt(o, Integer.parseInt(value.toString()));
+                        }
+                        break;
+                    case "long"://
+                        if(field.getName().equals(name)){
+                            field.setLong(o, (long) value);
+                        }
+                        break;
+                    case "class java.math.BigDecimal":
+                        if(field.getName().equals(name)){
+                            field.set(o, new BigDecimal(value.toString()));
+                        }
+                        break;
+                    default:
+                        break;                           
+                } 
             }catch ( Exception e ) {  
             }  
         }  

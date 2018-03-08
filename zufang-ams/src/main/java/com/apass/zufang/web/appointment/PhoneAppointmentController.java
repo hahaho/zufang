@@ -59,6 +59,10 @@ public class PhoneAppointmentController {
         try {
         	LOGGER.info("getHouseListForPhoneAppointment map--->{}",GsonUtils.toJson(map));
         	HouseAppointmentQueryParams entity = validateParams(map);
+        	String page = CommonUtils.getValue(map, "page");
+        	String rows = CommonUtils.getValue(map, "rows");
+        	entity.setPage(Integer.parseInt(page));
+        	entity.setRows(Integer.parseInt(rows));
         	respBody = phoneAppointmentService.getHouseListForPhoneAppointment(entity);
         } catch (Exception e) {
             LOGGER.error("getHouseListForPhoneAppointment EXCEPTION --- --->{}", e);
