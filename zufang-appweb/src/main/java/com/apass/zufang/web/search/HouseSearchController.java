@@ -331,6 +331,8 @@ public class HouseSearchController {
 			SearchResponse response = serachBuilder.execute().actionGet();
 			SearchHit[] hits = response.getHits().getHits();
 
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put("totalCount", response.getHits().getTotalHits());
 			//查询出的总房源：未先地点时返回
 			List<HouseAppSearchVo> houseList = Lists.newArrayList();
 			//5公里内的房源
@@ -375,10 +377,12 @@ public class HouseSearchController {
 
 			if(StringUtils.isNotEmpty(subCode) || StringUtils.isNotEmpty(areaCode)){
 				List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
-				return Response.success("ES查询成功",list);
+				returnMap.put("houseDataList", list);
+				return Response.success("ES查询成功",returnMap);
 			}
 
-			return Response.success("ES查询成功",houseList);
+			returnMap.put("houseDataList", houseList);
+			return Response.success("ES查询成功",returnMap);
 		}catch (Exception e){
 			LOGGER.error("ES查询失败！",e);
 			return Response.fail("ES查询失败");
@@ -458,8 +462,8 @@ public class HouseSearchController {
 
 		list = houseService.queryHouseBasicEntityByEntity(houseQueryParams);
 		Map<String, Object> returnMap = new HashMap<>();
+		returnMap.put("totalCount", list.size());
 		returnMap.put("houseDataList", list);
-
 		return returnMap;
 	}
 }

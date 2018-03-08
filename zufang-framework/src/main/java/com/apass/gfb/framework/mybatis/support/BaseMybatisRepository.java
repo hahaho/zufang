@@ -34,23 +34,46 @@ import java.util.Map;
  */
 public class BaseMybatisRepository<T, ID extends Serializable> extends SqlSessionDaoSupport {
 
-    protected String entityClassName; // 类名
+    /**
+     * 类名
+     */
+    protected String entityClassName;
 
-    private Class<?> entityClass; // 类Class
+    /**
+     * 类Class
+     */
+    private Class<?> entityClass;
 
-    private String insert; // 插入
+    /**
+     * 插入
+     */
+    private String insert;
 
-    private String select; // 查询
+    /**
+     * 查询
+     */
+    private String select;
 
     private String selectByPK;
+    /**
+     * 计数
+     */
+    private String count;
 
-    private String count; // 计数
+    /**
+     * 更新
+     */
+    private String update;
 
-    private String update; // 更新
+    /**
+     * 更新所有属性
+     */
+    private String updateAll;
 
-    private String updateAll; // 更新所有属性
-
-    private String delete; // 删除
+    /**
+     * 删除
+     */
+    private String delete;
 
     /**
      * @see org.springframework.dao.support.DaoSupport#initDao()
@@ -137,13 +160,13 @@ public class BaseMybatisRepository<T, ID extends Serializable> extends SqlSessio
      * 分页查询
      * 
      * @param domain 查询条件
-     * @param pageNo 分页信息
+     * @param page 分页信息
      * @return
      */
     public Pagination<T> page(T domain, Page page) {
         Integer offSet = (page.getPage() - 1) * page.getLimit();
         Integer maxRow = page.getLimit();
-        List<T> dataList = getSqlSession().selectList(this.select, domain, new RowBounds(offSet, maxRow));
+        List<T> dataList = getSqlSession().selectList(this.select, domain);
 
         Pagination<T> pageResult = new Pagination<T>();
         pageResult.setTotalCount(count(domain));

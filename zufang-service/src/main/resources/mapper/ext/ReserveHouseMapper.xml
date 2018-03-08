@@ -95,7 +95,7 @@
     
     
     <!-- 分页查询 -->
-	<select id="getHouseLists"  resultType="com.apass.zufang.domain.entity.HouseShowingsEntity" parameterType="com.apass.zufang.domain.entity.ReserveHouse">
+	<select id="getHouseLists"  resultType="com.apass.zufang.domain.entity.HouseShowingsEntity" parameterType="com.apass.zufang.domain.vo.ReservationsShowingsEntity">
 	<![CDATA[
 		SELECT 
 			  x.id						houseId,

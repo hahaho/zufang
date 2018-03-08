@@ -1,8 +1,8 @@
-package com.apass.zufang.domain.entity;
+package com.apass.zufang.domain.vo;
 import java.util.Date;
 import com.apass.zufang.common.model.QueryParams;
 
-public class ReserveHouse {
+public class ReservationsShowingsEntity extends QueryParams{
 	private Long id;
 
     private Long houseId;

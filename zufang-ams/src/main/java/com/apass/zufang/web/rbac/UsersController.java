@@ -72,14 +72,14 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/pagelist")
-	public ResponsePageBody<UsersDO> handlePageList(HttpServletRequest request) {
+	public ResponsePageBody<UsersDO> handlePageList(Map<String,String> paramMap) {
 		ResponsePageBody<UsersDO> respBody = new ResponsePageBody<UsersDO>();
 		try {
 			// 分页参数
 			// 页码
-			String pageNo = HttpWebUtils.getValue(request, "page");
+			String pageNo = paramMap.get("page");
 			// 每页显示条数
-			String pageSize = HttpWebUtils.getValue(request, "rows");
+			String pageSize = paramMap.get("rows");
 			Integer pageNoNum = Integer.parseInt(pageNo);
 			Integer pageSizeNum = Integer.parseInt(pageSize);
 			Page page = new Page();
@@ -88,9 +88,9 @@ public class UsersController {
 
 			// 查询传递的参数
 			// 用户帐号
-			String username = HttpWebUtils.getValue(request, USERNAME);
+			String username = paramMap.get(USERNAME);
 			// 用户真实姓名
-			String realName = HttpWebUtils.getValue(request, "realName");
+			String realName = paramMap.get("realName");
 			UsersDO paramDO = new UsersDO();
 			paramDO.setUserName(username);
 			paramDO.setRealName(realName);
@@ -360,11 +360,11 @@ public class UsersController {
 	 */
 	@POST
 	@Path("/relevanceApart")
-	public Response relevanceApart(HttpServletRequest request){
+	public Response relevanceApart(Map<String,String> paramMap){
 		try{
 			UsersDO usersDO = new UsersDO();
-			String userId = HttpWebUtils.getValue(request,USER_ID);
-			String apartmentCode = HttpWebUtils.getValue(request,APARTMENT_CODE);
+			String userId = paramMap.get(USER_ID);
+			String apartmentCode = paramMap.get(APARTMENT_CODE);
 			usersDO.setId(userId);
 			usersDO.setApartmentCode(apartmentCode);
 			usersDO.setUpdatedBy(SpringSecurityUtils.getCurrentUser());
