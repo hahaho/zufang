@@ -7,18 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.zufang.domain.constants.ConstantsUtil;
+import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
-import com.apass.zufang.mapper.zfang.HouseImgMapper;
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
+import com.apass.zufang.mapper.zfang.HouseMapper;
 import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
 import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.utils.PageBean;
@@ -35,7 +37,7 @@ public class HouseInfoService {
 	 */
 	private static double EARTH_RADIUS = 6367000.0; // 单位：m
 	@Autowired
-	private HouseImgMapper houseImgMapper;
+	private HouseMapper houseMapper;
 	@Autowired
 	private HousePeizhiMapper peizhiMapper;
 	@Autowired
@@ -57,6 +59,21 @@ public class HouseInfoService {
 				this.dealHouseRela(houseInfoList);
 			}
 			return houseInfoList;
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw e;
+		}
+	}
+	
+	/**
+	 * 增添浏览量
+	 * 
+	 * @param house
+	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+	public void addPageView(House house) {
+		try {
+			houseMapper.updateByPrimaryKeySelective(house);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw e;

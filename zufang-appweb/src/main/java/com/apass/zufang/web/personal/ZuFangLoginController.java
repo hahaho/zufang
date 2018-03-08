@@ -158,10 +158,10 @@ public class ZuFangLoginController {
 //	        		//用户id不能为空
 //	        		 return Response.success("用户id不能为空");
 //	        	}else 
-	        	if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
+	        	if(StringUtils.isBlank(mobile)){
 	        		//手机号不能为空
 	        		 return Response.success("手机号不能为空");
-	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(password)){
+	        	}else if(StringUtils.isBlank(password)){
 	        		//密码不能为空
 	        		 return Response.success("密码不能为空");
 	        	}
