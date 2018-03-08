@@ -155,7 +155,7 @@ public class FarmartJavaBean{
                             field.setInt(o, Integer.parseInt(value.toString()));
                         }
                         break;
-                    case "long"://
+                    case "long":
                         if(field.getName().equals(name)){
                             field.setLong(o, (long) value);
                         }
