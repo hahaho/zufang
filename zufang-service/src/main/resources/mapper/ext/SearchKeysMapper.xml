@@ -25,7 +25,7 @@
 	</select>
 	
 	<!-- 用户id查询-->
-	<select id="queryUserIdHistory" parameterType="String" resultType="com.apass.zufang.domain.entity.SearchKeys">
+	<select id="queryCustomerIdHistory" parameterType="String" resultType="com.apass.zufang.domain.entity.SearchKeys">
 	<![CDATA[
 		SELECT
 			ID				id,
