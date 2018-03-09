@@ -257,7 +257,7 @@ public class HouseinitService {
 		if(null==result){
 			city=city.replace("市","");
 			WorkCityJdParams entityProvince=new WorkCityJdParams();
-			entity.setProvince(city);
+			entityProvince.setProvince(city);
 			result = cityJddao.selectCityByName(entityProvince);
 		}
 		resultMap.put("code", result.getCode());
