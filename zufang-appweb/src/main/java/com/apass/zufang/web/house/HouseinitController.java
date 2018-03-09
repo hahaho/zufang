@@ -58,7 +58,7 @@ public class HouseinitController {
 			
 			HashMap<String, Object> init = houseinitService.queryCityCode(city);
 			
-			return Response.success("获取城市code失败！", init);
+			return Response.success("获取城市code成功！", init);
 		} catch (Exception e) {
 			LOG.error("获取城市code失败！", e);
 			return Response.fail("获取城市code失败！");
