@@ -213,6 +213,7 @@ public class ZuFangLoginController {
 		        		resultMap.put("token", token);
 		        		resultMap.put("account", mobile);
 		        		resultMap.put("userId", id);
+		        		resultMap.put("Password", "no");
 		        		return Response.success("验证码真确登录成功",resultMap);
 	        		}else{
 	        		//已注册用户
@@ -220,6 +221,7 @@ public class ZuFangLoginController {
 	        		resultMap.put("token", token);
 	        		resultMap.put("account", zfselecetmobile.getAccount());
 	        		resultMap.put("userId", zfselecetmobile.getId());
+	        		resultMap.put("Password", zfselecetmobile.getPassword() == null ? "no" :  "yes");
 	        		return Response.success("验证码真确登录成功",resultMap);
 	        		}
 	        }else{
