@@ -139,15 +139,6 @@ public class HouseSearchController {
 			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
 			//点击整租合租所传参数
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
-			String regex = "^[a-zA-Z0-9\\u4e00-\\u9fa5\\ ()（）.\\[\\]+=/\\-_\\【\\】]+$";
-			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = pattern.matcher(searchValue);
-			Boolean searchValueFalge = false;
-			if (matcher.matches()) {
-				searchValueFalge = true;
-				// 插入数据:搜索记录
-				searchKeyService.addCommonSearchKeys(searchValue, userId, deviceId);
-			}
 
 			Integer pages = null;
 			Integer row = null;
@@ -164,6 +155,15 @@ public class HouseSearchController {
 			Map<String, Object> returnMap = new HashMap<String, Object>();
 			List<HouseAppSearchVo> list = new ArrayList<HouseAppSearchVo>();
 			if(StringUtils.isEmpty(rentType)){
+				String regex = "^[a-zA-Z0-9\\u4e00-\\u9fa5\\ ()（）.\\[\\]+=/\\-_\\【\\】]+$";
+				Pattern pattern = Pattern.compile(regex);
+				Matcher matcher = pattern.matcher(searchValue);
+				Boolean searchValueFalge = false;
+				if (matcher.matches()) {
+					searchValueFalge = true;
+					// 插入数据:搜索记录
+					searchKeyService.addCommonSearchKeys(searchValue, userId, deviceId);
+				}
 				if(StringUtils.isEmpty(searchValue)){
 					throw new RuntimeException("输入关键字才能搜索哦");
 				}
