@@ -1,5 +1,6 @@
 package com.apass.zufang.domain.vo;
 import java.math.BigDecimal;
+import java.util.Date;
 /**
  * 电话预约专用  公寓房源列表VO实体类
  * @author Administrator
@@ -39,6 +40,9 @@ public class HouseAppointmentVo{
 	private String houseHezuResource;//房源合租房介绍， 1:出租主卧；2：出租次卧；3：出租隔断；4：出租床位
 	private String houseChaoxiang;//房源朝向， 1:东：2:南....
     private String houseHezuChaoxiang;//房源合租房朝向， 1:东：2:南....
+    private Date createdTime;
+    private String createdDateTime;
+    private String createdUser;
 	public Long getApartmentId() {
 		return apartmentId;
 	}
@@ -206,5 +210,23 @@ public class HouseAppointmentVo{
 	}
 	public void setHouseHezuChaoxiang(String houseHezuChaoxiang) {
 		this.houseHezuChaoxiang = houseHezuChaoxiang;
+	}
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+	public String getCreatedDateTime() {
+		return createdDateTime;
+	}
+	public void setCreatedDateTime(String createdDateTime) {
+		this.createdDateTime = createdDateTime;
+	}
+	public String getCreatedUser() {
+		return createdUser;
+	}
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
 	}
 }

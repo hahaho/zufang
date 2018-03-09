@@ -42,24 +42,41 @@ public class BrandApartmentService {
 		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
         List<HouseVo> list = houseMapper.getHotHouseList(entity);
         for(HouseVo vo : list){
+        	//户型
         	vo.setDescription(vo.getRoom()+"室"+vo.getHall()+"厅"+vo.getWei()+"卫");
+        	//付款方式
         	Byte zujintype = vo.getZujinType();
         	Integer zujinType = Integer.parseInt(zujintype.toString());
         	if(zujinType==BusinessHouseTypeEnums.YJLX_1.getCode()){
-        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_1.getMessage());;
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_1.getMessage());
         	}else if(zujinType==BusinessHouseTypeEnums.YJLX_2.getCode()){
-        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_2.getMessage());;
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_2.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_3.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_3.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_4.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_4.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_5.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_5.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_6.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_6.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_7.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_7.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_8.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_8.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_9.getCode()){
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_9.getMessage());
         	}else{
-        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_3.getMessage());;
+        		vo.setZujinTypeStr(BusinessHouseTypeEnums.YJLX_10.getMessage());
         	}
+        	//房源状态
         	Integer status = Integer.parseInt(vo.getHouseStatus());
         	if(status==BusinessHouseTypeEnums.ZT_1.getCode()){
         		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_1.getMessage());
-        	}else if(zujinType==BusinessHouseTypeEnums.ZT_2.getCode()){
+        	}else if(status==BusinessHouseTypeEnums.ZT_2.getCode()){
         		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_2.getMessage());
-        	}else if(zujinType==BusinessHouseTypeEnums.ZT_3.getCode()){
+        	}else if(status==BusinessHouseTypeEnums.ZT_3.getCode()){
         		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_3.getMessage());
-        	}else if(zujinType==BusinessHouseTypeEnums.ZT_4.getCode()){
+        	}else if(status==BusinessHouseTypeEnums.ZT_4.getCode()){
         		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_4.getMessage());
         	}else{
         		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_5.getMessage());
