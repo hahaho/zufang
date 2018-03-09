@@ -42,8 +42,7 @@
 			CREATED_BY,
 			CREATED_DATE,
 			UPDATED_BY,
-			UPDATED_DATE,
-			APARTMENT_CODE
+			UPDATED_DATE
 		)
 		VALUES
 		(
@@ -58,8 +57,7 @@
 			#{createdBy, jdbcType=VARCHAR}, 
 			CURRENT_TIMESTAMP, 
 			#{updatedBy, jdbcType=VARCHAR}, 
-			CURRENT_TIMESTAMP,
-			#{apartmentCode, jdbcType=VARCHAR}
+			CURRENT_TIMESTAMP
 		)
 	]]>
 		<selectKey resultType="String" keyProperty="id" order="BEFORE">
