@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.entity.ReserveHouse;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.service.house.HousePeiZhiService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -28,7 +30,57 @@ public class PhoneAppointmentService {
 		ResponsePageBody<HouseAppointmentVo> pageBody = new ResponsePageBody<HouseAppointmentVo>();
         List<HouseAppointmentVo> list = reserveHouseService.getHouseListForPhoneAppointment(entity);
         for(HouseAppointmentVo vo : list){
+        	//户型
         	vo.setHouseAll(vo.getHouseRoom()+"室"+vo.getHouseHall()+"厅"+vo.getHouseWei()+"卫");
+        	//房源状态
+        	Integer status = Integer.parseInt(vo.getHouseStatus());
+        	if(status==BusinessHouseTypeEnums.ZT_1.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_1.getMessage());
+        	}else if(status==BusinessHouseTypeEnums.ZT_2.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_2.getMessage());
+        	}else if(status==BusinessHouseTypeEnums.ZT_3.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_3.getMessage());
+        	}else if(status==BusinessHouseTypeEnums.ZT_4.getCode()){
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_4.getMessage());
+        	}else{
+        		vo.setHouseStatus(BusinessHouseTypeEnums.ZT_5.getMessage());
+        	}
+        	//付款方式
+        	String zujintype = vo.getHouseZujinType();
+        	Integer zujinType = Integer.parseInt(zujintype.toString());
+        	if(zujinType==BusinessHouseTypeEnums.YJLX_1.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_1.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_2.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_2.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_3.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_3.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_4.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_4.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_5.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_5.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_6.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_6.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_7.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_7.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_8.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_8.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_9.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_9.getMessage());
+        	}else{
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_10.getMessage());
+        	}
+        	//出租类型
+        	String renttype = vo.getHouseRentType();
+        	Integer rentType = Integer.parseInt(renttype.toString());
+        	if(rentType==BusinessHouseTypeEnums.HZ_0.getCode()){
+        		vo.setHouseRentType(BusinessHouseTypeEnums.HZ_0.getMessage());
+        	}else if(rentType==BusinessHouseTypeEnums.HZ_1.getCode()){
+        		vo.setHouseRentType(BusinessHouseTypeEnums.HZ_1.getMessage());
+        	}else if(rentType==BusinessHouseTypeEnums.HZ_2.getCode()){
+        		vo.setHouseRentType(BusinessHouseTypeEnums.HZ_2.getMessage());
+        	}
+        	//创建时间
+        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
         }
         pageBody.setRows(list);
         list = reserveHouseService.getHouseListForPhoneAppointment(count);

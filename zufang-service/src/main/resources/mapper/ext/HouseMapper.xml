@@ -261,7 +261,9 @@
 			x.chaoxiang houseChaoxiang,
 			x.hezu_chaoxiang houseHezuChaoxiang,
 			CASE WHEN a1.id >0 THEN '是' ELSE '否' END houseKitchenFalg,
-       		CASE WHEN a2.id >0 THEN '是' ELSE '否' END houseToiletFalg
+       		CASE WHEN a2.id >0 THEN '是' ELSE '否' END houseToiletFalg,
+       		x.created_time createdTime,
+       		x.created_user createdUser
         FROM t_zfang_house_location z
 			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id

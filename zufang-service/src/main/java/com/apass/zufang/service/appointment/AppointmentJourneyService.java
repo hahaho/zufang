@@ -10,6 +10,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
 import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.entity.ReturnVisit;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
 import com.apass.zufang.utils.ResponsePageBody;
 @Service
@@ -27,10 +28,38 @@ public class AppointmentJourneyService {
 		ResponsePageBody<ReserveHouseVo> pageBody = new ResponsePageBody<ReserveHouseVo>();
         List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(entity);
         for(ReserveHouseVo vo : list){
+        	//预约类型
         	String reserveType = vo.getType()==(byte)1?"在线预约":"电话预约";
         	vo.setReserveType(reserveType);
+        	//预约和看房时间
         	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
         	vo.setReserveDateTime(DateFormatUtil.dateToString(vo.getReserveDate()));
+        	//户型
+        	vo.setHouseAll(vo.getHouseRoom()+"室"+vo.getHouseHall()+"厅"+vo.getHouseWei()+"卫");
+        	//付款方式
+        	String zujintype = vo.getHouseZujinType();
+        	Integer zujinType = Integer.parseInt(zujintype.toString());
+        	if(zujinType==BusinessHouseTypeEnums.YJLX_1.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_1.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_2.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_2.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_3.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_3.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_4.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_4.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_5.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_5.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_6.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_6.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_7.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_7.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_8.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_8.getMessage());
+        	}else if(zujinType==BusinessHouseTypeEnums.YJLX_9.getCode()){
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_9.getMessage());
+        	}else{
+        		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_10.getMessage());
+        	}
         }
         pageBody.setRows(list);
         list = reserveHouseService.getReserveHouseList(count);
