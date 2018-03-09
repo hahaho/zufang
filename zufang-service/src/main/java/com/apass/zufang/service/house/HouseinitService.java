@@ -37,11 +37,9 @@ public class HouseinitService {
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		// 获取市区
 		List<HouseVo> cityList = houseMapper.initCity();
-		List<String> initCity = new ArrayList<>();
 		for (int i = 0; i < cityList.size(); i++) {
-			initCity.add(cityList.get(i).getCity());
+			resultMap.put(cityList.get(i).getCode(), cityList.get(i).getCity());
 		}
-		resultMap.put("initCity", initCity);
 		return resultMap;
 	}
 	
