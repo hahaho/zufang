@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -59,11 +60,13 @@ public class PhoneAppointmentController {
         try {
         	LOGGER.info("getHouseListForPhoneAppointment map--->{}",GsonUtils.toJson(map));
         	HouseAppointmentQueryParams entity = validateParams(map);
+        	HouseAppointmentQueryParams count = new HouseAppointmentQueryParams();
+        	BeanUtils.copyProperties(entity, count);
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
         	entity.setPage(Integer.parseInt(page));
         	entity.setRows(Integer.parseInt(rows));
-        	respBody = phoneAppointmentService.getHouseListForPhoneAppointment(entity);
+        	respBody = phoneAppointmentService.getHouseListForPhoneAppointment(entity,count);
         } catch (Exception e) {
             LOGGER.error("getHouseListForPhoneAppointment EXCEPTION --- --->{}", e);
             respBody.setMsg("电话预约管理 房源列表查询失败");

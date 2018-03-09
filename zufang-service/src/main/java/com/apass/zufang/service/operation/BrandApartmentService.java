@@ -38,7 +38,7 @@ public class BrandApartmentService {
 	 * @param entity
 	 * @return
 	 */
-	public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity) {
+	public ResponsePageBody<HouseVo> getHotHouseList(HouseQueryParams entity,HouseQueryParams count) {
 		ResponsePageBody<HouseVo> pageBody = new ResponsePageBody<HouseVo>();
         List<HouseVo> list = houseMapper.getHotHouseList(entity);
         for(HouseVo vo : list){
@@ -66,8 +66,7 @@ public class BrandApartmentService {
         	}
         }
         pageBody.setRows(list);
-        entity.setStartRecordIndex(null);
-        list = houseMapper.getHotHouseList(entity);
+        list = houseMapper.getHotHouseList(count);
         pageBody.setTotal(list.size());
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;

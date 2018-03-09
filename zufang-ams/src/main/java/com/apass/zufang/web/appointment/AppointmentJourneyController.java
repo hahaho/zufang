@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -60,11 +61,13 @@ public class AppointmentJourneyController {
         try {
         	LOGGER.info("getReserveHouseList map--->{}",GsonUtils.toJson(map));
         	ApprintmentJourneyQueryParams entity = validateParams(map);
+        	ApprintmentJourneyQueryParams count = new ApprintmentJourneyQueryParams();
+        	BeanUtils.copyProperties(entity, count);
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
         	entity.setPage(Integer.parseInt(page));
         	entity.setRows(Integer.parseInt(rows));
-        	respBody = appointmentJourneyService.getReserveHouseList(entity);
+        	respBody = appointmentJourneyService.getReserveHouseList(entity,count);
         } catch (Exception e) {
             LOGGER.error("getReserveHouseList EXCEPTION --- --->{}", e);
             respBody.setMsg("预约行程管理 预约看房记录列表查询失败");

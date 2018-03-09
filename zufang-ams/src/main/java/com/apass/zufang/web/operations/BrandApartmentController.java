@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -25,7 +26,7 @@ import com.apass.zufang.utils.ValidateUtils;
  * @author haotian
  *
  */
-@Path("/operations/brandApartmentController")
+@Path("/application/operations/brandApartmentController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class BrandApartmentController {
@@ -63,6 +64,7 @@ public class BrandApartmentController {
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
         	HouseQueryParams entity = new HouseQueryParams();
+        	HouseQueryParams count = new HouseQueryParams();
         	entity.setApartmentName(apartmentName);
         	entity.setHouseTitle(houseTitle);
         	entity.setHouseCode(houseCode);
@@ -70,13 +72,14 @@ public class BrandApartmentController {
         	entity.setCity(city);
         	entity.setDistrict(district);
         	entity.setStreet(street);
-        	entity.setPage(Integer.parseInt(page));
-        	entity.setRows(Integer.parseInt(rows));
+        	entity.setIsDelete("00");
         	if(StringUtils.isNotBlank(houseType)){
         		entity.setHouseType((byte)Integer.parseInt(houseType));
         	}
-        	entity.setIsDelete("00");
-        	respBody = brandApartmentService.getHotHouseList(entity);
+        	BeanUtils.copyProperties(entity, count);
+        	entity.setPage(Integer.parseInt(page));
+        	entity.setRows(Integer.parseInt(rows));
+        	respBody = brandApartmentService.getHotHouseList(entity,count);
         } catch (Exception e) {
             LOGGER.error("getHouseList EXCEPTION --- --->{}", e);
             respBody.setMsg("品牌公寓热门房源列表查询失败");

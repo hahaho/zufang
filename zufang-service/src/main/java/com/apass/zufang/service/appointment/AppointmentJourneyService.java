@@ -23,7 +23,7 @@ public class AppointmentJourneyService {
 	 * @param entity
 	 * @return
 	 */
-	public ResponsePageBody<ReserveHouseVo> getReserveHouseList(ApprintmentJourneyQueryParams entity) {
+	public ResponsePageBody<ReserveHouseVo> getReserveHouseList(ApprintmentJourneyQueryParams entity,ApprintmentJourneyQueryParams count) {
 		ResponsePageBody<ReserveHouseVo> pageBody = new ResponsePageBody<ReserveHouseVo>();
         List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(entity);
         for(ReserveHouseVo vo : list){
@@ -32,8 +32,9 @@ public class AppointmentJourneyService {
         	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
         	vo.setReserveDateTime(DateFormatUtil.dateToString(vo.getReserveDate()));
         }
-        pageBody.setTotal(list.size());
         pageBody.setRows(list);
+        list = reserveHouseService.getReserveHouseList(count);
+        pageBody.setTotal(list.size());
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;
 	}
