@@ -23,6 +23,7 @@ import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.nation.NationService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -125,6 +126,8 @@ public class HouseSearchController {
 	@Path(value = "/search")
 	public Response search2(@RequestBody Map<String, Object> paramMap) {
 		try {
+			LOGGER.info("首页搜索执行,参数:{}", GsonUtils.toJson(paramMap));
+
 			HouseSearchCondition houseSearchCondition = new HouseSearchCondition();
 			//搜索必传参数
 			// 设备号
