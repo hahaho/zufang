@@ -172,7 +172,7 @@ public class ObtainGaodeLocation {
 		try {
 
 			String url = String.format("http://restapi.amap.com/v3/geocode/geo?&s=rsv3&address=%s&key=%s", address,
-					"6fbe72c361901c0c3b2397a53e493ba5");
+					"29fe2f62be073f4005f5da10459ccce7");
 
 			URL myURL = null;
 
