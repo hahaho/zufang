@@ -51,7 +51,7 @@ import com.google.common.collect.Maps;
  */
 @Service
 public class HouseService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(HouseService.class);
+	private static final Logger logger = LoggerFactory.getLogger(HouseService.class);
 	
 	@Value("${zufang.image.uri}")
     private String imageUri;
@@ -249,7 +249,7 @@ public class HouseService {
 		return values;
 	}
 	
-	public WorkCityJdVo getVoByPo(HouseLocation location){
+	public WorkCityJdVo getVoByPo(HouseLocation location) throws BusinessException{
 		
 		if(null == location){
 			return null;
@@ -258,16 +258,27 @@ public class HouseService {
 		provice.setProvince(location.getProvince());
 		provice.setParentCode("0");
 		WorkCityJd p = cityJdMapper.selectCodeByName(provice);
-		
+		if(null == p){
+			logger.error("selectCodeByProvinceName is failed!");
+			throw new BusinessException("查询省份编码失败!");
+		}
 		WorkCityJdParams city = new WorkCityJdParams();
 		city.setCity(location.getCity());
 		city.setParentCode(p.getCode());
 		WorkCityJd c = cityJdMapper.selectCodeByName(city);
+		if(null == c){
+			logger.error("selectCodeByCityName is failed!");
+			throw new BusinessException("查询城市编码失败!");
+		}
 		
 		WorkCityJdParams district = new WorkCityJdParams();
 		district.setDistrict(location.getDistrict());
 		district.setParentCode(c.getCode());
 		WorkCityJd d = cityJdMapper.selectCodeByName(district);
+		if(null == d){
+			logger.error("selectCodeByDistrictName is failed!");
+			throw new BusinessException("查询区县编码失败!");
+		}
 		
 		WorkCityJdParams street = new WorkCityJdParams();
 		street.setStreet(location.getStreet());
@@ -275,23 +286,17 @@ public class HouseService {
 		WorkCityJd t = cityJdMapper.selectCodeByName(street);
 		
 		WorkCityJdVo vo = new WorkCityJdVo();
-		if(p != null){
-			vo.setProvince(p.getProvince());
-			vo.setProvinceCode(p.getCode());
-		}
-		if(c != null){
-			vo.setCity(c.getCity());
-			vo.setCityCode(c.getCode());
-		}
-		if(d != null){
-			vo.setDistrict(d.getDistrict());
-			vo.setDistrictCode(d.getCode());
-		}
-		if(t != null){
+		
+		vo.setProvince(p.getProvince());
+		vo.setProvinceCode(p.getCode());
+		vo.setCity(c.getCity());
+		vo.setCityCode(c.getCode());
+		vo.setDistrict(d.getDistrict());
+		vo.setDistrictCode(d.getCode());
+		if(t != null){//可以为null ,因为直辖市是没有4级地址
 			vo.setStreet(t.getTowns());
 			vo.setStreetCode(t.getCode());
 		}
-		
 		return vo;
 	}
 	
@@ -469,10 +474,10 @@ public class HouseService {
 			if (null == houseEs) {
 				continue;
 			}
-			LOGGER.info("houseEsList add houseId {} ...", houseEs.getId());
+			logger.info("houseEsList add houseId {} ...", houseEs.getId());
 			houseEsList.add(houseEs);
 		}
-		LOGGER.info("houseEsList add houseSize {} ...", houseEsList.size());
+		logger.info("houseEsList add houseSize {} ...", houseEsList.size());
 		return houseEsList;
 	}
 
@@ -584,7 +589,7 @@ public class HouseService {
 			}
 			return  houseEs;
 		}catch (Exception e){
-			LOGGER.error("--------houseInfoToHouseEs Exception------{}",e);
+			logger.error("--------houseInfoToHouseEs Exception------{}",e);
 		}
 
 
