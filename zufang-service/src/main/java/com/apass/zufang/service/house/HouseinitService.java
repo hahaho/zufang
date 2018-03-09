@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
+import com.apass.zufang.domain.common.KeyValue;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
@@ -37,9 +38,14 @@ public class HouseinitService {
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		// 获取市区
 		List<HouseVo> cityList = houseMapper.initCity();
+		List<KeyValue> result=new ArrayList<KeyValue>();
 		for (int i = 0; i < cityList.size(); i++) {
-			resultMap.put(cityList.get(i).getCode(), cityList.get(i).getCity());
+			KeyValue entity=new KeyValue();
+			entity.setKey(Integer.valueOf(cityList.get(i).getCode()));
+			entity.setValue(cityList.get(i).getCity());
+			result.add(entity);
 		}
+		resultMap.put("result", result);
 		return resultMap;
 	}
 	
