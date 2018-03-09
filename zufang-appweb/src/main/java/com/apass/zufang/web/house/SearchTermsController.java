@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
@@ -134,13 +135,25 @@ public class SearchTermsController {
 				WorkSubway temp = new WorkSubway();
 				temp.setId(workCityJd.getId());
 				temp.setCode(Long.valueOf(workCityJd.getCode()));
-				temp.setLineName(workCityJd.getCity());
-				if (!workCityJd.getResultList().isEmpty()) {
+				if(StringUtils.isBlank(workCityJd.getCity())){
+					temp.setLineName(workCityJd.getDistrict());
+				}else{
+					temp.setLineName(workCityJd.getCity());
+				}
+				
+				if (workCityJd.getResultList()!=null) {
 					for (WorkCityJd workSubwaysss : workCityJd.getResultList()) {
 						WorkSubway tempsss = new WorkSubway();
 						temp.setId(workSubwaysss.getId());
 						tempsss.setCode(Long.valueOf(workSubwaysss.getCode()));
-						tempsss.setSiteName(workSubwaysss.getDistrict());
+						
+						if(StringUtils.isBlank(workCityJd.getCity())){
+							tempsss.setSiteName(workSubwaysss.getTowns());
+						}else{
+							tempsss.setSiteName(workSubwaysss.getDistrict());
+						}
+						
+						
 						resultJdJsonTemp.add(tempsss);
 					}
 					temp.setResultList(resultJdJsonTemp);
