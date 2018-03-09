@@ -43,6 +43,27 @@ public class HouseinitController {
 			return Response.fail("初始城市地址失败！");
 		}
 	}
+	
+    /**
+     * 根据城市获取CODE
+     * @param paramMap
+     * @return
+     */
+	@POST
+	@Path("/queryCityCode")
+	public Response queryCityCode(Map<String, Object> paramMap) {
+		
+		try {
+			String city = (String) paramMap.get("city");// 城市
+			
+			HashMap<String, Object> init = houseinitService.queryCityCode(city);
+			
+			return Response.success("获取城市code失败！", init);
+		} catch (Exception e) {
+			LOG.error("获取城市code失败！", e);
+			return Response.fail("获取城市code失败！");
+		}
+	}
     
 	/**
 	 * init首页接口

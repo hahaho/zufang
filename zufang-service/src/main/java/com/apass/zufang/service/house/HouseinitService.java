@@ -14,10 +14,13 @@ import org.springframework.stereotype.Component;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.common.KeyValue;
+import com.apass.zufang.domain.common.WorkCityJd;
+import com.apass.zufang.domain.dto.WorkCityJdParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
+import com.apass.zufang.mapper.zfang.WorkCityJdMapper;
 import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.utils.PageBean;
 import com.apass.zufang.utils.ValidateUtils;
@@ -32,6 +35,9 @@ public class HouseinitService {
 	private HouseMapper houseMapper;
     @Autowired
     private HouseLocationMapper HouseLocationMapper;
+    
+	@Autowired
+	private WorkCityJdMapper cityJddao;
 
 	public HashMap<String, Object> init() {
 		
@@ -240,5 +246,21 @@ public class HouseinitService {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	public HashMap<String, Object> queryCityCode(String city) {
+		
+		HashMap<String, Object> resultMap = Maps.newHashMap();
+		// 获取市区
+		WorkCityJdParams entity=new WorkCityJdParams();
+		entity.setCity(city);
+		WorkCityJd result = cityJddao.selectCityByName(entity);
+		if(null==result){
+			city=city.replace("市","");
+			WorkCityJdParams entityProvince=new WorkCityJdParams();
+			entity.setProvince(city);
+			result = cityJddao.selectCityByName(entityProvince);
+		}
+		resultMap.put("code", result.getCode());
+		return resultMap;
 	}
 }
