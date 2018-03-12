@@ -419,7 +419,6 @@ public class HouseSearchController {
 		HouseAppSearchVo vo = new HouseAppSearchVo();
 		vo.setUrl(houseEs.getUrl());
 		vo.setHouseTitle(houseEs.getHouseTitle());
-		vo.setDescription(houseEs.getDescription());
 		vo.setDetailAddr(houseEs.getDetailAddr());
 		vo.setRoom(houseEs.getRoom());
 		vo.setHall(houseEs.getHall());

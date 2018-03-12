@@ -37,18 +37,6 @@
                     "analyzer": "standard",
                     "search_analyzer": "standard"
                 },
-                "description": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "ik_max_word",
-                    "search_analyzer": "ik_max_word"
-                },
-                "descriptionPinyin": {
-                    "type": "text",
-                    "index": "analyzed",
-                    "analyzer": "standard",
-                    "search_analyzer": "standard"
-                },
                 "detailAddr": {
                     "type": "text",
                     "index": "analyzed",

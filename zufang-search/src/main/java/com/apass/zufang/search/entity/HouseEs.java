@@ -35,6 +35,7 @@ public class HouseEs implements IdAble{
      * 公寓名称
      */
     private String apartmentName;
+    private String apartmentNamePinyin;
 
     /**
      * 热门房源类型：1：正常，2:精选
@@ -138,11 +139,6 @@ public class HouseEs implements IdAble{
     private String houseTitle;
     private String houseTitlePinyin;
 
-    /**
-     * 房源描述
-     */
-    private String description;
-    private String descriptionPinyin;
 
     /**
      * 创建时间
@@ -484,22 +480,6 @@ public class HouseEs implements IdAble{
         this.houseTitlePinyin = houseTitlePinyin;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDescriptionPinyin() {
-        return descriptionPinyin;
-    }
-
-    public void setDescriptionPinyin(String descriptionPinyin) {
-        this.descriptionPinyin = descriptionPinyin;
-    }
-
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -706,5 +686,13 @@ public class HouseEs implements IdAble{
 
     public void setApartmentName(String apartmentName) {
         this.apartmentName = apartmentName;
+    }
+
+    public String getApartmentNamePinyin() {
+        return apartmentNamePinyin;
+    }
+
+    public void setApartmentNamePinyin(String apartmentNamePinyin) {
+        this.apartmentNamePinyin = apartmentNamePinyin;
     }
 }

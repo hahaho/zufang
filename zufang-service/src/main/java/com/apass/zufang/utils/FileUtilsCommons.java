@@ -29,9 +29,9 @@ public class FileUtilsCommons {
     /**
      * 公用上传文件方法
      * 
-     * @param fatherPath
-     * @param url文件绝对路径
-     * @param file
+     * @param fatherPath 根路径：统一为/data/nfs/zufang
+     * @param file：文件
+     * @param urlOld:特定目录
      *            文件
      */
     public static void uploadFilesUtil(String fatherPath, String urlOld, MultipartFile file) {
@@ -48,16 +48,15 @@ public class FileUtilsCommons {
             in = file.getInputStream();
             out = new FileOutputStream(url);
 
-            int n = 0;// 每次读取的字节长度
-            byte[] bb = new byte[1024];// 存储每次读取的内容
+            // 每次读取的字节长度
+            int n = 0;
+            // 存储每次读取的内容
+            byte[] bb = new byte[1024];
             while ((n = in.read(bb)) != -1) {
-                out.write(bb, 0, n);// 将读取的内容，写入到输出流当中
+                // 将读取的内容，写入到输出流当中
+                out.write(bb, 0, n);
             }
 
-            //			boolean b = NarrowImageUtils.saveAndNarrowImageByIs(in, url);//in:输入流，url图片地址
-            //			if(!b){
-            //			    throw new RuntimeException("文件上传失败");
-            //			}
         } catch (Exception e) {
             LOGGER.error("文件上传失败", e);
         } finally {
@@ -81,20 +80,27 @@ public class FileUtilsCommons {
      * 公用上传文件方法
      * 
      * @param fatherPath
-     * @param url文件绝对路径
-     * @param bytefile文件
      */
-    public static void uploadByteFilesUtil(String fatherPath, String urlOld, byte[] file) {
+    public static void uploadImg(String fatherPath,String fileName,MultipartFile file) {
         FileOutputStream out = null;
+        InputStream in = null;
         try {
-            String url = fatherPath + urlOld;
             // 判断目录是否存在
-            String fil = new File(url).getParent();
-            if (!new File(fil).isDirectory()) {
-                new File(fil).mkdirs();
+            if (!new File(fatherPath).isDirectory()) {
+                new File(fatherPath).mkdirs();
             }
-            out = new FileOutputStream(url);
-            out.write(file);
+            out = new FileOutputStream(fatherPath+fileName);
+            in = file.getInputStream();
+
+            // 每次读取的字节长度
+            int len = 0;
+            // 存储每次读取的内容
+            byte[] bb = new byte[1024];
+            while ((len = in.read(bb)) != -1) {
+                // 将读取的内容，写入到输出流当中
+                out.write(bb, 0, len);
+            }
+
         } catch (Exception e) {
             LOGGER.error("文件上传失败", e);
         } finally {
@@ -106,39 +112,5 @@ public class FileUtilsCommons {
                 } // 关闭输入输出流
             }
         }
-    }
-    /**
-     * 获取base64文件
-     * 
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public static String loadPicBase64String(String fatherPath, String urlOld) throws Exception {
-        if (!StringUtils.isBlank(urlOld)) {
-            String url = fatherPath + urlOld;
-            String colorBigSquare = ImageUtils.imageToBase64(url);
-            if (colorBigSquare.length() > 0) {
-                return colorBigSquare;
-            }
-        }
-        return "";
-    }
-
-    /**
-     * 获取Byte文件
-     * 
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    public static byte[] loadPicByte(String fatherPath, String urlOld) throws Exception {
-        if (!StringUtils.isBlank(urlOld)) {
-            String url = fatherPath + urlOld;
-            File imgFile = new File(url);
-            byte[] xlsbyte = FileUtils.readFileToByteArray(imgFile);
-            return xlsbyte;
-        }
-        return null;
     }
 }

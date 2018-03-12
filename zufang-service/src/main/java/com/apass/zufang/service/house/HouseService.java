@@ -461,8 +461,6 @@ public class HouseService {
 		dto.setStatus(statuList);
 		dto.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 		dto.setListTimeStr("yes");
-		dto.setPage(index);
-		dto.setRows(bach_size);
 		dto.setPageParams(bach_size,index);
 		List<House> houseList = houseMapper.getHouseList(dto);
 
@@ -514,6 +512,8 @@ public class HouseService {
 				if(h.getRoom()>4){
 					houseEs.setRoom(-1);
 				}
+				houseEs.setHouseTitle(h.getTitle());
+				houseEs.setHouseTitlePinyin(Pinyin4jUtil.converterToSpell(h.getTitle()));
 				houseEs.setHall(h.getHall());
 				houseEs.setWei(h.getWei());
 				houseEs.setFloor(h.getFloor());
@@ -564,6 +564,7 @@ public class HouseService {
 			if(apartment != null){
 				houseEs.setCompanyName(apartment.getCompanyName());
 				houseEs.setApartmentName(apartment.getName());
+				houseEs.setApartmentNamePinyin(Pinyin4jUtil.converterToSpell(apartment.getName()));
 			}
 
 			HouseLocation hLocation = locationMapper.getLocationByHouseId(houseId);

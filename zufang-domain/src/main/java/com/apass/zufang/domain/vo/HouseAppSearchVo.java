@@ -17,10 +17,6 @@ public class HouseAppSearchVo {
      */
     private String houseTitle;
     /**
-     * 房源描述
-     */
-    private String description;
-    /**
      * 详细地址
      */
     private String detailAddr;
@@ -154,14 +150,6 @@ public class HouseAppSearchVo {
 
     public void setHouseDes(String houseDes) {
         this.houseDes = houseDes;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public BigDecimal getRoomAcreage() {

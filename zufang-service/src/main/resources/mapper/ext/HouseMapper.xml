@@ -73,6 +73,17 @@
         </if>
     </select>
     <!-- 分页查询数量 -->
+    <select id ="getHouseList" resultMap="BaseResultMap"
+            parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_zfang_house
+        <include refid="QueryConditionSql" />
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+    <!-- 分页查询数量 -->
     <select id ="getHouseListCount" resultType="java.lang.Integer"
        parameterType="com.apass.zufang.domain.dto.HouseQueryParams">
         SELECT COUNT(*) FROM t_zfang_house
