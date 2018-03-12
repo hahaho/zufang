@@ -44,12 +44,11 @@ public class HouseinitService {
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		// 获取市区
 		List<HouseVo> cityList = houseMapper.initCity();
-		List<KeyValue> result=new ArrayList<KeyValue>();
+		List<String> result=new ArrayList<>();
 		for (int i = 0; i < cityList.size(); i++) {
-			KeyValue entity=new KeyValue();
-			entity.setKey(Integer.valueOf(cityList.get(i).getCode()));
-			entity.setValue(cityList.get(i).getCity());
-			result.add(entity);
+//			KeyValue entity=new KeyValue();
+//			entity.setKey(Integer.valueOf(cityList.get(i).getCode()));
+			result.add(cityList.get(i).getCity());
 		}
 		resultMap.put("result", result);
 		return resultMap;
