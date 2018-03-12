@@ -66,6 +66,8 @@ public class HouseControler {
         	
         	rows = StringUtils.isNotBlank(rows) ? rows: "10";
         	page = StringUtils.isNotBlank(page) ? page: "1";
+        	//根据当前登录用户，获取所属公寓的Code
+        	String apartmentCode = apartmentService.getApartmentCodeByCurrentUser(SpringSecurityUtils.getCurrentUser());
         	HouseQueryParams dto = new HouseQueryParams();
         	dto.setApartmentName(apartmentName);
         	dto.setHouseTitle(houseTitle);
@@ -76,6 +78,7 @@ public class HouseControler {
         	dto.setStreet(street);
         	dto.setRows(Integer.parseInt(rows));
         	dto.setPage(Integer.parseInt(page));
+        	dto.setApartmentCode(apartmentCode);
         	respBody = houseService.getHouseListExceptDelete(dto);
         	respBody.setMsg("房屋信息列表查询成功!");
         	return Response.success("查询房屋信息成功！", respBody);

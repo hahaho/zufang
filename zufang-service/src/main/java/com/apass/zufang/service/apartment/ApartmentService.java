@@ -100,7 +100,7 @@ public class ApartmentService {
 		return Response.fail("公寓信息修改失败！");
 	}
 	/**
-	 * 新增房源专用   用于新增公寓下属房源
+	 * 新增/修改房源专用   用于新增公寓下属房源
 	 * 根据登录人信息获取该个人归属公寓信息  
 	 * @param username
 	 * @return
@@ -110,9 +110,7 @@ public class ApartmentService {
 		if(StringUtils.isBlank(username)){
 			throw new BusinessException("登录人为空，或者登录人未查找到公寓信息！");
 		}
-
         UsersDO usersDO = usersRepository.selectByUsername(username);
-
         Map<String,String> parmMap = Maps.newHashMap();
         parmMap.put("code",usersDO.getApartmentCode());
         List<Apartment> apartments = apartmentMapper.listAllValidApartment(parmMap);
@@ -123,5 +121,22 @@ public class ApartmentService {
             throw new BusinessException("用户关联公寓数据有误数据!");
         }
         return apartments.get(0).getId();
+	}
+	
+	/**
+	 * 根据当前登录的用户名，查询对应的公寓Code
+	 * @param username
+	 * @return
+	 * @throws BusinessException
+	 */
+	public String getApartmentCodeByCurrentUser(String username) throws BusinessException{
+		if(StringUtils.isBlank(username)){
+			throw new BusinessException("登录人为空，或者登录人未查找到公寓信息！");
+		}
+        UsersDO usersDO = usersRepository.selectByUsername(username);
+        if(null == usersDO){
+        	return null;
+        }
+		return usersDO.getApartmentCode();
 	}
 }

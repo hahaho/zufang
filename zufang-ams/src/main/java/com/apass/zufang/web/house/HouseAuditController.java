@@ -16,6 +16,7 @@ import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.vo.HouseBagVo;
+import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
@@ -34,6 +35,8 @@ public class HouseAuditController {
 	@Autowired
 	private HouseService houseService;
 	
+	@Autowired
+	private ApartmentService apartmentService;
 	/**
      * 房屋信息审核列表查询
      * @return
@@ -56,6 +59,8 @@ public class HouseAuditController {
         	
         	rows = StringUtils.isNotBlank(rows) ? rows: "10";
         	page = StringUtils.isNotBlank(page) ? page: "1";
+        	//根据当前登录用户，获取所属公寓的Code
+        	String apartmentCode = apartmentService.getApartmentCodeByCurrentUser(SpringSecurityUtils.getCurrentUser());
         	HouseQueryParams dto = new HouseQueryParams();
         	dto.setApartmentName(apartmentName);
         	dto.setHouseTitle(houseTitle);
@@ -66,6 +71,7 @@ public class HouseAuditController {
         	dto.setStreet(street);
         	dto.setRows(Integer.parseInt(rows));
         	dto.setPage(Integer.parseInt(page));
+        	dto.setApartmentCode(apartmentCode);
         	respBody = houseService.getHouseAuditListExceptDelete(dto);
         	respBody.setMsg("房屋信息审核列表查询成功!");
         	return Response.success("查询房屋审核信息成功！", respBody);
