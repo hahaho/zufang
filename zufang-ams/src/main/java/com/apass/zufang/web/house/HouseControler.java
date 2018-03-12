@@ -203,8 +203,8 @@ public class HouseControler {
     		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "房屋Id为空！");
-			houseService.upHouse(id, SpringSecurityUtils.getCurrentUser());
-			return Response.success("上架成功!");
+			String message = houseService.upHouse(id, SpringSecurityUtils.getCurrentUser());
+			return Response.success(message);
 		}catch (BusinessException e){
 			logger.error("bathUp house businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());

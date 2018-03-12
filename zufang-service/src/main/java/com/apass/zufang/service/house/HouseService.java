@@ -433,7 +433,7 @@ public class HouseService {
 		if(others == 0){
 			return "房源批量上架成功！";
 		}
-		return "";
+		return "部分房源上架成功，剩余房源需审核，通过后自动上架，请等待审核结果!";
 	}
 	
 	/*** 删除图片信息 * @throws BusinessException */
