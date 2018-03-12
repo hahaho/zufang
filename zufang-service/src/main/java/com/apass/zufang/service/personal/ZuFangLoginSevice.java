@@ -2,6 +2,7 @@ package com.apass.zufang.service.personal;
 
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -118,11 +119,22 @@ public class ZuFangLoginSevice {
 			String salt = SaltEncodeUtils.generateDefaultSalt();
 			String password = registerInfo.getPassword();
 			// 2. 加密后的密码
-			String newPassword = SaltEncodeUtils.sha1(password, salt);
-			registerInfo.setPassword(newPassword);
-			registerInfo.setSalt(salt);
-			// 3. 保存注册信息
-			gfbRegisterInfoEntityMapper.insert(registerInfo);
+			if(password==null){
+				password="";
+				registerInfo.setPassword(password);
+				registerInfo.setSalt(salt);
+				registerInfo.setCreatedDate(new Date());
+				registerInfo.setUpdatedDate(new Date());
+				// 3. 保存注册信息
+				gfbRegisterInfoEntityMapper.insert(registerInfo);		
+			}else{
+				String newPassword = SaltEncodeUtils.sha1(password, salt);
+				registerInfo.setPassword(newPassword);
+				registerInfo.setSalt(salt);
+				registerInfo.setUpdatedDate(new Date());
+				// 3. 保存注册信息
+				gfbRegisterInfoEntityMapper.insert(registerInfo);
+			}
 			return registerInfo.getId();
 		} catch (Exception e) {
 			LOGGER.error("保存客户注册信息出错===》", e);
