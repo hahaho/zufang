@@ -9,6 +9,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,10 +28,10 @@ import java.util.List;
  * @see
  * @since JDK 1.8
  */
-//@Component
-//@Configurable
-//@EnableScheduling
-//@Profile("Schedule")
+@Component
+@Configurable
+@EnableScheduling
+@Profile("Schedule")
 @Controller
 @RequestMapping("/es/zufang")
 public class EsInitScheduleTask {
@@ -39,7 +44,7 @@ public class EsInitScheduleTask {
     /**
      * 0 0 12 ? * WED 表示每个星期三中午12点
      */
-//    @Scheduled(cron = "0 0 12 ? * WED") TODO
+    @Scheduled(cron = "0 0 12 ? * WED")
     @RequestMapping("/init")
     public void esInitScheduleTask() {
         int index = 1;
