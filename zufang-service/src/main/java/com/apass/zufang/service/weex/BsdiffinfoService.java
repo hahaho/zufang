@@ -50,7 +50,7 @@ public class BsdiffinfoService {
 	/**
 	 * 思路:
 	 * 1,验证：先判断对应ver是否已经存在，版本号和文件名是否一致
-	 * 2,上传：把原始zip文件上传至 /data/nfs/gfb/eshop/bsdiff/verzip/ "lineId"/"bsdiffVer"目录下
+	 * 2,上传：把原始zip文件上传至 /data/nfs/zufang/house/bsdiff/verzip/ "lineId"/"bsdiffVer"目录下
 	 * 3,解压：解压缩,并生成文件清单,解压至 /data/nfs/gfb/eshop/bsdiff/verzip/ "lineId"/"bsdiffVer" 目录，供合并使用
 	 * 4,合并：合并并生成文件清单,目录/data/nfs/gfb/eshop/bsdiff/verzip/ "lineId"/"bsdiffVer"，名称固定为merge.
 	 * 	访问路径：域名+/static/eshop/bsdiff/verzip/commission/1/merge/ "lineId"/"bsdiffVer"

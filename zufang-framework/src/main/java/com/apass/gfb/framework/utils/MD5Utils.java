@@ -1,6 +1,8 @@
 package com.apass.gfb.framework.utils;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -12,6 +14,8 @@ import java.security.NoSuchAlgorithmException;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.MD5;
 
 public class MD5Utils {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MD5Utils.class);
+
 	static char hexdigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	/**
@@ -60,7 +64,7 @@ public class MD5Utils {
             }
             return new String(str).toLowerCase();
         } catch (Exception e) {
-            e.printStackTrace();
+			LOGGER.error("------getMD5 Exception----->{}",e);
             return null;
         }
 	}
@@ -103,7 +107,7 @@ public class MD5Utils {
 
 		} catch (Exception e) {
 
-			e.printStackTrace();
+			LOGGER.error("------getMD5 Exception----->{}",e);
 
 			return null;
 
@@ -114,7 +118,7 @@ public class MD5Utils {
 					fis.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.error("------getMD5 Exception----->{}",e);
 			}
 
 		}
@@ -227,7 +231,7 @@ public class MD5Utils {
 
 			return sb.toString();
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			LOGGER.error("------getMD5 Exception----->{}",e);
 			throw new RuntimeException("String to md5 Exception.....");
 		}
 	}
