@@ -26,6 +26,7 @@ import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.EditFalgEnums;
 import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
@@ -172,9 +173,9 @@ public class HouseService {
 		}
 		
 		/** 如果是首次添加，修改，状态不变，如果是下架，修改后，状态变为5*/
-		/*if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
-			house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
-		}*/
+		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
+			house.setEditFlag(EditFalgEnums.EditFalg_1.getCode().byteValue());
+		}
 		/*** 修改房屋信息*/
 		houseMapper.updateByPrimaryKeySelective(house);
 		
@@ -316,6 +317,7 @@ public class HouseService {
 		}
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
+			house.setEditFlag(EditFalgEnums.EditFalg_0.getCode().byteValue());
 			houseAddEs(house.getId());
 		}else{
 			house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
@@ -364,9 +366,12 @@ public class HouseService {
 		}
 		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
 				|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
-			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()){
+			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
+					||(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+							house.getEditFlag().intValue() == EditFalgEnums.EditFalg_1.getCode())){
 				house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
-			}else{
+			}else if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+					house.getEditFlag().intValue() == EditFalgEnums.EditFalg_0.getCode()){
 				house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 				house.setListTime(new Date());
 				houseAddEs(house.getId());
@@ -398,10 +403,13 @@ public class HouseService {
 			//如果房屋的状态为待上架，正常上架
 			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
 					|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
-				if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()){
+				if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
+						||(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+						house.getEditFlag().intValue() == EditFalgEnums.EditFalg_1.getCode())){
 					house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 					others++;
-				}else{
+				}else if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+						house.getEditFlag().intValue() == EditFalgEnums.EditFalg_0.getCode()){
 					house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 					house.setListTime(new Date());
 					houseAddEs(house.getId());
