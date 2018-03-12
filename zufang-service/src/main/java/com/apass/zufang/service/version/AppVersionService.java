@@ -10,7 +10,7 @@ import com.apass.gfb.framework.cache.CacheManager;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.apass.gfb.framework.utils.GsonUtils;
-import com.apass.zufang.domain.common.AppVersionEntity;
+import com.apass.zufang.domain.entity.AppVersionEntity;
 import com.apass.zufang.mapper.zfang.AppVersionMapper;
 
 @Service
