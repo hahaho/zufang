@@ -197,12 +197,12 @@ public class HouseinitService {
 						nearHouses.add(disMap.get(disance));
 					}
 				}
-				if (nearHouses.size() > 10) {
-					PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
-					nearHouses = pageBean.getList();
-				}
 
 			}
+		}
+		if (nearHouses.size() > 10) {
+			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
+			nearHouses = pageBean.getList();
 		}
 		gitImg(nearHouses);
 		return nearHouses;
