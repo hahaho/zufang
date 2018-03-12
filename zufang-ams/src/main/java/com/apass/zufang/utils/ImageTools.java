@@ -253,6 +253,27 @@ public class ImageTools {
     }
     
     /**
+     * 验证上传图片的大小
+     * @param file
+     * @param widths
+     * @param heights
+     * @return
+     */
+    public static boolean checkImgSize(MultipartFile file,int minWidths,int maxWidths,int minHeights,int maxHeights) {
+        try {
+            int width = getImgWidth(file.getInputStream());
+            int height = getImgHeight(file.getInputStream());
+
+            if ((width >= minWidths && width <= maxWidths) && (height >= minHeights && height <= maxHeights)) {
+                return true;
+            }
+        } catch (IOException e) {
+            LOGGER.info("图片宽度高度校验失败！", e);
+        }
+        return false;
+    }
+    
+    /**
      * 文件宽度高度验证:商品大图
      * 
      * @param file 图片文件

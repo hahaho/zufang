@@ -122,8 +122,6 @@ public class ApartmentService {
         if(apartments.size()>1){
             throw new BusinessException("用户关联公寓数据有误数据!");
         }
-
         return apartments.get(0).getId();
-//		return apartmentMapper.selectByPrimaryKey(1L).getId();
 	}
 }
