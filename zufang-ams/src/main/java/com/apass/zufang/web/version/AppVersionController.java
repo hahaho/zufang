@@ -14,7 +14,7 @@ import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.HttpWebUtils;
 import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.common.AppVersionEntity;
+import com.apass.zufang.domain.entity.AppVersionEntity;
 import com.apass.zufang.service.version.AppVersionService;
 import com.apass.zufang.utils.ResponsePageBody;
 

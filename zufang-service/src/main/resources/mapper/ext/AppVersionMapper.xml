@@ -25,7 +25,7 @@
         select
         <include refid="Base_Column_List" />
         from t_zufang_app_version
-        <include refid="QueryConditionSqlBackup" />
+        <include refid="QueryAppVersionConditionSql" />
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>

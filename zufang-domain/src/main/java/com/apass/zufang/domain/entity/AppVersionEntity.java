@@ -1,4 +1,4 @@
-package com.apass.zufang.domain.common;
+package com.apass.zufang.domain.entity;
 
 import java.util.Date;
 
