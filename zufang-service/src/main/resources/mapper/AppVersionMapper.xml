@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.AppVersionMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.common.AppVersionEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="version_name" property="versionName" jdbcType="VARCHAR" />
+    <result column="version_code" property="versionCode" jdbcType="VARCHAR" />
+    <result column="file_route" property="fileRoute" jdbcType="VARCHAR" />
+    <result column="app_size" property="appSize" jdbcType="VARCHAR" />
+    <result column="upgradeflag" property="upgradeflag" jdbcType="INTEGER" />
+    <result column="explains" property="explains" jdbcType="VARCHAR" />
+    <result column="distribution" property="distribution" jdbcType="INTEGER" />
+    <result column="ios_version_name" property="iosVersionName" jdbcType="VARCHAR" />
+    <result column="ios_version_code" property="iosVersionCode" jdbcType="VARCHAR" />
+    <result column="ios_app_size" property="iosAppSize" jdbcType="VARCHAR" />
+    <result column="ios_upgradeflag" property="iosUpgradeflag" jdbcType="INTEGER" />
+    <result column="ios_explains" property="iosExplains" jdbcType="VARCHAR" />
+    <result column="ios_distribution" property="iosDistribution" jdbcType="INTEGER" />
+    <result column="downloanurl" property="downloanurl" jdbcType="VARCHAR" />
+    <result column="indexbanner" property="indexbanner" jdbcType="VARCHAR" />
+    <result column="mybanner" property="mybanner" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, version_name, version_code, file_route, app_size, upgradeflag, explains, distribution, 
+    ios_version_name, ios_version_code, ios_app_size, ios_upgradeflag, ios_explains, 
+    ios_distribution, downloanurl, indexbanner, mybanner, created_time, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zufang_app_version
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_zufang_app_version
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.common.AppVersionEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zufang_app_version (version_name, version_code, file_route, 
+      app_size, upgradeflag, explains, 
+      distribution, ios_version_name, ios_version_code, 
+      ios_app_size, ios_upgradeflag, ios_explains, 
+      ios_distribution, downloanurl, indexbanner, 
+      mybanner, created_time, updated_time
+      )
+    values (#{versionName,jdbcType=VARCHAR}, #{versionCode,jdbcType=VARCHAR}, #{fileRoute,jdbcType=VARCHAR}, 
+      #{appSize,jdbcType=VARCHAR}, #{upgradeflag,jdbcType=INTEGER}, #{explains,jdbcType=VARCHAR}, 
+      #{distribution,jdbcType=INTEGER}, #{iosVersionName,jdbcType=VARCHAR}, #{iosVersionCode,jdbcType=VARCHAR}, 
+      #{iosAppSize,jdbcType=VARCHAR}, #{iosUpgradeflag,jdbcType=INTEGER}, #{iosExplains,jdbcType=VARCHAR}, 
+      #{iosDistribution,jdbcType=INTEGER}, #{downloanurl,jdbcType=VARCHAR}, #{indexbanner,jdbcType=VARCHAR}, 
+      #{mybanner,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.common.AppVersionEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zufang_app_version
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="versionName != null" >
+        version_name,
+      </if>
+      <if test="versionCode != null" >
+        version_code,
+      </if>
+      <if test="fileRoute != null" >
+        file_route,
+      </if>
+      <if test="appSize != null" >
+        app_size,
+      </if>
+      <if test="upgradeflag != null" >
+        upgradeflag,
+      </if>
+      <if test="explains != null" >
+        explains,
+      </if>
+      <if test="distribution != null" >
+        distribution,
+      </if>
+      <if test="iosVersionName != null" >
+        ios_version_name,
+      </if>
+      <if test="iosVersionCode != null" >
+        ios_version_code,
+      </if>
+      <if test="iosAppSize != null" >
+        ios_app_size,
+      </if>
+      <if test="iosUpgradeflag != null" >
+        ios_upgradeflag,
+      </if>
+      <if test="iosExplains != null" >
+        ios_explains,
+      </if>
+      <if test="iosDistribution != null" >
+        ios_distribution,
+      </if>
+      <if test="downloanurl != null" >
+        downloanurl,
+      </if>
+      <if test="indexbanner != null" >
+        indexbanner,
+      </if>
+      <if test="mybanner != null" >
+        mybanner,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="versionName != null" >
+        #{versionName,jdbcType=VARCHAR},
+      </if>
+      <if test="versionCode != null" >
+        #{versionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRoute != null" >
+        #{fileRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="appSize != null" >
+        #{appSize,jdbcType=VARCHAR},
+      </if>
+      <if test="upgradeflag != null" >
+        #{upgradeflag,jdbcType=INTEGER},
+      </if>
+      <if test="explains != null" >
+        #{explains,jdbcType=VARCHAR},
+      </if>
+      <if test="distribution != null" >
+        #{distribution,jdbcType=INTEGER},
+      </if>
+      <if test="iosVersionName != null" >
+        #{iosVersionName,jdbcType=VARCHAR},
+      </if>
+      <if test="iosVersionCode != null" >
+        #{iosVersionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="iosAppSize != null" >
+        #{iosAppSize,jdbcType=VARCHAR},
+      </if>
+      <if test="iosUpgradeflag != null" >
+        #{iosUpgradeflag,jdbcType=INTEGER},
+      </if>
+      <if test="iosExplains != null" >
+        #{iosExplains,jdbcType=VARCHAR},
+      </if>
+      <if test="iosDistribution != null" >
+        #{iosDistribution,jdbcType=INTEGER},
+      </if>
+      <if test="downloanurl != null" >
+        #{downloanurl,jdbcType=VARCHAR},
+      </if>
+      <if test="indexbanner != null" >
+        #{indexbanner,jdbcType=VARCHAR},
+      </if>
+      <if test="mybanner != null" >
+        #{mybanner,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.common.AppVersionEntity" >
+    update t_zufang_app_version
+    <set >
+      <if test="versionName != null" >
+        version_name = #{versionName,jdbcType=VARCHAR},
+      </if>
+      <if test="versionCode != null" >
+        version_code = #{versionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRoute != null" >
+        file_route = #{fileRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="appSize != null" >
+        app_size = #{appSize,jdbcType=VARCHAR},
+      </if>
+      <if test="upgradeflag != null" >
+        upgradeflag = #{upgradeflag,jdbcType=INTEGER},
+      </if>
+      <if test="explains != null" >
+        explains = #{explains,jdbcType=VARCHAR},
+      </if>
+      <if test="distribution != null" >
+        distribution = #{distribution,jdbcType=INTEGER},
+      </if>
+      <if test="iosVersionName != null" >
+        ios_version_name = #{iosVersionName,jdbcType=VARCHAR},
+      </if>
+      <if test="iosVersionCode != null" >
+        ios_version_code = #{iosVersionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="iosAppSize != null" >
+        ios_app_size = #{iosAppSize,jdbcType=VARCHAR},
+      </if>
+      <if test="iosUpgradeflag != null" >
+        ios_upgradeflag = #{iosUpgradeflag,jdbcType=INTEGER},
+      </if>
+      <if test="iosExplains != null" >
+        ios_explains = #{iosExplains,jdbcType=VARCHAR},
+      </if>
+      <if test="iosDistribution != null" >
+        ios_distribution = #{iosDistribution,jdbcType=INTEGER},
+      </if>
+      <if test="downloanurl != null" >
+        downloanurl = #{downloanurl,jdbcType=VARCHAR},
+      </if>
+      <if test="indexbanner != null" >
+        indexbanner = #{indexbanner,jdbcType=VARCHAR},
+      </if>
+      <if test="mybanner != null" >
+        mybanner = #{mybanner,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.common.AppVersionEntity" >
+    update t_zufang_app_version
+    set version_name = #{versionName,jdbcType=VARCHAR},
+      version_code = #{versionCode,jdbcType=VARCHAR},
+      file_route = #{fileRoute,jdbcType=VARCHAR},
+      app_size = #{appSize,jdbcType=VARCHAR},
+      upgradeflag = #{upgradeflag,jdbcType=INTEGER},
+      explains = #{explains,jdbcType=VARCHAR},
+      distribution = #{distribution,jdbcType=INTEGER},
+      ios_version_name = #{iosVersionName,jdbcType=VARCHAR},
+      ios_version_code = #{iosVersionCode,jdbcType=VARCHAR},
+      ios_app_size = #{iosAppSize,jdbcType=VARCHAR},
+      ios_upgradeflag = #{iosUpgradeflag,jdbcType=INTEGER},
+      ios_explains = #{iosExplains,jdbcType=VARCHAR},
+      ios_distribution = #{iosDistribution,jdbcType=INTEGER},
+      downloanurl = #{downloanurl,jdbcType=VARCHAR},
+      indexbanner = #{indexbanner,jdbcType=VARCHAR},
+      mybanner = #{mybanner,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
