@@ -51,24 +51,6 @@ public class ZuFangLoginController {
 	 * @param paramMap
 	 * @return
 	 */
-//	@POST
-//	@Path("/zufanglogin")
-//	public Response ZuFangLogin(Map<String, Object> paramMap) {
-//	        try {
-//	        	String userId = CommonUtils.getValue(paramMap, "userId");
-//	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
-//	        		//未登录
-//	        		 return Response.success("未登录操作");
-//	        	}else{
-//	        		//已登录
-//	        		return Response.success("登录成功",zuFangLoginSevice.zuFangifLogin(userId));
-//	        	}
-//	        } catch (Exception e) {
-//	        	logger.info("判断登录失败"+e);
-//	            return Response.fail("操作失败");
-//	        }
-//	    }
-	
 	/**
 	 * 设置密码
 	 * @param paramMap

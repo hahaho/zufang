@@ -120,8 +120,9 @@ public class ZuFangLoginSevice {
 			String password = registerInfo.getPassword();
 			// 2. 加密后的密码
 			if(password==null){
-				password="";
-				registerInfo.setPassword(password);
+				password="123456";
+				String newPassword = SaltEncodeUtils.sha1(password, salt);
+				registerInfo.setPassword(newPassword);
 				registerInfo.setSalt(salt);
 				registerInfo.setCreatedDate(new Date());
 				registerInfo.setUpdatedDate(new Date());
