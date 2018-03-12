@@ -186,4 +186,14 @@ public class CacheManager {
     return null;
   }
 
+	/**
+	 * 设置缓存不过期
+	 *
+	 * @param key
+	 * @param val
+	 */
+	public void setNoExpire(String key, String val) {
+		stringRedisTemplate.opsForValue().set(key, val);
+	}
+
 }
