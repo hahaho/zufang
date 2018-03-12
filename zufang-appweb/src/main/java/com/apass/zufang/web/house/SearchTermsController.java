@@ -1,6 +1,7 @@
 package com.apass.zufang.web.house;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import com.apass.zufang.domain.enums.FeaturesConfigurationEnums;
 import com.apass.zufang.domain.enums.HuxingEnums;
 import com.apass.zufang.domain.enums.PriceRangeEnum;
 import com.apass.zufang.service.house.ApartHouseService;
+import com.apass.zufang.service.house.HouseinitService;
 import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
 import com.apass.zufang.utils.ValidateUtils;
 import com.google.common.collect.Maps;
@@ -48,6 +50,9 @@ public class SearchTermsController {
 
 	@Autowired
 	private WorkSubwaySevice workSubwaySevice;
+	
+    @Autowired
+    private HouseinitService houseinitService;
 
 	/**
 	 * 品牌公寓
@@ -112,10 +117,15 @@ public class SearchTermsController {
 	@Path("/getSubwayLineAndSiteOrAre")
 	public Response getSubwayLineAndSiteOrAre(Map<String, Object> paramMap) {
 		try {
-			String code = CommonUtils.getValue(paramMap, "code");// 当前位置的编码
+			String city = CommonUtils.getValue(paramMap, "city");// 当前位置的编码
 
-			ValidateUtils.isNotBlank(code, "编码无数据");
+			ValidateUtils.isNotBlank(city, "城市不可为空");
+			
+			HashMap<String, Object> codeMap = houseinitService.queryCityCode(city);
+			
+			String code = (String) codeMap.get("code");
 
+			ValidateUtils.isNotBlank(code, "城市数据有误");
 			WorkSubway domin = new WorkSubway();
 			domin.setParentCode(Long.valueOf(code));
 			;
