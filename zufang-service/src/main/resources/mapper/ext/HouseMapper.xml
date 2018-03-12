@@ -22,6 +22,9 @@
     <!-- 房屋信息管理中心 -->
     <sql id="QueryHouseConditionSql">
        <where>
+            <if test="apartmentCode!=null and apartmentCode!=''">
+            	AND apart.code = #{apartmentCode}
+            </if>
 	        <if test="apartmentName!=null and apartmentName!=''">
 	            AND apart.name LIKE '%${apartmentName}%'
 	        </if>

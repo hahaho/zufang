@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseInfoRela;
@@ -75,8 +76,8 @@ public class HouseInfoService {
 		try {
 			houseMapper.updateByPrimaryKeySelective(house);
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw e;
+			LOG.error("保存房屋详情浏览量失败!", e);
+			return;
 		}
 	}
 

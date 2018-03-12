@@ -39,7 +39,7 @@ public interface GfbRegisterInfoEntityMapper extends GenericMapper<Apartment, Lo
 	 * @param customerId
 	 * @return
 	 */
-	public String insert(GfbRegisterInfoEntity registerInfo);
+	public Integer insert(GfbRegisterInfoEntity registerInfo);
 	
 	/**
 	 * 手机号查询

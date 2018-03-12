@@ -34,26 +34,20 @@ public class UpLoadPictureController {
 	@ResponseBody
     @RequestMapping(value = "/uppicture320", method = RequestMethod.POST)
 	public Response uploadPicture320(@ModelAttribute("file") MultipartFile file){
-		return uploadImg(file, 757, 562);
+		return uploadImg(file, 750,850,562,662);
     }
 	
-	@ResponseBody
-    @RequestMapping(value = "/uppicture562", method = RequestMethod.POST)
-	public Response uploadPicture562(@ModelAttribute("file") MultipartFile file){
-		return uploadImg(file, 750, 562);
-    }
-	
-	public Response uploadImg(MultipartFile file,int widths,int heights){
+	public Response uploadImg(MultipartFile file,int minWidths,int maxWidths,int minHeights,int maxHeights){
 		try{
     		if(null == file){
         		throw new BusinessException("上传文件不能为空!");
         	}
     		boolean checkImgType = ImageTools.checkImgType(file);// 图片类型
-        	boolean checkImgSize = ImageTools.checkImgSize(file,widths,heights);// 尺寸
+        	boolean checkImgSize = ImageTools.checkImgSize(file,minWidths,maxWidths,minHeights,maxHeights);// 尺寸
         	int size = file.getInputStream().available();
         	
         	if(!(checkImgType && checkImgSize)){
-        		throw new BusinessException("文件尺寸不符,上传图片尺寸必须是宽："+widths+"px,高："+heights+"px,格式：.jpg,.png");
+        		throw new BusinessException("文件尺寸不符,上传图片尺寸必须是宽：["+minWidths+"~"+maxWidths+"]px,高：["+minHeights+"~"+maxHeights+"]px,格式：.jpg,.png");
         	}else if(size > 1024 * 1024 * 2){
         		file.getInputStream().close();
         		throw new BusinessException("文件不能大于2MB!");
