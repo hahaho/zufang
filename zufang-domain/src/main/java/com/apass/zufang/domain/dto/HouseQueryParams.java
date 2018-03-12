@@ -27,6 +27,7 @@ public class HouseQueryParams extends QueryParams{
 	private List<Integer> status;//状态
 	private String communityName;//小区名称
 	private Long apartmentId;
+	private String apartmentCode;//公寓Code
 
 	private Byte type;
 
@@ -172,4 +173,13 @@ public class HouseQueryParams extends QueryParams{
 	public void setStreet(String street) {
 		this.street = street;
 	}
+
+	public String getApartmentCode() {
+		return apartmentCode;
+	}
+
+	public void setApartmentCode(String apartmentCode) {
+		this.apartmentCode = apartmentCode;
+	}
+	
 }
