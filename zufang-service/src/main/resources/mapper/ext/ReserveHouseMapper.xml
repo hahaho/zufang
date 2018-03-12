@@ -114,7 +114,6 @@
 			  x.zujin_type				zujinType,
 			  x.`status`         		houseStatus,
 			  x.title					title	,
-			  x.description				description,
 			  x.housekeeper_tel			housekeeperTel,
 			  x.total_doors				totalDoors,
 			  x.room_acreage			room_acreage,
@@ -131,6 +130,7 @@
 			(SELECT * FROM t_zfang_house where  is_delete = '00')  x on  z.house_id = x.id
 		LEFT JOIN		t_zfang_house_location w on z.house_id = w.house_id
 		where x.`status`='2' 
+		AND z.reserve_date > CURDATE()
 
 		  ]]>
 	<![CDATA[
@@ -145,8 +145,17 @@
 	<!-- 记录总数 -->
 	<select id="getCount"  resultType="java.lang.Integer" parameterType="java.lang.String"   >
 	<![CDATA[
-		SELECT COUNT(*) FROM t_zfang_reserve_house 
-		where telphone =  #{telphone};
+			SELECT 
+			  COUNT(*)
+
+		FROM (SELECT * FROM t_zfang_reserve_house where  telphone = #{telphone}  and is_delete = '00') z 
+		LEFT JOIN 
+			(SELECT * FROM t_zfang_house_img where  is_delete = '00') y on y.house_id = z.house_id
+		LEFT JOIN 
+			(SELECT * FROM t_zfang_house where  is_delete = '00')  x on  z.house_id = x.id
+		LEFT JOIN		t_zfang_house_location w on z.house_id = w.house_id
+		where x.`status`='2' 
+		AND z.reserve_date > CURDATE()
 		]]>
 	</select>
     
