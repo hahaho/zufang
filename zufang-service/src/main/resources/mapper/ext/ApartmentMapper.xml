@@ -6,6 +6,7 @@
         <where>
 			<if test="name!=null and name!=''"> AND name like '%${name}%' </if>
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
+            <if test="code!=null and code!=''"> AND code = #{code} </if>
         </where>
     </sql>
     <!-- getApartmentListCodeCount-->

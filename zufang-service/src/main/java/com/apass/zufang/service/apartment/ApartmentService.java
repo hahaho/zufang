@@ -1,6 +1,11 @@
 package com.apass.zufang.service.apartment;
 import java.util.List;
+import java.util.Map;
 
+import com.apass.zufang.domain.entity.rbac.UsersDO;
+import com.apass.zufang.rbac.UsersRepository;
+import com.google.common.collect.Maps;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +29,9 @@ public class ApartmentService {
 	private ApartmentMapper apartmentMapper;
 	@Autowired
 	public ImageService imageService;
+	@Autowired
+	private UsersRepository usersRepository;
+
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Integer createEntity(Apartment entity){
 		return apartmentMapper.insertSelective(entity);
@@ -102,7 +110,20 @@ public class ApartmentService {
 		if(StringUtils.isBlank(username)){
 			throw new BusinessException("登录人为空，或者登录人未查找到公寓信息！");
 		}
-		return 1L;
+
+        UsersDO usersDO = usersRepository.selectByUsername(username);
+
+        Map<String,String> parmMap = Maps.newHashMap();
+        parmMap.put("code",usersDO.getApartmentCode());
+        List<Apartment> apartments = apartmentMapper.listAllValidApartment(parmMap);
+        if(CollectionUtils.isEmpty(apartments)){
+            throw new BusinessException("该用户未关联公寓!");
+        }
+        if(apartments.size()>1){
+            throw new BusinessException("用户关联公寓数据有误数据!");
+        }
+
+        return apartments.get(0).getId();
 //		return apartmentMapper.selectByPrimaryKey(1L).getId();
 	}
 }
