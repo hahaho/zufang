@@ -171,9 +171,9 @@ public class HouseService {
 		}
 		
 		/** 如果是首次添加，修改，状态不变，如果是下架，修改后，状态变为5*/
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
+		/*if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
 			house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
-		}
+		}*/
 		/*** 修改房屋信息*/
 		houseMapper.updateByPrimaryKeySelective(house);
 		
