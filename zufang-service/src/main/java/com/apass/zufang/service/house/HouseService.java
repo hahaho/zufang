@@ -522,8 +522,6 @@ public class HouseService {
 				houseEs.setDelistTime(h.getDelistTime());
 				String delistStr = DateFormatUtil.dateToString(h.getDelistTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
 				houseEs.setDelistTimeStr(delistStr);
-				houseEs.setDescription(h.getDescription());
-				houseEs.setDescriptionPinyin(Pinyin4jUtil.converterToSpell(h.getDescription()));
 				houseEs.setCreatedTime(h.getCreatedTime());
 				houseEs.setCreatedTimeStr(DateFormatUtil.dateToString(h.getCreatedTime(), DateFormatUtil.YYYY_MM_DD_HH_MM_SS));
 				houseEs.setUpdatedTime(h.getUpdatedTime());

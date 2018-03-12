@@ -24,7 +24,7 @@
     <result column="list_time" property="listTime" jdbcType="TIMESTAMP" />
     <result column="delist_time" property="delistTime" jdbcType="TIMESTAMP" />
     <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="edit_flag" property="editFlag" jdbcType="TINYINT" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
     <result column="created_user" property="createdUser" jdbcType="VARCHAR" />
@@ -40,7 +40,7 @@
   <sql id="Base_Column_List" >
     id, code, apartment_id, type, sort_no, rent_type, community_name, acreage, room, 
     hall, wei, floor, total_floor, lift_type, rent_amt, zujin_type, chaoxiang, zhuangxiu, 
-    status, list_time, delist_time, title, description, created_time, updated_time, created_user, 
+    status, list_time, delist_time, title, edit_flag, created_time, updated_time, created_user, 
     updated_user, is_delete, page_view, housekeeper_tel, total_doors, hezu_chaoxiang, 
     hezu_resource, room_acreage
   </sql>
@@ -62,7 +62,7 @@
       lift_type, rent_amt, zujin_type, 
       chaoxiang, zhuangxiu, status, 
       list_time, delist_time, title, 
-      description, created_time, updated_time, 
+      edit_flag, created_time, updated_time, 
       created_user, updated_user, is_delete, 
       page_view, housekeeper_tel, total_doors, 
       hezu_chaoxiang, hezu_resource, room_acreage
@@ -74,7 +74,7 @@
       #{liftType,jdbcType=TINYINT}, #{rentAmt,jdbcType=DECIMAL}, #{zujinType,jdbcType=TINYINT}, 
       #{chaoxiang,jdbcType=TINYINT}, #{zhuangxiu,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{listTime,jdbcType=TIMESTAMP}, #{delistTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{editFlag,jdbcType=TINYINT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
       #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, 
       #{pageView,jdbcType=BIGINT}, #{housekeeperTel,jdbcType=VARCHAR}, #{totalDoors,jdbcType=VARCHAR}, 
       #{hezuChaoxiang,jdbcType=TINYINT}, #{hezuResource,jdbcType=TINYINT}, #{roomAcreage,jdbcType=DECIMAL}
@@ -146,8 +146,8 @@
       <if test="title != null" >
         title,
       </if>
-      <if test="description != null" >
-        description,
+      <if test="editFlag != null" >
+        edit_flag,
       </if>
       <if test="createdTime != null" >
         created_time,
@@ -247,8 +247,8 @@
       <if test="title != null" >
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
+      <if test="editFlag != null" >
+        #{editFlag,jdbcType=TINYINT},
       </if>
       <if test="createdTime != null" >
         #{createdTime,jdbcType=TIMESTAMP},
@@ -351,8 +351,8 @@
       <if test="title != null" >
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
+      <if test="editFlag != null" >
+        edit_flag = #{editFlag,jdbcType=TINYINT},
       </if>
       <if test="createdTime != null" >
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -413,7 +413,7 @@
       list_time = #{listTime,jdbcType=TIMESTAMP},
       delist_time = #{delistTime,jdbcType=TIMESTAMP},
       title = #{title,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
+      edit_flag = #{editFlag,jdbcType=TINYINT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       created_user = #{createdUser,jdbcType=VARCHAR},
