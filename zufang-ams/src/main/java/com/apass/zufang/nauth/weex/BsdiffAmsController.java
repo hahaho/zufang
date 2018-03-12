@@ -1,8 +1,6 @@
-package com.apass.zufang.web.weex;
+package com.apass.zufang.nauth.weex;
 
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
-import com.apass.gfb.framework.utils.CommonUtils;
-import com.apass.gfb.framework.utils.HttpWebUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.weex.BsdiffInfoEntity;
 import com.apass.zufang.domain.vo.BsdiffVo;
@@ -10,7 +8,6 @@ import com.apass.zufang.service.weex.BsdiffinfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;

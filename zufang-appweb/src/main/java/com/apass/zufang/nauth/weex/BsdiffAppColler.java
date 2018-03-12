@@ -1,4 +1,4 @@
-package com.apass.zufang.web.weex;
+package com.apass.zufang.nauth.weex;
 
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.gfb.framework.utils.MD5Utils;
