@@ -67,10 +67,6 @@ public class HouseInfoRela {
 	 */
 	private String title;
 	/**
-	 * 房源描述
-	 */
-	private String description;
-	/**
 	 * 房源小区名称
 	 */
 	private String communityName;
@@ -257,14 +253,6 @@ public class HouseInfoRela {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public String getCommunityName() {

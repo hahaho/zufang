@@ -359,7 +359,7 @@ public class HouseService {
 			throw new BusinessException("房屋Id不能为空!");
 		}
 		House house = houseMapper.selectByPrimaryKey(Long.parseLong(id));
-		int status = house.getStatus().intValue();
+		int status = 2;
 		//如果房屋的状态为待上架，正常上架
 		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_4.getCode()){
 			return "房屋状态不允许操作！";
@@ -370,17 +370,20 @@ public class HouseService {
 					||(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
 							house.getEditFlag().intValue() == EditFalgEnums.EditFalg_1.getCode())){
 				house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
+				status = 1;
 			}else if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
 					house.getEditFlag().intValue() == EditFalgEnums.EditFalg_0.getCode()){
 				house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 				house.setListTime(new Date());
 				houseAddEs(house.getId());
+				status = 0;
 			}
 			house.setUpdatedTime(new Date());
 			house.setUpdatedUser(updateUser);
 			houseMapper.updateByPrimaryKeySelective(house);
 		}
-		return status == 1 ? "首次录入房源需审核，通过后自动上架，请等待审核结果!":"房屋上架成功!";
+		
+		return status == 1 ? "该房源需审核，通过后自动上架，请等待审核结果!":"房屋上架成功!";
 	}
 	
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
@@ -430,7 +433,7 @@ public class HouseService {
 		if(others == 0){
 			return "房源批量上架成功！";
 		}
-		return "";
+		return "部分房源上架成功，剩余房源需审核，通过后自动上架，请等待审核结果!";
 	}
 	
 	/*** 删除图片信息 * @throws BusinessException */

@@ -1,8 +1,8 @@
 package com.apass.zufang.service.onlinebooking;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -63,16 +63,9 @@ public class OnlineBookingService {
 	}
 	
 	
-	public ResponsePageBody<HouseShowingsEntity> queryReservations(ReservationsShowingsEntity crmety) {
-		ResponsePageBody<HouseShowingsEntity> body = new ResponsePageBody<>();
+	public ResponsePageBody<HouseShowingsEntity> queryReservations(ReservationsShowingsEntity crmety)throws BusinessException {
+ 		ResponsePageBody<HouseShowingsEntity> body = new ResponsePageBody<>();
 		List<HouseShowingsEntity> houseList = reserveHouseMapper.getHouseLists(crmety);
-		for (HouseShowingsEntity houseShowingsEntity : houseList) {
-			if(houseShowingsEntity.getReserveDate().before( new Date()) ){
-				houseShowingsEntity.setAcreage("");
-			}
-			
-		}
-		
 		body.setRows(houseList);
 		body.setTotal(reserveHouseMapper.getCount(crmety.getTelphone()));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);

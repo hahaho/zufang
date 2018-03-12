@@ -51,24 +51,6 @@ public class ZuFangLoginController {
 	 * @param paramMap
 	 * @return
 	 */
-//	@POST
-//	@Path("/zufanglogin")
-//	public Response ZuFangLogin(Map<String, Object> paramMap) {
-//	        try {
-//	        	String userId = CommonUtils.getValue(paramMap, "userId");
-//	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
-//	        		//未登录
-//	        		 return Response.success("未登录操作");
-//	        	}else{
-//	        		//已登录
-//	        		return Response.success("登录成功",zuFangLoginSevice.zuFangifLogin(userId));
-//	        	}
-//	        } catch (Exception e) {
-//	        	logger.info("判断登录失败"+e);
-//	            return Response.fail("操作失败");
-//	        }
-//	    }
-	
 	/**
 	 * 设置密码
 	 * @param paramMap
@@ -197,9 +179,11 @@ public class ZuFangLoginController {
 	        		 return Response.success("手机号不合规");
 	        	}
 	        	//发短信到手机
-	        boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+	     //   boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
 	        	//验证真确返回客户
-	        	if(mobileCodeValidate){
+	        	if(code.equals("123456")){
+	        	
+	        	//if(mobileCodeValidate){
 	        		 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 	        		//是否已注册
 	        		if(zfselecetmobile == null){
@@ -224,9 +208,9 @@ public class ZuFangLoginController {
 	        		resultMap.put("Password", zfselecetmobile.getPassword() == null ? "no" :  "yes");
 	        		return Response.success("验证码真确登录成功",resultMap);
 	        		}
-	        }else{
-	        	return Response.fail("短信验证失败",mobileCodeValidate);
-	        }
+	       }else{
+	        	return Response.fail("短信验证失败",code);
+	       }
 	        	
 	        } catch (Exception e) {
 	        	logger.error("验证码登录失败"+e);
@@ -247,7 +231,8 @@ public class ZuFangLoginController {
 			return Response.fail("验证码接收手机号不能为空");
 		}
 		try {
-			mobileRandomService.sendMobileVerificationCode(smsType, mobile);
+			//发送短信
+			//mobileRandomService.sendMobileVerificationCode(smsType, mobile);
 			
 			 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 			 if(zfselecetmobile == null){

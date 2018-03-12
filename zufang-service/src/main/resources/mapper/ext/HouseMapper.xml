@@ -168,12 +168,8 @@
     </select>
     
     <!-- init城市 -->
-        <select id="initCity" resultType="com.apass.zufang.domain.vo.HouseVo">
+	<select id="initCity" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
-       	SELECT c.CITY, c.CODE
-	   	FROM
-		t_zufang_work_city_jd c
-		WHERE c.CITY IN (
 	   		SELECT l.city
 	   		FROM
 	   			t_zfang_house h,
@@ -187,9 +183,8 @@
 	   		AND a.is_delete = '00'
 	   		GROUP BY
 	   			l.city ASC
-		)
         ]]>
-    </select>
+	</select>
     <!-- 查询房源List -->
     <select id="getHouseById" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[

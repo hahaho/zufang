@@ -53,7 +53,7 @@
 		WHERE
 		a.id = h.apartment_id
 		AND h.id = l.house_id
-		AND a.city = #{city}
+		AND l.city = #{city}
 		AND a.is_delete = '00'
 		AND h.is_delete = '00'
 		AND l.is_delete = '00'
