@@ -48,7 +48,7 @@ public class House {
 
     private String title;
 
-    private String description;
+    private Byte editFlag;
 
     private Date createdTime;
 
@@ -248,12 +248,12 @@ public class House {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public Byte getEditFlag() {
+        return editFlag;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setEditFlag(Byte editFlag) {
+        this.editFlag = editFlag;
     }
 
     public Date getCreatedTime() {
