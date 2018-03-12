@@ -102,6 +102,7 @@ public class HouseService {
 		status.add(BusinessHouseTypeEnums.ZT_1.getCode());
 		status.add(BusinessHouseTypeEnums.ZT_2.getCode());
 		status.add(BusinessHouseTypeEnums.ZT_3.getCode());
+		status.add(BusinessHouseTypeEnums.ZT_5.getCode());
 		dto.setStatus(status);
 		List<HouseBagVo> houseList = houseMapper.getHouseLists(dto);
 		body.setRows(houseList);
