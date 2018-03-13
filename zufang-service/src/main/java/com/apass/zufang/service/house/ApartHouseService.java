@@ -34,7 +34,7 @@ public class ApartHouseService {
     @Value("${zufang.image.uri}")
     private String imageUri;
     
-    private final static String apartInitImg = "http://espapp.apass.cn/static/eshop/other/1520907753943.jpg";
+    private final static String apartInitImg = "http://espapp.apass.cn/static/eshop/other/1520911924231.jpg";
     /**
      * initImg
      * @return
