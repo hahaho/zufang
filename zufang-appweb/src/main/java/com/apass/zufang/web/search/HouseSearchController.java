@@ -241,6 +241,7 @@ public class HouseSearchController {
 	@POST
 	@Path(value = "/search/filter")
 	public Response searchFilter(@RequestBody Map<String, Object> paramMap) {
+		LOGGER.info("房屋筛选执行,参数:{}", GsonUtils.toJson(paramMap));
 		try{
 			String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");
 			String priceFlag = CommonUtils.getValue(paramMap,"priceFlag");
