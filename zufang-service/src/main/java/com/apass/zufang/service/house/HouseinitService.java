@@ -141,7 +141,10 @@ public class HouseinitService {
 		if (ValidateUtils.listIsTrue(hotHouse)) {
 			// 追加图片
 			for (HouseVo houseVo : hotHouse) {
-				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
+				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+				if (ValidateUtils.listIsTrue(imgList)) {
+					imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
+				}
 				houseVo.setPictures(imgList);
 			}
 		}
