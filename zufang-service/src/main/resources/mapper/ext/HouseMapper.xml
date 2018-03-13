@@ -265,7 +265,6 @@
 			x.rent_type houseRentType,
 			x.acreage houseAcreage,
 			x.room_acreage houseRoomAcreage,
-			x.description houseDescription,
 			x.hezu_resource houseHezuResource,
 			x.chaoxiang houseChaoxiang,
 			x.hezu_chaoxiang houseHezuChaoxiang,
@@ -308,7 +307,6 @@
         SELECT
             zhouseImg.url url,
             zhouse.title houseTitle,
-            zhouse.description description,
         location.detail_addr detailAddr,
         zhouse.room room,
         zhouse.hall hall,
