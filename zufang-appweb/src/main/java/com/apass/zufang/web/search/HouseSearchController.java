@@ -365,7 +365,7 @@ public class HouseSearchController {
 					double latitude = houseEs.getLatitude();
 
 					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
-					if(distance>5000d){
+					if(distance<5000d){
 						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
 					}
 				}
@@ -397,16 +397,21 @@ public class HouseSearchController {
 					double latitude = houseEs.getLatitude();
 
 					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
-					if(distance>5000d){
+					if(distance<5000d){
 						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
 					}
 				}
 			}
 
 			if(StringUtils.isNotEmpty(subCode) || StringUtils.isNotEmpty(areaCode)){
-				List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
-				returnMap.put("houseDataList", list);
-				return Response.success("ES查询成功",returnMap);
+				if(CollectionUtils.isNotEmpty(houseList2)){
+					List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
+					returnMap.put("houseDataList", list);
+					return Response.success("ES查询成功",returnMap);
+				}else {
+					returnMap.put("houseDataList", "");
+					return Response.success("ES查询成功",returnMap);
+				}
 			}
 
 			returnMap.put("houseDataList", houseList);
