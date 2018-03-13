@@ -20,6 +20,7 @@ import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.apartment.ApartmentService;
@@ -73,9 +74,15 @@ public class HouseControler {
         	dto.setHouseTitle(houseTitle);
         	dto.setHouseCode(houseCode);
         	dto.setProvince(province);
-        	dto.setCity(city);
-        	dto.setDistrict(district);
-        	dto.setStreet(street);
+        	if(CityEnums.isContains(province)){
+        		dto.setCity(province);
+        		dto.setDistrict(city);
+        		dto.setStreet(district);
+        	}else{
+        		dto.setCity(city);
+            	dto.setDistrict(district);
+            	dto.setStreet(street);
+        	}
         	dto.setRows(Integer.parseInt(rows));
         	dto.setPage(Integer.parseInt(page));
         	dto.setApartmentCode(apartmentCode);
@@ -285,8 +292,6 @@ public class HouseControler {
 	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
 	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
 	    
-	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
-	    
 	    String rentAmt = CommonUtils.getValue(paramMap, "rentAmt");//租金
 	    String zujinType = CommonUtils.getValue(paramMap, "zujinType");//租金支付方式
 	    
@@ -344,7 +349,6 @@ public class HouseControler {
 	    	ValidateUtils.checkNonNumberRange(roomAcreage, 1, 9999, "房屋面积");
 	    }
 	    
-	    ValidateUtils.isNotBlank(peizhi, "请选择房屋配置");
 	    ValidateUtils.isNotBlank(rentAmt, "请填写租金");
 	    ValidateUtils.checkNumberRange(rentAmt, 0, 0, "租金");
 	    ValidateUtils.isNotBlank(zujinType, "请选择租金支付方式");
@@ -413,8 +417,10 @@ public class HouseControler {
 	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
 	    String picturs = CommonUtils.getValue(paramMap,"pictures");//图片
 	    
-	    String[] peizhis = StringUtils.split(peizhi, ",");
-	    house.setConfigs(Arrays.asList(peizhis));
+	    if(StringUtils.isNotBlank(peizhi)){
+	    	String[] peizhis = StringUtils.split(peizhi, ",");
+		    house.setConfigs(Arrays.asList(peizhis));
+	    }
 	    
 	    String[] pictures = StringUtils.split(picturs,",");
 	    house.setPictures(Arrays.asList(pictures));

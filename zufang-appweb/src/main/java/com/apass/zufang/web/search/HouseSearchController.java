@@ -2,10 +2,7 @@ package com.apass.zufang.web.search;
 
 import static com.apass.zufang.search.enums.IndexType.HOUSE;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +21,7 @@ import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.nation.NationService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.google.gson.Gson;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -79,6 +77,14 @@ public class HouseSearchController {
 	private HouseInfoService houseInfoService;
 	@Autowired
 	private NationService nationService;
+	@Autowired
+	private ObtainGaodeLocation obtainGaodeLocation;
+
+	/**
+	 * 直辖市
+	 */
+	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4"};
+	private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
 
 	/**
 	 * 添加致搜索记录表
@@ -235,6 +241,7 @@ public class HouseSearchController {
 	@POST
 	@Path(value = "/search/filter")
 	public Response searchFilter(@RequestBody Map<String, Object> paramMap) {
+		LOGGER.info("房屋筛选执行,参数:{}", GsonUtils.toJson(paramMap));
 		try{
 			String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");
 			String priceFlag = CommonUtils.getValue(paramMap,"priceFlag");
@@ -264,13 +271,13 @@ public class HouseSearchController {
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}
 			if(StringUtils.isNotEmpty(priceFlag)){
-				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(1.5f));
+				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
 			}
 			//如果户型选不限，则不加此条件
 			if(StringUtils.isNotEmpty(rentType)){
 				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
 						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
-					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(1.5f));
+					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(2.5f));
 				}
 			}
 			if(StringUtils.isNotEmpty(room)){
@@ -351,6 +358,7 @@ public class HouseSearchController {
 				if(StringUtils.isNotEmpty(subCode)){
 					//根据code查询经纬度，计算距离
 					WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
+					LOGGER.info("subCode:{}查询地铁线路表结果：{}",subCode,GsonUtils.toJson(workSubway));
 					String nearestPoint = workSubway.getNearestPoint();
 					location = nearestPoint.split(",");
 					double longitude = houseEs.getLongitude();
@@ -363,11 +371,28 @@ public class HouseSearchController {
 				}
 				if(StringUtils.isNotEmpty(areaCode)){
 					//根据code查询经纬度，计算距离
-					WorkCityJd workCityJd = nationService.selectWorkCityByCode(areaCode);
+						//towns
+					WorkCityJd townJd = nationService.selectWorkCityByCode(areaCode);
+						//district
+					WorkCityJd districtJd = nationService.selectWorkCityByCode(String.valueOf(townJd.getParent()));
+						//city
+					WorkCityJd cityJd = nationService.selectWorkCityByCode(String.valueOf(districtJd.getParent()));
+					String address = null;
 					StringBuffer sb = new StringBuffer();
-					String address = sb.append(workCityJd.getProvince()).append(workCityJd.getCity())
-							.append(workCityJd.getDistrict()).append(workCityJd.getTowns()).toString();
-					location = new ObtainGaodeLocation().getLocation(address);
+					//说明是直辖市，townJd无数据，areaCode为县code
+					if(CENTRL_CITY_LIST.contains(cityJd.getCode())){
+						address = sb.append(cityJd.getProvince()).append(districtJd.getCity())
+								.append(townJd.getDistrict()).toString();
+					}else{
+						//province
+						WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
+						address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
+								.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
+					}
+
+					location = obtainGaodeLocation.getLocation(address);
+					LOGGER.info("参数address:{}调用ObtainGaodeLocation.getgetLocation方法返回数据：{}",address,location);
+
 					double longitude = houseEs.getLongitude();
 					double latitude = houseEs.getLatitude();
 
