@@ -27,10 +27,7 @@ public class HousePeiZhiService {
 	
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void insertPeiZhi(HouseVo houseVo) throws BusinessException{
-		if(null == houseVo){
-			throw new BusinessException("配置参数不能为空!");
-		}
-		if(CollectionUtils.isEmpty(houseVo.getConfigs())){
+		if(null == houseVo || CollectionUtils.isEmpty(houseVo.getConfigs())){
 			return;
 		}
 		for (String config : houseVo.getConfigs()) {
