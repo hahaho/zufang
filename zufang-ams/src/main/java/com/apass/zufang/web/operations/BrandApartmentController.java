@@ -165,7 +165,7 @@ public class BrandApartmentController {
         	String houseId = CommonUtils.getValue(map, "houseId");
         	String url = CommonUtils.getValue(map, "url");
         	ValidateUtils.isNotBlank(houseId, "热门房源ID为空！");
-        	ValidateUtils.isNotBlank(url, "热门房源图片为空！");
+//        	ValidateUtils.isNotBlank(url, "热门房源图片为空！");
         	String username = SpringSecurityUtils.getCurrentUser();
         	return brandApartmentService.hotHouseSet(houseId,url,username);
         } catch (BusinessException e) {
