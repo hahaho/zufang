@@ -149,7 +149,7 @@
        	WHERE 1=1 
        	]]>
     	<if test="houseType!=null and houseType!=''"> AND x.type = #{houseType} </if>
-    	<if test="apartmentName!=null and apartmentName!=''"> AND x.name LIKE '%${apartmentName}%' </if>
+    	<if test="apartmentName!=null and apartmentName!=''"> AND y.name LIKE '%${apartmentName}%' </if>
     	<if test="houseTitle!=null and houseTitle!=''"> AND x.title LIKE '%${houseTitle}%' </if>
     	<if test="houseCode!=null and houseCode!=''"> AND x.code = #{houseCode} </if>
     	
@@ -265,7 +265,6 @@
 			x.rent_type houseRentType,
 			x.acreage houseAcreage,
 			x.room_acreage houseRoomAcreage,
-			x.description houseDescription,
 			x.hezu_resource houseHezuResource,
 			x.chaoxiang houseChaoxiang,
 			x.hezu_chaoxiang houseHezuChaoxiang,
@@ -308,7 +307,6 @@
         SELECT
             zhouseImg.url url,
             zhouse.title houseTitle,
-            zhouse.description description,
         location.detail_addr detailAddr,
         zhouse.room room,
         zhouse.hall hall,
