@@ -292,8 +292,6 @@ public class HouseControler {
 	    String hezuChaoxiang = CommonUtils.getValue(paramMap, "hezuChaoxiang");//朝向
 	    String roomAcreage = CommonUtils.getValue(paramMap, "roomAcreage");
 	    
-//	    String peizhi = CommonUtils.getValue(paramMap,"peizhi");//配置
-	    
 	    String rentAmt = CommonUtils.getValue(paramMap, "rentAmt");//租金
 	    String zujinType = CommonUtils.getValue(paramMap, "zujinType");//租金支付方式
 	    
@@ -351,7 +349,6 @@ public class HouseControler {
 	    	ValidateUtils.checkNonNumberRange(roomAcreage, 1, 9999, "房屋面积");
 	    }
 	    
-//	    ValidateUtils.isNotBlank(peizhi, "请选择房屋配置");
 	    ValidateUtils.isNotBlank(rentAmt, "请填写租金");
 	    ValidateUtils.checkNumberRange(rentAmt, 0, 0, "租金");
 	    ValidateUtils.isNotBlank(zujinType, "请选择租金支付方式");
