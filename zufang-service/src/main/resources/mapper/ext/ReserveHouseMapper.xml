@@ -43,7 +43,6 @@
 			y.rent_type houseRentType,
 			y.acreage houseAcreage,
 			y.room_acreage houseRoomAcreage,
-			y.description houseDescription,
 			y.hezu_resource houseHezuResource,
 			y.chaoxiang houseChaoxiang,
 			y.hezu_chaoxiang houseHezuChaoxiang
