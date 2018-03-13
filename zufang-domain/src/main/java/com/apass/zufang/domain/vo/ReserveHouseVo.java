@@ -47,7 +47,6 @@ public class ReserveHouseVo{
     private String houseRentType;//房源出租类型 1:整租；2:合租
     private String houseAcreage;//房源总面积
     private String houseRoomAcreage;//房源合租面积
-    private String houseDescription;//房源描述
 	public Long getId() {
 		return id;
 	}
@@ -257,11 +256,5 @@ public class ReserveHouseVo{
 	}
 	public void setHouseRoomAcreage(String houseRoomAcreage) {
 		this.houseRoomAcreage = houseRoomAcreage;
-	}
-	public String getHouseDescription() {
-		return houseDescription;
-	}
-	public void setHouseDescription(String houseDescription) {
-		this.houseDescription = houseDescription;
 	}
 }

@@ -33,7 +33,6 @@ public class HouseAppointmentVo{
     private String houseRentType;//房源出租类型 1:整租；2:合租
     private String houseAcreage;//房源总面积
     private String houseRoomAcreage;//房源合租面积
-    private String houseDescription;//房源描述
     
     private String houseKitchenFalg;//房源独立厨房
 	private String houseToiletFalg;//房源独立卫生间
@@ -174,12 +173,6 @@ public class HouseAppointmentVo{
 	}
 	public void setHouseRoomAcreage(String houseRoomAcreage) {
 		this.houseRoomAcreage = houseRoomAcreage;
-	}
-	public String getHouseDescription() {
-		return houseDescription;
-	}
-	public void setHouseDescription(String houseDescription) {
-		this.houseDescription = houseDescription;
 	}
 	public String getHouseKitchenFalg() {
 		return houseKitchenFalg;
