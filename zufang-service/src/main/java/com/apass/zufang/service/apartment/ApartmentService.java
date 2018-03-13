@@ -58,7 +58,7 @@ public class ApartmentService {
         Integer count = apartmentMapper.getApartmentListCount(entity);
         List<ApartmentVo> list = apartmentMapper.getApartmentList(entity);
         for(ApartmentVo en : list){
-        	en.setCompanyLogo(imageService.getComplateUrl(en.getCompanyLogo()));
+        	en.setFullCompanyLogo(imageService.getComplateUrl(en.getCompanyLogo()));
         }
         pageBody.setTotal(count);
         pageBody.setRows(list);
