@@ -15,7 +15,6 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
-import com.apass.zufang.utils.PageBean;
 import com.apass.zufang.utils.ValidateUtils;
 @Service
 public class HouseImgService {
@@ -25,6 +24,7 @@ public class HouseImgService {
 	
 	@Value("${zufang.image.uri}")
 	private String imageUri;
+	private final static String homeInitImg = "http://espapp.apass.cn/static/eshop/other/1520907719383.jpg";
 	/**
 	 * 根据房屋Id，批量删除图片信息
 	 * deleteImgByHouseId
@@ -40,13 +40,16 @@ public class HouseImgService {
 	 * @return
 	 */
 	public List<String> initImg() {
-		List<HouseImg> initImg = houseImgMapper.initImg();
-		PageBean<HouseImg> pageBean = new PageBean<>(1, 10, initImg);
-		initImg = pageBean.getList();
+//		List<HouseImg> initImg = houseImgMapper.initImg();
+//		PageBean<HouseImg> pageBean = new PageBean<>(1, 10, initImg);
+//		initImg = pageBean.getList();
+//		List<String> initCity = new ArrayList<>();
+//		for (HouseImg string : initImg) {
+//			initCity.add(imageUri + "/static" +string.getUrl());
+//		}
+		
 		List<String> initCity = new ArrayList<>();
-		for (HouseImg string : initImg) {
-			initCity.add(imageUri + "/static" +string.getUrl());
-		}
+		initCity.add(homeInitImg);
 		return initCity;
 	}
 	/**

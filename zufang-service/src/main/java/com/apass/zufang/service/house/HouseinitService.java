@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
-import com.apass.zufang.domain.common.KeyValue;
 import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.dto.WorkCityJdParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
@@ -199,11 +198,13 @@ public class HouseinitService {
 
 			}
 		}
+		if (ValidateUtils.listIsTrue(nearHouses)) {
 		if (nearHouses.size() > 10) {
 			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
 			nearHouses = pageBean.getList();
 		}
 		gitImg(nearHouses);
+		}
 		return nearHouses;
 	}
 
