@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.apass.gfb.framework.exception.BusinessException;
@@ -27,6 +28,9 @@ public class OnlineBookingService {
 
 	@Autowired
 	private ReserveHouseMapper reserveHouseMapper;
+	
+	@Value("${zufang.image.uri}")
+	private   String imageUri;
 
 	/**
 	 * 插入数据库
@@ -66,6 +70,10 @@ public class OnlineBookingService {
 	public ResponsePageBody<HouseShowingsEntity> queryReservations(ReservationsShowingsEntity crmety)throws BusinessException {
  		ResponsePageBody<HouseShowingsEntity> body = new ResponsePageBody<>();
 		List<HouseShowingsEntity> houseList = reserveHouseMapper.getHouseLists(crmety);
+		//设置图片地址
+		for (HouseShowingsEntity houseShowingsEntity : houseList) {
+			houseShowingsEntity.setUrl(imageUri+houseShowingsEntity.getUrl());
+		}
 		body.setRows(houseList);
 		body.setTotal(reserveHouseMapper.getCount(crmety.getTelphone()));
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
