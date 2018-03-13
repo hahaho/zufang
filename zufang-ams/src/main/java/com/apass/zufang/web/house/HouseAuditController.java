@@ -68,7 +68,7 @@ public class HouseAuditController {
         	dto.setHouseCode(houseCode);
         	dto.setProvince(province);
         	if(CityEnums.isContains(province)){
-        		dto.setCity(province+"市");
+        		dto.setCity(province);
         		dto.setDistrict(city);
         		dto.setStreet(district);
         	}else{

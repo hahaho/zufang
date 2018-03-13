@@ -70,7 +70,7 @@ public class HouseLocationService {
 		location.setHouseId(houseVo.getHouseId());
 		location.setProvince(houseVo.getProvince());
 		if(CityEnums.isContains(houseVo.getProvince())){
-			location.setCity(houseVo.getProvince()+"市");
+			location.setCity(houseVo.getProvince());
 			location.setDistrict(houseVo.getCity());
 			location.setStreet(houseVo.getDistrict());
 		}else{
