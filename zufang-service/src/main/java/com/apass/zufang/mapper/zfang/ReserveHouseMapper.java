@@ -35,7 +35,7 @@ public interface ReserveHouseMapper extends GenericMapper<ReserveHouse,Long> {
 	 * @return
 	 */
 	public Integer getCount(String telphone);
-
+	
 	
 	
 }
