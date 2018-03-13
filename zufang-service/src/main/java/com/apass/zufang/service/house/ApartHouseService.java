@@ -90,7 +90,7 @@ public class ApartHouseService {
 				houseListById = pageBean1.getList();
 				}
 			for (HouseVo houseVo : houseListById) {
-				houseVo.setPictures(houseImgService.getImgList(resultApartment.get(i).getId(), (byte) 0));
+				houseVo.setPictures(houseImgService.getImgList(houseVo.getHouseId(), (byte) 0));
 			}
 			}
 			ApartHouseList eachAPH = new ApartHouseList();
