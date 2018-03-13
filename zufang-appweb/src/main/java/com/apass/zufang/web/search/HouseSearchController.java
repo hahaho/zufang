@@ -79,6 +79,8 @@ public class HouseSearchController {
 	private HouseInfoService houseInfoService;
 	@Autowired
 	private NationService nationService;
+	@Autowired
+	private ObtainGaodeLocation obtainGaodeLocation;
 
 	/**
 	 * 添加致搜索记录表
@@ -264,13 +266,13 @@ public class HouseSearchController {
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}
 			if(StringUtils.isNotEmpty(priceFlag)){
-				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(1.5f));
+				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
 			}
 			//如果户型选不限，则不加此条件
 			if(StringUtils.isNotEmpty(rentType)){
 				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
 						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
-					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(1.5f));
+					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(2.5f));
 				}
 			}
 			if(StringUtils.isNotEmpty(room)){
@@ -351,6 +353,7 @@ public class HouseSearchController {
 				if(StringUtils.isNotEmpty(subCode)){
 					//根据code查询经纬度，计算距离
 					WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
+					LOGGER.info("subCode:{}查询地铁线路表结果：{}",subCode,GsonUtils.toJson(workSubway));
 					String nearestPoint = workSubway.getNearestPoint();
 					location = nearestPoint.split(",");
 					double longitude = houseEs.getLongitude();
@@ -363,11 +366,19 @@ public class HouseSearchController {
 				}
 				if(StringUtils.isNotEmpty(areaCode)){
 					//根据code查询经纬度，计算距离
-					WorkCityJd workCityJd = nationService.selectWorkCityByCode(areaCode);
+					//towns
+					WorkCityJd townJd = nationService.selectWorkCityByCode(areaCode);
+					//district
+					WorkCityJd districtJd = nationService.selectWorkCityByCode(String.valueOf(townJd.getParent()));
+					//city
+					WorkCityJd cityJd = nationService.selectWorkCityByCode(String.valueOf(districtJd.getParent()));
+					//province
+					WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
 					StringBuffer sb = new StringBuffer();
-					String address = sb.append(workCityJd.getProvince()).append(workCityJd.getCity())
-							.append(workCityJd.getDistrict()).append(workCityJd.getTowns()).toString();
-					location = new ObtainGaodeLocation().getLocation(address);
+					String address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
+							.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
+					location = obtainGaodeLocation.getLocation(address);
+					LOGGER.info("参数address:{}调用ObtainGaodeLocation.getgetLocation方法返回数据：{}",address,location);
 					double longitude = houseEs.getLongitude();
 					double latitude = houseEs.getLatitude();
 
