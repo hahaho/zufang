@@ -25,6 +25,7 @@ public class ApartmentVo extends CreatedUser{
     private String bankCard;
     private String isDelete;
     private String companyLogo;
+    private String fullCompanyLogo;
     public Long getId() {
         return id;
     }
@@ -107,5 +108,11 @@ public class ApartmentVo extends CreatedUser{
 	}
 	public void setCompanyLogo(String companyLogo) {
 		this.companyLogo = companyLogo;
+	}
+	public String getFullCompanyLogo() {
+		return fullCompanyLogo;
+	}
+	public void setFullCompanyLogo(String fullCompanyLogo) {
+		this.fullCompanyLogo = fullCompanyLogo;
 	}
 }
