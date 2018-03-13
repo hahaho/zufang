@@ -149,7 +149,7 @@
        	WHERE 1=1 
        	]]>
     	<if test="houseType!=null and houseType!=''"> AND x.type = #{houseType} </if>
-    	<if test="apartmentName!=null and apartmentName!=''"> AND x.name LIKE '%${apartmentName}%' </if>
+    	<if test="apartmentName!=null and apartmentName!=''"> AND y.name LIKE '%${apartmentName}%' </if>
     	<if test="houseTitle!=null and houseTitle!=''"> AND x.title LIKE '%${houseTitle}%' </if>
     	<if test="houseCode!=null and houseCode!=''"> AND x.code = #{houseCode} </if>
     	
