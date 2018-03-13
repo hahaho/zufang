@@ -120,7 +120,13 @@ public class ApartHouseService {
 	}
 	
 	public List<Apartment> getApartmentBylistCity(Apartment apartment) {
-		return apartmentMapper.getApartmentBylistCity(apartment);
+		List<Apartment> result = apartmentMapper.getApartmentBylistCity(apartment);
+		if(result.isEmpty()){
+			String city=apartment.getCity().replace("市","");
+			apartment.setCity(city);
+			result=apartmentMapper.getApartmentBylistCity(apartment);
+		}
+		return result;
 	}
 
 	/**
