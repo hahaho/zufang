@@ -2,6 +2,7 @@ package com.apass.zufang.web.search;
 
 import static com.apass.zufang.search.enums.IndexType.HOUSE;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,10 +28,7 @@ import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.Index;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
@@ -243,6 +241,8 @@ public class HouseSearchController {
 	public Response searchFilter(@RequestBody Map<String, Object> paramMap) {
 		LOGGER.info("房屋筛选执行,参数:{}", GsonUtils.toJson(paramMap));
 		try{
+			//首页搜索接收的参数
+			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
 			String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");
 			String priceFlag = CommonUtils.getValue(paramMap,"priceFlag");
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
@@ -267,6 +267,14 @@ public class HouseSearchController {
 			 * 思路：先根据品牌、价格、筛选条件查询房源List,然后遍历结果计算每个house与目标位置距离，如果<1km,返回。否则过虑掉
 			 */
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+			MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchValue,
+					"communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
+			multiMatchQueryBuilder.field("communityName", 1.5f);
+			multiMatchQueryBuilder.field("houseTitle", 2f);
+			multiMatchQueryBuilder.field("detailAddr", 1f);
+			multiMatchQueryBuilder.field("apartmentName", 1f);
+			boolQueryBuilder.must(multiMatchQueryBuilder);
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}
@@ -456,7 +464,7 @@ public class HouseSearchController {
 		vo.setFloor(houseEs.getFloor());
 		vo.setAcreage(houseEs.getAcreage());
 		vo.setRoomAcreage(houseEs.getRoomAcreage());
-		vo.setRentAmt(houseEs.getRentAmt());
+		vo.setRentAmt(houseEs.getRentAmt().setScale(0, BigDecimal.ROUND_DOWN));
 		vo.setHouseId(houseEs.getHouseId());
 		vo.setLatitude(houseEs.getLatitude());
 		vo.setLongitude(houseEs.getLongitude());
