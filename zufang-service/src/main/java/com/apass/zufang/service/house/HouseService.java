@@ -26,6 +26,7 @@ import com.apass.zufang.domain.entity.HouseImg;
 import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.enums.EditFalgEnums;
 import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
@@ -264,8 +265,17 @@ public class HouseService {
 			logger.error("selectCodeByProvinceName is failed!");
 			throw new BusinessException("查询省份编码失败!");
 		}
+		String cityName = location.getCity();
+		String districtName = location.getDistrict();
+		String streetName = location.getStreet();
+		if(CityEnums.isContains(location.getProvince())){
+			cityName = location.getDistrict();
+			districtName = location.getStreet();
+			streetName = "0";
+		}
+		
 		WorkCityJdParams city = new WorkCityJdParams();
-		city.setCity(location.getCity());
+		city.setCity(cityName);
 		city.setParentCode(p.getCode());
 		WorkCityJd c = cityJdMapper.selectCodeByName(city);
 		if(null == c){
@@ -274,7 +284,7 @@ public class HouseService {
 		}
 		
 		WorkCityJdParams district = new WorkCityJdParams();
-		district.setDistrict(location.getDistrict());
+		district.setDistrict(districtName);
 		district.setParentCode(c.getCode());
 		WorkCityJd d = cityJdMapper.selectCodeByName(district);
 		if(null == d){
@@ -283,7 +293,7 @@ public class HouseService {
 		}
 		
 		WorkCityJdParams street = new WorkCityJdParams();
-		street.setStreet(location.getStreet());
+		street.setStreet(streetName);
 		street.setParentCode(d.getCode());
 		WorkCityJd t = cityJdMapper.selectCodeByName(street);
 		

@@ -18,6 +18,7 @@ import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
+import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.utils.PageBean;
 import com.apass.zufang.utils.ValidateUtils;
 import com.google.common.collect.Maps;
@@ -68,6 +69,7 @@ public class ApartHouseService {
 		
 		// 获取公寓列表以及对应房源
 		String city = (String) paramMap.get("city");
+		city = CommonService.cityValidation(city);
 		String pageNum = (String) paramMap.get("pageNum");
 		ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", city, pageNum);
 		Apartment apartment = new Apartment();
@@ -120,7 +122,13 @@ public class ApartHouseService {
 	}
 	
 	public List<Apartment> getApartmentBylistCity(Apartment apartment) {
-		return apartmentMapper.getApartmentBylistCity(apartment);
+		List<Apartment> result = apartmentMapper.getApartmentBylistCity(apartment);
+		if(result.isEmpty()){
+			String city=apartment.getCity().replace("市","");
+			apartment.setCity(city);
+			result=apartmentMapper.getApartmentBylistCity(apartment);
+		}
+		return result;
 	}
 
 	/**

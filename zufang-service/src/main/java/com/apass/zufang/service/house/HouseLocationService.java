@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.entity.HouseLocation;
+import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
@@ -50,13 +51,40 @@ public class HouseLocationService {
 		if(StringUtils.isNotBlank(houseVo.getLocationId())){
 			location = locationMapper.selectByPrimaryKey(Long.parseLong(houseVo.getLocationId()));
 		}
-		BeanUtils.copyProperties(houseVo, location);
+		getHouseLocationByVo(houseVo, location);
 		getAddressLngLat(houseVo, location);
 		if(null == location.getId()){
 			locationMapper.insertSelective(location);
 		}else{
 			locationMapper.updateByPrimaryKeySelective(location);
 		}
+	}
+	
+	/**
+	 * 回填数据
+	 * @param houseVo
+	 * @param location
+	 * @return
+	 */
+	public HouseLocation getHouseLocationByVo(HouseVo houseVo, HouseLocation location){
+		location.setHouseId(houseVo.getHouseId());
+		location.setProvince(houseVo.getProvince());
+		if(CityEnums.isContains(houseVo.getProvince())){
+			location.setCity(houseVo.getProvince());
+			location.setDistrict(houseVo.getCity());
+			location.setStreet(houseVo.getDistrict());
+		}else{
+			location.setCity(houseVo.getCity());
+			location.setDistrict(houseVo.getDistrict());
+			location.setStreet(houseVo.getStreet());
+		}
+		location.setDetailAddr(houseVo.getDetailAddr());
+		
+		if(location.getId() == null){
+			location.setCreatedTime(houseVo.getCreatedTime());
+		}
+		location.setUpdatedTime(houseVo.getUpdatedTime());
+		return location;
 	}
 	
 	public void getAddressLngLat(HouseVo houseVo,HouseLocation location){
