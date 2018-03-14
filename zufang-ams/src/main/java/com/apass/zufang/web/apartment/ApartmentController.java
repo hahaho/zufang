@@ -109,7 +109,7 @@ public class ApartmentController {
 			String apartmentId = CommonUtils.getValue(map, "id");
 			entity.setId(Long.parseLong(apartmentId));
 			String username = SpringSecurityUtils.getCurrentUser();
-			return apartmentService.editApartment(entity,username);
+			return apartmentService.editApartment(apartmentId,entity,username);
 		}catch(Exception e){
 			LOGGER.error("editApartment EXCEPTION --- --->{}", e);
 			return Response.fail("公寓信息修改失败！");
