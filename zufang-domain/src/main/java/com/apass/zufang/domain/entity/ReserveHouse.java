@@ -1,6 +1,10 @@
 package com.apass.zufang.domain.entity;
 import java.util.Date;
-
+/**
+ * 预约看房对象持久化类
+ * @author Administrator
+ *
+ */
 public class ReserveHouse {
 	private Long id;
 
