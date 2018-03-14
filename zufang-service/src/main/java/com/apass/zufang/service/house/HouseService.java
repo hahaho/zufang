@@ -302,14 +302,22 @@ public class HouseService {
 		
 		vo.setProvince(p.getProvince());
 		vo.setProvinceCode(p.getCode());
-		vo.setCity(c.getCity());
-		vo.setCityCode(c.getCode());
-		vo.setDistrict(d.getDistrict());
-		vo.setDistrictCode(d.getCode());
-		if(t != null){//可以为null ,因为直辖市是没有4级地址
+		if(CityEnums.isContains(location.getProvince())){
+			vo.setCity(p.getProvince());
+			vo.setCityCode(p.getCode()+"zxs");
+			vo.setDistrict(c.getCity());
+			vo.setDistrictCode(c.getCode());
+			vo.setStreet(d.getDistrict());
+			vo.setStreetCode(d.getCode());
+		}else{
+			vo.setCity(c.getCity());
+			vo.setCityCode(c.getCode());
+			vo.setDistrict(d.getDistrict());
+			vo.setDistrictCode(d.getCode());
 			vo.setStreet(t.getTowns());
 			vo.setStreetCode(t.getCode());
 		}
+		
 		return vo;
 	}
 	

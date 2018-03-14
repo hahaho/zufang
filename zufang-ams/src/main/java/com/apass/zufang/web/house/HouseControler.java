@@ -77,15 +77,9 @@ public class HouseControler {
         	dto.setHouseTitle(houseTitle);
         	dto.setHouseCode(houseCode);
         	dto.setProvince(province);
-        	if(CityEnums.isContains(province)){
-        		dto.setCity(province);
-        		dto.setDistrict(city);
-        		dto.setStreet(district);
-        	}else{
-        		dto.setCity(city);
-            	dto.setDistrict(district);
-            	dto.setStreet(street);
-        	}
+    		dto.setCity(city);
+        	dto.setDistrict(district);
+        	dto.setStreet(street);
         	dto.setRows(Integer.parseInt(rows));
         	dto.setPage(Integer.parseInt(page));
         	dto.setApartmentCode(apartmentCode);

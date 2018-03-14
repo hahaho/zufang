@@ -67,15 +67,9 @@ public class HouseLocationService {
 	public HouseLocation getHouseLocationByVo(HouseVo houseVo, HouseLocation location){
 		location.setHouseId(houseVo.getHouseId());
 		location.setProvince(houseVo.getProvince());
-		if(CityEnums.isContains(houseVo.getProvince())){
-			location.setCity(houseVo.getProvince());
-			location.setDistrict(houseVo.getCity());
-			location.setStreet(houseVo.getDistrict());
-		}else{
-			location.setCity(houseVo.getCity());
-			location.setDistrict(houseVo.getDistrict());
-			location.setStreet(houseVo.getStreet());
-		}
+		location.setCity(houseVo.getCity());
+		location.setDistrict(houseVo.getDistrict());
+		location.setStreet(houseVo.getStreet());
 		location.setDetailAddr(houseVo.getDetailAddr());
 		
 		if(location.getId() == null){
