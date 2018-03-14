@@ -98,8 +98,9 @@ public class ApartmentService {
 	 * @return
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response editApartment(Apartment entity,String username) {
+	public Response editApartment(String apartmentId,Apartment entity,String username) {
 		ApprintmentQueryParams entity2 = new ApprintmentQueryParams();
+		entity2.setId(apartmentId);
 		entity2.setName(entity.getName());
 		entity2.setIsDelete("00");
 		Integer count1 = apartmentMapper.getApartmentListNameCount(entity2);
