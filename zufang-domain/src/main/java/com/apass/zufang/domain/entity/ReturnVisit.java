@@ -1,7 +1,10 @@
 package com.apass.zufang.domain.entity;
-
 import java.util.Date;
-
+/**
+ * 回访记录对象持久化类
+ * @author Administrator
+ *
+ */
 public class ReturnVisit {
     private Long id;
 
