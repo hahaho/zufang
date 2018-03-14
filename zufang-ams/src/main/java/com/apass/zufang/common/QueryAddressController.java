@@ -37,10 +37,10 @@ public class QueryAddressController {
 	/**
 	 * 直辖市
 	 */
-	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4"};
+	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4","32","52993"};
 	private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
 
-	private static final String[] CENTRL_CITY_ARRAY2 = {"1zxs", "2zxs", "3zxs", "4zxs"};
+	private static final String[] CENTRL_CITY_ARRAY2 = {"1zxs", "2zxs", "3zxs", "4zxs","32zxs","52993zxs"};
 	private static final List<String> CENTRL_CITY_LIST2 = Arrays.asList(CENTRL_CITY_ARRAY2);
 
 
@@ -56,16 +56,34 @@ public class QueryAddressController {
 			LOGGER.info("查询参数,parent:{}",districtCode);
 
 			List<WorkCityJd> jdlist = nationService.queryDistrictForAms(districtCode);
+			//如果是直辖市，返回一条直辖市数据
 			if(CENTRL_CITY_LIST.contains(districtCode)){
 				WorkCityJd workCityJd = nationService.selectWorkCityByCode(districtCode);
 				//如果是直辖市，每个code后+zxs
 				workCityJd.setCode(workCityJd.getCode()+"zxs");
+				workCityJd.setCity(workCityJd.getProvince());
 				jdlist.clear();
 				jdlist.add(workCityJd);
 			}
+
+			//如果第二级是直辖市,返回对应直辖市的区，district字段赋值,返回的字段拼接上second
 			if(CENTRL_CITY_LIST2.contains(districtCode)){
 				jdlist.clear();
-				jdlist = nationService.queryDistrictForAms(districtCode.substring(0,1));
+				jdlist = nationService.queryDistrictForAms(districtCode.substring(0,districtCode.length()-3));
+				for(WorkCityJd workCityJd: jdlist){
+					workCityJd.setCode(workCityJd.getCode()+"T");
+					workCityJd.setDistrict(workCityJd.getCity());
+				}
+			}
+
+			//如果是直辖市，towns字段为空，赋值：towns=district
+			if(districtCode.contains("T")){
+				jdlist.clear();
+				jdlist = nationService.queryDistrictForAms(districtCode.substring(0,districtCode.length()-1));
+				for(WorkCityJd workCityJd: jdlist){
+					workCityJd.setCode(workCityJd.getCode());
+					workCityJd.setTowns(workCityJd.getDistrict());
+				}
 			}
 
 			return jdlist;
