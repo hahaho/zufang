@@ -24,7 +24,7 @@ public interface ApartmentMapper extends GenericMapper<Apartment,Long> {
 	 * @param entity
 	 * @return
 	 */
-	public Integer getApartmentListNameCount(ApprintmentQueryParams entity);
+	public List<ApartmentVo> getApartmentListNameCount(ApprintmentQueryParams entity);
 	/**
 	 * getApartmentListCount
 	 * @param entity
