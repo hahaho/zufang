@@ -261,8 +261,8 @@ public class HouseSearchController {
 			//首页搜索接收的参数
 			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
 			String city = CommonUtils.getValue(paramMap, "city");
-			if(StringUtils.isEmpty(searchValue)&&StringUtils.isEmpty(city)){
-				throw new RuntimeException("请传入首页搜索关键字或地址！");
+			if(StringUtils.isEmpty(city)){
+				throw new RuntimeException("请传入地址！");
 			}
 			if(CENTRL_CITY_LIST2.contains(city)){
 				city = city.substring(0, city.length()-1);
@@ -291,14 +291,15 @@ public class HouseSearchController {
 			 * 思路：先根据品牌、价格、筛选条件查询房源List,然后遍历结果计算每个house与目标位置距离，如果<1km,返回。否则过虑掉
 			 */
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-
-			MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchValue,
-					"communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
-			multiMatchQueryBuilder.field("communityName", 1.5f);
-			multiMatchQueryBuilder.field("houseTitle", 2f);
-			multiMatchQueryBuilder.field("detailAddr", 1f);
-			multiMatchQueryBuilder.field("apartmentName", 1f);
-			boolQueryBuilder.must(multiMatchQueryBuilder);
+			if(StringUtils.isNotEmpty(searchValue)){
+				MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchValue,
+						"communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
+				multiMatchQueryBuilder.field("communityName", 1.5f);
+				multiMatchQueryBuilder.field("houseTitle", 2f);
+				multiMatchQueryBuilder.field("detailAddr", 1f);
+				multiMatchQueryBuilder.field("apartmentName", 1f);
+				boolQueryBuilder.must(multiMatchQueryBuilder);
+			}
 
 			MultiMatchQueryBuilder multiMatchQueryBuilder2 = QueryBuilders.multiMatchQuery(city,
 					"province","city", "district").operator(Operator.AND);
