@@ -88,6 +88,7 @@
 		WHERE
 			telphone = #{telphone}
 		AND is_delete ='00'
+		AND reserve_date > (select current_timestamp())
     </select>
     
     
