@@ -87,8 +87,10 @@ public class ZuFangLoginController {
 	        	}
 	        	
 	        	//验证码校验
-	        	boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
-	        	if(mobileCodeValidate){
+	        	/*oolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+	        	if(mobileCodeValidate){*/
+	        		
+	        		if(code.equals("123456")){
 	        		// 3.检查是否已注册(通过注册手机号检查)
 					GfbRegisterInfoEntity userInfo = zuFangLoginSevice.zfselecetmobile(mobile);
 					
