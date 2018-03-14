@@ -98,14 +98,18 @@ public class ApartmentService {
 	 * @return
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response editApartment(String apartmentId,Apartment entity,String username) {
+	public Response editApartment(Apartment entity,String username) {
 		ApprintmentQueryParams entity2 = new ApprintmentQueryParams();
-		entity2.setId(apartmentId);
 		entity2.setName(entity.getName());
 		entity2.setIsDelete("00");
 		List<ApartmentVo> count1 = apartmentMapper.getApartmentListNameCount(entity2);
-		if(count1!=null&&count1.size()>1){
-			return Response.fail("公寓信息修改失败,公寓名称验重失败！");
+		for(ApartmentVo vo : count1){
+			if(vo.getId().equals(entity.getId())){
+				continue;
+			}
+			if(StringUtils.equals(vo.getName(), entity.getName())){
+				return Response.fail("公寓信息修改失败,公寓名称验重失败！");
+			}
 		}
 		entity.fillField(username);
 		if(updateEntity(entity)==1){
