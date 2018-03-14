@@ -77,10 +77,9 @@ public class ApartHouseService {
 		ArrayList<ApartHouseList> apartHouseList = new ArrayList<ApartHouseList>();
 		List<Apartment> resultApartment = apartmentMapper.getApartByCity(apartment);
 		if (ValidateUtils.listIsTrue(resultApartment)) {
-		if (resultApartment.size() > 4) {
-			PageBean<Apartment> pageBean = new PageBean<Apartment>(new Integer(pageNum)+1, 4, resultApartment);
-			resultApartment = pageBean.getList();
-		}
+		PageBean<Apartment> pageBean = new PageBean<Apartment>(new Integer(pageNum)+1, 4, resultApartment);
+		resultApartment = pageBean.getList();
+		if (ValidateUtils.listIsTrue(resultApartment)) {
 		LOG.info("查询公寓房源信息_获取公寓成功！");
 		for (int i = 0; i < resultApartment.size(); i++) {
 			List<HouseVo> houseListById = houseMapper.getHouseById(Arrays.asList(resultApartment.get(i).getId()));
@@ -101,8 +100,9 @@ public class ApartHouseService {
 			eachAPH.setRows(houseListById);
 			apartHouseList.add(eachAPH);
 			}
-		resultMap.put("apartHouses",apartHouseList);
 		}
+		}
+		resultMap.put("apartHouses",apartHouseList);
 		return resultMap;
 	}
 	
