@@ -59,7 +59,7 @@ public class HouseInfoController {
 					.queryHouseInfoRela(queryCondition);
 			
 			if (!ValidateUtils.listIsTrue(targetHouseInfoList)) {
-				return Response.success("该房源已下架，请查看其他房源", resultMap);
+				return Response.fail("该房源已下架，请查看其他房源", resultMap);
 			}
 			
 			HouseInfoRela houseInfoRela = targetHouseInfoList.get(0);
