@@ -306,7 +306,7 @@ public class HouseService {
 			vo.setCity(p.getProvince());
 			vo.setCityCode(p.getCode()+"zxs");
 			vo.setDistrict(c.getCity());
-			vo.setDistrictCode(c.getCode());
+			vo.setDistrictCode(c.getCode()+"T");
 			vo.setStreet(d.getDistrict());
 			vo.setStreetCode(d.getCode());
 		}else{
