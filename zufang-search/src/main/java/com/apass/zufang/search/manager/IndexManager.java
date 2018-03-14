@@ -63,13 +63,15 @@ public class IndexManager<T> {
      * @param desc 是否降序
      * @param from 从哪里开始
      * @param size 一共搜索多少条
-     * @param value 查询内容
+     * @param condition 查询内容
      * @param <T>
      * @return
      */
-    private static <T> Pagination<T> boolSearch(String sortField, boolean desc, int from, int size, String value) {
+    private static <T> Pagination<T> boolSearch(String sortField, boolean desc, int from, int size, HouseSearchCondition condition) {
+        String value = condition.getHouseTitle();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder
+                .must(QueryBuilders.multiMatchQuery(condition.getCity(),"province","city", "district").operator(Operator.AND).boost(2.5f))
                 .should(QueryBuilders.wildcardQuery("apartmentName", "*" + value + "*").boost(1.5f))
                 .should(QueryBuilders.wildcardQuery("apartmentNamePinyin", "*" + value + "*").boost(1.5f))
                 .should(QueryBuilders.wildcardQuery("communityName", "*" + value + "*").boost(1.5f))
@@ -276,25 +278,34 @@ public class IndexManager<T> {
         int from = condition.getOffset();
         int size = condition.getPageSize();
 
-        String value = condition.getHouseTitle();
-
+//        String value = condition.getHouseTitle();
+//        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+//
+//        MultiMatchQueryBuilder multiMatchQueryBuilder2 = QueryBuilders.multiMatchQuery(condition.getCity(),
+//                "province","city", "district").operator(Operator.AND);
+//        multiMatchQueryBuilder2.field("province", 2f);
+//        multiMatchQueryBuilder2.field("city", 2f);
+//        multiMatchQueryBuilder2.field("district", 1f);
+//        boolQueryBuilder.must(multiMatchQueryBuilder2);
         //如果是汉字走此流程
-        if (Pinyin4jUtil.isContainChinese(value)||Pinyin4jUtil.isContainSpecial(value)) {
-            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
-                    "communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
-            multiMatchQueryBuilder.field("communityName", 1.5f);
-            multiMatchQueryBuilder.field("houseTitle", 2f);
-            multiMatchQueryBuilder.field("detailAddr", 1f);
-            multiMatchQueryBuilder.field("apartmentName", 1f);
-
-            //TODO
-            Pagination<HouseEs> housePagination =
-                    search(multiMatchQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
-            if (!CollectionUtils.isEmpty(housePagination.getDataList())) {
-                return housePagination;
-            }
-        }
-        return boolSearch(sortField, desc, from, size, StringUtils.lowerCase(value));
+//        if (Pinyin4jUtil.isContainChinese(value)||Pinyin4jUtil.isContainSpecial(value)) {
+//
+//            MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
+//                    "communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
+//            multiMatchQueryBuilder.field("communityName", 1.5f);
+//            multiMatchQueryBuilder.field("houseTitle", 2f);
+//            multiMatchQueryBuilder.field("detailAddr", 1f);
+//            multiMatchQueryBuilder.field("apartmentName", 1f);
+//            boolQueryBuilder.must(multiMatchQueryBuilder);
+//
+//            //TODO
+//            Pagination<HouseEs> housePagination =
+//                    search(boolQueryBuilder, IndexType.HOUSE, desc, from, size, sortField);
+//            if (!CollectionUtils.isEmpty(housePagination.getDataList())) {
+//                return housePagination;
+//            }
+//        }
+        return boolSearch(sortField, desc, from, size, condition);
     }
 
 

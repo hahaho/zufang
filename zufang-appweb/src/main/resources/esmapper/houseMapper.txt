@@ -1,6 +1,18 @@
 {
         "house": {
             "properties": {
+                "province": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "city": {
+                    "type": "text",
+                    "index": "analyzed",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
                 "communityName": {
                     "type": "text",
                     "index": "analyzed",
