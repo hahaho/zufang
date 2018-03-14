@@ -117,6 +117,7 @@ public class OnlineBookingController {
 								returnMap.put("token", token);
 								returnMap.put("account", mobile);
 								returnMap.put("userId", saveRegisterInfo);
+								returnMap.put("user", "xinyonghu");
 								if(insetReserveHouse == 1){
 									return Response.success("在线预约成功", returnMap);
 								}else{
@@ -139,6 +140,7 @@ public class OnlineBookingController {
 			                    	returnMap.put("token", token);
 			                    	returnMap.put("account", mobile);
 			                    	returnMap.put("userId", zfselecetmobile2.getId());
+			                    	returnMap.put("user", "laoyonghu");
 			                    	if(insetReserveHouse == 1){
 			                    		return Response.success("在线预约成功", returnMap);
 			                    	}else{
