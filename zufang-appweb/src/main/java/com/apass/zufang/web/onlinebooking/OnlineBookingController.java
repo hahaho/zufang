@@ -123,9 +123,6 @@ public class OnlineBookingController {
 								}
 								
 			        		}else{
-			        			
-			        			
-			        			
 			        			//已经注册    未登录
 			        			GfbRegisterInfoEntity zfselecetmobile2 = zuFangLoginSevice.zfselecetmobile(mobile);
 			        			
@@ -162,6 +159,7 @@ public class OnlineBookingController {
                 Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
                 if(queryOverdue == null || queryOverdue ==0 ){
                 	
+				
 					Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
 					if(insetReserveHouse==1){
 						// 生成token

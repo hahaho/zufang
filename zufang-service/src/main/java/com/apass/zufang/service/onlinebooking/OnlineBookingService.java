@@ -86,7 +86,10 @@ public class OnlineBookingService {
 	 * @param telphone
 	 */
 	public Integer queryOverdue(String telphone ,String houseId) {
-		return reserveHouseMapper.queryOverdue(telphone,houseId);
+		ReservationsShowingsEntity reservationsShowingsEntity = new ReservationsShowingsEntity();
+		reservationsShowingsEntity.setTelphone(telphone);
+		reservationsShowingsEntity.setHouseId(Long.parseLong(houseId));
+		return reserveHouseMapper.queryOverdue(reservationsShowingsEntity);
 	}
 
 
