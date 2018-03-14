@@ -119,8 +119,8 @@ public class HouseinitService {
 			if (size >= 5) {
 				hotHouse = new PageBean<>(1, 5, setHouses).getList();
 			} else {
+				hotHouse = setHouses;
 				if (ValidateUtils.listIsTrue(norHouses)) {
-					hotHouse = setHouses;
 					List<HouseVo> list = new PageBean<>(1, 5 - size, norHouses).getList();
 					for (HouseVo houseVo : list) {
 						hotHouse.add(houseVo);
