@@ -23,7 +23,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2017年1月12日
  */
-@Path("/nation")
+@Path("/application/nation")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class QueryAddressController {
@@ -40,13 +40,15 @@ public class QueryAddressController {
 	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4"};
 	private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
 
+	private static final String[] CENTRL_CITY_ARRAY2 = {"1zxs", "2zxs", "3zxs", "4zxs"};
+	private static final List<String> CENTRL_CITY_LIST2 = Arrays.asList(CENTRL_CITY_ARRAY2);
+
 
 	@POST
 	@Path("/v1/queryNations")
 	public List<WorkCityJd> queryCity(Map<String,String> paramMap){
 		try{
 			String districtCode = paramMap.get("code");
-			String level = paramMap.get("level");
 			//此时查询的是省份
 			if(StringUtils.isBlank(districtCode)){
 				districtCode = "0";
@@ -54,10 +56,16 @@ public class QueryAddressController {
 			LOGGER.info("查询参数,parent:{}",districtCode);
 
 			List<WorkCityJd> jdlist = nationService.queryDistrictForAms(districtCode);
-			if(StringUtils.isNoneEmpty(level) && Integer.valueOf(level).equals(1) && CENTRL_CITY_LIST.contains(districtCode)){
+			if(CENTRL_CITY_LIST.contains(districtCode)){
 				WorkCityJd workCityJd = nationService.selectWorkCityByCode(districtCode);
+				//如果是直辖市，每个code后+zxs
+				workCityJd.setCode(workCityJd.getCode()+"zxs");
 				jdlist.clear();
 				jdlist.add(workCityJd);
+			}
+			if(CENTRL_CITY_LIST2.contains(districtCode)){
+				jdlist.clear();
+				jdlist = nationService.queryDistrictForAms(districtCode.substring(0,1));
 			}
 
 			return jdlist;
