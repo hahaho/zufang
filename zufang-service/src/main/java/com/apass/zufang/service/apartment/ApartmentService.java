@@ -78,8 +78,8 @@ public class ApartmentService {
 		entity2.setName(entity.getName());
 		entity2.setCode(code);
 		entity2.setIsDelete("00");
-		Integer count1 = apartmentMapper.getApartmentListNameCount(entity2);
-		if(count1>0){
+		List<ApartmentVo> count1 = apartmentMapper.getApartmentListNameCount(entity2);
+		if(count1!=null&&count1.size()>0){
 			return Response.fail("公寓信息新增失败,公寓名称验重失败！");
 		}
 		Integer count2 = apartmentMapper.getApartmentListCodeCount(entity2);
@@ -103,8 +103,8 @@ public class ApartmentService {
 		entity2.setId(apartmentId);
 		entity2.setName(entity.getName());
 		entity2.setIsDelete("00");
-		Integer count1 = apartmentMapper.getApartmentListNameCount(entity2);
-		if(count1>0){
+		List<ApartmentVo> count1 = apartmentMapper.getApartmentListNameCount(entity2);
+		if(count1!=null&&count1.size()>1){
 			return Response.fail("公寓信息修改失败,公寓名称验重失败！");
 		}
 		entity.fillField(username);
