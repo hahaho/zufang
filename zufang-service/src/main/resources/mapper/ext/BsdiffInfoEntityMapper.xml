@@ -15,8 +15,19 @@
 
   <!--查询所有:按创建时间倒序排序-->
   <select id="selectAllBsdiff" resultMap="BaseResultMap">
-    SELECT <include refid="Base_Column_List" />
-    from t_zfang_bsdiff_info ORDER BY created_time DESC
+     SELECT
+      a.id id,
+      a.bsdiff_ver bsdiffVer,
+      a.line_id lineId,
+      a.if_compel_update ifCompelUpdate
+      FROM
+          t_zfang_bsdiff_info a,
+      (
+          SELECT MAX(id) id,MAX(bsdiff_ver) ver FROM t_zfang_bsdiff_info GROUP BY line_id
+      ) b
+      WHERE a.id = b.id
+      ORDER BY
+          a.created_time DESC
   </select>
 
  <select id="selectAllBsdiffNewest" resultMap="BaseResultMap">

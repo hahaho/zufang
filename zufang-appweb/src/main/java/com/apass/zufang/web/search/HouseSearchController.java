@@ -81,8 +81,11 @@ public class HouseSearchController {
 	/**
 	 * 直辖市
 	 */
-	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4"};
+	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4","32","52993"};
 	private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
+
+	private static final String[] CENTRL_CITY_ARRAY2 = {"北京市", "上海市", "重庆市", "天津市"};
+	private static final List<String> CENTRL_CITY_LIST2 = Arrays.asList(CENTRL_CITY_ARRAY2);
 
 	/**
 	 * 添加致搜索记录表
@@ -141,6 +144,9 @@ public class HouseSearchController {
 			//页面和数量
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
+			//当前地址
+			String city = CommonUtils.getValue(paramMap, "city");
+
 
 			//首页搜索接收的参数
 			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
@@ -158,6 +164,14 @@ public class HouseSearchController {
 			Integer offset = (pages-1)*row;
 			houseSearchCondition.setOffset(offset);
 			houseSearchCondition.setPageSize(row);
+			if(StringUtils.isEmpty(city)){
+				throw new RuntimeException("请传入当前所有城市");
+			}
+			if(CENTRL_CITY_LIST2.contains(city)){
+				city = city.substring(0, city.length()-1);
+			}
+			houseSearchCondition.setCity(city);
+
 
 			Map<String, Object> returnMap = new HashMap<String, Object>();
 			List<HouseAppSearchVo> list = new ArrayList<HouseAppSearchVo>();
@@ -198,11 +212,13 @@ public class HouseSearchController {
 				returnMap.put("houseDataList", list);
 				return Response.successResponse(returnMap);
 			}else {
+				BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 				TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("rentType", rentType);
+				boolQueryBuilder.must(termQueryBuilder).must(QueryBuilders.multiMatchQuery(city,"province","city", "district").operator(Operator.AND).boost(2.5f));
 				SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
 						.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
 						.setTypes(HOUSE.getDataName())
-						.setQuery(termQueryBuilder)
+						.setQuery(boolQueryBuilder)
 						.setFrom(offset).setSize(row);
 				SearchResponse response = serachBuilder.execute().actionGet();
 
@@ -243,6 +259,13 @@ public class HouseSearchController {
 		try{
 			//首页搜索接收的参数
 			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
+			String city = CommonUtils.getValue(paramMap, "city");
+			if(StringUtils.isAnyEmpty(searchValue,city)){
+				throw new RuntimeException("请传入首页搜索关键字和地址！");
+			}
+			if(CENTRL_CITY_LIST2.contains(city)){
+				city = city.substring(0, city.length()-1);
+			}
 			String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");
 			String priceFlag = CommonUtils.getValue(paramMap,"priceFlag");
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
@@ -275,6 +298,14 @@ public class HouseSearchController {
 			multiMatchQueryBuilder.field("detailAddr", 1f);
 			multiMatchQueryBuilder.field("apartmentName", 1f);
 			boolQueryBuilder.must(multiMatchQueryBuilder);
+
+			MultiMatchQueryBuilder multiMatchQueryBuilder2 = QueryBuilders.multiMatchQuery(city,
+					"province","city", "district").operator(Operator.AND);
+			multiMatchQueryBuilder2.field("province", 2f);
+			multiMatchQueryBuilder2.field("city", 2f);
+			multiMatchQueryBuilder2.field("district", 1f);
+			boolQueryBuilder.must(multiMatchQueryBuilder2);
+
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}

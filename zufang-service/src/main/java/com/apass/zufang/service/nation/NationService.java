@@ -26,12 +26,6 @@ public class NationService {
     @Autowired
     private WorkCityJdMapper cityJdMapper;
     /**
-     * 直辖市
-     */
-    private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4"};
-    private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
-
-    /**
      * 根据code,查询数据
      *
      * @return

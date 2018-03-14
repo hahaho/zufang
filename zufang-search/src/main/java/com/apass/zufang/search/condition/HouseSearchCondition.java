@@ -59,6 +59,10 @@ public class HouseSearchCondition {
      * 排序字段
      */
     private SortMode sortMode;
+    /**
+     * 定位或传入地址
+     */
+    private String city;
 
     /**
      * 开始条数
@@ -164,5 +168,13 @@ public class HouseSearchCondition {
 
     public void setConfigName(String configName) {
         this.configName = configName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

@@ -212,6 +212,7 @@ public class HouseinitService {
 		return nearHouses;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private List<HouseVo> addSetHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
 		
 		try {
@@ -225,8 +226,8 @@ public class HouseinitService {
 					addSetList = norHouses.subList(5 - currSize, norHouses.size());
 				}
 				// @2:正常房源+配置房源<5
-			}else {
-				
+			} else {
+				addSetList = new PageBean(1, 5, setHouse).getList();
 			}
 			return addSetList;
 		} catch (Exception e) {
