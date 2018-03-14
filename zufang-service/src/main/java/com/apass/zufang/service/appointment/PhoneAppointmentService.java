@@ -32,6 +32,9 @@ public class PhoneAppointmentService {
         for(HouseAppointmentVo vo : list){
         	//户型
         	vo.setHouseAll(vo.getHouseRoom()+"室"+vo.getHouseHall()+"厅"+vo.getHouseWei()+"卫");
+        	//面积
+        	vo.setHouseAcreage(vo.getHouseAcreage().substring(0, vo.getHouseAcreage().length()-2));
+        	vo.setHouseRoomAcreage(vo.getHouseRoomAcreage().substring(0, vo.getHouseRoomAcreage().length()-2));
         	//房源状态
         	Integer status = Integer.parseInt(vo.getHouseStatus());
         	if(status==BusinessHouseTypeEnums.ZT_1.getCode()){
