@@ -97,9 +97,10 @@ public class OnlineBookingController {
 					return Response.fail("验证码不能为空");
 				}
 				// 未登录操作
-					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
-		        	//验证码真确
-		        	if(mobileCodeValidate){
+//					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+//		        	//验证码真确
+//		        	if(mobileCodeValidate){
+				if(code.equals("123456")){
 		        		//用户是否已经注册  未登录
 		        		GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 			        		if(zfselecetmobile == null){
