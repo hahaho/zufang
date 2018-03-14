@@ -12,7 +12,6 @@
     <!-- getApartmentListNameCount专用    公寓名称验重-->
 	<sql id="QueryConditionSql">
         <where>
-            <if test="id!=null and id!=''"> AND id != #{id} </if>
 			<if test="name!=null and name!=''"> AND name = #{name} </if>
             <if test="isDelete!=null and isDelete!=''"> AND is_delete = #{isDelete} </if>
         </where>
@@ -24,9 +23,11 @@
         </where>
     </sql>
     <!-- getApartmentListNameCount 公寓名称验重-->
-    <select id ="getApartmentListNameCount" resultType="java.lang.Integer"
+    <select id ="getApartmentListNameCount" resultType="com.apass.zufang.domain.vo.ApartmentVo"
         parameterType="com.apass.zufang.domain.dto.ApprintmentQueryParams">
-        SELECT COUNT(*) FROM t_zfang_apartment
+        SELECT 
+            id id, code code, name name
+        FROM t_zfang_apartment
         <include refid="QueryConditionSql" />
     </select>
     <!-- getApartmentListCodeCount 公寓Code数量编组-->
