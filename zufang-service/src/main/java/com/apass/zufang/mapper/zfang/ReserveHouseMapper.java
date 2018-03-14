@@ -42,7 +42,7 @@ public interface ReserveHouseMapper extends GenericMapper<ReserveHouse,Long> {
 	 * @param telphone
 	 * @return
 	 */
-	public Integer queryOverdue(String telphone,String houseId);
+	public Integer queryOverdue(ReservationsShowingsEntity reservationsShowingsEntity);
 	
 	
 	
