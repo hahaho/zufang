@@ -2,10 +2,8 @@ package com.apass.zufang.web.search;
 
 import static com.apass.zufang.search.enums.IndexType.HOUSE;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,15 +22,13 @@ import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.nation.NationService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.google.gson.Gson;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.Index;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
@@ -81,6 +77,12 @@ public class HouseSearchController {
 	private NationService nationService;
 	@Autowired
 	private ObtainGaodeLocation obtainGaodeLocation;
+
+	/**
+	 * 直辖市
+	 */
+	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4"};
+	private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
 
 	/**
 	 * 添加致搜索记录表
@@ -237,7 +239,10 @@ public class HouseSearchController {
 	@POST
 	@Path(value = "/search/filter")
 	public Response searchFilter(@RequestBody Map<String, Object> paramMap) {
+		LOGGER.info("房屋筛选执行,参数:{}", GsonUtils.toJson(paramMap));
 		try{
+			//首页搜索接收的参数
+			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
 			String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");
 			String priceFlag = CommonUtils.getValue(paramMap,"priceFlag");
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
@@ -262,6 +267,14 @@ public class HouseSearchController {
 			 * 思路：先根据品牌、价格、筛选条件查询房源List,然后遍历结果计算每个house与目标位置距离，如果<1km,返回。否则过虑掉
 			 */
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+			MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchValue,
+					"communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
+			multiMatchQueryBuilder.field("communityName", 1.5f);
+			multiMatchQueryBuilder.field("houseTitle", 2f);
+			multiMatchQueryBuilder.field("detailAddr", 1f);
+			multiMatchQueryBuilder.field("apartmentName", 1f);
+			boolQueryBuilder.must(multiMatchQueryBuilder);
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}
@@ -360,39 +373,53 @@ public class HouseSearchController {
 					double latitude = houseEs.getLatitude();
 
 					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
-					if(distance>5000d){
+					if(distance<5000d){
 						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
 					}
 				}
 				if(StringUtils.isNotEmpty(areaCode)){
 					//根据code查询经纬度，计算距离
-					//towns
+						//towns
 					WorkCityJd townJd = nationService.selectWorkCityByCode(areaCode);
-					//district
+						//district
 					WorkCityJd districtJd = nationService.selectWorkCityByCode(String.valueOf(townJd.getParent()));
-					//city
+						//city
 					WorkCityJd cityJd = nationService.selectWorkCityByCode(String.valueOf(districtJd.getParent()));
-					//province
-					WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
+					String address = null;
 					StringBuffer sb = new StringBuffer();
-					String address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
-							.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
+					//说明是直辖市，townJd无数据，areaCode为县code
+					if(CENTRL_CITY_LIST.contains(cityJd.getCode())){
+						address = sb.append(cityJd.getProvince()).append(districtJd.getCity())
+								.append(townJd.getDistrict()).toString();
+					}else{
+						//province
+						WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
+						address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
+								.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
+					}
+
 					location = obtainGaodeLocation.getLocation(address);
 					LOGGER.info("参数address:{}调用ObtainGaodeLocation.getgetLocation方法返回数据：{}",address,location);
+
 					double longitude = houseEs.getLongitude();
 					double latitude = houseEs.getLatitude();
 
 					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
-					if(distance>5000d){
+					if(distance<5000d){
 						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
 					}
 				}
 			}
 
 			if(StringUtils.isNotEmpty(subCode) || StringUtils.isNotEmpty(areaCode)){
-				List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
-				returnMap.put("houseDataList", list);
-				return Response.success("ES查询成功",returnMap);
+				if(CollectionUtils.isNotEmpty(houseList2)){
+					List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
+					returnMap.put("houseDataList", list);
+					return Response.success("ES查询成功",returnMap);
+				}else {
+					returnMap.put("houseDataList", "");
+					return Response.success("ES查询成功",returnMap);
+				}
 			}
 
 			returnMap.put("houseDataList", houseList);
@@ -437,7 +464,7 @@ public class HouseSearchController {
 		vo.setFloor(houseEs.getFloor());
 		vo.setAcreage(houseEs.getAcreage());
 		vo.setRoomAcreage(houseEs.getRoomAcreage());
-		vo.setRentAmt(houseEs.getRentAmt());
+		vo.setRentAmt(houseEs.getRentAmt().setScale(0, BigDecimal.ROUND_DOWN));
 		vo.setHouseId(houseEs.getHouseId());
 		vo.setLatitude(houseEs.getLatitude());
 		vo.setLongitude(houseEs.getLongitude());

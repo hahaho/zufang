@@ -10,12 +10,26 @@ import com.apass.zufang.domain.entity.HouseLocation;
 import com.google.common.collect.Maps;
 
 public class CommonService {
+	
+	private static final String[] CROWN_CITY_ARRAY = { "上海市", "天津市", "北京市", "重庆市" };
+	private static final List<String> CROWN_CITY_LIST = Arrays.asList(CROWN_CITY_ARRAY);
 
 	/**
 	 * 默认地球半径
 	 */
 	private static double EARTH_RADIUS = 6367000.0; // 单位：m
 
+	/**
+	 * 效验是不是直辖市
+	 * @param city
+	 * @return
+	 */
+	public static String cityValidation(String city){
+		if (CROWN_CITY_LIST.contains(city)) {
+			city = city.replace("市", "");
+		}
+		return city;
+	}
 	/**
 	 * 计算经纬度点对应正方形4个点的坐标
 	 * 

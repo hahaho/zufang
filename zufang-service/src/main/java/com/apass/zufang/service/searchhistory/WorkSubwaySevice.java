@@ -48,7 +48,7 @@ public class WorkSubwaySevice {
 	/**
 	 * 获取地铁及其站点
 	 * 
-	 * @param code
+	 * @param domin
 	 * @return
 	 */
 	public List<WorkSubway> getSubwayLineAndSiteOrAre(WorkSubway domin) {

@@ -59,6 +59,7 @@ public class HouseinitService {
 		final HashMap<String, Integer> finMap = Maps.newHashMap();
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		String city = (String) paramMap.get("city");// 城市
+		city = CommonService.cityValidation(city);
 		
 		// 获取url
 		List<String> imgList = houseImgService.initImg();;
@@ -140,7 +141,10 @@ public class HouseinitService {
 		if (ValidateUtils.listIsTrue(hotHouse)) {
 			// 追加图片
 			for (HouseVo houseVo : hotHouse) {
-				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
+				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+				if (!ValidateUtils.listIsTrue(imgList)) {
+					imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
+				}
 				houseVo.setPictures(imgList);
 			}
 		}
@@ -215,12 +219,14 @@ public class HouseinitService {
 			
 			List<HouseVo> addSetList = null;
 			// 配置房源大于5
-			if (currSize < 5) {
+			if (currSize <= 5) {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
 					addSetList = norHouses.subList(5 - currSize, norHouses.size());
 				}
 				// @2:正常房源+配置房源<5
+			}else {
+				
 			}
 			return addSetList;
 		} catch (Exception e) {

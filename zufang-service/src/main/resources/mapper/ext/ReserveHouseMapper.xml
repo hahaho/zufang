@@ -86,7 +86,8 @@
 		FROM
 			`t_zfang_reserve_house`
 		WHERE
-			telphone = #{telphone};
+			telphone = #{telphone}
+		AND is_delete ='00'
     </select>
     
     
@@ -129,7 +130,11 @@
 			(SELECT * FROM t_zfang_house where  is_delete = '00')  x on  z.house_id = x.id
 		LEFT JOIN		t_zfang_house_location w on z.house_id = w.house_id
 		where x.`status`='2' 
-		AND z.reserve_date > CURDATE()
+		AND z.reserve_date > (select current_timestamp())
+			GROUP BY
+			x.id
+		HAVING
+			count(*) > 1
 
 		  ]]>
 	<![CDATA[
@@ -144,17 +149,23 @@
 	<!-- 记录总数 -->
 	<select id="getCount"  resultType="java.lang.Integer" parameterType="java.lang.String"   >
 	<![CDATA[
-			SELECT 
-			  COUNT(*)
-
-		FROM (SELECT * FROM t_zfang_reserve_house where  telphone = #{telphone}  and is_delete = '00') z 
+		SELECT 
+			  count(*)
+		FROM (SELECT 
+			  x.*
+		FROM (SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00') z 
 		LEFT JOIN 
 			(SELECT * FROM t_zfang_house_img where  is_delete = '00') y on y.house_id = z.house_id
 		LEFT JOIN 
 			(SELECT * FROM t_zfang_house where  is_delete = '00')  x on  z.house_id = x.id
 		LEFT JOIN		t_zfang_house_location w on z.house_id = w.house_id
 		where x.`status`='2' 
-		AND z.reserve_date > CURDATE()
+		AND z.reserve_date > (select current_timestamp())
+		GROUP BY
+			x.id
+		HAVING
+			count(*) > 1) v
+
 		]]>
 	</select>
     

@@ -12,6 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -33,22 +34,38 @@ public class QueryAddressController {
 	 * 日志
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryAddressController.class);
-
+	/**
+	 * 直辖市
+	 */
+	private static final String[] CENTRL_CITY_ARRAY = {"1", "2", "3", "4"};
+	private static final List<String> CENTRL_CITY_LIST = Arrays.asList(CENTRL_CITY_ARRAY);
 
 
 	@POST
 	@Path("/v1/queryNations")
 	public List<WorkCityJd> queryCity(Map<String,String> paramMap){
-		String districtCode = paramMap.get("code");
-		//此时查询的是省份
-		if(StringUtils.isBlank(districtCode)){
-			districtCode = "0";
+		try{
+			String districtCode = paramMap.get("code");
+			String level = paramMap.get("level");
+			//此时查询的是省份
+			if(StringUtils.isBlank(districtCode)){
+				districtCode = "0";
+			}
+			LOGGER.info("查询参数,parent:{}",districtCode);
+
+			List<WorkCityJd> jdlist = nationService.queryDistrictForAms(districtCode);
+			if(StringUtils.isNoneEmpty(level) && Integer.valueOf(level).equals(1) && CENTRL_CITY_LIST.contains(districtCode)){
+				WorkCityJd workCityJd = nationService.selectWorkCityByCode(districtCode);
+				jdlist.clear();
+				jdlist.add(workCityJd);
+			}
+
+			return jdlist;
+		}catch (Exception e){
+			LOGGER.error("查询失败,---Exception---",e);
+			return null;
 		}
-		LOGGER.info("查询参数,parent:{}",districtCode);
-		
-		List<WorkCityJd> jdlist = nationService.queryDistrictForAms(districtCode);
-		
-		return jdlist;
+
 	}
 
 

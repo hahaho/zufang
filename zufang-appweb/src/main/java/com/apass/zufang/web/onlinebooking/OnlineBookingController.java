@@ -146,14 +146,18 @@ public class OnlineBookingController {
 	        	return Response.fail("验证码错误,失败", returnMap);
 			} else {
 				// 已登录操作
-				onlineBookingService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
-				// 生成token
-				String token = tokenManager.createToken(String.valueOf(userId), mobile,
-						ConstantsUtil.TOKEN_EXPIRES_SPACE);
-				returnMap.put("token", token);
-				returnMap.put("ACCOUNT", mobile);
-				returnMap.put("userId", userId);
-				return Response.success("在线预约成功", returnMap);
+				Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
+				if(insetReserveHouse==1){
+					// 生成token
+					String token = tokenManager.createToken(String.valueOf(userId), mobile,
+							ConstantsUtil.TOKEN_EXPIRES_SPACE);
+					returnMap.put("token", token);
+					returnMap.put("ACCOUNT", mobile);
+					returnMap.put("userId", userId);
+					return Response.success("在线预约成功", returnMap);
+				}else{
+					return Response.fail("您近期行程已排满，暂时不能预约。");
+				}
 			}
 		} catch (BusinessException e) {
 			logger.error("mobile verification code send fail", e);

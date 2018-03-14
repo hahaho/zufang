@@ -263,7 +263,6 @@ public class HouseInfoService {
 			HouseAppSearchVo vo=houseInfoList.get(i);
 			double distance = this.distanceSimplify(latitude, longitude,
 					vo.getLatitude(), vo.getLongitude());
-					BigDecimal distanceBig = new BigDecimal(distance);
 
 			for (int j = 0; j < houseInfoList.size(); j++) {
 				if (houseDistanceMap.containsKey(distance)) {
@@ -279,8 +278,7 @@ public class HouseInfoService {
 		//对距离按照升序排序
 		Arrays.sort(resultArray);
 
-		int value = resultArray.length < number ? number : resultArray.length;
-		for (int i = 0; i < value; i++) {
+		for (int i = 0; i < resultArray.length; i++) {
 			double disance = resultArray[i];
 			voList.add(houseDistanceMap.get(disance));
 		}
