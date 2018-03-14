@@ -261,8 +261,8 @@ public class HouseSearchController {
 			//首页搜索接收的参数
 			String searchValue = CommonUtils.getValue(paramMap, "searchValue");
 			String city = CommonUtils.getValue(paramMap, "city");
-			if(StringUtils.isAnyEmpty(searchValue,city)){
-				throw new RuntimeException("请传入首页搜索关键字和地址！");
+			if(StringUtils.isEmpty(searchValue)&&StringUtils.isEmpty(city)){
+				throw new RuntimeException("请传入首页搜索关键字或地址！");
 			}
 			if(CENTRL_CITY_LIST2.contains(city)){
 				city = city.substring(0, city.length()-1);
