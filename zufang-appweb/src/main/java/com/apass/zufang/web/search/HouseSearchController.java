@@ -17,6 +17,7 @@ import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.HuxingEnums;
 import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.nation.NationService;
@@ -309,7 +310,7 @@ public class HouseSearchController {
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}
-			if(StringUtils.isNotEmpty(priceFlag)){
+			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals("6")){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
 			}
 			//如果户型选不限，则不加此条件
@@ -321,6 +322,10 @@ public class HouseSearchController {
 			}
 			if(StringUtils.isNotEmpty(room)){
 				String[] roomArr = room.split(",");
+				List roomList = Arrays.asList(roomArr);
+				if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
+					boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
+				}
 				switch(roomArr.length)
 				{
 					case 1:
@@ -338,7 +343,7 @@ public class HouseSearchController {
 						break;
 					case 5:
 						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3],roomArr[4]).boost(1.5f));
+								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
 						break;
 					default:
 						break;
