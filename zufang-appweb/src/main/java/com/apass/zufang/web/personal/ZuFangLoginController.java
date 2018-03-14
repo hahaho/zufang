@@ -153,7 +153,7 @@ public class ZuFangLoginController {
 	        	returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
 	        	
 	        	if(returnMap==null){
-	        		return Response.fail("请设置好密码",returnMap);
+	        		return Response.fail("请重设密码",returnMap);
 	        	}
 	        		return Response.success("登录成功",returnMap);
 	        	
