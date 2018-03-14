@@ -23,7 +23,7 @@ public class HouseInfoRela {
 	 */
 	private String province;
 	/**
-	 * 房屋所在城市
+	 * 房源所在城市
 	 */
 	private String city;
 	/**
@@ -166,6 +166,11 @@ public class HouseInfoRela {
 	 * 浏览量
 	 */
 	private Long pageView;
+	
+	/**
+	 * 房源city
+	 */
+	private String cityH;
 	
 	public Long getHouseId() {
 		return houseId;
@@ -469,6 +474,14 @@ public class HouseInfoRela {
 
 	public void setPageView(Long pageView) {
 		this.pageView = pageView;
+	}
+
+	public String getCityH() {
+		return cityH;
+	}
+
+	public void setCityH(String cityH) {
+		this.cityH = cityH;
 	}
 
 }
