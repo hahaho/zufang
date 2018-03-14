@@ -7,7 +7,9 @@ public enum CityEnums {
 	city_1("1", "北京"),
     city_2("2", "上海"),
     city_3("3", "天津"),
-    city_4("4", "重庆");
+    city_4("4", "重庆"),
+    city_32("32","台湾"),
+    city_52993("52993","港澳");
     
     private String code;
 	

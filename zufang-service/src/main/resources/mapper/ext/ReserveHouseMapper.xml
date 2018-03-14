@@ -168,5 +168,20 @@
 
 		]]>
 	</select>
+	
+	
+	<!-- 是否过期 -->
+	<select id="queryOverdue"  resultType="java.lang.Integer" parameterType="com.apass.zufang.domain.vo.ReservationsShowingsEntity"   >
+	<![CDATA[
+		SELECT
+			COUNT(*)
+		FROM
+			`t_zfang_reserve_house`
+		WHERE 	
+		 is_delete ='00'
+		AND house_id =#{houseId}
+		AND telphone = #{telphone}
+		]]>
+	</select>
     
 </mapper>

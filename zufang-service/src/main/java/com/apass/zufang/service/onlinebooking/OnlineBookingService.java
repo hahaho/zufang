@@ -79,4 +79,18 @@ public class OnlineBookingService {
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
 		return body;
 	}
+
+
+	/**
+	 * 是否过期
+	 * @param telphone
+	 */
+	public Integer queryOverdue(String telphone ,String houseId) {
+		ReservationsShowingsEntity reservationsShowingsEntity = new ReservationsShowingsEntity();
+		reservationsShowingsEntity.setTelphone(telphone);
+		reservationsShowingsEntity.setHouseId(Long.parseLong(houseId));
+		return reserveHouseMapper.queryOverdue(reservationsShowingsEntity);
+	}
+
+
 }

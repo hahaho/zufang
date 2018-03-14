@@ -49,7 +49,7 @@ public class HouseinitService {
 //			entity.setKey(Integer.valueOf(cityList.get(i).getCode()));
 			result.add(cityList.get(i).getCity());
 		}
-		resultMap.put("result", result);
+		resultMap.put("result", CommonService.cityValidationAdd(result));
 		return resultMap;
 	}
 	
@@ -119,8 +119,8 @@ public class HouseinitService {
 			if (size >= 5) {
 				hotHouse = new PageBean<>(1, 5, setHouses).getList();
 			} else {
+				hotHouse = setHouses;
 				if (ValidateUtils.listIsTrue(norHouses)) {
-					hotHouse = setHouses;
 					List<HouseVo> list = new PageBean<>(1, 5 - size, norHouses).getList();
 					for (HouseVo houseVo : list) {
 						hotHouse.add(houseVo);

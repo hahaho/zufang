@@ -35,6 +35,14 @@ public interface ReserveHouseMapper extends GenericMapper<ReserveHouse,Long> {
 	 * @return
 	 */
 	public Integer getCount(String telphone);
+
+	
+	/**
+	 * 预约是否过期
+	 * @param telphone
+	 * @return
+	 */
+	public Integer queryOverdue(ReservationsShowingsEntity reservationsShowingsEntity);
 	
 	
 	
