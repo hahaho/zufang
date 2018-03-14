@@ -143,7 +143,7 @@ public class OnlineBookingController {
 							
 	        	}
 		        //验证码错误
-	        	return Response.fail("验证码错误,失败", returnMap);
+	        	return Response.fail("验证码输入错误", returnMap);
 			} else {
 				// 已登录操作
 				Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
