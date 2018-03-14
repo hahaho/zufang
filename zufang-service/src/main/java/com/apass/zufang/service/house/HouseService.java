@@ -537,9 +537,6 @@ public class HouseService {
 				houseEs.setCommunityNamePinyin(Pinyin4jUtil.converterToSpell(h.getCommunityName()));
 				houseEs.setAcreage(h.getAcreage());
 				houseEs.setRoom(h.getRoom());
-				if(h.getRoom()>4){
-					houseEs.setRoom(-1);
-				}
 				houseEs.setHouseTitle(h.getTitle());
 				houseEs.setHouseTitlePinyin(Pinyin4jUtil.converterToSpell(h.getTitle()));
 				houseEs.setHall(h.getHall());
