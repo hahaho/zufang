@@ -37,7 +37,8 @@
 				AND h.type = #{type}
 				AND h.status = '2'
 				AND l.city = #{city}
-	        	ORDER BY h.page_view DESC;
        	]]>
+       			<if test="type!=null and type!='' and type == 2">ORDER BY h.sort_no ASC</if>
+       			<if test="type!=null and type!='' and type == 1">ORDER BY h.page_view DESC;</if>
     </select>
 </mapper>
