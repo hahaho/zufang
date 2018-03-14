@@ -59,7 +59,7 @@
     <!-- 搜索所有公寓codes -->
 		<select id="getApartByCity" resultMap="BaseResultMap"
 		parameterType="com.apass.zufang.domain.entity.Apartment">
-		SELECT a.id,a.name,a.area
+		SELECT a.id,a.name,a.city,a.area
 		FROM
 		t_zfang_apartment a,
 		t_zfang_house h,
