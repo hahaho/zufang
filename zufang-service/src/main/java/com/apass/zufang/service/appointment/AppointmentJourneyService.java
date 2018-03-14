@@ -38,6 +38,9 @@ public class AppointmentJourneyService {
         	vo.setReserveDateTime(DateFormatUtil.dateToString(vo.getReserveDate(),DateFormatUtil.YYYY_MM_DD_HH_MM));
         	//户型
         	vo.setHouseAll(vo.getHouseRoom()+"室"+vo.getHouseHall()+"厅"+vo.getHouseWei()+"卫");
+        	//面积
+        	vo.setHouseAcreage(vo.getHouseAcreage().substring(0, vo.getHouseAcreage().length()-2));
+        	vo.setHouseRoomAcreage(vo.getHouseRoomAcreage().substring(0, vo.getHouseRoomAcreage().length()-2));
         	//付款方式
         	String zujintype = vo.getHouseZujinType();
         	Integer zujinType = Integer.parseInt(zujintype.toString());

@@ -88,6 +88,7 @@
 		WHERE
 			telphone = #{telphone}
 		AND is_delete ='00'
+		AND reserve_date > (select current_timestamp())
     </select>
     
     
@@ -181,6 +182,7 @@
 		 is_delete ='00'
 		AND house_id =#{houseId}
 		AND telphone = #{telphone}
+		AND reserve_date > (select current_timestamp())
 		]]>
 	</select>
     
