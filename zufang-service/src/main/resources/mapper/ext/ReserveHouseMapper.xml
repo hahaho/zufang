@@ -168,5 +168,20 @@
 
 		]]>
 	</select>
+	
+	
+	<!-- 是否过期 -->
+	<select id="queryOverdue"  resultType="java.lang.Integer" parameterType="java.lang.String"   >
+	<![CDATA[
+		SELECT
+			*
+		FROM
+			`t_zfang_reserve_house`
+	WHERE 	house_id =#{houseId}
+		AND telphone = #{telphone}
+		AND is_delete ='00'
+
+		]]>
+	</select>
     
 </mapper>
