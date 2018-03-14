@@ -32,8 +32,8 @@ public class AppointmentJourneyService {
         	String reserveType = vo.getType()==(byte)1?"在线预约":"电话预约";
         	vo.setReserveType(reserveType);
         	//预约和看房时间
-        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
-        	vo.setReserveDateTime(DateFormatUtil.dateToString(vo.getReserveDate()));
+        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime(),null));
+        	vo.setReserveDateTime(DateFormatUtil.dateToString(vo.getReserveDate(),DateFormatUtil.YYYY_MM_DD_HH_MM));
         	//户型
         	vo.setHouseAll(vo.getHouseRoom()+"室"+vo.getHouseHall()+"厅"+vo.getHouseWei()+"卫");
         	//付款方式
