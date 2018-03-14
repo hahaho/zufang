@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
@@ -30,6 +30,7 @@ import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.enums.EditFalgEnums;
 import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.domain.vo.WorkCityJdVo;
