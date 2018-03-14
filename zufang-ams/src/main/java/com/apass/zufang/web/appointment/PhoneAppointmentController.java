@@ -129,6 +129,16 @@ public class PhoneAppointmentController {
 				entity = (HouseAppointmentQueryParams) FarmartJavaBean.farmartJavaB(entity, HouseAppointmentQueryParams.class, value, key);
     		}
     	}
+    	String houseStatus = CommonUtils.getValue(map, "houseStatus");
+    	if(StringUtils.equals(houseStatus, "正在审核")){
+    		entity.setHouseStatus("5");
+    	}else if(StringUtils.equals(houseStatus, "上架")){
+    		entity.setHouseStatus("2");
+    	}else if(StringUtils.equals(houseStatus, "下架")){
+    		entity.setHouseStatus("3");
+    	}else{
+    		entity.setHouseStatus(null);
+    	}
     	return entity;
 	}
 }
