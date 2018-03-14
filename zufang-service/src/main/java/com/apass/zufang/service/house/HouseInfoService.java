@@ -212,8 +212,7 @@ public class HouseInfoService {
 					queryCondition).get(0);
 			// setp 2 根据目标房源的所在位置查询所在城市的所有房源
 			HouseInfoRela queryInfo = new HouseInfoRela();
-			queryInfo.setProvince(houseInfo.getProvince());
-			queryInfo.setCity(houseInfo.getCity());
+			queryInfo.setCityH(houseInfo.getCityH());
 			queryInfo.setTargetHouseId(houseId);
 			List<HouseInfoRela> houseInfoList = queryHouseInfoRela(queryInfo);
 			if (houseInfoList == null || houseInfoList.size() <= 0) {
