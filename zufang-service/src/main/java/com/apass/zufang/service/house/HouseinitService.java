@@ -133,16 +133,21 @@ public class HouseinitService {
 				hotHouse = new PageBean<>(1, 5, norHouses).getList();
 			}
 		}
-		gitImg(hotHouse);
+		gitImg(hotHouse, true);
 		return hotHouse;
 	}
 
-	private void gitImg(List<HouseVo> hotHouse) {
+	private void gitImg(List<HouseVo> hotHouse, boolean boo) {
 		if (ValidateUtils.listIsTrue(hotHouse)) {
 			// 追加图片
 			for (HouseVo houseVo : hotHouse) {
-				List<String> imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
-				if (!ValidateUtils.listIsTrue(imgList)) {
+				List<String> imgList = null;
+				if (boo) {
+					imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
+					if (!ValidateUtils.listIsTrue(imgList)) {
+						imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
+					}
+				}else {
 					imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
 				}
 				houseVo.setPictures(imgList);
@@ -207,7 +212,7 @@ public class HouseinitService {
 			PageBean<HouseVo> pageBean = new PageBean<HouseVo>(new Integer(pageNum) + 1, 10, nearHouses);
 			nearHouses = pageBean.getList();
 		}
-		gitImg(nearHouses);
+		gitImg(nearHouses, false);
 		}
 		return nearHouses;
 	}
