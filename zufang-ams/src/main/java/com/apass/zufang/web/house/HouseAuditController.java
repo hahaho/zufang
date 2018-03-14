@@ -18,7 +18,6 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.service.house.HouseService;
@@ -70,15 +69,9 @@ public class HouseAuditController {
         	dto.setHouseTitle(houseTitle);
         	dto.setHouseCode(houseCode);
         	dto.setProvince(province);
-        	if(CityEnums.isContains(province)){
-        		dto.setCity(province);
-        		dto.setDistrict(city);
-        		dto.setStreet(district);
-        	}else{
-        		dto.setCity(city);
-            	dto.setDistrict(district);
-            	dto.setStreet(street);
-        	}
+    		dto.setCity(city);
+        	dto.setDistrict(district);
+        	dto.setStreet(street);
         	dto.setRows(Integer.parseInt(rows));
         	dto.setPage(Integer.parseInt(page));
         	dto.setApartmentCode(apartmentCode);
