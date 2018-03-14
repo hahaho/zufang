@@ -325,12 +325,17 @@ public class HouseService {
 		if(house.getStatus().intValue() != BusinessHouseTypeEnums.ZT_5.getCode()){
 			throw new BusinessException("房屋状态不允许操作!");
 		}
+		
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			house.setEditFlag(EditFalgEnums.EditFalg_0.getCode().byteValue());
 			houseAddEs(house.getId());
 		}else{
-			house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
+			if(house.getEditFlag().intValue() == EditFalgEnums.EditFalg_2.getCode()){
+				house.setStatus(BusinessHouseTypeEnums.ZT_1.getCode().byteValue());
+			}else{
+				house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
+			}
 		}
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
@@ -347,19 +352,16 @@ public class HouseService {
 		if(null == house){
 			throw new BusinessException("房屋信息不存在！");
 		}
-		/***房屋状态为上架或者删除时，不允许删除*/
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_4.getCode()){
-			throw new BusinessException("房屋状态不允许进行上下架操作!");
+		/***房屋状态不为上架，不允许下架*/
+		if(house.getStatus().intValue() != BusinessHouseTypeEnums.ZT_2.getCode()){
+			throw new BusinessException("房屋状态不允许进行下架操作!");
 		}
-		
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_2.getCode()){
-			house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
-			house.setUpdatedTime(new Date());
-			house.setUpdatedUser(updateUser);
-			house.setDelistTime(new Date());
-			houseMapper.updateByPrimaryKeySelective(house);
-			houseDeleteEs(house.getId());
-		}
+		house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
+		house.setUpdatedTime(new Date());
+		house.setUpdatedUser(updateUser);
+		house.setDelistTime(new Date());
+		houseMapper.updateByPrimaryKeySelective(house);
+		houseDeleteEs(house.getId());
 	}
 	
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
@@ -376,8 +378,10 @@ public class HouseService {
 		}
 		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
 				|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
-			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
-					||(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+			
+			if((house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() &&
+					house.getEditFlag().intValue() == EditFalgEnums.EditFalg_2.getCode())
+					|| (house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
 							house.getEditFlag().intValue() == EditFalgEnums.EditFalg_1.getCode())){
 				house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 				status = 1;
@@ -416,8 +420,10 @@ public class HouseService {
 			//如果房屋的状态为待上架，正常上架
 			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
 					|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
-				if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
-						||(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+				
+				if((house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
+						&&house.getEditFlag().intValue() == EditFalgEnums.EditFalg_2.getCode())
+						|| (house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
 						house.getEditFlag().intValue() == EditFalgEnums.EditFalg_1.getCode())){
 					house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 					others++;
