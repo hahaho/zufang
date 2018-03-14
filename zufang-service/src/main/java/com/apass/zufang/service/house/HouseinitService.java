@@ -49,7 +49,7 @@ public class HouseinitService {
 //			entity.setKey(Integer.valueOf(cityList.get(i).getCode()));
 			result.add(cityList.get(i).getCity());
 		}
-		resultMap.put("result", result);
+		resultMap.put("result", CommonService.cityValidationAdd(result));
 		return resultMap;
 	}
 	
