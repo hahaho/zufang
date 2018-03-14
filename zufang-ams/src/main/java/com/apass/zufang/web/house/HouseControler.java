@@ -23,7 +23,6 @@ import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
-import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.apartment.ApartmentService;
