@@ -123,22 +123,33 @@ public class OnlineBookingController {
 								}
 								
 			        		}else{
+			        			
+			        			
+			        			
 			        			//已经注册    未登录
 			        			GfbRegisterInfoEntity zfselecetmobile2 = zuFangLoginSevice.zfselecetmobile(mobile);
 			        			
-			        			Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,
-			        					memo);
-			        			// 生成token
-								String token = tokenManager.createToken(String.valueOf(zfselecetmobile2.getId()), mobile,
-										ConstantsUtil.TOKEN_EXPIRES_SPACE);
-								returnMap.put("token", token);
-								returnMap.put("account", mobile);
-								returnMap.put("userId", zfselecetmobile2.getId());
-								if(insetReserveHouse == 1){
-									return Response.success("在线预约成功", returnMap);
-								}else{
-									return Response.fail("您近期行程已排满，暂时不能预约。");
-								}
+			        			//是否已经预约过
+			                    Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
+			                    if(queryOverdue == null || queryOverdue ==0 ){
+			                    	
+			                    	Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,
+			                    			memo);
+			                    	// 生成token
+			                    	String token = tokenManager.createToken(String.valueOf(zfselecetmobile2.getId()), mobile,
+			                    			ConstantsUtil.TOKEN_EXPIRES_SPACE);
+			                    	returnMap.put("token", token);
+			                    	returnMap.put("account", mobile);
+			                    	returnMap.put("userId", zfselecetmobile2.getId());
+			                    	if(insetReserveHouse == 1){
+			                    		return Response.success("在线预约成功", returnMap);
+			                    	}else{
+			                    		return Response.fail("您近期行程已排满，暂时不能预约。");
+			                    	}
+			                    }else{
+			                    	return Response.fail("您已经预约该房源");
+			                    }
+			        			
 			        		}
 							
 	        	}
@@ -146,18 +157,26 @@ public class OnlineBookingController {
 	        	return Response.fail("验证码输入错误", returnMap);
 			} else {
 				// 已登录操作
-				Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
-				if(insetReserveHouse==1){
-					// 生成token
-					String token = tokenManager.createToken(String.valueOf(userId), mobile,
-							ConstantsUtil.TOKEN_EXPIRES_SPACE);
-					returnMap.put("token", token);
-					returnMap.put("ACCOUNT", mobile);
-					returnMap.put("userId", userId);
-					return Response.success("在线预约成功", returnMap);
-				}else{
-					return Response.fail("您近期行程已排满，暂时不能预约。");
-				}
+				
+				//是否已经预约过
+                Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
+                if(queryOverdue == null || queryOverdue ==0 ){
+                	
+					Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
+					if(insetReserveHouse==1){
+						// 生成token
+						String token = tokenManager.createToken(String.valueOf(userId), mobile,
+								ConstantsUtil.TOKEN_EXPIRES_SPACE);
+						returnMap.put("token", token);
+						returnMap.put("ACCOUNT", mobile);
+						returnMap.put("userId", userId);
+						return Response.success("在线预约成功", returnMap);
+					}else{
+						return Response.fail("您近期行程已排满，暂时不能预约。");
+					}
+                }else{
+                	return Response.fail("您已经预约该房源");
+                }
 			}
 		} catch (BusinessException e) {
 			logger.error("mobile verification code send fail", e);
@@ -199,7 +218,6 @@ public class OnlineBookingController {
             crmety.setRows(Integer.parseInt(rows));
             crmety.setPage(Integer.parseInt(page));
             
-
             ResponsePageBody<HouseShowingsEntity> resultPage = onlineBookingService.queryReservations(crmety);
 			
             if (resultPage == null) {
