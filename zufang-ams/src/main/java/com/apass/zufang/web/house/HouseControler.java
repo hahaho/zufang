@@ -3,15 +3,18 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.common.ListeningRegExpUtils;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
@@ -20,7 +23,6 @@ import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
-import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.apartment.ApartmentService;
@@ -74,15 +76,9 @@ public class HouseControler {
         	dto.setHouseTitle(houseTitle);
         	dto.setHouseCode(houseCode);
         	dto.setProvince(province);
-        	if(CityEnums.isContains(province)){
-        		dto.setCity(province);
-        		dto.setDistrict(city);
-        		dto.setStreet(district);
-        	}else{
-        		dto.setCity(city);
-            	dto.setDistrict(district);
-            	dto.setStreet(street);
-        	}
+    		dto.setCity(city);
+        	dto.setDistrict(district);
+        	dto.setStreet(street);
         	dto.setRows(Integer.parseInt(rows));
         	dto.setPage(Integer.parseInt(page));
         	dto.setApartmentCode(apartmentCode);

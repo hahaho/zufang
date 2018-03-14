@@ -119,8 +119,8 @@ public class HouseinitService {
 			if (size >= 5) {
 				hotHouse = new PageBean<>(1, 5, setHouses).getList();
 			} else {
+				hotHouse = setHouses;
 				if (ValidateUtils.listIsTrue(norHouses)) {
-					hotHouse = setHouses;
 					List<HouseVo> list = new PageBean<>(1, 5 - size, norHouses).getList();
 					for (HouseVo houseVo : list) {
 						hotHouse.add(houseVo);
@@ -212,6 +212,7 @@ public class HouseinitService {
 		return nearHouses;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private List<HouseVo> addSetHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
 		
 		try {
@@ -225,8 +226,8 @@ public class HouseinitService {
 					addSetList = norHouses.subList(5 - currSize, norHouses.size());
 				}
 				// @2:正常房源+配置房源<5
-			}else {
-				
+			} else {
+				addSetList = new PageBean(1, 5, setHouse).getList();
 			}
 			return addSetList;
 		} catch (Exception e) {

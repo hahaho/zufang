@@ -75,9 +75,15 @@ public class ApartmentService {
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addApartment(Apartment entity,String username,String code) throws BusinessException {
 		ApprintmentQueryParams entity2 = new ApprintmentQueryParams();
+		entity2.setName(entity.getName());
 		entity2.setCode(code);
-		Integer count = apartmentMapper.getApartmentListCodeCount(entity2);
-		String cou = ++count<10?"0"+count:count.toString();
+		entity2.setIsDelete("00");
+		Integer count1 = apartmentMapper.getApartmentListNameCount(entity2);
+		if(count1>0){
+			return Response.fail("公寓信息新增失败,公寓名称验重失败！");
+		}
+		Integer count2 = apartmentMapper.getApartmentListCodeCount(entity2);
+		String cou = ++count2<10?"0"+count2:count2.toString();
 		entity.fillAllField(username);
 		entity.setCode(code+cou);
 		if(createEntity(entity)==1){
@@ -92,7 +98,15 @@ public class ApartmentService {
 	 * @return
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response editApartment(Apartment entity,String username) {
+	public Response editApartment(String apartmentId,Apartment entity,String username) {
+		ApprintmentQueryParams entity2 = new ApprintmentQueryParams();
+		entity2.setId(apartmentId);
+		entity2.setName(entity.getName());
+		entity2.setIsDelete("00");
+		Integer count1 = apartmentMapper.getApartmentListNameCount(entity2);
+		if(count1>0){
+			return Response.fail("公寓信息修改失败,公寓名称验重失败！");
+		}
 		entity.fillField(username);
 		if(updateEntity(entity)==1){
 			return Response.success("公寓信息修改成功！");

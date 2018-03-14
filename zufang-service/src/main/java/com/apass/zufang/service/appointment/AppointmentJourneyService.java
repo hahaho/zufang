@@ -1,6 +1,8 @@
 package com.apass.zufang.service.appointment;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,11 +122,32 @@ public class AppointmentJourneyService {
 	public Response downLoadReserveHouseList(ApprintmentJourneyQueryParams entity) {
 		List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(entity);
         for(ReserveHouseVo vo : list){
+        	vo.setName(encryptCustomerName(vo.getName()));
         	String reserveType = vo.getType()==(byte)1?"在线预约":"电话预约";
         	vo.setReserveType(reserveType);
-        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
-        	vo.setReserveType(DateFormatUtil.dateToString(vo.getReserveDate()));
+        	//预约和看房时间
+        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime(),null));
+        	vo.setReserveDateTime(DateFormatUtil.dateToString(vo.getReserveDate(),DateFormatUtil.YYYY_MM_DD_HH_MM));
         }
 		return Response.success("预约行程管理 看房记录导出成功！",list);
+	}
+	/**
+	 * encryptCustomerName
+	 * 加密客户姓名
+	 * @param name
+	 * @return
+	 */
+	private String encryptCustomerName(String name) {
+		if(StringUtils.isBlank(name)){
+			return "";
+		}
+		Integer length = name.length();
+		if(length<2){
+			return name+"先生/女士";
+		}else if(length==2){
+			return name.substring(0, 1)+"*"+"先生/女士";
+		}else{
+			return name.substring(0, 1)+"*"+name.substring(length-1, length)+"先生/女士";
+		}
 	}
 }

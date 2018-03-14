@@ -6,9 +6,16 @@ import com.apass.zufang.common.model.QueryParams;
  *
  */
 public class ApprintmentQueryParams extends QueryParams{
+	private String id;//公寓ID
 	private String name;//公寓名称
 	private String code;//公寓名称
 	private String isDelete;//公寓名称
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}

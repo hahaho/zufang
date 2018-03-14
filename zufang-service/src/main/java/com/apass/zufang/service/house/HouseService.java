@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
@@ -30,6 +30,7 @@ import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.enums.EditFalgEnums;
 import com.apass.zufang.domain.enums.HouseAuditEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import com.apass.zufang.domain.vo.HouseBagVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.domain.vo.WorkCityJdVo;
@@ -301,14 +302,22 @@ public class HouseService {
 		
 		vo.setProvince(p.getProvince());
 		vo.setProvinceCode(p.getCode());
-		vo.setCity(c.getCity());
-		vo.setCityCode(c.getCode());
-		vo.setDistrict(d.getDistrict());
-		vo.setDistrictCode(d.getCode());
-		if(t != null){//可以为null ,因为直辖市是没有4级地址
+		if(CityEnums.isContains(location.getProvince())){
+			vo.setCity(p.getProvince());
+			vo.setCityCode(p.getCode()+"zxs");
+			vo.setDistrict(c.getCity());
+			vo.setDistrictCode(c.getCode()+"T");
+			vo.setStreet(d.getDistrict());
+			vo.setStreetCode(d.getCode());
+		}else{
+			vo.setCity(c.getCity());
+			vo.setCityCode(c.getCode());
+			vo.setDistrict(d.getDistrict());
+			vo.setDistrictCode(d.getCode());
 			vo.setStreet(t.getTowns());
 			vo.setStreetCode(t.getCode());
 		}
+		
 		return vo;
 	}
 	
@@ -325,12 +334,17 @@ public class HouseService {
 		if(house.getStatus().intValue() != BusinessHouseTypeEnums.ZT_5.getCode()){
 			throw new BusinessException("房屋状态不允许操作!");
 		}
+		
 		if(StringUtils.equals(HouseAuditEnums.HOUSE_AUDIT_0.getCode(), status)){
 			house.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			house.setEditFlag(EditFalgEnums.EditFalg_0.getCode().byteValue());
 			houseAddEs(house.getId());
 		}else{
-			house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
+			if(house.getEditFlag().intValue() == EditFalgEnums.EditFalg_2.getCode()){
+				house.setStatus(BusinessHouseTypeEnums.ZT_1.getCode().byteValue());
+			}else{
+				house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
+			}
 		}
 		house.setUpdatedTime(new Date());
 		house.setUpdatedUser(updateUser);
@@ -347,19 +361,16 @@ public class HouseService {
 		if(null == house){
 			throw new BusinessException("房屋信息不存在！");
 		}
-		/***房屋状态为上架或者删除时，不允许删除*/
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_4.getCode()){
-			throw new BusinessException("房屋状态不允许进行上下架操作!");
+		/***房屋状态不为上架，不允许下架*/
+		if(house.getStatus().intValue() != BusinessHouseTypeEnums.ZT_2.getCode()){
+			throw new BusinessException("房屋状态不允许进行下架操作!");
 		}
-		
-		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_2.getCode()){
-			house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
-			house.setUpdatedTime(new Date());
-			house.setUpdatedUser(updateUser);
-			house.setDelistTime(new Date());
-			houseMapper.updateByPrimaryKeySelective(house);
-			houseDeleteEs(house.getId());
-		}
+		house.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
+		house.setUpdatedTime(new Date());
+		house.setUpdatedUser(updateUser);
+		house.setDelistTime(new Date());
+		houseMapper.updateByPrimaryKeySelective(house);
+		houseDeleteEs(house.getId());
 	}
 	
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
@@ -376,8 +387,10 @@ public class HouseService {
 		}
 		if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
 				|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
-			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
-					||(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+			
+			if((house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() &&
+					house.getEditFlag().intValue() == EditFalgEnums.EditFalg_2.getCode())
+					|| (house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
 							house.getEditFlag().intValue() == EditFalgEnums.EditFalg_1.getCode())){
 				house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 				status = 1;
@@ -416,8 +429,10 @@ public class HouseService {
 			//如果房屋的状态为待上架，正常上架
 			if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode() 
 					|| house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode()){
-				if(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
-						||(house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
+				
+				if((house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_1.getCode()
+						&&house.getEditFlag().intValue() == EditFalgEnums.EditFalg_2.getCode())
+						|| (house.getStatus().intValue() == BusinessHouseTypeEnums.ZT_3.getCode() &&
 						house.getEditFlag().intValue() == EditFalgEnums.EditFalg_1.getCode())){
 					house.setStatus(BusinessHouseTypeEnums.ZT_5.getCode().byteValue());
 					others++;

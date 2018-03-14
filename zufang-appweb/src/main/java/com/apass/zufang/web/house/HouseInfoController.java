@@ -22,6 +22,7 @@ import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.utils.GfbLogUtils;
+import com.apass.zufang.utils.ValidateUtils;
 
 @Path("/house")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -56,6 +57,11 @@ public class HouseInfoController {
 			queryCondition.setHouseId(Long.valueOf(houseId));
 			List<HouseInfoRela> targetHouseInfoList = houseInfoService
 					.queryHouseInfoRela(queryCondition);
+			
+			if (!ValidateUtils.listIsTrue(targetHouseInfoList)) {
+				return Response.fail("该房源已下架，请查看其他房源", resultMap);
+			}
+			
 			HouseInfoRela houseInfoRela = targetHouseInfoList.get(0);
 			if (houseInfoRela != null) {
 				Long pageview = houseInfoRela.getPageView();

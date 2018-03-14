@@ -4,7 +4,8 @@ public enum EditFalgEnums {
 	
 	// 热门房源类型	1：正常，2:精选',
 	EditFalg_0(0, "未编辑"),
-	EditFalg_1(1, "编辑");
+	EditFalg_1(1, "编辑"),
+	EditFalg_2(2, "未审核");
 	
 	private Integer code;
 
