@@ -54,7 +54,7 @@ public class OnlineBookingService {
 			Integer selectByPrimaryKey = reserveHouseMapper.selectRepeat(setreserveHouse);
 			//已经预约了5次
 			Integer selectrepeat = reserveHouseMapper.selectrepeat(telphone);
-			if(selectByPrimaryKey < 1 && selectrepeat <= 5){
+			if(selectByPrimaryKey < 1 && selectrepeat < 5){
 				reserveHouseMapper.insert(setreserveHouse);
 				return 1;
 			}else{
