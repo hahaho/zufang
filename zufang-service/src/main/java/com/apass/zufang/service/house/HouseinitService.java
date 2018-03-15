@@ -234,7 +234,7 @@ public class HouseinitService {
 			List<HouseVo> addSetList = null;
 			List<HouseVo> tempHouse = timeHouse;
 			// 配置房源大于5
-			if (currSize <= 5) {
+			if (currSize < 5) {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
 					addSetList = norHouses.subList(0, 5 - currSize);
