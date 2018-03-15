@@ -1,62 +1,61 @@
 package com.apass.zufang.web.search;
 
-import static com.apass.zufang.search.enums.IndexType.HOUSE;
-
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import com.apass.zufang.domain.common.WorkCityJd;
-import com.apass.zufang.domain.entity.HouseInfoRela;
-import com.apass.zufang.domain.entity.WorkSubway;
-import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
-import com.apass.zufang.domain.enums.HuxingEnums;
-import com.apass.zufang.domain.enums.PriceRangeEnum;
-import com.apass.zufang.search.enums.IndexType;
-import com.apass.zufang.service.house.HouseInfoService;
-import com.apass.zufang.service.nation.NationService;
-import com.apass.zufang.utils.ObtainGaodeLocation;
-import com.google.gson.Gson;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.fieldstats.FieldStats;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.Index;
-import org.elasticsearch.index.query.*;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.sort.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.common.code.BusinessErrorCode;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.dto.HouseQueryParams;
+import com.apass.zufang.domain.entity.HouseInfoRela;
+import com.apass.zufang.domain.entity.WorkSubway;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.HuxingEnums;
+import com.apass.zufang.domain.enums.PriceRangeEnum;
 import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import com.apass.zufang.search.condition.HouseSearchCondition;
 import com.apass.zufang.search.entity.HouseEs;
+import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.search.enums.SortMode;
 import com.apass.zufang.search.manager.ESClientManager;
 import com.apass.zufang.search.manager.IndexManager;
 import com.apass.zufang.search.utils.ESDataUtil;
+import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.house.HouseService;
+import com.apass.zufang.service.nation.NationService;
 import com.apass.zufang.service.search.SearchKeyService;
 import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
+import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.unit.DistanceUnit;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.apass.zufang.search.enums.IndexType.HOUSE;
 
 /**
  * 商品搜索类
@@ -89,6 +88,13 @@ public class HouseSearchController {
 	private static final String[] CENTRL_CITY_ARRAY2 = {"北京市", "上海市", "重庆市", "天津市"};
 	private static final List<String> CENTRL_CITY_LIST2 = Arrays.asList(CENTRL_CITY_ARRAY2);
 
+	/**
+	 * 周围几公里距离:5公理
+	 */
+	private static final double ROUND_DISTANSE = 5;
+
+	@Value("${zufang.image.uri}")
+	private String appWebDomain;
 	/**
 	 * 添加致搜索记录表
 	 * @param paramMap
@@ -141,8 +147,14 @@ public class HouseSearchController {
 			//搜索必传参数
 			// 设备号
 			String deviceId = CommonUtils.getValue(paramMap, "deviceId");
-			// 用户号
+			if(StringUtils.isEmpty(deviceId)){
+				throw new RuntimeException("请传入设备号deviceId");
+			}
+			// 用户id
 			String userId = CommonUtils.getValue(paramMap, "userId");
+			if(StringUtils.isEmpty(userId)){
+				throw new RuntimeException("请传入用户id");
+			}
 			//页面和数量
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
@@ -334,6 +346,54 @@ public class HouseSearchController {
 			if(StringUtils.isNotEmpty(configName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName));
 			}
+			if(StringUtils.isNotEmpty(subCode) && StringUtils.isNotEmpty(areaCode)){
+				throw new RuntimeException("subCode和areaCode不可同时传入!");
+			}
+
+			String[] location = null;
+			//传入地铁线路编码
+			if(StringUtils.isNotEmpty(subCode)){
+				//根据code查询经纬度，计算距离
+				WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
+				LOGGER.info("subCode:{}查询地铁线路表结果：{}",subCode,GsonUtils.toJson(workSubway));
+				String nearestPoint = workSubway.getNearestPoint();
+				location = nearestPoint.split(",");
+				if(location==null || location.length!=2){
+					throw new RuntimeException("地铁线路表经纬度数据有误!");
+				}
+				boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("location")
+						.point(Double.valueOf(location[1]), Double.valueOf(location[0]))
+						.distance(ROUND_DISTANSE, DistanceUnit.KILOMETERS));
+			}
+
+			//传入区域编码
+			if(StringUtils.isNotEmpty(areaCode)) {
+				//根据code查询经纬度，计算距离
+				//towns
+				WorkCityJd townJd = nationService.selectWorkCityByCode(areaCode);
+				//district
+				WorkCityJd districtJd = nationService.selectWorkCityByCode(String.valueOf(townJd.getParent()));
+				//city
+				WorkCityJd cityJd = nationService.selectWorkCityByCode(String.valueOf(districtJd.getParent()));
+				String address = null;
+				StringBuffer sb = new StringBuffer();
+				//说明是直辖市，townJd无数据，areaCode为县code
+				if(CENTRL_CITY_LIST.contains(cityJd.getCode())){
+					address = sb.append(cityJd.getProvince()).append(districtJd.getCity())
+							.append(townJd.getDistrict()).toString();
+				}else{
+					//province
+					WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
+					address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
+							.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
+				}
+
+				location = obtainGaodeLocation.getLocation(address);
+				LOGGER.info("参数address:{}调用ObtainGaodeLocation.getgetLocation方法返回数据：{}",address,location);
+				boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("location")
+						.point(Double.valueOf(location[1]), Double.valueOf(location[0]))
+						.distance(ROUND_DISTANSE, DistanceUnit.KILOMETERS));
+			}
 
 			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
 					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
@@ -348,73 +408,10 @@ public class HouseSearchController {
 			returnMap.put("totalCount", response.getHits().getTotalHits());
 			//查询出的总房源：未先地点时返回
 			List<HouseAppSearchVo> houseList = Lists.newArrayList();
-			//5公里内的房源
-			List<HouseAppSearchVo> houseList2 = Lists.newArrayList();
-			//附近房源排序calculateDistanceAndSort方法需要此参数
-			List<HouseInfoRela> houseRelas = Lists.newArrayList();
-			String[] location = null;
 			for(SearchHit hit: hits){
 				//如果位置筛选不为空，计算所查结果与目标经纬度的距离
 				HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
-				houseRelas.add(houseEsToHouseRElas(houseEs));
 				houseList.add(houseEsToHouseAppSearchVo(houseEs));
-				if(StringUtils.isNotEmpty(subCode)){
-					//根据code查询经纬度，计算距离
-					WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
-					LOGGER.info("subCode:{}查询地铁线路表结果：{}",subCode,GsonUtils.toJson(workSubway));
-					String nearestPoint = workSubway.getNearestPoint();
-					location = nearestPoint.split(",");
-					double longitude = houseEs.getLongitude();
-					double latitude = houseEs.getLatitude();
-
-					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
-					if(distance<5000d){
-						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
-					}
-				}
-				if(StringUtils.isNotEmpty(areaCode)){
-					//根据code查询经纬度，计算距离
-						//towns
-					WorkCityJd townJd = nationService.selectWorkCityByCode(areaCode);
-						//district
-					WorkCityJd districtJd = nationService.selectWorkCityByCode(String.valueOf(townJd.getParent()));
-						//city
-					WorkCityJd cityJd = nationService.selectWorkCityByCode(String.valueOf(districtJd.getParent()));
-					String address = null;
-					StringBuffer sb = new StringBuffer();
-					//说明是直辖市，townJd无数据，areaCode为县code
-					if(CENTRL_CITY_LIST.contains(cityJd.getCode())){
-						address = sb.append(cityJd.getProvince()).append(districtJd.getCity())
-								.append(townJd.getDistrict()).toString();
-					}else{
-						//province
-						WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
-						address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
-								.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
-					}
-
-					location = obtainGaodeLocation.getLocation(address);
-					LOGGER.info("参数address:{}调用ObtainGaodeLocation.getgetLocation方法返回数据：{}",address,location);
-
-					double longitude = houseEs.getLongitude();
-					double latitude = houseEs.getLatitude();
-
-					double distance = houseInfoService.distanceSimplify(Double.valueOf(location[0]),Double.valueOf(location[1]),longitude,latitude);
-					if(distance<5000d){
-						houseList2.add(houseEsToHouseAppSearchVo(houseEs));
-					}
-				}
-			}
-
-			if(StringUtils.isNotEmpty(subCode) || StringUtils.isNotEmpty(areaCode)){
-				if(CollectionUtils.isNotEmpty(houseList2)){
-					List<HouseAppSearchVo> list = houseInfoService.calculateDistanceAndSort2(Double.valueOf(location[0]),Double.valueOf(location[1]),houseList2);
-					returnMap.put("houseDataList", list);
-					return Response.success("ES查询成功",returnMap);
-				}else {
-					returnMap.put("houseDataList", "");
-					return Response.success("ES查询成功",returnMap);
-				}
 			}
 
 			returnMap.put("houseDataList", houseList);
@@ -450,7 +447,7 @@ public class HouseSearchController {
 	 */
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
 		HouseAppSearchVo vo = new HouseAppSearchVo();
-		vo.setUrl(houseEs.getUrl());
+		vo.setUrl(appWebDomain+houseEs.getUrl());
 		vo.setHouseTitle(houseEs.getHouseTitle());
 		vo.setDetailAddr(houseEs.getDetailAddr());
 		vo.setRoom(houseEs.getRoom());

@@ -16,7 +16,7 @@ public class CronTools {
 	/**
 	 * 根据传入的时分秒,获取cron（HH:mm:ss）
 	 * @param dateStr
-	 * @return
+	 * @return 每天的固定执行时间
 	 */
 	public static String getCron(String dateStr){
 		

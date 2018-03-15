@@ -254,7 +254,6 @@ public class HouseInfoService {
 		return Math.sqrt(Lx * Lx + Ly * Ly); // 用平面的矩形对角距离公式计算总距离
 	}
 
-
 	public List<HouseAppSearchVo> calculateDistanceAndSort2(Double latitude, Double longitude,
 														List<HouseAppSearchVo> houseInfoList) {
 		int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
