@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.service.house.HouseinitService;
 import com.apass.zufang.utils.ValidateUtils;
@@ -75,17 +76,19 @@ public class HouseinitController {
 	public Response initHomePage(Map<String, Object> paramMap) {
 		
 		try {
+			LOG.info(GsonUtils.toJson(paramMap));
 			String city = (String) paramMap.get("city");// 城市
 			String pageNum = (String) paramMap.get("pageNum");// 页码
-			ValidateUtils.isNotBlank("初始首页请求参数丢失数据！", city, pageNum);
+			ValidateUtils.isNotBlank("initHomePage_请求参数丢失数据！", city, pageNum);
 			
 			HashMap<String, Object> initHomePage = houseinitService.initHomePage(paramMap);
+			LOG.info("initHomePage_返回数据:" + GsonUtils.toJson(initHomePage));
 			return Response.success("初始首页数据成功！", initHomePage);
 		}catch (BusinessException e){
-			LOG.error("初始首页数据失败！",e);
+			LOG.error("initHomePage_初始首页数据失败！",e);
 			return Response.fail(e.getErrorDesc());
 		} catch (Exception e) {
-			LOG.error("初始首页数据失败！", e);
+			LOG.error("initHomePage_初始首页数据失败！", e);
 			return Response.fail("初始首页数据失败！");
 		}
 	}
