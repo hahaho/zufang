@@ -34,11 +34,13 @@
 				h.id = l.house_id
 				AND h.apartment_id = a.id
 				AND h.is_delete = '00'
-				AND h.type = #{type}
 				AND h.status = '2'
 				AND l.city = #{city}
        	]]>
-       			<if test="type!=null and type!='' and type == 2">ORDER BY h.sort_no ASC</if>
-       			<if test="type!=null and type!='' and type == 1">ORDER BY h.page_view DESC;</if>
+	<if test="type!=null and type!=''"> AND h.type = #{type} </if>
+	<if test="typeTime!=null and typeTime!=''"> AND h.type = #{typeTime} </if>
+	<if test="type == 2">ORDER BY h.sort_no ASC</if>
+	<if test="type == 1">ORDER BY h.page_view DESC</if>
+	<if test="typeTime!=null and typeTime!=''">ORDER BY h.list_time DESC</if>
     </select>
 </mapper>
