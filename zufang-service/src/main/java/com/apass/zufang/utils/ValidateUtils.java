@@ -172,6 +172,20 @@ public class ValidateUtils {
 	}
 	
 	/**
+	 * 验证是数字，并且长度在某一区间内
+	 * @param value
+	 * @param length
+	 * @param message
+	 * @throws BusinessException
+	 */
+	public static void isNumberAndCheckLength(String value,int length,String message) throws BusinessException{
+		isNumber(value,message);
+		if(StringUtils.length(value) > 20 ){
+			throw new BusinessException(message+"值长度应该在"+length+"位以内");
+		}
+	}
+	
+	/**
 	 * 判断整数数字在某一区间
 	 * @param value
 	 * @param min
