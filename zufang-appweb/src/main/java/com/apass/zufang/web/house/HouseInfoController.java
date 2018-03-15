@@ -81,8 +81,10 @@ public class HouseInfoController {
 			}
 			resultMap.put("targetHouseInfo", houseInfoRela);
 			if (boo) {
-				return Response.fail("操作成功", resultMap);
+				resultMap.put("statusBuff", "0");
+				return Response.success("操作成功", resultMap);
 			}
+			resultMap.put("statusBuff", "0");
 			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
