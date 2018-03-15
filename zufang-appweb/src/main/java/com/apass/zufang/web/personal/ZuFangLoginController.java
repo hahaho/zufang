@@ -153,7 +153,7 @@ public class ZuFangLoginController {
 	        	returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
 	        	
 	        	if(returnMap==null){
-	        		return Response.fail("密码不正确，请输入正确密码",returnMap);
+	        		return Response.fail("请输入6-20位字母与数字组合，字母区分大小写",returnMap);
 	        	}
 	        		return Response.success("登录成功",returnMap);
 	        	
@@ -204,10 +204,11 @@ public class ZuFangLoginController {
 	        		}else{
 	        		//已注册用户
 	        		String token = tokenManager.createToken(null, mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
+	        		
 	        		resultMap.put("token", token);
 	        		resultMap.put("account", zfselecetmobile.getAccount());
 	        		resultMap.put("userId", zfselecetmobile.getId());
-	        		resultMap.put("Password", zfselecetmobile.getPassword() == null ||zfselecetmobile.getPassword() == ""  ? "no" :  "yes");
+	        		resultMap.put("Password", StringUtils.isBlank(zfselecetmobile.getPassword())  ? "no" :  "yes");
 	        		return Response.success("验证码真确登录成功",resultMap);
 	        		}
 	       }else{

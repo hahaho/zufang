@@ -158,7 +158,7 @@
         <if test="district!=null and district!=''"> AND z.district = #{district} </if>
         <if test="street!=null and street!=''"> AND z.street = #{street} </if>
 	        
-    	<if test="isDelete!=null and isDelete!=''"> AND x.is_delete = #{isDelete} AND y.is_delete = #{isDelete}</if>
+    	<if test="isDelete!=null and isDelete!=''"> AND x.is_delete = #{isDelete} AND y.is_delete = #{isDelete} AND z.is_delete = #{isDelete} </if>
         <![CDATA[ 
         	ORDER BY x.type DESC,x.sort_no ASC,x.created_time DESC
        	]]>
@@ -277,7 +277,7 @@
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
         	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id and a1.`name` = '独卫'
         	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id and a2.`name` = '可做饭'
-       	WHERE 1=1 AND x.is_delete = '00'
+       	WHERE 1=1 AND x.is_delete = '00' AND y.is_delete = '00' AND z.is_delete = '00'
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>
        	<if test="communityName!=null and communityName!=''"> AND x.community_name LIKE '%${communityName}%' </if>

@@ -2,7 +2,6 @@ package com.apass.zufang.web.version;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,15 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.apass.gfb.framework.mybatis.page.Pagination;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.CommonUtils;
-import com.apass.gfb.framework.utils.HttpWebUtils;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.AppVersionQueryParams;
 import com.apass.zufang.domain.entity.AppVersionEntity;
 import com.apass.zufang.service.version.AppVersionService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -50,7 +45,7 @@ public class AppVersionController {
     public ResponsePageBody<AppVersionEntity> queryAppVersionList(Map<String,Object> paramMap) {
     	
 
-        ResponsePageBody<AppVersionEntity> respBody = new ResponsePageBody<AppVersionEntity>();
+    	ResponsePageBody<AppVersionEntity> respBody = new ResponsePageBody<AppVersionEntity>();
         try {
         	String pageNo = CommonUtils.getValue(paramMap, "page");
         	String pageSize = CommonUtils.getValue(paramMap, "pageSize");
@@ -62,8 +57,7 @@ public class AppVersionController {
             if (StringUtils.isEmpty(pageSize)) {
                 pageSize = 10 + "";
             }
-
-            AppVersionEntity version = new AppVersionEntity();
+            AppVersionQueryParams version=new AppVersionQueryParams();
             if (null != versionName && !versionName.trim().isEmpty()) {
                 version.setVersionName(versionName);
             }
@@ -71,16 +65,8 @@ public class AppVersionController {
             version.setPage(Integer.parseInt(pageNo));
             version.setRows(Integer.parseInt(pageSize));
 
-            Pagination<AppVersionEntity> pagination = appVersionService.getVersionPage(version);
-
-            if (pagination == null) {
-                respBody.setTotal(0);
-                respBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
-                return respBody;
-            }
-            respBody.setTotal(pagination.getTotalCount());
-            respBody.setRows(pagination.getDataList());
-            respBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+          respBody = appVersionService.getVersionPage(version);
+             
         } catch (Exception e) {
             LOGGER.error("app版本号查询失败", e);
             respBody.setStatus(BaseConstants.CommonCode.FAILED_CODE);
@@ -197,8 +183,9 @@ public class AppVersionController {
             return Response.fail("请选择需要发布的版本");
         }
         try {
-        	AppVersionEntity version = new AppVersionEntity();
-        	version.setId(Long.valueOf(versionId));
+        	
+    	   AppVersionQueryParams version=new AppVersionQueryParams();
+    	   version.setId(Long.valueOf(versionId));
             appVersionService.deployVersion(version);
         } catch (Exception e) {
             LOGGER.error("queryDetail error", e);
