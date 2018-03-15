@@ -18,6 +18,7 @@ import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.HuxingEnums;
+import com.apass.zufang.domain.enums.PriceRangeEnum;
 import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.nation.NationService;
@@ -154,6 +155,9 @@ public class HouseSearchController {
 			//点击整租合租所传参数
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
 
+			if(StringUtils.isEmpty(searchValue) && StringUtils.isEmpty(rentType)){
+				throw new RuntimeException("搜索内容和租房类型不能同时为空");
+			}
 			Integer pages = null;
 			Integer row = null;
 			if (StringUtils.isNotEmpty(rows)) {
@@ -172,68 +176,43 @@ public class HouseSearchController {
 				city = city.substring(0, city.length()-1);
 			}
 			houseSearchCondition.setCity(city);
-
+			houseSearchCondition.setSortMode(SortMode.PAGEVIEW_DESC);
 
 			Map<String, Object> returnMap = new HashMap<String, Object>();
 			List<HouseAppSearchVo> list = new ArrayList<HouseAppSearchVo>();
-			if(StringUtils.isEmpty(rentType)){
+			Boolean searchValueFalge = false;
+			if(StringUtils.isNotEmpty(searchValue)){
 				String regex = "^[a-zA-Z0-9\\u4e00-\\u9fa5\\ ()（）.\\[\\]+=/\\-_\\【\\】]+$";
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(searchValue);
-				Boolean searchValueFalge = false;
 				if (matcher.matches()) {
 					searchValueFalge = true;
 					// 插入数据:搜索记录
 					searchKeyService.addCommonSearchKeys(searchValue, userId, deviceId);
 				}
-				if(StringUtils.isEmpty(searchValue)){
-					throw new RuntimeException("输入关键字才能搜索哦");
-				}
-				houseSearchCondition.setSortMode(SortMode.PAGEVIEW_DESC);
-				houseSearchCondition.setApartmentName(searchValue);
-				houseSearchCondition.setCommunityName(searchValue);
-				houseSearchCondition.setDetailAddr(searchValue);
 				houseSearchCondition.setHouseTitle(searchValue);
-
-				long before = System.currentTimeMillis();
-				Pagination<HouseEs> pagination = new Pagination<>();
-				if (searchValueFalge) {
-					pagination = IndexManager.HouseSearch(houseSearchCondition);
-				}
-
-				for (HouseEs houseEs : pagination.getDataList()) {
-					list.add(houseEsToHouseAppSearchVo(houseEs));
-				}
-				long after = System.currentTimeMillis();
-
-				LOGGER.info("Es查询用时：" + (after - before)/1000+"s");
-				Integer totalCount = pagination.getTotalCount();
-				returnMap.put("totalCount", totalCount);
-
-				returnMap.put("houseDataList", list);
-				return Response.successResponse(returnMap);
-			}else {
-				BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-				TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("rentType", rentType);
-				boolQueryBuilder.must(termQueryBuilder).must(QueryBuilders.multiMatchQuery(city,"province","city", "district").operator(Operator.AND).boost(2.5f));
-				SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
-						.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
-						.setTypes(HOUSE.getDataName())
-						.setQuery(boolQueryBuilder)
-						.setFrom(offset).setSize(row);
-				SearchResponse response = serachBuilder.execute().actionGet();
-
-				SearchHits searchHits = response.getHits();
-				for (SearchHit hit : searchHits.getHits()) {
-					HouseEs houseEs =(HouseEs) ESDataUtil.readValue(hit.source(), IndexType.HOUSE.getTypeClass());
-					list.add(houseEsToHouseAppSearchVo(houseEs));
-				}
-				int total = (int) searchHits.getTotalHits();
-
-				returnMap.put("totalCount", total);
-				returnMap.put("houseDataList", list);
-				return Response.successResponse(returnMap);
 			}
+
+			if(StringUtils.isNotEmpty(rentType)){
+				searchValueFalge = true;
+				houseSearchCondition.setRentType(Byte.valueOf(rentType));
+			}
+
+
+			Pagination<HouseEs> pagination = new Pagination<>();
+			if (searchValueFalge) {
+				pagination = IndexManager.HouseSearch(houseSearchCondition);
+			}
+
+			for (HouseEs houseEs : pagination.getDataList()) {
+				list.add(houseEsToHouseAppSearchVo(houseEs));
+			}
+			Integer totalCount = pagination.getTotalCount();
+			returnMap.put("totalCount", totalCount);
+
+			returnMap.put("houseDataList", list);
+			return Response.successResponse(returnMap);
+
 		} catch (Exception e) {
 			LOGGER.error("ES查询，出现异常,--Exception--:{}",e);
 			// 当用ES查询时出错时查询数据库的数据
@@ -307,14 +286,13 @@ public class HouseSearchController {
 			multiMatchQueryBuilder2.field("city", 2f);
 			multiMatchQueryBuilder2.field("district", 1f);
 			boolQueryBuilder.must(multiMatchQueryBuilder2);
-
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}
-			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals("6")){
+			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
 			}
-			//如果户型选不限，则不加此条件
+			//如果类型选不限，则不加此条件
 			if(StringUtils.isNotEmpty(rentType)){
 				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
 						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
@@ -324,57 +302,37 @@ public class HouseSearchController {
 			if(StringUtils.isNotEmpty(room)){
 				String[] roomArr = room.split(",");
 				List roomList = Arrays.asList(roomArr);
-				if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
-					boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
+				//如果户型选不限,则无此条件
+				if(!roomList.contains(HuxingEnums.HUXING_0.getCode().toString())){
+					if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
+						boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
+					}
+					switch(roomArr.length)
+					{
+						case 1:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
+							break;
+						case 2:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
+							break;
+						case 3:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
+							break;
+						case 4:
+							boolQueryBuilder.must(QueryBuilders
+									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+							break;
+						case 5:
+							boolQueryBuilder.must(QueryBuilders
+									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+							break;
+						default:
+							break;
+					}
 				}
-				switch(roomArr.length)
-				{
-					case 1:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
-						break;
-					case 2:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
-						break;
-					case 3:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
-						break;
-					case 4:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
-						break;
-					case 5:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
-						break;
-					default:
-						break;
-				}
-
 			}
 			if(StringUtils.isNotEmpty(configName)){
-				String[] configArr = configName.split(",");
-				switch(configArr.length)
-				{
-					case 1:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0]).boost(1.5f));
-						break;
-					case 2:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0],configArr[1]).boost(1.5f));
-						break;
-					case 3:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0],configArr[1],configArr[2]).boost(1.5f));
-						break;
-					case 4:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("configName", configArr[0],configArr[1],configArr[2],configArr[3]).boost(1.5f));
-						break;
-					case 5:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("configName", configArr[0],configArr[1],configArr[2],configArr[3],configArr[4]).boost(1.5f));
-						break;
-					default:
-						break;
-				}
+				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName));
 			}
 
 			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
