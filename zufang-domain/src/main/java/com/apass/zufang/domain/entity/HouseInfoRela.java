@@ -168,6 +168,31 @@ public class HouseInfoRela {
 	private Long pageView;
 	
 	/**
+	 * 管家联系方式
+	 */
+	private String houseKeepertel;
+	
+	/**
+	 * 几户合租
+	 */
+	private String totalDoors;
+	
+	/**
+	 * 朝向
+	 */
+	private Long hezuChaoxiang;
+	
+	/**
+	 * 出租介绍
+	 */
+	private Long hezuResource;
+	
+	/**
+	 * 出租面积
+	 */
+	private BigDecimal roomAcreage;
+	
+	/**
 	 * 房源city
 	 */
 	private String cityH;
@@ -474,6 +499,46 @@ public class HouseInfoRela {
 
 	public void setPageView(Long pageView) {
 		this.pageView = pageView;
+	}
+
+	public String getHouseKeepertel() {
+		return houseKeepertel;
+	}
+
+	public void setHouseKeepertel(String houseKeepertel) {
+		this.houseKeepertel = houseKeepertel;
+	}
+
+	public String getTotalDoors() {
+		return totalDoors;
+	}
+
+	public void setTotalDoors(String totalDoors) {
+		this.totalDoors = totalDoors;
+	}
+
+	public Long getHezuChaoxiang() {
+		return hezuChaoxiang;
+	}
+
+	public void setHezuChaoxiang(Long hezuChaoxiang) {
+		this.hezuChaoxiang = hezuChaoxiang;
+	}
+
+	public Long getHezuResource() {
+		return hezuResource;
+	}
+
+	public void setHezuResource(Long hezuResource) {
+		this.hezuResource = hezuResource;
+	}
+
+	public BigDecimal getRoomAcreage() {
+		return roomAcreage;
+	}
+
+	public void setRoomAcreage(BigDecimal roomAcreage) {
+		this.roomAcreage = roomAcreage;
 	}
 
 	public String getCityH() {
