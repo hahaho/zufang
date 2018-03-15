@@ -154,6 +154,9 @@ public class HouseSearchController {
 			//点击整租合租所传参数
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
 
+			if(StringUtils.isEmpty(searchValue) && StringUtils.isEmpty(rentType)){
+				throw new RuntimeException("搜索内容和租房类型不能同时为空");
+			}
 			Integer pages = null;
 			Integer row = null;
 			if (StringUtils.isNotEmpty(rows)) {
@@ -172,68 +175,43 @@ public class HouseSearchController {
 				city = city.substring(0, city.length()-1);
 			}
 			houseSearchCondition.setCity(city);
-
+			houseSearchCondition.setSortMode(SortMode.PAGEVIEW_DESC);
 
 			Map<String, Object> returnMap = new HashMap<String, Object>();
 			List<HouseAppSearchVo> list = new ArrayList<HouseAppSearchVo>();
-			if(StringUtils.isEmpty(rentType)){
+			Boolean searchValueFalge = false;
+			if(StringUtils.isNotEmpty(searchValue)){
 				String regex = "^[a-zA-Z0-9\\u4e00-\\u9fa5\\ ()（）.\\[\\]+=/\\-_\\【\\】]+$";
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(searchValue);
-				Boolean searchValueFalge = false;
 				if (matcher.matches()) {
 					searchValueFalge = true;
 					// 插入数据:搜索记录
 					searchKeyService.addCommonSearchKeys(searchValue, userId, deviceId);
 				}
-				if(StringUtils.isEmpty(searchValue)){
-					throw new RuntimeException("输入关键字才能搜索哦");
-				}
-				houseSearchCondition.setSortMode(SortMode.PAGEVIEW_DESC);
-				houseSearchCondition.setApartmentName(searchValue);
-				houseSearchCondition.setCommunityName(searchValue);
-				houseSearchCondition.setDetailAddr(searchValue);
 				houseSearchCondition.setHouseTitle(searchValue);
-
-				long before = System.currentTimeMillis();
-				Pagination<HouseEs> pagination = new Pagination<>();
-				if (searchValueFalge) {
-					pagination = IndexManager.HouseSearch(houseSearchCondition);
-				}
-
-				for (HouseEs houseEs : pagination.getDataList()) {
-					list.add(houseEsToHouseAppSearchVo(houseEs));
-				}
-				long after = System.currentTimeMillis();
-
-				LOGGER.info("Es查询用时：" + (after - before)/1000+"s");
-				Integer totalCount = pagination.getTotalCount();
-				returnMap.put("totalCount", totalCount);
-
-				returnMap.put("houseDataList", list);
-				return Response.successResponse(returnMap);
-			}else {
-				BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-				TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("rentType", rentType);
-				boolQueryBuilder.must(termQueryBuilder).must(QueryBuilders.multiMatchQuery(city,"province","city", "district").operator(Operator.AND).boost(2.5f));
-				SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
-						.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
-						.setTypes(HOUSE.getDataName())
-						.setQuery(boolQueryBuilder)
-						.setFrom(offset).setSize(row);
-				SearchResponse response = serachBuilder.execute().actionGet();
-
-				SearchHits searchHits = response.getHits();
-				for (SearchHit hit : searchHits.getHits()) {
-					HouseEs houseEs =(HouseEs) ESDataUtil.readValue(hit.source(), IndexType.HOUSE.getTypeClass());
-					list.add(houseEsToHouseAppSearchVo(houseEs));
-				}
-				int total = (int) searchHits.getTotalHits();
-
-				returnMap.put("totalCount", total);
-				returnMap.put("houseDataList", list);
-				return Response.successResponse(returnMap);
 			}
+
+			if(StringUtils.isNotEmpty(rentType)){
+				searchValueFalge = true;
+				houseSearchCondition.setRentType(Byte.valueOf(rentType));
+			}
+
+
+			Pagination<HouseEs> pagination = new Pagination<>();
+			if (searchValueFalge) {
+				pagination = IndexManager.HouseSearch(houseSearchCondition);
+			}
+
+			for (HouseEs houseEs : pagination.getDataList()) {
+				list.add(houseEsToHouseAppSearchVo(houseEs));
+			}
+			Integer totalCount = pagination.getTotalCount();
+			returnMap.put("totalCount", totalCount);
+
+			returnMap.put("houseDataList", list);
+			return Response.successResponse(returnMap);
+
 		} catch (Exception e) {
 			LOGGER.error("ES查询，出现异常,--Exception--:{}",e);
 			// 当用ES查询时出错时查询数据库的数据
