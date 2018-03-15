@@ -98,15 +98,18 @@ public class PhoneAppointmentService {
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) {
+		if(reserveDate.getTime()>new Date().getTime()){
+			return Response.fail("电话预约管理 预约看房记录新增失败,看房时间选择错误,请重新选择！");
+		}
 		entity.setType((byte)2);
 		entity.setReserveDate(reserveDate);
 		entity.setIsDelete("00");
 		entity.setCreatedTime(new Date());
 		entity.setUpdatedTime(new Date());
 		if(reserveHouseService.createEntity(entity)==1){
-			return Response.success("预约看房记录新增成功！");
+			return Response.success("电话预约管理 预约看房记录新增成功！");
 		}
-		return Response.fail("预约看房记录新增失败！");
+		return Response.fail("电话预约管理 预约看房记录新增失败！");
 	}
 	@SuppressWarnings("unused")
 	private List<HouseAppointmentVo> checkHouseList(List<HouseAppointmentVo> list){
