@@ -37,6 +37,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.apass.gfb.framework.exception.BusinessException;
@@ -89,6 +90,8 @@ public class HouseSearchController {
 	private static final String[] CENTRL_CITY_ARRAY2 = {"北京市", "上海市", "重庆市", "天津市"};
 	private static final List<String> CENTRL_CITY_LIST2 = Arrays.asList(CENTRL_CITY_ARRAY2);
 
+	@Value("${zufang.image.uri}")
+	private String appWebDomain;
 	/**
 	 * 添加致搜索记录表
 	 * @param paramMap
@@ -450,7 +453,7 @@ public class HouseSearchController {
 	 */
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
 		HouseAppSearchVo vo = new HouseAppSearchVo();
-		vo.setUrl(houseEs.getUrl());
+		vo.setUrl(appWebDomain+houseEs.getUrl());
 		vo.setHouseTitle(houseEs.getHouseTitle());
 		vo.setDetailAddr(houseEs.getDetailAddr());
 		vo.setRoom(houseEs.getRoom());

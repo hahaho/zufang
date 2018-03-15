@@ -26,7 +26,7 @@ public class ImageTools {
     /**
      * 获取图片宽度
      * 
-     * @param file 图片文件
+     * @param is 文件读取流
      * @return 宽度
      */
     public static int getImgWidth(InputStream is) {
