@@ -2,9 +2,7 @@ package com.apass.zufang.domain.entity;
 
 import java.util.Date;
 
-import com.apass.zufang.common.model.QueryParams;
-
-public class AppVersionEntity extends QueryParams {
+public class AppVersionEntity{
     
     private Long Id;
     

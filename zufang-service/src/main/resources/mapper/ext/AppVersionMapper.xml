@@ -3,21 +3,12 @@
 <mapper namespace="com.apass.zufang.mapper.zfang.AppVersionMapper">
 	<sql id="QueryAppVersionConditionSql">
        <where>
-	        <if test="Id!=null and Id!=''"> 
-	            AND id = #{Id}
+	        <if test="id!=null and Id!=''"> 
+	            AND id = #{id}
 	        </if>
             <if test="versionName!=null and versionName!=''">
             	AND version_name = #{versionName}
             </if>
-	        <if test="versionCode!=null and versionCode!=''">
-	            AND version_code = #{versionCode}
-	        </if>
-	        <if test="iosVersionname!=null and iosVersionname!=''"> 
-	            AND ios_version_name = #{iosVersionname} 
-	        </if>
-	        <if test="iosVersioncode!=null and iosVersioncode!=''">
-	            AND ios_version_code = #{iosVersioncode} 
-	        </if>
         </where>
     </sql>
     
@@ -42,7 +33,7 @@
 	  created_time AS createdDate
  	 </sql>
      <!-- 分页查询 -->
-	<select id="getVersionPage" resultMap="com.apass.zufang.domain.entity.AppVersionEntity"
+	<select id="getVersionPage" resultType="com.apass.zufang.domain.entity.AppVersionEntity"
 		parameterType="com.apass.zufang.domain.dto.AppVersionQueryParams">
         select
         <include refid="Base_Column_querySelect" />
