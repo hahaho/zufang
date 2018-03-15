@@ -38,7 +38,6 @@
 			MOBILE,
 			EMAIL,
 			STATUS,
-			DEPARTMENT,
 			CREATED_BY,
 			CREATED_DATE,
 			UPDATED_BY,
@@ -53,8 +52,7 @@
 			#{mobile, jdbcType=VARCHAR}, 
 			#{email, jdbcType=VARCHAR}, 
 			#{status, jdbcType=VARCHAR},
-			#{department, jdbcType=VARCHAR},  
-			#{createdBy, jdbcType=VARCHAR}, 
+			#{createdBy, jdbcType=VARCHAR},
 			CURRENT_TIMESTAMP, 
 			#{updatedBy, jdbcType=VARCHAR}, 
 			CURRENT_TIMESTAMP
