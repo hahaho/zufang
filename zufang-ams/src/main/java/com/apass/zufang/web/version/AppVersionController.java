@@ -164,18 +164,18 @@ public class AppVersionController {
             return Response.fail("downloadurl 或 indexBanner 或 mybanner 值不能为空");
         }
         AppVersionEntity app=new AppVersionEntity();
-        app.setVersionName(iosVersionname);
-        app.setVersionCode(iosVersioncode);
+        app.setVersionName(versionName);
+        app.setVersionCode(versionCode);
         app.setFileRoute(fileRoute);
-        app.setAppSize(iosAppsize);
-        app.setUpgradeflag(iosUpgradeflag);
-        app.setExplains(iosExplains);
-        app.setDistribution(iosDistribution);
+        app.setAppSize(appSize);
+        app.setUpgradeflag(upgradeflag);
+        app.setExplains(explains);
+        app.setDistribution(distribution);
         app.setIosVersionname(iosVersionname);
         app.setIosVersioncode(iosVersioncode);
         app.setIosAppsize(iosAppsize);
         app.setIosUpgradeflag(iosUpgradeflag);
-        app.setExplains(iosExplains);
+        app.setIosExplains(iosExplains);
         app.setIosDistribution(iosDistribution);
         app.setDownloanurl(downloanurl);
         app.setIndexbanner(indexbanner);
