@@ -300,7 +300,9 @@ public class HouseControler {
 	    	ValidateUtils.isNotBlank(houseId, "房屋Id不能为!");
 		    ValidateUtils.isNotBlank(locationId, "地址编号不能为空");
 	    }
-	    ValidateUtils.isNotBlank(phone, "请填写手机号码");
+	    ValidateUtils.isNotBlank(phone, "请填写管家联系方式");
+	    ValidateUtils.isNumberAndCheckLength(phone, 20 ,"管家联系方式");
+	    //20位长度的数字
 	    if(!ListeningRegExpUtils.mobile(phone)){
 	    	throw new BusinessException("请正确填写11位手机号码");
 	    }
