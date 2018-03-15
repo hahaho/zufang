@@ -96,6 +96,7 @@ public class ApartHouseService {
 			eachAPH.setId(resultApartment.get(i).getId());
 			eachAPH.setName(resultApartment.get(i).getName());
 			eachAPH.setArea(resultApartment.get(i).getArea());
+			eachAPH.setCity(resultApartment.get(i).getCity());
 //			List<String> imgList = houseImgService.getImgList(resultApartment.get(i).getId(), (byte) 1);
 			eachAPH.setRows(houseListById);
 			apartHouseList.add(eachAPH);

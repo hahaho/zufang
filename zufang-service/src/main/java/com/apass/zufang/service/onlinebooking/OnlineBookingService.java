@@ -50,11 +50,11 @@ public class OnlineBookingService {
 			setreserveHouse.setCreatedTime(new Date());
 			setreserveHouse.setUpdatedTime(new Date());
 			
-			//判断是否重复   或者  已经预约了5次
-			ReserveHouse selectByPrimaryKey = reserveHouseMapper.selectByPrimaryKey(setreserveHouse.getHouseId());
-			
+			//判断是否重复   
+			Integer selectByPrimaryKey = reserveHouseMapper.selectRepeat(setreserveHouse);
+			//已经预约了5次
 			Integer selectrepeat = reserveHouseMapper.selectrepeat(telphone);
-			if(selectByPrimaryKey == null && selectrepeat <= 5){
+			if(selectByPrimaryKey < 1 && selectrepeat < 5){
 				reserveHouseMapper.insert(setreserveHouse);
 				return 1;
 			}else{

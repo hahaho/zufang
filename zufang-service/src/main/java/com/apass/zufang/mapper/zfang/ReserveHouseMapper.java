@@ -44,6 +44,13 @@ public interface ReserveHouseMapper extends GenericMapper<ReserveHouse,Long> {
 	 */
 	public Integer queryOverdue(ReservationsShowingsEntity reservationsShowingsEntity);
 	
+	/**
+	 * 是否重复
+	 * @param setreserveHouse
+	 * @return
+	 */
+	public Integer selectRepeat(ReserveHouse setreserveHouse);
+	
 	
 	
 }
