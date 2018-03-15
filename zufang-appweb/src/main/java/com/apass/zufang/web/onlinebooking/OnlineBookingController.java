@@ -49,6 +49,9 @@ public class OnlineBookingController {
 	
 	@Autowired
 	private MobileSmsService mobileRandomService;
+	
+	
+	
 
 	/**
 	 * 预约看房
@@ -117,7 +120,7 @@ public class OnlineBookingController {
 								returnMap.put("token", token);
 								returnMap.put("account", mobile);
 								returnMap.put("userId", saveRegisterInfo);
-								returnMap.put("user", "xinyonghu");
+								returnMap.put("Password", "no");
 								if(insetReserveHouse == 1){
 									return Response.success("在线预约成功", returnMap);
 								}else{
@@ -140,7 +143,7 @@ public class OnlineBookingController {
 			                    	returnMap.put("token", token);
 			                    	returnMap.put("account", mobile);
 			                    	returnMap.put("userId", zfselecetmobile2.getId());
-			                    	returnMap.put("user", "laoyonghu");
+			                    	returnMap.put("Password", zfselecetmobile2.getPassword() == null||zfselecetmobile2.getPassword()== "" ? "no" :  "yes");
 			                    	if(insetReserveHouse == 1){
 			                    		return Response.success("在线预约成功", returnMap);
 			                    	}else{
@@ -235,5 +238,53 @@ public class OnlineBookingController {
 		}
 		return Response.success("在线预约成功", returnMap);
 	}
+	
+	
+	
+	/**
+	 * 预约看房Reservations
+	 * @param paramMap
+	 * @return
+	 */
+	@POST
+	@Path("/whetherabout")
+	public Response whetherabout(Map<String, Object> paramMap) {
+		ResponsePageBody<ReservationsShowingsEntity> respBody = new ResponsePageBody<ReservationsShowingsEntity>();
+		
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		
+		try {
+			
+            String houseId = CommonUtils.getValue(paramMap, "houseId");//用户id
+            String telphone = CommonUtils.getValue(paramMap, "telphone");//电话
+            
+            ReservationsShowingsEntity crmety = new ReservationsShowingsEntity();
+            if (StringUtils.isBlank(telphone)) {
+            	return Response.fail("电话不能为空");
+            }
+           
+            if (StringUtils.isBlank(houseId)) {
+            	return Response.fail("房源ID不能为空");
+            }
+            crmety.setTelphone(telphone);
+            crmety.setUserId(houseId);
+            Integer resultPage = onlineBookingService.queryOverdue(telphone,houseId);
+            if(resultPage < 1){
+            	returnMap.put("isabout", "no");
+            	//没预约过
+            	return Response.success("没预约过房源", returnMap);
+            }else{
+            	returnMap.put("isabout", "yes");
+            	return Response.fail("已经有预约房源",returnMap);
+            }
+           
+		} catch (Exception e) {
+			logger.error("预约看房查询失败", e);
+	            respBody.setStatus(BaseConstants.CommonCode.FAILED_CODE);
+	            respBody.setMsg("预约看房查询失败");
+		}
+		return null;
+	}
+	
 
 }

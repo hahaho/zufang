@@ -30,8 +30,14 @@
 			t2.list_time listTime,
             t2.delist_time delistTime,
             t2.page_view pageView,
+            t2.housekeeper_tel houseKeepertel,
+			t2.total_doors totalDoors,
+			t2.hezu_chaoxiang hezuChaoxiang,
+			t2.hezu_resource hezuResource,
+			t2.room_acreage roomAcreage,
 			t4.latitude latitude,
 			t4.longitude longitude,
+			t4.city cityH,
 			t4.street street,
 			t4.detail_addr detailAddr,
 			t2.created_time houseCreatedTime
@@ -43,13 +49,13 @@
 			 AND t4.is_delete NOT IN ('01')
              AND t1.is_delete NOT IN ('01')
              AND t2.is_delete NOT IN ('01')
-             AND t2.status = '2'
 	]]>
 	<if test="apartmentId!=null and apartmentId!=''"> AND t1.id = #{apartmentId}  </if>
 	<if test="houseId!=null and houseId!=''"> AND t2.id = #{houseId} </if>
 	<if test="targetHouseId!=null and targetHouseId!=''"> <![CDATA[  AND t2.id <> ]]> #{targetHouseId}</if>
 	<if test="province!=null and province!=''"> AND t1.province = #{province} </if>
 	<if test="city!=null and city!=''"> AND t1.city = #{city} </if>
+	<if test="cityH!=null and cityH!=''"> AND t4.city = #{cityH} </if>
 	<if test="district!=null and district!=''"> AND t4.id = #{district} </if>
 	<if test="rentType!=null and rentType!=''"> AND t2.rent_type = #{rentType} </if>
 	<if test="zujinType!=null and zujinType!=''"> AND t2.rent_type = #{zujinType} </if>
@@ -99,9 +105,9 @@
              AND t1.is_delete NOT IN ('01')
              AND t2.is_delete NOT IN ('01')
              AND t2.list_time < CURRENT_TIMESTAMP ()
+			 AND t2.id  = #{houseId}
+			 LIMIT 1
 	]]>
-			AND t2.id  = #{houseId}
-			LIMIT 1
 	</select>
     
 </mapper>

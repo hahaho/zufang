@@ -136,6 +136,7 @@ public class HouseInfoService {
 		try {
 			// setp 1 查询房源
 			HouseInfoRela queryInfo = new HouseInfoRela();
+			 queryInfo.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			 queryInfo.setProvince(province);
 			 queryInfo.setCity(city);
 			List<HouseInfoRela> houseInfoList = houseInfoRelaMapper
@@ -208,15 +209,17 @@ public class HouseInfoService {
 			// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 			HouseInfoRela queryCondition = new HouseInfoRela();
 			queryCondition.setHouseId(houseId);
+			queryCondition.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			HouseInfoRela houseInfo = houseInfoRelaMapper.getHouseInfoRelaList(
 					queryCondition).get(0);
 			// setp 2 根据目标房源的所在位置查询所在城市的所有房源
 			HouseInfoRela queryInfo = new HouseInfoRela();
-			queryInfo.setProvince(houseInfo.getProvince());
-			queryInfo.setCity(houseInfo.getCity());
+			queryInfo.setCityH(houseInfo.getCityH());
+			queryInfo.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			queryInfo.setTargetHouseId(houseId);
 			List<HouseInfoRela> houseInfoList = queryHouseInfoRela(queryInfo);
-			if (houseInfoList == null || houseInfoList.size() <= 0) {
+			
+			if (!ValidateUtils.listIsTrue(houseInfoList)) {
 				return null;
 			}
 			// setp 3 根据目标经纬度和房源list 根据距离进行排序并取前number的房源数据
