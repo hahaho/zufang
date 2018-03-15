@@ -20,6 +20,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseInfoRela;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.utils.GfbLogUtils;
 import com.apass.zufang.utils.ValidateUtils;
@@ -45,6 +46,7 @@ public class HouseInfoController {
 	@Path("/getHouseInfoRela")
 	public Response getHouseInfoRela(Map<String, Object> paramMap) {
 		try {
+			boolean boo = false;
 			String houseId = CommonUtils.getValue(paramMap, "houseId");
 			GfbLogUtils.info("房屋详情页：根据houseId显示房屋信息getHouseInfoRela,全量参数信息:"
 					+ paramMap);
@@ -55,11 +57,18 @@ public class HouseInfoController {
 			// 目标房源信息
 			HouseInfoRela queryCondition = new HouseInfoRela();
 			queryCondition.setHouseId(Long.valueOf(houseId));
+			queryCondition.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			List<HouseInfoRela> targetHouseInfoList = houseInfoService
 					.queryHouseInfoRela(queryCondition);
 			
+			// 若房源下架,仍然查询
 			if (!ValidateUtils.listIsTrue(targetHouseInfoList)) {
-				return Response.fail("该房源已下架，请查看其他房源", resultMap);
+				queryCondition.setStatus(BusinessHouseTypeEnums.ZT_3.getCode().byteValue());
+				targetHouseInfoList = houseInfoService.queryHouseInfoRela(queryCondition);
+				if (!ValidateUtils.listIsTrue(targetHouseInfoList)) {
+					return Response.fail("该房源信息已被移除，请查看其他房源", resultMap);
+				}
+				boo = true;
 			}
 			
 			HouseInfoRela houseInfoRela = targetHouseInfoList.get(0);
@@ -71,6 +80,9 @@ public class HouseInfoController {
 				houseInfoService.addPageView(house);
 			}
 			resultMap.put("targetHouseInfo", houseInfoRela);
+			if (boo) {
+				return Response.fail("操作成功", resultMap);
+			}
 			return Response.success("操作成功", resultMap);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -133,6 +145,7 @@ public class HouseInfoController {
 				queryCondition.setCity("上海市");
 				queryCondition
 						.setSortField(ConstantsUtil.THE_NEARBY_HOUSES_NUMBER);// 按照上架时间倒序排列，取前十条数据
+				queryCondition.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 				List<HouseInfoRela> nearlyHouseInfoList = houseInfoService
 						.queryHouseInfoRela(queryCondition);
 				resultMap.put("nearlyHouseInfoList", nearlyHouseInfoList);

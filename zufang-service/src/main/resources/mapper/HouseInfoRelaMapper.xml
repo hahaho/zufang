@@ -30,6 +30,11 @@
 			t2.list_time listTime,
             t2.delist_time delistTime,
             t2.page_view pageView,
+            t2.housekeeper_tel houseKeepertel,
+			t2.total_doors totalDoors,
+			t2.hezu_chaoxiang hezuChaoxiang,
+			t2.hezu_resource hezuResource,
+			t2.room_acreage roomAcreage,
 			t4.latitude latitude,
 			t4.longitude longitude,
 			t4.city cityH,
@@ -44,7 +49,6 @@
 			 AND t4.is_delete NOT IN ('01')
              AND t1.is_delete NOT IN ('01')
              AND t2.is_delete NOT IN ('01')
-             AND t2.status = '2'
 	]]>
 	<if test="apartmentId!=null and apartmentId!=''"> AND t1.id = #{apartmentId}  </if>
 	<if test="houseId!=null and houseId!=''"> AND t2.id = #{houseId} </if>
@@ -101,9 +105,9 @@
              AND t1.is_delete NOT IN ('01')
              AND t2.is_delete NOT IN ('01')
              AND t2.list_time < CURRENT_TIMESTAMP ()
+			 AND t2.id  = #{houseId}
+			 LIMIT 1
 	]]>
-			AND t2.id  = #{houseId}
-			LIMIT 1
 	</select>
     
 </mapper>
