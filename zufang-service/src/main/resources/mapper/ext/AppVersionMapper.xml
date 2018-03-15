@@ -20,14 +20,46 @@
 	        </if>
         </where>
     </sql>
-	<select id="getVersionPage" resultMap="BaseResultMap"
-		parameterType="java.lang.String">
+    
+    <sql id="Base_Column_querySelect" >
+      id,
+	  version_name AS versionName,
+	  version_code AS versionCode,
+	  file_route AS fileRoute,
+	  app_size AS appSize,
+	  upgradeflag,
+	  explains,
+	  distribution,
+	  ios_version_name AS iosVersionname,
+	  ios_version_code AS iosVersioncode,
+	  ios_app_size AS iosAppsize,
+	  ios_upgradeflag AS iosUpgradeflag,
+	  ios_explains AS iosExplains,
+	  ios_distribution AS iosDistribution,
+	  downloanurl,
+	  indexbanner,
+	  mybanner,
+	  created_time AS createdDate
+ 	 </sql>
+     <!-- 分页查询 -->
+	<select id="getVersionPage" resultMap="com.apass.zufang.domain.entity.AppVersionEntity"
+		parameterType="com.apass.zufang.domain.dto.AppVersionQueryParams">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_querySelect" />
         from t_zufang_app_version
         <include refid="QueryAppVersionConditionSql" />
+         <![CDATA[ 
+        ORDER BY created_time DESC
+        ]]>
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
 	</select>
+	
+	 <!-- 分页查询数量 -->
+    <select id ="getVersionPageCount" resultType="java.lang.Integer"
+        parameterType="com.apass.zufang.domain.dto.AppVersionQueryParams">
+        SELECT COUNT(*) FROM t_zufang_app_version
+        <include refid="QueryAppVersionConditionSql" />
+    </select>
 </mapper>
