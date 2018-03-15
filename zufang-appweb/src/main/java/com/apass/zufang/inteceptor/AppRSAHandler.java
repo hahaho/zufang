@@ -52,7 +52,7 @@ public class AppRSAHandler {
 	 * @throws Throwable
 	 */
 
-	@Around("execution(* com.apass.zufang.web..*.*(..))")
+//	@Around("execution(* com.apass.zufang.web..*.*(..))")
 	private Object handleRSAInteceptor(ProceedingJoinPoint point) throws Throwable {
 		return inteceptorMethod(point);
 	}

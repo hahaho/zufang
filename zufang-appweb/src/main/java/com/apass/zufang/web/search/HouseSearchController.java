@@ -1,38 +1,43 @@
 package com.apass.zufang.web.search;
 
-import static com.apass.zufang.search.enums.IndexType.HOUSE;
-
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.mybatis.page.Pagination;
+import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.GsonUtils;
+import com.apass.zufang.common.code.BusinessErrorCode;
+import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.common.WorkCityJd;
+import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.HuxingEnums;
 import com.apass.zufang.domain.enums.PriceRangeEnum;
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
+import com.apass.zufang.search.condition.HouseSearchCondition;
+import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.search.enums.SortMode;
+import com.apass.zufang.search.manager.ESClientManager;
+import com.apass.zufang.search.manager.IndexManager;
+import com.apass.zufang.search.utils.ESDataUtil;
 import com.apass.zufang.service.house.HouseInfoService;
+import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.service.nation.NationService;
+import com.apass.zufang.service.search.SearchKeyService;
+import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
 import com.apass.zufang.utils.ObtainGaodeLocation;
-import com.google.gson.Gson;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.fieldstats.FieldStats;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.Index;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.common.unit.DistanceUnit;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,24 +45,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.mybatis.page.Pagination;
-import com.apass.gfb.framework.utils.CommonUtils;
-import com.apass.gfb.framework.utils.GsonUtils;
-import com.apass.zufang.common.code.BusinessErrorCode;
-import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.dto.HouseQueryParams;
-import com.apass.zufang.domain.vo.HouseAppSearchVo;
-import com.apass.zufang.search.condition.HouseSearchCondition;
-import com.apass.zufang.search.entity.HouseEs;
-import com.apass.zufang.search.enums.SortMode;
-import com.apass.zufang.search.manager.ESClientManager;
-import com.apass.zufang.search.manager.IndexManager;
-import com.apass.zufang.search.utils.ESDataUtil;
-import com.apass.zufang.service.house.HouseService;
-import com.apass.zufang.service.search.SearchKeyService;
-import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
-import com.google.common.collect.Lists;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.apass.zufang.search.enums.IndexType.HOUSE;
 
 /**
  * 商品搜索类
@@ -338,6 +336,9 @@ public class HouseSearchController {
 				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName));
 			}
 
+//			boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("pin.location")
+//					.point(40, -70)
+//					.distance(200, DistanceUnit.KILOMETERS));
 			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
 					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
 					.setTypes(IndexType.HOUSE.getDataName())
