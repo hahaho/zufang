@@ -50,7 +50,7 @@
 			LEFT JOIN t_zfang_house y on y.id = x.house_id
 			LEFT JOIN t_zfang_apartment z on z.id = y.apartment_id
 			JOIN t_zfang_house_location a on a.house_id = x.house_id
-		WHERE 1=1 AND x.is_delete = '00'
+		WHERE 1=1 AND x.is_delete = '00' AND y.is_delete = '00' AND z.is_delete = '00' AND a.is_delete = '00'
         ]]>
         <if test="name!=null and name!=''"> AND x.`name` LIKE '%${name}%' </if>
         <if test="telphone!=null and telphone!=''"> AND x.telphone = #{telphone} </if>
