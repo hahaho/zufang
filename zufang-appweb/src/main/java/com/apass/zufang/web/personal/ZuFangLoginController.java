@@ -207,7 +207,7 @@ public class ZuFangLoginController {
 	        		resultMap.put("token", token);
 	        		resultMap.put("account", zfselecetmobile.getAccount());
 	        		resultMap.put("userId", zfselecetmobile.getId());
-	        		resultMap.put("Password", zfselecetmobile.getPassword() == null ? "no" :  "yes");
+	        		resultMap.put("Password", zfselecetmobile.getPassword() == null ||zfselecetmobile.getPassword() == ""  ? "no" :  "yes");
 	        		return Response.success("验证码真确登录成功",resultMap);
 	        		}
 	       }else{
