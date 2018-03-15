@@ -181,6 +181,7 @@
 	   		AND h. STATUS = '2'
 	   		AND h.is_delete = '00'
 	   		AND a.is_delete = '00'
+	   		AND l.is_delete = '00'
 	   		GROUP BY
 	   			l.city ASC
         ]]>

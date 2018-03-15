@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.logstash.LOG;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.house.ApartHouseService;
@@ -36,6 +37,7 @@ public class ApartHouseController {
 	public Response getApartByCity(Map<String, Object> paramMap) {
 		
 		try {
+			LOG.info("getApartHouse" + GsonUtils.toJson(paramMap));
 			HashMap<String, Object> resultMap = apartHouseService.getApartByCity(paramMap);
 	
 			return Response.success("查询公寓房源信息！", resultMap);
@@ -55,7 +57,7 @@ public class ApartHouseController {
 		
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		try {
-			
+			LOG.info("getHouseById_" + GsonUtils.toJson(paramMap));
 			String houseId = (String) paramMap.get("apartId");
 			String pageNum = (String) paramMap.get("pageNum");
 			String pageSize = (String) paramMap.get("pageSize");
