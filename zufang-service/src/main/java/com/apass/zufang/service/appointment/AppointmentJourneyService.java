@@ -81,13 +81,13 @@ public class AppointmentJourneyService {
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response editReserveHouse(ReserveHouse entity, String username,Date reserveDate) {
 		if(reserveDate.getTime()>new Date().getTime()){
-			return Response.fail("预约行程管理  预约看房记录编辑失败,看房时间选择错误,请重新选择！");
+			return Response.fail("预约行程管理  预约看房编辑失败,看房时间选择错误,请重新选择！");
 		}
 		entity.setReserveDate(reserveDate);
 		if(reserveHouseService.updateEntity(entity)==1){
-			return Response.success("预约行程管理 预约看房记录编辑成功！");
+			return Response.success("预约行程管理 预约看房编辑成功！");
 		}
-		return Response.fail("预约行程管理 预约看房记录编辑失败！");
+		return Response.fail("预约行程管理 预约看房编辑失败！");
 	}
 	/**
 	 * 预约行程管理 预约看房记录删除
@@ -101,9 +101,9 @@ public class AppointmentJourneyService {
 		entity.setIsDelete("01");
 		entity.setUpdatedTime(new Date());
 		if(reserveHouseService.updateEntity(entity)==1){
-			return Response.success("预约行程管理 预约看房记录删除成功！");
+			return Response.success("预约行程管理 预约看房删除成功！");
 		}
-		return Response.fail("预约行程管理 预约看房记录删除失败！");
+		return Response.fail("预约行程管理 预约看房删除失败！");
 	}
 	/**
 	 * 预约行程管理 客户回访记录新增
@@ -116,9 +116,9 @@ public class AppointmentJourneyService {
 		entity.setCreatedTime(new Date());
 		entity.setUpdatedTime(new Date());
 		if(returnVisitService.createEntity(entity)==1){
-			return Response.success("预约行程管理 客户回访记录新增成功！");
+			return Response.success("预约行程管理 客户回访新增成功！");
 		}
-		return Response.fail("预约行程管理 客户回访记录新增失败！");
+		return Response.fail("预约行程管理 客户回访新增失败！");
 	}
 	/**
 	 * 预约行程管理 看房记录导出
@@ -166,7 +166,7 @@ public class AppointmentJourneyService {
         		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_10.getMessage());
         	}
         }
-		return Response.success("预约行程管理 看房记录导出成功！",list);
+		return Response.success("预约行程管理 看房行程导出成功！",list);
 	}
 	/**
 	 * encryptCustomerName

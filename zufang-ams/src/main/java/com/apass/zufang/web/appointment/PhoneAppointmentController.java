@@ -104,7 +104,10 @@ public class PhoneAppointmentController {
     		entity.setTelphone(telphone);
     		entity.setName(name);
     		entity.setMemo(memo);
-    		Date date = DateFormatUtil.string2date(reserveDate,DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+    		Date date = DateFormatUtil.string2date(reserveDate+":00",DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+    		if(date==null){
+    			return Response.fail("电话预约管理 预约看房新增失败,reserveDate字段格式化出错！");
+    		}
     		String username = SpringSecurityUtils.getCurrentUser();
     		return phoneAppointmentService.addReserveHouse(entity,username,date);
     	} catch (Exception e) {
