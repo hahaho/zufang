@@ -8,6 +8,7 @@ public class ApartHouseList{
     private Long id;
     private String area;
     private String name;
+    private String city;
     
     private List<HouseVo> rows = new ArrayList<HouseVo>();
 
@@ -41,6 +42,14 @@ public class ApartHouseList{
 
 	public void setRows(List<HouseVo> rows) {
 		this.rows = rows;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 }
