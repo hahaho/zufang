@@ -18,6 +18,7 @@ import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.HuxingEnums;
+import com.apass.zufang.domain.enums.PriceRangeEnum;
 import com.apass.zufang.search.enums.IndexType;
 import com.apass.zufang.service.house.HouseInfoService;
 import com.apass.zufang.service.nation.NationService;
@@ -285,14 +286,13 @@ public class HouseSearchController {
 			multiMatchQueryBuilder2.field("city", 2f);
 			multiMatchQueryBuilder2.field("district", 1f);
 			boolQueryBuilder.must(multiMatchQueryBuilder2);
-
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
 			}
-			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals("6")){
+			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
 			}
-			//如果户型选不限，则不加此条件
+			//如果类型选不限，则不加此条件
 			if(StringUtils.isNotEmpty(rentType)){
 				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
 						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
@@ -302,57 +302,37 @@ public class HouseSearchController {
 			if(StringUtils.isNotEmpty(room)){
 				String[] roomArr = room.split(",");
 				List roomList = Arrays.asList(roomArr);
-				if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
-					boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
+				//如果户型选不限,则无此条件
+				if(!roomList.contains(HuxingEnums.HUXING_0.getCode().toString())){
+					if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
+						boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
+					}
+					switch(roomArr.length)
+					{
+						case 1:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
+							break;
+						case 2:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
+							break;
+						case 3:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
+							break;
+						case 4:
+							boolQueryBuilder.must(QueryBuilders
+									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+							break;
+						case 5:
+							boolQueryBuilder.must(QueryBuilders
+									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+							break;
+						default:
+							break;
+					}
 				}
-				switch(roomArr.length)
-				{
-					case 1:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
-						break;
-					case 2:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
-						break;
-					case 3:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
-						break;
-					case 4:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
-						break;
-					case 5:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
-						break;
-					default:
-						break;
-				}
-
 			}
 			if(StringUtils.isNotEmpty(configName)){
-				String[] configArr = configName.split(",");
-				switch(configArr.length)
-				{
-					case 1:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0]).boost(1.5f));
-						break;
-					case 2:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0],configArr[1]).boost(1.5f));
-						break;
-					case 3:
-						boolQueryBuilder.must(QueryBuilders.termsQuery("configName", configArr[0],configArr[1],configArr[2]).boost(1.5f));
-						break;
-					case 4:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("configName", configArr[0],configArr[1],configArr[2],configArr[3]).boost(1.5f));
-						break;
-					case 5:
-						boolQueryBuilder.must(QueryBuilders
-								.termsQuery("configName", configArr[0],configArr[1],configArr[2],configArr[3],configArr[4]).boost(1.5f));
-						break;
-					default:
-						break;
-				}
+				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName));
 			}
 
 			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
