@@ -41,15 +41,25 @@
 	  mybanner,
 	  created_time AS createdDate
  	 </sql>
-    
-	<select id="getVersionPage" resultMap="BaseResultMap"
-		parameterType="java.lang.String">
+     <!-- 分页查询 -->
+	<select id="getVersionPage" resultMap="com.apass.zufang.domain.entity.AppVersionEntity"
+		parameterType="com.apass.zufang.domain.dto.AppVersionQueryParams">
         select
         <include refid="Base_Column_querySelect" />
         from t_zufang_app_version
         <include refid="QueryAppVersionConditionSql" />
+         <![CDATA[ 
+        ORDER BY created_time DESC
+        ]]>
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
 	</select>
+	
+	 <!-- 分页查询数量 -->
+    <select id ="getVersionPageCount" resultType="java.lang.Integer"
+        parameterType="com.apass.zufang.domain.dto.AppVersionQueryParams">
+        SELECT COUNT(*) FROM t_zufang_app_version
+        <include refid="QueryAppVersionConditionSql" />
+    </select>
 </mapper>
