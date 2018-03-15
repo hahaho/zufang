@@ -59,12 +59,8 @@ public class HouseinitService {
 		final HashMap<String, Integer> finMap = Maps.newHashMap();
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		String city = (String) paramMap.get("city");// 城市
+		String pageNum = (String) paramMap.get("pageNum");// 页码
 		city = CommonService.cityValidation(city);
-		
-		// 获取url
-		List<String> imgList = houseImgService.initImg();;
-		resultMap.put("initImg", imgList);
-		LOG.info("init首页接口_获取url成功");
 		
 		// 获取房源
 		HashMap<String, String> map = Maps.newHashMap();
@@ -78,10 +74,17 @@ public class HouseinitService {
 		map.put("typeTime", BusinessHouseTypeEnums.FYLX_1.getCode().toString());
 		List<HouseVo> addTimeHouse = initHouseByCity(map);
 		
-		// 封装热门房源
-		List<HouseVo> hotHouse = getHotHouse(setHouses, norHouses);
-		resultMap.put("hotHouse", hotHouse);
-		LOG.info("init首页接口_获取热门房源成功");
+		// 优化请求过程
+		if (pageNum.equals("0")) {
+			// 获取url
+			List<String> imgList = houseImgService.initImg();;
+			resultMap.put("initImg", imgList);
+			LOG.info("init首页接口_获取url成功");
+			// 封装热门房源
+			List<HouseVo> hotHouse = getHotHouse(setHouses, norHouses);
+			resultMap.put("hotHouse", hotHouse);
+			LOG.info("init首页接口_获取热门房源成功");
+		}
 		// 封装配置房源
 		List<HouseVo> setHouse = getSetHouse(setHouses, norHouses, addTimeHouse, paramMap, finMap);
 		resultMap.put("setHouse", setHouse);
@@ -243,7 +246,7 @@ public class HouseinitService {
 				for (HouseVo houseVo : addSetList) {
 					for (int i = 0; i < tempHouse.size(); i++) {
 						if (houseVo.getHouseId().equals(timeHouse.get(i).getHouseId())) {
-							timeHouse.remove(i);
+							tempHouse.remove(i);
 						}
 					}
 				}
