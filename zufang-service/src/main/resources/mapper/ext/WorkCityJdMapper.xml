@@ -5,7 +5,7 @@
         select
         <include refid="Base_Column_List" />
         from t_zufang_work_city_jd
-        where parent = #{code}
+        where parent = #{code} order by code
     </select>
 
 	<select id="selectCodeByName" resultMap="BaseResultMap" parameterType="com.apass.zufang.domain.dto.WorkCityJdParams">
