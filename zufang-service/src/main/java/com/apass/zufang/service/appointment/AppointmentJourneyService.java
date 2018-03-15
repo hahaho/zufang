@@ -146,11 +146,11 @@ public class AppointmentJourneyService {
 		}
 		Integer length = name.length();
 		if(length<2){
-			return name+"先生/女士";
+			return name;
 		}else if(length==2){
-			return name.substring(0, 1)+"*"+"先生/女士";
+			return name.substring(0, 1)+"*";
 		}else{
-			return name.substring(0, 1)+"*"+name.substring(length-1, length)+"先生/女士";
+			return name.substring(0, 1)+"*"+name.substring(length-1, length);
 		}
 	}
 }

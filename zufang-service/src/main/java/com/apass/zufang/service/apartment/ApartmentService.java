@@ -80,10 +80,18 @@ public class ApartmentService {
 		entity2.setIsDelete("00");
 		List<ApartmentVo> count1 = apartmentMapper.getApartmentListNameCount(entity2);
 		if(count1!=null&&count1.size()>0){
-			return Response.fail("公寓信息新增失败,公寓名称验重失败！");
+			return Response.fail("公寓信息新增失败,公寓名称不可重复！");
 		}
 		Integer count2 = apartmentMapper.getApartmentListCodeCount(entity2);
-		String cou = ++count2<10?"0"+count2:count2.toString();
+		count2++;
+		String cou = null;
+		if(count2<10){
+			cou = "00"+count2;
+		}else if(count2>9&&count2<100){
+			cou = "0"+count2;
+		}else{
+			cou = count2.toString();
+		}
 		entity.fillAllField(username);
 		entity.setCode(code+cou);
 		if(createEntity(entity)==1){
@@ -108,7 +116,7 @@ public class ApartmentService {
 				continue;
 			}
 			if(StringUtils.equals(vo.getName(), entity.getName())){
-				return Response.fail("公寓信息修改失败,公寓名称验重失败！");
+				return Response.fail("公寓信息修改失败,公寓名称不可重复！");
 			}
 		}
 		entity.fillField(username);

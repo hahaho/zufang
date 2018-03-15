@@ -83,7 +83,7 @@ public class PhoneAppointmentService {
         		vo.setHouseRentType(BusinessHouseTypeEnums.HZ_2.getMessage());
         	}
         	//创建时间
-        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime()));
+        	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime(),null));
         }
         pageBody.setRows(list);
         list = reserveHouseService.getHouseListForPhoneAppointment(count);
