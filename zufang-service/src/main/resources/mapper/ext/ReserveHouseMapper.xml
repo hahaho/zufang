@@ -135,7 +135,7 @@
 			GROUP BY
 			x.id
 		HAVING
-			count(*) > 1
+			count(*) >= 1
 
 		  ]]>
 	<![CDATA[
@@ -165,7 +165,7 @@
 		GROUP BY
 			x.id
 		HAVING
-			count(*) > 1) v
+			count(*) >= 1) v
 
 		]]>
 	</select>
