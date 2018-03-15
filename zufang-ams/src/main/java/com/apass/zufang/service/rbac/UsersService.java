@@ -64,7 +64,7 @@ public class UsersService {
 	/**
 	 * 保存用户角色设置
 	 */
-	@Transactional
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void saveAssignedRoles(String userId, String roles) {
 		usersRepository.deleteUserRolesByUserId(userId);
 		Set<String> roleIds = ListeningCollectionUtils.tokenizeToSet(roles, ",");
@@ -87,7 +87,7 @@ public class UsersService {
 	 * 
 	 * @throws BusinessException
 	 */
-	@Transactional
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void delete(String userId) throws BusinessException {
 		UsersDO usersDO = usersRepository.select(userId);
 		if (usersDO == null) {
