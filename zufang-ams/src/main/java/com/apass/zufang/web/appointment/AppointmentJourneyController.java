@@ -94,8 +94,10 @@ public class AppointmentJourneyController {
     		
         	String reserveDate = CommonUtils.getValue(map, "reserveDate");
     		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
-    		Date date = DateFormatUtil.string2date(reserveDate,DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
-    		
+    		Date date = DateFormatUtil.string2date(reserveDate+":00",DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+    		if(date==null){
+    			return Response.fail("预约行程管理 预约看房编辑失败,reserveDate字段格式化出错！");
+    		}
     		String memo = CommonUtils.getValue(map, "memo");
     		
     		ReserveHouse entity = new ReserveHouse();
@@ -106,7 +108,7 @@ public class AppointmentJourneyController {
         	return appointmentJourneyService.editReserveHouse(entity,username,date);
         } catch (Exception e) {
             LOGGER.error("editReserveHouse EXCEPTION --- --->{}", e);
-            return Response.fail("预约行程管理 预约看房记录编辑失败！");
+            return Response.fail("预约行程管理 预约看房编辑失败！");
         }
     }
 	/**
@@ -124,7 +126,7 @@ public class AppointmentJourneyController {
         	return appointmentJourneyService.deleReserveHouse(reserveHouseId,username);
         } catch (Exception e) {
             LOGGER.error("deleReserveHouse EXCEPTION --- --->{}", e);
-            return Response.fail("预约行程管理 预约看房记录删除失败！");
+            return Response.fail("预约行程管理 预约看房删除失败！");
         }
     }
 	/**
@@ -178,7 +180,7 @@ public class AppointmentJourneyController {
         	return appointmentJourneyService.addReturnVisit(entity,username);
         } catch (Exception e) {
             LOGGER.error("addReturnVisit EXCEPTION --- --->{}", e);
-            return Response.fail("预约行程管理 客户回访记录新增！");
+            return Response.fail("预约行程管理 客户回访新增失败！");
         }
     }
 	/**
@@ -195,7 +197,7 @@ public class AppointmentJourneyController {
 	    	return appointmentJourneyService.downLoadReserveHouseList(entity);
 		}catch(Exception e){
 			LOGGER.error("downLoadReserveHouseList EXCEPTION --- --->{}", e);
-			return Response.fail("预约行程管理 看房记录导出失败！");
+			return Response.fail("预约行程管理 看房行程导出失败！");
 		}
 	}
 	/**
