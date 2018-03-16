@@ -47,10 +47,10 @@
       )
     values (#{versionName,jdbcType=VARCHAR}, #{versionCode,jdbcType=VARCHAR}, #{fileRoute,jdbcType=VARCHAR}, 
       #{appSize,jdbcType=VARCHAR}, #{upgradeflag,jdbcType=INTEGER}, #{explains,jdbcType=VARCHAR}, 
-      #{distribution,jdbcType=INTEGER}, #{iosVersionName,jdbcType=VARCHAR}, #{iosVersionCode,jdbcType=VARCHAR}, 
-      #{iosAppSize,jdbcType=VARCHAR}, #{iosUpgradeflag,jdbcType=INTEGER}, #{iosExplains,jdbcType=VARCHAR}, 
+      #{distribution,jdbcType=INTEGER}, #{iosVersionname,jdbcType=VARCHAR}, #{iosVersioncode,jdbcType=VARCHAR}, 
+      #{iosAppsize,jdbcType=VARCHAR}, #{iosUpgradeflag,jdbcType=INTEGER}, #{iosExplains,jdbcType=VARCHAR}, 
       #{iosDistribution,jdbcType=INTEGER}, #{downloanurl,jdbcType=VARCHAR}, #{indexbanner,jdbcType=VARCHAR}, 
-      #{mybanner,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      #{mybanner,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
       )
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.AppVersionEntity" useGeneratedKeys="true" keyProperty="id" >
