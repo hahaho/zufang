@@ -27,9 +27,26 @@
     ios_version_name, ios_version_code, ios_app_size, ios_upgradeflag, ios_explains, 
     ios_distribution, downloanurl, indexbanner, mybanner, created_time, updated_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultType="com.apass.zufang.domain.entity.AppVersionEntity" parameterType="java.lang.Long" >
     select 
-    <include refid="Base_Column_List" />
+      id,
+	  version_name AS versionName,
+	  version_code AS versionCode,
+	  file_route AS fileRoute,
+	  app_size AS appSize,
+	  upgradeflag,
+	  explains,
+	  distribution,
+	  ios_version_name AS iosVersionname,
+	  ios_version_code AS iosVersioncode,
+	  ios_app_size AS iosAppsize,
+	  ios_upgradeflag AS iosUpgradeflag,
+	  ios_explains AS iosExplains,
+	  ios_distribution AS iosDistribution,
+	  downloanurl,
+	  indexbanner,
+	  mybanner,
+	  created_time AS createdDate
     from t_zufang_app_version
     where id = #{id,jdbcType=BIGINT}
   </select>
