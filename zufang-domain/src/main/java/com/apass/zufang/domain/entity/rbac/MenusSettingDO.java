@@ -18,7 +18,7 @@ public class MenusSettingDO {
     /**
      * 主键标识id
      */
-    private String               id;
+    private Long               id;
     /**
      * 文本标题
      */
@@ -31,7 +31,7 @@ public class MenusSettingDO {
     /**
      * 父节点
      */
-    private String               parentId;
+    private Long               parentId;
     /**
      * 子节点
      */
@@ -53,11 +53,11 @@ public class MenusSettingDO {
         this.children = children;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,11 +69,11 @@ public class MenusSettingDO {
         this.text = text;
     }
 
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 

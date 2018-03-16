@@ -45,8 +45,8 @@ public class PermissionsService {
     /**
      * 删除资源ID
      */
-    @Transactional
-    public void delete(String permissionId) {
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+    public void delete(Long permissionId) {
         permissionsRepository.deleteRolePermissionsByPermissionId(permissionId);
         permissionsRepository.delete(permissionId);
     }
@@ -55,14 +55,14 @@ public class PermissionsService {
      * 保存资源数据
      */
     public void save(PermissionsDO permission) throws BusinessException {
-        String id = permission.getId();
+        Long id = permission.getId();
         String operator = SpringSecurityUtils.getCurrentUser();
         String permissionCode = permission.getPermissionCode();
         List<PermissionsDO> dataList = permissionsRepository.filter(permissionCode, id);
         if (!CollectionUtils.isEmpty(dataList)) {
             throw new BusinessException("资源编码已存在");
         }
-        if (StringUtils.isBlank(id)) {
+        if (id ==null) {
             permission.setCreatedBy(operator);
             permission.setUpdatedBy(operator);
             permissionsRepository.insert(permission);
@@ -82,7 +82,7 @@ public class PermissionsService {
     /**
      * 主键加载
      */
-    public PermissionsDO select(String permissionId) {
+    public PermissionsDO select(Long permissionId) {
         return permissionsRepository.select(permissionId);
     }
 

@@ -111,7 +111,7 @@ public class RolesController {
                 return Response.fail("角色描述长度不合法");
             }
             RolesDO role = new RolesDO();
-            role.setId(roleId);
+            role.setId(Long.valueOf(roleId));
             role.setRoleCode(roleCode);
             role.setRoleName(roleName);
             role.setDescription(description);
@@ -159,7 +159,7 @@ public class RolesController {
                 return Response.fail("角色ID不能为空");
             }
             // 删除角色记录 
-            RolesDO rolesDO = rolesService.select(roleId);
+            RolesDO rolesDO = rolesService.select(Long.valueOf(roleId));
             if (rolesDO == null) {
                 throw new BusinessException("角色记录不存在,请刷新列表后重试");
             }

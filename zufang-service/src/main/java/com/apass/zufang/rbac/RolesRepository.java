@@ -17,7 +17,7 @@ import java.util.Map;
  * @version $Id: RolesRepository.java, v 0.1 2016年6月22日 上午11:14:16 lixining Exp $
  */
 @MyBatisRepository
-public class RolesRepository extends BaseMybatisRepository<RolesDO, String> {
+public class RolesRepository extends BaseMybatisRepository<RolesDO, Long> {
 
     /**
      *  根据角色ID删除角色权限表记录
@@ -38,7 +38,7 @@ public class RolesRepository extends BaseMybatisRepository<RolesDO, String> {
     /**
      * 过滤角色编码
      */
-    public List<RolesDO> filter(String roleCode, String id) {
+    public List<RolesDO> filter(String roleCode, Long id) {
         RolesDO rolesDO = new RolesDO();
         rolesDO.setRoleCode(roleCode);
         rolesDO.setNeId(id);
@@ -56,11 +56,11 @@ public class RolesRepository extends BaseMybatisRepository<RolesDO, String> {
     /**
      * 角色菜单设置列表
      */
-    public List<MenusSettingDO> selectRoleMenuSettings(String roleId, String parentId) {
+    public List<MenusSettingDO> selectRoleMenuSettings(String roleId, Long parentId) {
         String sql = this.getSQL("selectMenuSettingList");
         Map<String, String> paramsMap = Maps.newHashMap();
         paramsMap.put("roleId", roleId);
-        paramsMap.put("parentId", parentId);
+        paramsMap.put("parentId", String.valueOf(parentId));
         List<MenusSettingDO> tempList = this.getSqlSession().selectList(sql, paramsMap);
         if (CollectionUtils.isEmpty(tempList)) {
             return null;

@@ -34,7 +34,7 @@ public class MenusService {
      */
     public List<MenusDO> selectPermitTreeJson() {
         String securityUserId = SpringSecurityUtils.getCurrentUser();
-        return menusRepository.selectAvailableMenus(securityUserId, "root");
+        return menusRepository.selectAvailableMenus(securityUserId, -1l);
     }
 
     /**
@@ -54,12 +54,12 @@ public class MenusService {
      */
     public List<MenusDO> selectAllMenuTreeJson(String menuName) {
         if (StringUtils.isNotBlank(menuName)) {
-            return menusRepository.selectAllMenus("root", menuName);
+            return menusRepository.selectAllMenus(-1l, menuName);
         }
         MenusDO rootMenu = new MenusDO();
-        rootMenu.setChildren(menusRepository.selectAllMenus("root", null));
+        rootMenu.setChildren(menusRepository.selectAllMenus(-1l, null));
         rootMenu.setText("后台管理系统菜单树");
-        rootMenu.setId("root");
+        rootMenu.setId(-1l);
         List<MenusDO> resultList = Lists.newArrayList();
         resultList.add(rootMenu);
         return resultList;
@@ -69,15 +69,15 @@ public class MenusService {
      * 保存菜单数据
      */
     public void save(MenusDO menusDO) throws BusinessException {
-        String id = menusDO.getId();
+        Long id = menusDO.getId();
         String operator = SpringSecurityUtils.getCurrentUser();
 
         String text = menusDO.getText();
-        List<MenusDO> dataList = menusRepository.filter(text, StringUtils.isBlank(id) ? null : id);
+        List<MenusDO> dataList = menusRepository.filter(text, id);
         if (!CollectionUtils.isEmpty(dataList)) {
             throw new BusinessException("菜单名称已存在");
         }
-        if (StringUtils.isBlank(id)) {
+        if (id != null) {
             menusDO.setCreatedBy(operator);
             menusDO.setUpdatedBy(operator);
             menusRepository.insert(menusDO);
@@ -99,15 +99,15 @@ public class MenusService {
     /**
      * 加载菜单数据
      */
-    public MenusDO select(String menuId) {
+    public MenusDO select(Long menuId) {
         return menusRepository.select(menuId);
     }
 
     /**
      * 删除菜单数据
      */
-    @Transactional
-    public void delete(String menuId) {
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+    public void delete(Long menuId) {
         menusRepository.deleteRoleMenuByMenuId(menuId);
         menusRepository.delete(menuId);
         MenusDO tempMenuDO = new MenusDO();

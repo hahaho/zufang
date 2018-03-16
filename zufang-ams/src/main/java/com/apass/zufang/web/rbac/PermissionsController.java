@@ -95,7 +95,7 @@ public class PermissionsController {
             if (StringUtils.isBlank(permissionId)) {
                 return Response.fail("资源ID不能为空");
             }
-            PermissionsDO permission = permissionsService.select(permissionId);
+            PermissionsDO permission = permissionsService.select(Long.valueOf(permissionId));
             if (permission == null) {
                 throw new BusinessException("资源记录不存在,请刷新列表后重试");
             }
@@ -133,7 +133,7 @@ public class PermissionsController {
                 return Response.fail("资源描述长度不合法");
             }
             PermissionsDO permission = new PermissionsDO();
-            permission.setId(permissionId);
+            permission.setId(Long.valueOf(permissionId));
             permission.setPermissionCode(permissionCode);
             permission.setPermissionName(permissionName);
             permission.setDescription(description);
@@ -161,7 +161,7 @@ public class PermissionsController {
                 return Response.fail("资源ID不能为空");
             }
             // 删除资源记录 
-            permissionsService.delete(permissionId);
+            permissionsService.delete(Long.valueOf(permissionId));
             return Response.success("success");
         } catch (Exception e) {
             LOG.error("删除资源失败", e);
