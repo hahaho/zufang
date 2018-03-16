@@ -145,15 +145,15 @@ public class ZuFangLoginController {
 	        	if(StringUtils.isBlank(mobile)){
 	        		//手机号不能为空
 	        		 return Response.success("手机号不能为空");
-	        	}else if(StringUtils.isBlank(password)){
+	        	}else if(StringUtils.isBlank(password) && password.length()<=6){
 	        		//密码不能为空
-	        		 return Response.success("密码不能为空");
+	        		 return Response.success("请输入6-20位字母与数字组合，字母区分大小写");
 	        	}
 	        	
 	        	returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
 	        	
 	        	if(returnMap==null){
-	        		return Response.fail("请输入6-20位字母与数字组合，字母区分大小写",returnMap);
+	        		return Response.fail("密码不正确，请输入正确密码",returnMap);
 	        	}
 	        		return Response.success("登录成功",returnMap);
 	        	
