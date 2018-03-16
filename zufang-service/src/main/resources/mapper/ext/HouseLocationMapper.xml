@@ -19,6 +19,7 @@
 				h.hall			hall,
 				h.wei			wei,
 				h.acreage		acreage,
+				h.type 			houseType,
 				l.province		province,
 				l.city			city,
 				l.district		district,
