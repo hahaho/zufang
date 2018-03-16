@@ -1,4 +1,5 @@
 package com.apass.zufang.mapper.zfang;
+import java.util.HashMap;
 import java.util.List;
 
 import com.apass.gfb.framework.mybatis.GenericMapper;
@@ -55,10 +56,10 @@ public interface HouseMapper extends GenericMapper<House,Long> {
 	public List<HouseVo> initCity();
 	/**
 	 * 查询房源List
-	 * @param list
+	 * @param paramMap
 	 * @return
 	 */
-	public List<HouseVo> getHouseById(List list);
+	public List<HouseVo> getHouseById(HashMap<String, String> paramMap);
 	/**
 	 * getHouseListForPhoneAppointment
 	 * @param entity
