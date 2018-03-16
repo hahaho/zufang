@@ -63,7 +63,7 @@ public class AppVersionService {
         if (null == versionEntity) {
         	throw new BusinessException("该版本号不存在！");
         }
-        cacheManage.setNoExpire(APPVERSION, GsonUtils.toJson(versionEntity));
+        cacheManage.set(APPVERSION, GsonUtils.toJson(versionEntity));
     }
 
 }

@@ -81,7 +81,7 @@ public class AppVersionCheckController {
 			
 			info.setNotifyList(getNotifyList());
 
-			String appVersionCache = cacheManage.get(APPVERSION);
+			String appVersionCache = cacheManage.getStr(APPVERSION);
 
 			if (StringUtils.isNotBlank(appVersionCache)) {
 
