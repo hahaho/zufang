@@ -177,38 +177,28 @@ public class HouseinitService {
 			// 去除按流量排进热门的数据
 			nearHouses = removeSetHouse(setHouses, norHouses, finMap);
 			if (ValidateUtils.listIsTrue(nearHouses)) {
-				// if (ValidateUtils.listIsTrue(nearHouses1)) {
-				// for (int i = 0; i < nearHouses.size(); i++) {
-				// Long houseId = nearHouses.get(i).getHouseId();
-				// for (int j = 0; j < nearHouses1.size(); j++) {
-				// Long houseIdj = nearHouses1.get(j).getHouseId();
-				// if (houseId.equals(houseIdj)) {
-				// nearHouses.remove(i);
-				// break;
-				// }
-				// }
-				// }
-				// }
 				// 按照房源距离由近到远排序
 				double[] disArray = new double[nearHouses.size()];
 				HashMap<Double, HouseVo> disMap = Maps.newHashMap();
 				for (int i = 0; i < nearHouses.size(); i++) {
 					double disOne = CommonService.distanceSimplify(new Double(longitude), new Double(latitude),
 							nearHouses.get(i).getLongitude(), nearHouses.get(i).getLatitude());
-					if (disMap.containsKey(disOne)) {
-						BigDecimal bigDecimal = new BigDecimal(disOne);
-						disOne = bigDecimal.add(new BigDecimal(0.00001)).doubleValue();
+					for (int j = 0; j < nearHouses.size(); j++) {
+						if (disMap.containsKey(disOne)) {
+							BigDecimal bigDecimal = new BigDecimal(disOne);
+							disOne = bigDecimal.add(new BigDecimal(0.1)).doubleValue();
+						} else {
+							break;
+						}
 					}
 					disMap.put(disOne, nearHouses.get(i));
 					disArray[i] = disOne;
 				}
 				Arrays.sort(disArray);
 
-				if (disArray.length > 10) {
-					for (int i = 0; i < disArray.length; i++) {
-						double disance = disArray[i];
-						nearHouses.add(disMap.get(disance));
-					}
+				for (int i = 0; i < disArray.length; i++) {
+					double disance = disArray[i];
+					nearHouses.add(disMap.get(disance));
 				}
 
 			}
@@ -305,6 +295,8 @@ public class HouseinitService {
 					removeList = norHouses.subList(0, 5 - currSize);
 				}
 				// @2:正常房源+配置房源<5
+			} else {
+				removeList = norHouses;
 			}
 
 			return removeList;
