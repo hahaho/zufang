@@ -13,8 +13,10 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.logstash.LOG;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.service.house.ApartHouseService;
 import com.apass.zufang.utils.ValidateUtils;
 import com.google.common.collect.Maps;
@@ -36,6 +38,7 @@ public class ApartHouseController {
 	public Response getApartByCity(Map<String, Object> paramMap) {
 		
 		try {
+			LOG.info("getApartHouse" + GsonUtils.toJson(paramMap));
 			HashMap<String, Object> resultMap = apartHouseService.getApartByCity(paramMap);
 	
 			return Response.success("查询公寓房源信息！", resultMap);
@@ -55,13 +58,15 @@ public class ApartHouseController {
 		
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		try {
-			
-			String houseId = (String) paramMap.get("apartId");
+			LOG.info("getHouseById_" + GsonUtils.toJson(paramMap));
+			String apartId = (String) paramMap.get("apartId");
+			String city = (String) paramMap.get("city");
+			city = CommonService.cityValidation(city);
 			String pageNum = (String) paramMap.get("pageNum");
 			String pageSize = (String) paramMap.get("pageSize");
-			ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", houseId, pageNum);
+			ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", apartId, city, pageNum);
 			
-			List<HouseVo> apartList = apartHouseService.getHouseById(houseId, pageNum, pageSize);
+			List<HouseVo> apartList = apartHouseService.getHouseById(apartId, city, pageNum, pageSize);
 			resultMap.put("house", apartList);
 			return Response.success("查询房源List成功！", resultMap);
 		} catch (Exception e) {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * 图片上传公共类
  * Created by xiaohai on 2018/3/12.
  */
 @Controller

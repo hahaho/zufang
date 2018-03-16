@@ -23,6 +23,9 @@ public class PageBean<T> {
 	//通过pageNum，pageSize，totalRecord计算得来tatalPage和startIndex
     //构造方法中将pageNum，pageSize，totalRecord获得
     public PageBean(int pageNum,int pageSize,List<T> totalList) {
+    	if (pageSize == 0) {
+			return; 
+		}
         this.totalRecord = totalList.size();
         //totalPage 总页数
         if(totalRecord%pageSize==0){

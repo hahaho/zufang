@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,8 @@ import com.google.common.collect.Maps;
 public class HouseInfoService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(HouseInfoService.class);
-
+	@Value("${zufang.image.uri}")
+	private String imageUri;
 	/**
 	 * 默认地球半径
 	 */
@@ -109,6 +111,9 @@ public class HouseInfoService {
 				houseInfo.setChaoxiangStr(chaoxiang.getMessage());
 			}
 
+			// 替换公司Logo
+			String companyLogo = houseInfo.getCompanyLogo();
+			houseInfo.setCompanyLogo(imageUri + companyLogo);
 			// 获取图片
 			List<String> imgList = houseImgService.getImgList(houseInfo.getHouseId(), (byte) 0);
 			for (String string : imgList) {
@@ -253,7 +258,6 @@ public class HouseInfoService {
 		double Ly = EARTH_RADIUS * Math.toRadians(dy); // 南北距离
 		return Math.sqrt(Lx * Lx + Ly * Ly); // 用平面的矩形对角距离公式计算总距离
 	}
-
 
 	public List<HouseAppSearchVo> calculateDistanceAndSort2(Double latitude, Double longitude,
 														List<HouseAppSearchVo> houseInfoList) {

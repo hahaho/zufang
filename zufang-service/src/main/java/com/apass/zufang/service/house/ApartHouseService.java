@@ -1,7 +1,6 @@
 package com.apass.zufang.service.house;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,10 @@ public class ApartHouseService {
 		if (ValidateUtils.listIsTrue(resultApartment)) {
 		LOG.info("查询公寓房源信息_获取公寓成功！");
 		for (int i = 0; i < resultApartment.size(); i++) {
-			List<HouseVo> houseListById = houseMapper.getHouseById(Arrays.asList(resultApartment.get(i).getId()));
+			HashMap<String, String> paramMap1 = Maps.newHashMap();
+			paramMap1.put("city", city);
+			paramMap1.put("apartId", resultApartment.get(i).getId().toString());
+			List<HouseVo> houseListById = houseMapper.getHouseById(paramMap1);
 			if (ValidateUtils.listIsTrue(houseListById)) {
 			if (houseListById.size() > 4) {
 				PageBean<HouseVo> pageBean1 = new PageBean<HouseVo>(new Integer(pageNum)+1, 5, houseListById);
@@ -107,8 +109,12 @@ public class ApartHouseService {
 		return resultMap;
 	}
 	
-	public List<HouseVo> getHouseById(String houseId, String pageNum, String pageSize) {
-		List<HouseVo> apartList = houseMapper.getHouseById(Arrays.asList(houseId));
+	public List<HouseVo> getHouseById(String apartId, String city, String pageNum, String pageSize) {
+		
+		HashMap<String, String> paramMap = Maps.newHashMap();
+		paramMap.put("apartId", apartId);
+		paramMap.put("city", city);
+		List<HouseVo> apartList = houseMapper.getHouseById(paramMap);
 		if (StringUtils.isBlank(pageSize)) {
 			pageSize = "20";
 		}

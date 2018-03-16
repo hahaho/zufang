@@ -74,21 +74,22 @@ public class HouseinitService {
 		map.put("typeTime", BusinessHouseTypeEnums.FYLX_1.getCode().toString());
 		List<HouseVo> addTimeHouse = initHouseByCity(map);
 		
+		LOG.info("initHomePage_初始房源成功");
 		// 优化请求过程
 		if (pageNum.equals("0")) {
 			// 获取url
 			List<String> imgList = houseImgService.initImg();;
 			resultMap.put("initImg", imgList);
-			LOG.info("init首页接口_获取url成功");
+			LOG.info("initHomePage_获取url成功");
 			// 封装热门房源
 			List<HouseVo> hotHouse = getHotHouse(setHouses, norHouses);
 			resultMap.put("hotHouse", hotHouse);
-			LOG.info("init首页接口_获取热门房源成功");
+			LOG.info("initHomePage_获取热门房源成功");
 		}
 		// 封装配置房源
 		List<HouseVo> setHouse = getSetHouse(setHouses, norHouses, addTimeHouse, paramMap, finMap);
 		resultMap.put("setHouse", setHouse);
-		LOG.info("init首页接口_获取配置房源成功");
+		LOG.info("initHomePage_获取配置房源成功");
 		return resultMap;
 	}
 
@@ -175,7 +176,6 @@ public class HouseinitService {
 			// 去除按流量排进热门的数据→按照上架时间倒序排列
 			nearHouses = addTimeHouse(setHouses, norHouses, addTimeHouse, finMap);
 		} else {
-			ValidateUtils.isNotBlank("请求参数丢失数据", longitude, latitude);
 			// 去除按流量排进热门的数据
 			nearHouses = removeSetHouse(setHouses, norHouses, finMap);
 			if (ValidateUtils.listIsTrue(nearHouses)) {
@@ -238,6 +238,22 @@ public class HouseinitService {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
 					addSetList = norHouses.subList(0, 5 - currSize);
+				} else{
+					if (ValidateUtils.listIsTrue(norHouses)) {
+						addSetList = new PageBean(1, 5 - currSize, norHouses).getList();
+					}
+//					if (!ValidateUtils.listIsTrue(setHouse)) {
+//						addSetList = norHouses;
+//					} else {
+//						if (ValidateUtils.listIsTrue(norHouses)) {
+//							addSetList = setHouse;
+//							for (HouseVo houseVo : norHouses) {
+//								addSetList.add(houseVo);
+//							}
+//						} else {
+//							addSetList = setHouse;
+//						}
+//					}
 				}
 				// @2:正常房源+配置房源<5
 			}
