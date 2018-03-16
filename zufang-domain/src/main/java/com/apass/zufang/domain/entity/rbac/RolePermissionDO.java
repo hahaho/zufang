@@ -17,15 +17,15 @@ public class RolePermissionDO {
     /**
      * ID
      */
-    private String id;
+    private Long id;
     /**
      * 角色ID
      */
-    private String roleId;
+    private Long roleId;
     /**
      * 权限ID
      */
-    private String permissionId;
+    private Long permissionId;
     /**
      * 创建人
      */
@@ -40,34 +40,34 @@ public class RolePermissionDO {
      * 创建日期
      */
     @JsonIgnore
-    private Date   createdDate;
+    private Date   createdTime;
     /**
      * 更新日期
      */
     @JsonIgnore
-    private Date   updatedDate;
+    private Date   updatedTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
-    public String getPermissionId() {
+    public Long getPermissionId() {
         return permissionId;
     }
 
-    public void setPermissionId(String permissionId) {
+    public void setPermissionId(Long permissionId) {
         this.permissionId = permissionId;
     }
 
@@ -87,20 +87,19 @@ public class RolePermissionDO {
         this.updatedBy = updatedBy;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
     }
-
 }

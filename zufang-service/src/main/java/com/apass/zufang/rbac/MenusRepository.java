@@ -18,18 +18,18 @@ import java.util.Map;
  * @version $Id: MenusRepository.java, v 0.1 2016年6月22日 上午11:12:33 lixining Exp $
  */
 @MyBatisRepository
-public class MenusRepository extends BaseMybatisRepository<MenusDO, String> {
+public class MenusRepository extends BaseMybatisRepository<MenusDO, Long> {
 
     /**
      * Select Available menus
      * 
      * @return List<MenusDO>
      */
-    public List<MenusDO> selectAvailableMenus(String username, String parentId) {
+    public List<MenusDO> selectAvailableMenus(String username, Long parentId) {
         String sqlScript = this.getSQL("selectAvailableMenus");
         Map<String, String> maps = Maps.newHashMap();
         maps.put("username", username);
-        maps.put("parentId", parentId);
+        maps.put("parentId", String.valueOf(parentId));
         List<MenusDO> resultList = this.getSqlSession().selectList(sqlScript);
         if (CollectionUtils.isEmpty(resultList)) {
             return null;
@@ -45,10 +45,11 @@ public class MenusRepository extends BaseMybatisRepository<MenusDO, String> {
      * 
      * @return List<MenusDO>
      */
-    public List<MenusDO> selectAllMenus(String parentId, String menuName) {
+    public List<MenusDO> selectAllMenus(Long parentId, String menuName) {
         MenusDO tempMenusDO = new MenusDO();
         tempMenusDO.setParentId(parentId);
-        if (StringUtils.equals(parentId, "root")) {
+        //TODO 根目录root--->-1
+        if (parentId==-1l) {
             tempMenusDO.setText(menuName);
         }
         List<MenusDO> resultList = filter(tempMenusDO);
@@ -64,14 +65,14 @@ public class MenusRepository extends BaseMybatisRepository<MenusDO, String> {
     /**
      * 根据菜单名称 + neId过滤
      */
-    public List<MenusDO> filter(String text, String neId) {
+    public List<MenusDO> filter(String text, Long neId) {
         MenusDO tempMenusDO = new MenusDO();
         tempMenusDO.setText(text);
         tempMenusDO.setNeId(neId);
         return filter(tempMenusDO);
     }
 
-    public void deleteRoleMenuByMenuId(String menuId) {
+    public void deleteRoleMenuByMenuId(Long menuId) {
         getSqlSession().delete(getSQL("deleteRoleMenuByMenuId"), menuId);
     }
 }

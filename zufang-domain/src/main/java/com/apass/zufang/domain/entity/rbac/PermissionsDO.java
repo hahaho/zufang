@@ -17,7 +17,7 @@ public class PermissionsDO {
     /**
      * ID
      */
-    private String id;
+    private Long id;
     /**
      * 权限编码
      */
@@ -44,21 +44,21 @@ public class PermissionsDO {
      * 创建日期
      */
     @JsonIgnore
-    private Date   createdDate;
+    private Date   createdTime;
     /**
      * 更新日期
      */
     @JsonIgnore
-    private Date   updatedDate;
+    private Date   updatedTime;
 
     // not id
-    private String neId;
+    private Long neId;
 
-    public String getNeId() {
+    public Long getNeId() {
         return neId;
     }
 
-    public void setNeId(String neId) {
+    public void setNeId(Long neId) {
         this.neId = neId;
     }
 
@@ -70,11 +70,11 @@ public class PermissionsDO {
         this.description = description;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -110,20 +110,19 @@ public class PermissionsDO {
         this.updatedBy = updatedBy;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
     }
-
 }

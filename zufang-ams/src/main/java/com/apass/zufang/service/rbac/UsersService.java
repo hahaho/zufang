@@ -74,8 +74,8 @@ public class UsersService {
 		String operator = SpringSecurityUtils.getCurrentUser();
 		for (String role : roleIds) {
 			UserRoleDO userRoleDO = new UserRoleDO();
-			userRoleDO.setUserId(userId);
-			userRoleDO.setRoleId(role);
+			userRoleDO.setUserId(Long.valueOf(userId));
+			userRoleDO.setRoleId(Long.valueOf(role));
 			userRoleDO.setCreatedBy(operator);
 			userRoleDO.setUpdatedBy(operator);
 			usersRepository.insertUserRole(userRoleDO);

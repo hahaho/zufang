@@ -17,15 +17,15 @@ public class RoleMenuDO {
     /**
      * ID
      */
-    private String id;
+    private Long id;
     /**
      * 角色ID
      */
-    private String roleId;
+    private Long roleId;
     /**
      * 菜单ID
      */
-    private String menuId;
+    private Long menuId;
     /**
      * 创建人
      */
@@ -40,34 +40,34 @@ public class RoleMenuDO {
      * 创建日期
      */
     @JsonIgnore
-    private Date   createdDate;
+    private Date   createdTime;
     /**
      * 更新日期
      */
     @JsonIgnore
-    private Date   updatedDate;
+    private Date   updatedTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
-    public String getMenuId() {
+    public Long getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(String menuId) {
+    public void setMenuId(Long menuId) {
         this.menuId = menuId;
     }
 
@@ -87,20 +87,19 @@ public class RoleMenuDO {
         this.updatedBy = updatedBy;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
     }
-
 }

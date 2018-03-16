@@ -30,7 +30,7 @@
 	<!-- 插入 -->
 	<insert id="insert" parameterType="UsersDO">
 	<![CDATA[
-		INSERT INTO LS_RBAC_USERS (
+		INSERT INTO T_RBAC_USERS (
 			ID,
 			USER_NAME,
 			REAL_NAME,
@@ -39,9 +39,9 @@
 			EMAIL,
 			STATUS,
 			CREATED_BY,
-			CREATED_DATE,
+			CREATED_TIME,
 			UPDATED_BY,
-			UPDATED_DATE
+			UPDATED_TIME 
 		)
 		VALUES
 		(
@@ -58,9 +58,6 @@
 			CURRENT_TIMESTAMP
 		)
 	]]>
-		<selectKey resultType="String" keyProperty="id" order="BEFORE">
-			select UUID() ID
-		</selectKey>
 	</insert>
 
 	<!-- 分页查询&过滤查询 -->
@@ -74,22 +71,22 @@
 				 t_uses.STATUS           STATUS,
 				 t_uses.DEPARTMENT       DEPARTMENT,
 				 t_uses.CREATED_BY       CREATEDBY,
-				 t_uses.CREATED_DATE     CREATEDDATE,
+				 t_uses.CREATED_TIME     createdTime,
 				 t_uses.UPDATED_BY       UPDATEDBY,
-				 t_uses.UPDATED_DATE     UPDATEDDATE,
+				 t_uses.UPDATED_TIME     updatedTime,
 				 t_uses.APARTMENT_CODE   apartmentCode
-		FROM LS_RBAC_USERS t_uses
+		FROM T_RBAC_USERS t_uses
 	]]>
 		<include refid="QueryConditionSql" />
 	<![CDATA[
-		ORDER BY CREATED_DATE DESC
+		ORDER BY CREATED_TIME DESC
 	]]>
 	</select>
 
 	<!-- 记录总数 -->
 	<select id="count" parameterType="UsersDO" resultType="Integer">
 	<![CDATA[
-		SELECT COUNT(1) FROM LS_RBAC_USERS
+		SELECT COUNT(1) FROM T_RBAC_USERS
 	]]>
 		<include refid="QueryConditionSql" />
 	</select>
@@ -105,11 +102,11 @@
 				 STATUS           STATUS,
 				 DEPARTMENT       DEPARTMENT,
 				 CREATED_BY       CREATEDBY,
-				 CREATED_DATE     CREATEDDATE,
+				 CREATED_TIME     createdTime,
 				 UPDATED_BY       UPDATEDBY,
-				 UPDATED_DATE     UPDATEDDATE,
+				 UPDATED_TIME     updatedTime,
 				 APARTMENT_CODE   apartmentCode
-		FROM LS_RBAC_USERS WHERE ID = #{value}
+		FROM T_RBAC_USERS WHERE ID = #{value}
 	]]>
 	</select>
 	
@@ -125,28 +122,27 @@
 				 PASSWORD         PASSWORD,
 				 DEPARTMENT       DEPARTMENT,
 				 CREATED_BY       CREATEDBY,
-				 CREATED_DATE     CREATEDDATE,
+				 CREATED_TIME     createdTime,
 				 UPDATED_BY       UPDATEDBY,
-				 UPDATED_DATE     UPDATEDDATE,
-				 UPDATED_DATE     UPDATEDDATE,
+				 UPDATED_TIME     updatedTime,
 				 APARTMENT_CODE   apartmentCode
-		FROM LS_RBAC_USERS WHERE USER_NAME = #{value}
+		FROM T_RBAC_USERS WHERE USER_NAME = #{value}
 	]]>
 	</select>
 
 	<!-- 删除 -->
 	<delete id="delete" parameterType="String">
 	<![CDATA[
-		DELETE FROM LS_RBAC_USERS WHERE ID = #{value}
+		DELETE FROM T_RBAC_USERS WHERE ID = #{value}
 	]]>
 	</delete>
 
 	<!-- 更新 -->
 	<update id="update" parameterType="UsersDO">
-		UPDATE LS_RBAC_USERS
+		UPDATE T_RBAC_USERS
 		<set>
 			UPDATED_BY = #{updatedBy, jdbcType=VARCHAR},
-			UPDATED_DATE = CURRENT_TIMESTAMP,
+			UPDATED_TIME = CURRENT_TIMESTAMP,
 			<if test="userName != null and userName != ''">
 				USER_NAME = #{userName, jdbcType=VARCHAR},
 			</if>
@@ -179,9 +175,9 @@
 	<!-- 更新所有 -->
 	<update id="updateAll" parameterType="UsersDO">
 	<![CDATA[
-		UPDATE LS_RBAC_USERS 
+		UPDATE T_RBAC_USERS 
 			SET UPDATED_BY     = #{updatedBy, jdbcType=VARCHAR}, 
-				UPDATED_DATE   = CURRENT_TIMESTAMP, 
+				UPDATED_TIME   = CURRENT_TIMESTAMP, 
 				REAL_NAME      = #{realName, jdbcType=VARCHAR},  
 				MOBILE         = #{mobile, jdbcType=VARCHAR},  
 				EMAIL          = #{email, jdbcType=VARCHAR},
@@ -195,9 +191,9 @@
 	<!-- 更新密码 -->
 	<update id="changePwd" parameterType="UsersDO">
 	<![CDATA[
-		UPDATE LS_RBAC_USERS 
+		UPDATE T_RBAC_USERS 
 			SET UPDATED_BY     = #{updatedBy, jdbcType=VARCHAR}, 
-				UPDATED_DATE   = CURRENT_TIMESTAMP, 
+				UPDATED_TIME   = CURRENT_TIMESTAMP, 
 				PASSWORD       = #{password, jdbcType=VARCHAR}
 		 WHERE USER_NAME = #{userName, jdbcType=VARCHAR}
 	]]>
@@ -211,9 +207,9 @@
 			SELECT  ID           ID,
 					ROLE_CODE    ROLECODE,
 					ROLE_NAME    ROLENAME
-		  FROM LS_RBAC_ROLES WHERE ID NOT IN 
-			  (SELECT ROLE_ID FROM LS_RBAC_USER_ROLE WHERE USER_ID = #{value})
-			  ORDER BY CREATED_DATE DESC
+		  FROM T_RBAC_ROLES WHERE ID NOT IN 
+			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
+			  ORDER BY CREATED_TIME DESC
 	]]>
 	</select>
 	
@@ -224,32 +220,28 @@
 			SELECT  ID                 ID,
 					ROLE_CODE    ROLECODE,
 					ROLE_NAME    ROLENAME
-		  FROM LS_RBAC_ROLES WHERE ID IN 
-			  (SELECT ROLE_ID FROM LS_RBAC_USER_ROLE WHERE USER_ID = #{value})
-			  ORDER BY CREATED_DATE DESC
+		  FROM T_RBAC_ROLES WHERE ID IN 
+			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
+			  ORDER BY CREATED_TIME DESC
 	]]>
 	</select>
 
 	<!-- 删除用户角色列表 -->
 	<delete id="deleteUserRolesByUserId" parameterType="String">
 	<![CDATA[
-		DELETE FROM LS_RBAC_USER_ROLE WHERE USER_ID = #{value}
+		DELETE FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value}
 	]]>
 	</delete>
 
 	<!-- 插入用户角色 -->
 	<insert id="insertUserRole" parameterType="UserRoleDO">
 	<![CDATA[
-		INSERT INTO LS_RBAC_USER_ROLE (ID, USER_ID, ROLE_ID, 
-		CREATED_BY,	CREATED_DATE, UPDATED_BY, UPDATED_DATE) 
+		INSERT INTO T_RBAC_USER_ROLE (ID, USER_ID, ROLE_ID, 
+		CREATED_BY,	CREATED_TIME, UPDATED_BY, UPDATED_TIME) 
 		VALUES (#{id, jdbcType=VARCHAR}, 
 		#{userId, jdbcType=VARCHAR}, #{roleId, jdbcType=VARCHAR}, 
 		#{createdBy, jdbcType=VARCHAR}, CURRENT_TIMESTAMP, 
 		#{updatedBy, jdbcType=VARCHAR},	CURRENT_TIMESTAMP)
 	]]>
-		<selectKey resultType="String" keyProperty="id" order="BEFORE">
-			select UUID() ID
-		</selectKey>	
 	</insert>
-	
-</mapper> 
+</mapper>

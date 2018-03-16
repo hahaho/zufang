@@ -51,32 +51,32 @@ public class RolesService {
     /**
      * 删除角色
      */
-    @Transactional
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void delete(String roleId) {
         rolesRepository.deleteRolePermissionsByRoleId(roleId);
         rolesRepository.deleteUserRolesByRoleId(roleId);
         rolesRepository.deleteRoleMenusByRoleId(roleId);
-        rolesRepository.delete(roleId);
+        rolesRepository.delete(Long.valueOf(roleId));
     }
 
     /**
      * 保存角色
      */
     public void save(RolesDO role) throws BusinessException {
-        String id = role.getId();
+        Long id = role.getId();
         String operator = SpringSecurityUtils.getCurrentUser();
         String roleCode = role.getRoleCode();
-        List<RolesDO> dataList = rolesRepository.filter(roleCode, StringUtils.isBlank(id) ? null : id);
+        List<RolesDO> dataList = rolesRepository.filter(roleCode,id);
         if (!CollectionUtils.isEmpty(dataList)) {
             throw new BusinessException("角色编码已存在");
         }
-        if (StringUtils.isBlank(id)) {
+        if (id == null) {
             role.setCreatedBy(operator);
             role.setUpdatedBy(operator);
             rolesRepository.insert(role);
             return;
         }
-        RolesDO rolesDB = rolesRepository.select(id);
+        RolesDO rolesDB = rolesRepository.select(Long.valueOf(id));
         if (rolesDB == null) {
             throw new BusinessException("记录不存在,无法更新, 请刷新列表后重试");
         }
@@ -90,7 +90,7 @@ public class RolesService {
     /**
      * 主键加载
      */
-    public RolesDO select(String roleId) {
+    public RolesDO select(Long roleId) {
         return rolesRepository.select(roleId);
     }
 
@@ -103,9 +103,9 @@ public class RolesService {
             return resultList;
         }
         MenusSettingDO rootMenu = new MenusSettingDO();
-        rootMenu.setChildren(rolesRepository.selectRoleMenuSettings(roleId, "root"));
+        rootMenu.setChildren(rolesRepository.selectRoleMenuSettings(roleId, -1l));
         rootMenu.setText("后台管理系统菜单树");
-        rootMenu.setId("root");
+        rootMenu.setId(-1l);
         rootMenu.setCheckSign("Y");
         resultList.add(rootMenu);
         return resultList;
@@ -114,7 +114,7 @@ public class RolesService {
     /**
      * 保存角色菜单设置
      */
-    @Transactional
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void saveRoleMenuSettings(String roleId, String menus) {
         // 删除角色菜单历史记录操作
         rolesRepository.deleteRoleMenusByRoleId(roleId);
@@ -127,8 +127,8 @@ public class RolesService {
         String operator = SpringSecurityUtils.getCurrentUser();
         for (String content : menuIds) {
             RoleMenuDO roleMenuDO = new RoleMenuDO();
-            roleMenuDO.setMenuId(content);
-            roleMenuDO.setRoleId(roleId);
+            roleMenuDO.setMenuId(Long.valueOf(content));
+            roleMenuDO.setRoleId(Long.valueOf(roleId));
             roleMenuDO.setCreatedBy(operator);
             roleMenuDO.setUpdatedBy(operator);
             rolesRepository.insertRoleMenu(roleMenuDO);
@@ -160,7 +160,7 @@ public class RolesService {
      * @param permissions
      * @return
      */
-    @Transactional
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void saveAssignedPermissions(String roleId, String permissions) {
         // 删除角色菜单历史记录操作
         rolesRepository.deleteRolePermissionsByRoleId(roleId);
@@ -172,8 +172,8 @@ public class RolesService {
         String operator = SpringSecurityUtils.getCurrentUser();
         for (String permission : permissionIds) {
             RolePermissionDO rolePermissionDO = new RolePermissionDO();
-            rolePermissionDO.setPermissionId(permission);
-            rolePermissionDO.setRoleId(roleId);
+            rolePermissionDO.setPermissionId(Long.valueOf(permission));
+            rolePermissionDO.setRoleId(Long.valueOf(roleId));
             rolePermissionDO.setCreatedBy(operator);
             rolePermissionDO.setUpdatedBy(operator);
             rolesRepository.insertRolePermission(rolePermissionDO);

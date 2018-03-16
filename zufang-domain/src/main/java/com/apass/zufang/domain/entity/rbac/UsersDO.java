@@ -17,7 +17,7 @@ public class UsersDO {
 	/**
 	 * ID
 	 */
-	private String id;
+	private Long id;
 	/**
 	 * 用户姓名
 	 */
@@ -55,7 +55,7 @@ public class UsersDO {
 	 * 创建日期
 	 */
 	@JsonIgnore
-	private Date createdDate;
+	private Date createdTime;
 	/**
 	 * 更新人
 	 */
@@ -65,18 +65,18 @@ public class UsersDO {
 	 * 更新日期
 	 */
 	@JsonIgnore
-	private Date updatedDate;
+	private Date updatedTime;
 
 	/**
 	 *  公寓code
 	 */
 	private String apartmentCode;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -144,14 +144,6 @@ public class UsersDO {
 		this.createdBy = createdBy;
 	}
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -160,19 +152,27 @@ public class UsersDO {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(Date updatedDate) {
-		this.updatedDate = updatedDate;
-	}
-
 	public String getApartmentCode() {
 		return apartmentCode;
 	}
 
 	public void setApartmentCode(String apartmentCode) {
 		this.apartmentCode = apartmentCode;
+	}
+
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
 	}
 }

@@ -6,8 +6,8 @@
 	<!-- 查询条件 -->
 	<sql id="QueryConditionSql">
 		<where>
-			<if test="id != null and id != ''">
-				AND ID = #{id, jdbcType=VARCHAR}
+			<if test="id != null">
+				AND ID = #{id}
 			</if>
 			<if test="text != null and text != ''">
 <!-- 				AND TEXT = #{text, jdbcType=VARCHAR} -->
@@ -28,18 +28,15 @@
 	<!-- 插入 -->
 	<insert id="insert" parameterType="MenusDO">
 	<![CDATA[
-		INSERT INTO LS_RBAC_MENUS (ID, TEXT, ICON_CLS, URL, 
-		PARENT_ID, DISPLAY, CREATED_BY, CREATED_DATE, 
-		UPDATED_BY, UPDATED_DATE) VALUES(#{id, jdbcType=VARCHAR}, 
+		INSERT INTO T_RBAC_MENUS (ID, TEXT, ICON_CLS, URL, 
+		PARENT_ID, DISPLAY, CREATED_BY, created_time,
+		UPDATED_BY, updated_time) VALUES(#{id},
 		#{text, jdbcType=VARCHAR}, #{iconCls, jdbcType=VARCHAR}, 
 		#{url, jdbcType=VARCHAR}, 
 		#{parentId, jdbcType=VARCHAR}, #{display, jdbcType=INTEGER}, 
 		#{createdBy, jdbcType=VARCHAR}, CURRENT_TIMESTAMP, 
 		#{updatedBy, jdbcType=VARCHAR}, CURRENT_TIMESTAMP)
 	]]>
-		<selectKey resultType="String" keyProperty="id" order="BEFORE">
-			select UUID() ID
-		</selectKey>
 	</insert>
 
 	<!-- 分页查询&过滤查询 -->
@@ -52,10 +49,10 @@
 			   PARENT_ID             PARENTID,
 			   DISPLAY               DISPLAY,
 			   CREATED_BY            CREATEDBY,
-			   CREATED_DATE          CREATEDDATE,
+			   created_time          createdTime,
 			   UPDATED_BY            UPDATEDBY,
-			   UPDATED_DATE          UPDATEDDATE 
-		FROM LS_RBAC_MENUS
+			   updated_time          updatedTime
+		FROM T_RBAC_MENUS
 	]]>
 		<include refid="QueryConditionSql" />
 	<![CDATA[
@@ -66,7 +63,7 @@
 	<!-- 记录总数 -->
 	<select id="count" parameterType="MenusDO" resultType="Integer">
 	<![CDATA[
-		SELECT COUNT(1) FROM LS_RBAC_MENUS
+		SELECT COUNT(1) FROM T_RBAC_MENUS
 	]]>
 		<include refid="QueryConditionSql" />
 	</select>
@@ -81,28 +78,28 @@
 			   PARENT_ID             PARENTID,
 			   DISPLAY               DISPLAY,
 			   CREATED_BY            CREATEDBY,
-			   CREATED_DATE          CREATEDDATE,
+			   created_time          createdTime,
 			   UPDATED_BY            UPDATEDBY,
-			   UPDATED_DATE          UPDATEDDATE 
-		FROM LS_RBAC_MENUS WHERE ID = #{value}
+			   updated_time          updatedTime
+		FROM T_RBAC_MENUS WHERE ID = #{value}
 	]]>
 	</select>
 
 	<!-- 删除 -->
 	<delete id="delete" parameterType="String">
 	<![CDATA[
-		DELETE FROM LS_RBAC_MENUS WHERE ID = #{value}
+		DELETE FROM T_RBAC_MENUS WHERE ID = #{value}
 	]]>
 	</delete>
 
 	<!-- 更新 -->
 	<update id="update" parameterType="MenusDO">
 	<![CDATA[
-		UPDATE LS_RBAC_MENUS 
+		UPDATE T_RBAC_MENUS 
 	]]>
 		<set>
 			UPDATED_BY = #{updatedBy, jdbcType=VARCHAR}, 
-			UPDATED_DATE = CURRENT_TIMESTAMP,
+			updated_time = CURRENT_TIMESTAMP,
 			<if test="text != null and text != ''">
 				TEXT = #{text, jdbcType=VARCHAR},
 			</if>
@@ -120,22 +117,22 @@
 			</if>
 		</set>
 	<![CDATA[
-		WHERE ID = #{id, jdbcType=VARCHAR} 
+		WHERE ID = #{id}
 	]]>
 	</update>
 
 	<!-- 更新所有 -->
 	<update id="updateAll" parameterType="MenusDO">
 	<![CDATA[
-		UPDATE LS_RBAC_MENUS 
+		UPDATE T_RBAC_MENUS 
 			SET UPDATED_BY = #{updatedBy, jdbcType=VARCHAR},  
-				UPDATED_DATE = CURRENT_TIMESTAMP, 
+				updated_time = CURRENT_TIMESTAMP,
 				TEXT = #{text, jdbcType=VARCHAR},
 				ICON_CLS = #{iconCls, jdbcType=VARCHAR},  
 				URL = #{url, jdbcType=VARCHAR},  
 				PARENT_ID = #{parentId, jdbcType=VARCHAR},  
 				DISPLAY = #{display, jdbcType=INTEGER} 
-		WHERE ID = #{id, jdbcType=VARCHAR}
+		WHERE ID = #{id}
 	]]>
 	</update>
 	
@@ -149,11 +146,11 @@
 				E.PARENT_ID             PARENTID,
 				E.DISPLAY               DISPLAY,
 				E.CREATED_BY            CREATEDBY,
-				E.CREATED_DATE          CREATEDDATE,
+				E.created_time          createdTime,
 				E.UPDATED_BY            UPDATEDBY,
-				E.UPDATED_DATE          UPDATEDDATE 
-		FROM LS_RBAC_USERS A, LS_RBAC_USER_ROLE B, LS_RBAC_ROLES C, 
-			 LS_RBAC_ROLE_MENU D, LS_RBAC_MENUS E WHERE A.ID = B.USER_ID 
+				E.updated_time          updatedTime
+		FROM T_RBAC_USERS A, T_RBAC_USER_ROLE B, T_RBAC_ROLES C, 
+			 T_RBAC_ROLE_MENU D, T_RBAC_MENUS E WHERE A.ID = B.USER_ID 
 			 AND B.ROLE_ID = C.ID AND C.ID = D.ROLE_ID AND D.MENU_ID = E.ID 
 			 AND A.USER_NAME = #{username, jdbcType=VARCHAR} AND 
 			 E.PARENT_ID = #{parentId, jdbcType=VARCHAR} ORDER BY E.DISPLAY ASC
@@ -163,7 +160,7 @@
 	<!--  根据菜单ID删除角色菜单表数据  -->
 	<delete id="deleteRoleMenuByMenuId" parameterType="String">
 	<![CDATA[
-		DELETE FROM LS_RBAC_ROLE_MENU WHERE MENU_ID = #{value}
+		DELETE FROM T_RBAC_ROLE_MENU WHERE MENU_ID = #{value}
 	]]>
 	</delete>
 	

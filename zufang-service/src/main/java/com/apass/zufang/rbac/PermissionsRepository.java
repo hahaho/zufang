@@ -14,12 +14,12 @@ import java.util.List;
  * @version $Id: PermissionsRepository.java, v 0.1 2016年6月22日 上午11:13:19 lixining Exp $
  */
 @MyBatisRepository
-public class PermissionsRepository extends BaseMybatisRepository<PermissionsDO, String> {
+public class PermissionsRepository extends BaseMybatisRepository<PermissionsDO, Long> {
 
     /**
      * 删除角色权限表中的资源记录
      */
-    public void deleteRolePermissionsByPermissionId(String permissionId) {
+    public void deleteRolePermissionsByPermissionId(Long permissionId) {
         String sql = this.getSQL("deleteRolePermissionsByPermissionId");
         this.getSqlSession().delete(sql, permissionId);
     }
@@ -27,7 +27,7 @@ public class PermissionsRepository extends BaseMybatisRepository<PermissionsDO, 
     /**
      * 删除角色权限表中的资源记录
      */
-    public List<PermissionsDO> filter(String permissionCode, String neId) {
+    public List<PermissionsDO> filter(String permissionCode, Long neId) {
         PermissionsDO tempPermission = new PermissionsDO();
         tempPermission.setPermissionCode(permissionCode);
         tempPermission.setNeId(neId);

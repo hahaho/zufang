@@ -18,7 +18,7 @@ public class MenusDO {
     /**
      * 主键标识id
      */
-    private String        id;
+    private Long        id;
     /**
      * 文本标题
      */
@@ -34,7 +34,7 @@ public class MenusDO {
     /**
      * 父节点
      */
-    private String        parentId;
+    private Long        parentId;
     /**
      * 显示顺序
      */
@@ -52,7 +52,7 @@ public class MenusDO {
      * 查询参数
      */
     @JsonIgnore
-    private String        neId;
+    private Long        neId;
     /**
      * 创建人
      */
@@ -67,18 +67,18 @@ public class MenusDO {
      * 创建日期
      */
     @JsonIgnore
-    private Date          createdDate;
+    private Date          createdTime;
     /**
      * 更新日期
      */
     @JsonIgnore
-    private Date          updatedDate;
+    private Date          updatedTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -106,11 +106,11 @@ public class MenusDO {
         this.url = url;
     }
 
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -138,11 +138,11 @@ public class MenusDO {
         this.state = state;
     }
 
-    public String getNeId() {
+    public Long getNeId() {
         return neId;
     }
 
-    public void setNeId(String neId) {
+    public void setNeId(Long neId) {
         this.neId = neId;
     }
 
@@ -162,20 +162,19 @@ public class MenusDO {
         this.updatedBy = updatedBy;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
     }
-
 }

@@ -17,15 +17,15 @@ public class UserRoleDO {
     /**
      * ID
      */
-    private String id;
+    private Long id;
     /**
      * User ID
      */
-    private String userId;
+    private Long userId;
     /**
      * Role ID
      */
-    private String roleId;
+    private Long roleId;
     /**
      * 创建人
      */
@@ -40,35 +40,51 @@ public class UserRoleDO {
      * 创建日期
      */
     @JsonIgnore
-    private Date   createdDate;
+    private Date   createdTime;
     /**
      * 更新日期
      */
     @JsonIgnore
-    private Date   updatedDate;
+    private Date   updatedTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Date getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getCreatedBy() {
@@ -85,22 +101,6 @@ public class UserRoleDO {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
     }
 
 }

@@ -253,8 +253,8 @@ public class UsersController {
 			LOG.error("手机号码已存在", e);
 			return Response.fail("手机号码已存在");
 		} catch (Exception e) {
-			LOG.error("保存角色失败", e);
-			return Response.fail("保存角色记录失败");
+			LOG.error("保存用户失败", e);
+			return Response.fail("保存用户记录失败");
 		}
 	}
 
@@ -365,13 +365,13 @@ public class UsersController {
 			UsersDO usersDO = new UsersDO();
 			String userId = paramMap.get(USER_ID);
 			String apartmentCode = paramMap.get(APARTMENT_CODE);
-			usersDO.setId(userId);
+			usersDO.setId(Long.valueOf(userId));
 			usersDO.setApartmentCode(apartmentCode);
 			usersDO.setUpdatedBy(SpringSecurityUtils.getCurrentUser());
 
 			usersService.relevanceApart(usersDO);
 
-			return Response.success("查询公寓列表成功！","");
+			return Response.success("用户关联公寓成功！","");
 		}catch (Exception e){
 			LOG.error("用户关联公寓失败,-----Exception---->{}",e);
 			return Response.fail("用户关联公寓失败!");

@@ -116,10 +116,10 @@ public class MenusController {
                 return Response.fail("显示顺序必须为非0正整数");
             }
             MenusDO menusDO = new MenusDO();
-            menusDO.setId(menuId);
+            menusDO.setId(Long.valueOf(menuId));
             menusDO.setDisplay(Integer.parseInt(display));
             menusDO.setIconCls(iconCls);
-            menusDO.setParentId(parentId);
+            menusDO.setParentId(Long.valueOf(parentId));
             menusDO.setText(text);
             menusDO.setUrl(url);
             menusService.save(menusDO);
@@ -145,7 +145,7 @@ public class MenusController {
                 return Response.fail("菜单ID不能为空");
             }
             // 删除菜单记录 
-            menusService.delete(menuId);
+            menusService.delete(Long.valueOf(menuId));
             return Response.success("success");
         } catch (Exception e) {
             LOG.error("删除菜单失败", e);
@@ -164,7 +164,7 @@ public class MenusController {
             if (StringUtils.isBlank(menuId)) {
                 return Response.fail("菜单ID不能为空");
             }
-            MenusDO menu = menusService.select(menuId);
+            MenusDO menu = menusService.select(Long.valueOf(menuId));
             if (menu == null) {
                 throw new BusinessException("菜单记录不存在, 请刷新列表后重试");
             }
