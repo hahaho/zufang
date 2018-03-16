@@ -58,12 +58,13 @@ public class ApartHouseController {
 		HashMap<String, Object> resultMap = Maps.newHashMap();
 		try {
 			LOG.info("getHouseById_" + GsonUtils.toJson(paramMap));
-			String houseId = (String) paramMap.get("apartId");
+			String apartId = (String) paramMap.get("apartId");
+			String city = (String) paramMap.get("city");
 			String pageNum = (String) paramMap.get("pageNum");
 			String pageSize = (String) paramMap.get("pageSize");
-			ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", houseId, pageNum);
+			ValidateUtils.isNotBlank("查询公寓请求参数丢失数据！", apartId, city, pageNum);
 			
-			List<HouseVo> apartList = apartHouseService.getHouseById(houseId, pageNum, pageSize);
+			List<HouseVo> apartList = apartHouseService.getHouseById(apartId, city, pageNum, pageSize);
 			resultMap.put("house", apartList);
 			return Response.success("查询房源List成功！", resultMap);
 		} catch (Exception e) {

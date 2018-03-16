@@ -187,7 +187,7 @@
         ]]>
 	</select>
     <!-- 查询房源List -->
-    <select id="getHouseById" parameterType="java.util.List" resultType="com.apass.zufang.domain.vo.HouseVo">
+    <select id="getHouseById" parameterType="java.util.Map" resultType="com.apass.zufang.domain.vo.HouseVo">
         <![CDATA[
         SELECT
 				h.id			houseId,
@@ -214,11 +214,9 @@
 				AND h.is_delete = '00'
 				AND l.is_delete = '00'
 				AND h.status = '2'
-				AND h.apartment_id in
+				AND h.apartment_id = #{apartId}
+				AND l.city = #{city}
         ]]>
-        <foreach collection="list" item="employeeId" index="index" open="(" separator="," close=")">
-				#{employeeId}
-        </foreach>
         <![CDATA[
 	      ORDER BY h.page_view DESC;
         ]]>

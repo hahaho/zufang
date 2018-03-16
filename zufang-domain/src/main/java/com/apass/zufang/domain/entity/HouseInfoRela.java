@@ -70,6 +70,10 @@ public class HouseInfoRela {
 	 * 房源小区名称
 	 */
 	private String communityName;
+	/**
+	 * 房源公寓的logo
+	 */
+	private String companyLogo;
 	
 	/**
 	 * 房屋 朝向， 1:东：2:南....
@@ -291,6 +295,14 @@ public class HouseInfoRela {
 
 	public void setCommunityName(String communityName) {
 		this.communityName = communityName;
+	}
+
+	public String getCompanyLogo() {
+		return companyLogo;
+	}
+
+	public void setCompanyLogo(String companyLogo) {
+		this.companyLogo = companyLogo;
 	}
 
 	public Byte getChaoxiang() {
