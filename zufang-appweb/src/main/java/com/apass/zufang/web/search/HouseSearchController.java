@@ -344,7 +344,7 @@ public class HouseSearchController {
 				}
 			}
 			if(StringUtils.isNotEmpty(configName)){
-				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName));
+				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName).operator(Operator.AND));
 			}
 			if(StringUtils.isNotEmpty(subCode) && StringUtils.isNotEmpty(areaCode)){
 				throw new RuntimeException("subCode和areaCode不可同时传入!");
@@ -447,7 +447,9 @@ public class HouseSearchController {
 	 */
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
 		HouseAppSearchVo vo = new HouseAppSearchVo();
-		vo.setUrl(appWebDomain+houseEs.getUrl());
+		if(StringUtils.isNotEmpty(houseEs.getUrl())){
+			vo.setUrl(appWebDomain+houseEs.getUrl().split(",")[0]);
+		}
 		vo.setHouseTitle(houseEs.getHouseTitle());
 		vo.setDetailAddr(houseEs.getDetailAddr());
 		vo.setRoom(houseEs.getRoom());

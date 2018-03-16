@@ -607,20 +607,32 @@ public class HouseService {
 			}
 			List<HouseImg> hImgs = imgMapper.getImgByRealHouseId(houseId);
 			if(CollectionUtils.isNotEmpty(hImgs)){
-				for(HouseImg hImg: hImgs){
-					if(hImg!=null){
-						houseEs.setUrl(hImg.getUrl());
+				StringBuffer sb = new StringBuffer();
+				for(int i=0; i<hImgs.size(); i++){
+					if(hImgs.get(i)!=null){
+						if(i<(hImgs.size()-1)){
+							sb = sb.append(hImgs.get(i).getUrl()+",");
+						}else {
+							sb = sb.append(hImgs.get(i).getUrl());
+						}
 					}
 				}
+				houseEs.setUrl(sb.toString());
 			}
 			List<HousePeizhi> peiZhiByHouses = peizhiMapper.getPeiZhiByHouseId(houseId);
 			if(CollectionUtils.isNotEmpty(peiZhiByHouses)){
-				for(HousePeizhi hPeizhi: peiZhiByHouses){
-					if(hPeizhi!=null){
-						houseEs.setConfigName(hPeizhi.getName());
-						houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(hPeizhi.getName()));
+				StringBuffer sb = new StringBuffer();
+				for(int i=0; i<peiZhiByHouses.size(); i++){
+					if(peiZhiByHouses.get(i)!=null){
+						if(i<(peiZhiByHouses.size()-1)){
+							sb = sb.append(peiZhiByHouses.get(i).getName()+",");
+						}else {
+							sb = sb.append(peiZhiByHouses.get(i).getName());
+						}
 					}
 				}
+				houseEs.setConfigName(sb.toString());
+				houseEs.setConfigNamePinyin(Pinyin4jUtil.converterToSpell(sb.toString()));
 			}
 			return  houseEs;
 		}catch (Exception e){
