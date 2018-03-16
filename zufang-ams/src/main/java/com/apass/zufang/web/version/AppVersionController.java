@@ -23,7 +23,7 @@ import com.apass.zufang.domain.entity.AppVersionEntity;
 import com.apass.zufang.service.version.AppVersionService;
 import com.apass.zufang.utils.ResponsePageBody;
 
-@Path("/application/zf/appversion")
+@Path("/zf/appversion")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class AppVersionController {
