@@ -18,6 +18,7 @@ import com.apass.zufang.common.utils.FarmartJavaBean;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.ApprintmentQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.enums.CityEnums;
 import com.apass.zufang.domain.vo.ApartmentVo;
 import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -81,12 +82,16 @@ public class ApartmentController {
 		try{
 			LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
 			String provinceCode = CommonUtils.getValue(map, "provinceCode");
+			String cityCode = CommonUtils.getValue(map, "cityCode");
+			String areaCode = CommonUtils.getValue(map, "areaCode");
 			provinceCode = provinceCode.length()==1?"0"+provinceCode:provinceCode;
 			provinceCode = provinceCode.length()>2?provinceCode.substring(provinceCode.length()-2, provinceCode.length()):provinceCode;
-			String cityCode = CommonUtils.getValue(map, "cityCode");
+			if(CityEnums.isContains(provinceCode)){
+				cityCode = provinceCode;//去掉后缀zxs
+				areaCode = areaCode.substring(0, areaCode.length()-1);//去掉后缀T
+			}
 			cityCode = cityCode.length()==1?"0"+cityCode:cityCode;
 			cityCode = cityCode.length()>2?cityCode.substring(cityCode.length()-2, cityCode.length()):cityCode;
-			String areaCode = CommonUtils.getValue(map, "areaCode");
 			areaCode = areaCode.length()==1?"0"+areaCode:areaCode;
 			areaCode = areaCode.length()>2?areaCode.substring(areaCode.length()-2, areaCode.length()):areaCode;
 			String code = provinceCode+cityCode+areaCode;
