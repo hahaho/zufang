@@ -80,7 +80,7 @@ public class AppointmentJourneyService {
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response editReserveHouse(ReserveHouse entity, String username,Date reserveDate) {
-		if(reserveDate.getTime()>new Date().getTime()){
+		if(reserveDate.getTime()<new Date().getTime()){
 			return Response.fail("预约行程管理  预约看房编辑失败,看房时间选择错误,请重新选择！");
 		}
 		entity.setReserveDate(reserveDate);
