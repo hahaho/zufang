@@ -33,8 +33,7 @@ CREATE TABLE t_rbac_roles (
   created_time datetime NOT NULL DEFAULT '1900-01-01 00:00:00' COMMENT '创建日期',
   UPDATED_BY varchar(50) NOT NULL DEFAULT '' COMMENT '更新人',
   updated_time datetime NOT NULL DEFAULT '1900-01-01 00:00:00' COMMENT '更新日期',
-  PRIMARY KEY (ID),
-  UNIQUE KEY UNIQUE_ROLE_CODE (ROLE_CODE)
+  PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 /*==============================================================*/
@@ -96,8 +95,7 @@ CREATE TABLE t_rbac_permissions (
   created_time datetime NOT NULL DEFAULT '1900-01-01 00:00:00' COMMENT '创建日期',
   UPDATED_BY varchar(50) NOT NULL DEFAULT '' COMMENT '更新人',
   updated_time datetime NOT NULL DEFAULT '1900-01-01 00:00:00' COMMENT '更新日期',
-  PRIMARY KEY (ID),
-  UNIQUE KEY UNIQUE_PERMISSION_CODE (PERMISSION_CODE)
+  PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
 
 
