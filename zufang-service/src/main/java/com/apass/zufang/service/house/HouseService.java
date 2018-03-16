@@ -602,6 +602,7 @@ public class HouseService {
 				houseEs.setDetailAddrPinyin(Pinyin4jUtil.converterToSpell(hLocation.getDetailAddr()));
 				houseEs.setLongitude(hLocation.getLongitude());
 				houseEs.setLatitude(hLocation.getLatitude());
+				//左:纬度,右:经度
 				houseEs.setLocation(hLocation.getLatitude()+","+hLocation.getLongitude());
 			}
 			List<HouseImg> hImgs = imgMapper.getImgByRealHouseId(houseId);
