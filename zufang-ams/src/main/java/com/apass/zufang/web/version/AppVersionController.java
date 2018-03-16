@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
@@ -187,9 +188,12 @@ public class AppVersionController {
     	   AppVersionQueryParams version=new AppVersionQueryParams();
     	   version.setId(Long.valueOf(versionId));
             appVersionService.deployVersion(version);
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             LOGGER.error("queryDetail error", e);
-            Response.success("版本发布失败");
+            return Response.fail(e.getErrorDesc());
+        }catch (Exception e) {
+            LOGGER.error("queryDetail error", e);
+            return Response.fail("操作失败");
         }
         return Response.success("版本发布成功");
     }

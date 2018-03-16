@@ -301,11 +301,8 @@ public class HouseControler {
 		    ValidateUtils.isNotBlank(locationId, "地址编号不能为空");
 	    }
 	    ValidateUtils.isNotBlank(phone, "请填写管家联系方式");
-	    ValidateUtils.isNumberAndCheckLength(phone, 20 ,"管家联系方式");
 	    //20位长度的数字
-	    if(!ListeningRegExpUtils.mobile(phone)){
-	    	throw new BusinessException("请正确填写11位手机号码");
-	    }
+	    ValidateUtils.isNumberAndCheckLength(phone, 20 ,"管家联系方式");
 		ValidateUtils.isNotBlank(rentType, "请选择出租方式");
 		ValidateUtils.isNotBlank(communityName, "请填写小区名称");
 		ValidateUtils.checkLength(communityName, 2, 20, "2-20个字，可填写汉字，数字，不能填写特殊字符");

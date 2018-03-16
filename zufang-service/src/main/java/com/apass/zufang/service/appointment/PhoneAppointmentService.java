@@ -98,7 +98,7 @@ public class PhoneAppointmentService {
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) {
-		if(reserveDate.getTime()>new Date().getTime()){
+		if(reserveDate.getTime()<new Date().getTime()){
 			return Response.fail("电话预约管理 预约看房新增失败,看房时间选择错误,请重新选择！");
 		}
 		entity.setType((byte)2);

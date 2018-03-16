@@ -149,12 +149,10 @@ public class HouseinitService {
 			// 追加图片
 			for (HouseVo houseVo : hotHouse) {
 				List<String> imgList = null;
-				if (boo) {
+				if (boo && houseVo.getHouseType().equals(BusinessHouseTypeEnums.FYLX_2.getCode().toString())) {
 					imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 1);
-					if (!ValidateUtils.listIsTrue(imgList)) {
-						imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
-					}
-				}else {
+				}
+				if (!ValidateUtils.listIsTrue(imgList)) {
 					imgList = houseImgService.getImgList(houseVo.getHouseId(), (byte) 0);
 				}
 				houseVo.setPictures(imgList);

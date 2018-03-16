@@ -212,7 +212,7 @@ public class ZuFangLoginController {
 	        		return Response.success("验证码真确登录成功",resultMap);
 	        		}
 	       }else{
-	        	return Response.fail("短信验证失败",code);
+	        	return Response.fail("验证码错误，请重新输入",code);
 	       }
 	        	
 	        } catch (Exception e) {

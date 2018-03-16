@@ -52,18 +52,17 @@ public class AppVersionService {
 
     public void deployVersion(AppVersionQueryParams version) throws BusinessException {
     	
-        List<AppVersionEntity> appVersion;
-		AppVersionEntity versionEntity;
+        AppVersionEntity appVersion;
 		try {
-			appVersion = appVersionDao.getVersionPage(version);
-			versionEntity = appVersion.get(0);
+			appVersion = appVersionDao.selectByPrimaryKey(version.getId());
+			
 		} catch (Exception e) {
 			throw new BusinessException("该版本号不存在！");
 		}
-        if (null == versionEntity) {
+        if (null == appVersion) {
         	throw new BusinessException("该版本号不存在！");
         }
-        cacheManage.setNoExpire(APPVERSION, GsonUtils.toJson(versionEntity));
+        cacheManage.set(APPVERSION, GsonUtils.toJson(appVersion));
     }
 
 }

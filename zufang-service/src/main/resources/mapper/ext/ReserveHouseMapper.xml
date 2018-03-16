@@ -139,7 +139,7 @@
 
 		  ]]>
 	<![CDATA[
-		ORDER BY z.reserve_date DESC
+		ORDER BY z.reserve_date ASC
 	]]>
 	<if test="_parameter  != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
