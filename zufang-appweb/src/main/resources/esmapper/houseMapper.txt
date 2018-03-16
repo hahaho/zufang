@@ -1,6 +1,9 @@
 {
         "house": {
             "properties": {
+                "location": {
+                   "type": "geo_point"
+                },
                 "province": {
                     "type": "text",
                     "index": "analyzed",

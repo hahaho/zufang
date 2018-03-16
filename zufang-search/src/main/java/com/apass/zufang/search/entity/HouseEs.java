@@ -235,6 +235,11 @@ public class HouseEs implements IdAble{
     private double latitude;
 
     /**
+     * 位置
+     */
+    private String location;
+
+    /**
      * 图片url
      * @return
      */
@@ -694,5 +699,13 @@ public class HouseEs implements IdAble{
 
     public void setApartmentNamePinyin(String apartmentNamePinyin) {
         this.apartmentNamePinyin = apartmentNamePinyin;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
