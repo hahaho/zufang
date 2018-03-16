@@ -38,10 +38,10 @@ public class HouseinitController {
 		
 		try {
 			HashMap<String, Object> init = houseinitService.init();
-			return Response.success("初始城市地址成功！", init);
+			return Response.success("initCity_初始城市地址成功！", init);
 		} catch (Exception e) {
-			LOG.error("初始城市地址失败！", e);
-			return Response.fail("初始城市地址失败！");
+			LOG.error("initCity_初始城市地址失败！", e);
+			return Response.fail("initCity_初始城市地址失败！");
 		}
 	}
 	
@@ -76,7 +76,7 @@ public class HouseinitController {
 	public Response initHomePage(Map<String, Object> paramMap) {
 		
 		try {
-			LOG.info(GsonUtils.toJson(paramMap));
+			LOG.info("initHomePage_" + GsonUtils.toJson(paramMap));
 			String city = (String) paramMap.get("city");// 城市
 			String pageNum = (String) paramMap.get("pageNum");// 页码
 			ValidateUtils.isNotBlank("initHomePage_请求参数丢失数据！", city, pageNum);
