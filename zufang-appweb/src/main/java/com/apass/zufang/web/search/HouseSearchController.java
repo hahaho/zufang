@@ -296,7 +296,7 @@ public class HouseSearchController {
 			multiMatchQueryBuilder2.field("district", 1f);
 			boolQueryBuilder.must(multiMatchQueryBuilder2);
 			if(StringUtils.isNotEmpty(apartmentName)){
-				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
+				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName).operator(Operator.AND));
 			}
 			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
