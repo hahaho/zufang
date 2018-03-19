@@ -54,7 +54,7 @@
         ]]>
         <if test="name!=null and name!=''"> AND x.`name` LIKE '%${name}%' </if>
         <if test="telphone!=null and telphone!=''"> AND x.telphone = #{telphone} </if>
-        <if test="createdFloor!=null and createdFloor!=''"> <![CDATA[ AND x.created_time >= #{houseCreatedFloor} ]]></if>
+        <if test="createdFloor!=null and createdFloor!=''"> <![CDATA[ AND x.created_time >= #{createdFloor} ]]></if>
        	<if test="createdCeiling!=null and createdCeiling!=''"> <![CDATA[ AND x.created_time <= #{createdCeiling} ]]></if>
        	<if test="apartmentName!=null and apartmentName!=''"> AND z.`name` LIKE '%${apartmentName}%' </if>
        	
