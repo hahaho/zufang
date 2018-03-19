@@ -267,7 +267,7 @@ public class ZuFangLoginController {
 			if (StringUtils.isBlank(mobile) && mobile.length()<12 ) {
 				return Response.fail("手机号不能为空");
 			}
-			
+			   
 			try {
 				 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 				 if(zfselecetmobile == null){
