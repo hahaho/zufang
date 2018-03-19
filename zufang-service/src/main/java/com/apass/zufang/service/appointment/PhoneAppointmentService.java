@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.zufang.domain.Response;
@@ -95,11 +97,15 @@ public class PhoneAppointmentService {
 	 * 电话预约管理 预约看房记录新增
 	 * @param entity
 	 * @return
+	 * @throws BusinessException 
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) {
+	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) throws BusinessException {
+		if(reserveDate==null){
+			throw new BusinessException("reserveDate字段格式化出错！");
+		}
 		if(reserveDate.getTime()<new Date().getTime()){
-			return Response.fail("电话预约管理 预约看房新增失败,看房时间选择错误,请重新选择！");
+			throw new BusinessException("看房时间选择错误,请重新选择！");
 		}
 		entity.setType((byte)2);
 		entity.setReserveDate(reserveDate);
