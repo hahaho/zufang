@@ -150,11 +150,8 @@ public class HouseSearchController {
 			if(StringUtils.isEmpty(deviceId)){
 				throw new RuntimeException("请传入设备号deviceId");
 			}
-			// 用户id
+			// 用户id:用户没登陆也可以搜索
 			String userId = CommonUtils.getValue(paramMap, "userId");
-			if(StringUtils.isEmpty(userId)){
-				throw new RuntimeException("请传入用户id");
-			}
 			//页面和数量
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
