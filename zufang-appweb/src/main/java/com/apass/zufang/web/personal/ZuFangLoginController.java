@@ -150,13 +150,18 @@ public class ZuFangLoginController {
 	        		 return Response.success("请输入6-20位字母与数字组合，字母区分大小写");
 	        	}
 	        	
-	        	returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
-	        	
-	        	if(returnMap==null){
-	        		return Response.fail("密码不正确，请输入正确密码",returnMap);
-	        	}
+	        	//是否有密码
+	        	 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
+	        	if(StringUtils.isBlank(zfselecetmobile.getPassword())){
+	        		//没设密码
+	        		return Response.success("请使用验证码登录后前往个人中心进设置密码后再次操作",returnMap);
+	        	}else{
+	        		returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
+	        		if(returnMap==null){
+	        			return Response.fail("密码不正确，请输入正确密码",returnMap);
+	        		}
 	        		return Response.success("登录成功",returnMap);
-	        	
+	        	}
 	        } catch (Exception e) {
 	        	logger.error("密码登录失败"+e);
 	            return Response.fail("操作失败");
