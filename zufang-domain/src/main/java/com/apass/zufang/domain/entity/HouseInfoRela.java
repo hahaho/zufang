@@ -184,12 +184,20 @@ public class HouseInfoRela {
 	/**
 	 * 朝向
 	 */
-	private Long hezuChaoxiang;
+	private Byte hezuChaoxiang;
+	/**
+	 * 朝向Str
+	 */
+	private String hezuChaoxiangStr;
 	
 	/**
 	 * 出租介绍
 	 */
-	private Long hezuResource;
+	private Byte hezuResource;
+	/**
+	 * 出租介绍Str
+	 */
+	private String hezuResourceStr;
 	
 	/**
 	 * 出租面积
@@ -529,20 +537,36 @@ public class HouseInfoRela {
 		this.totalDoors = totalDoors;
 	}
 
-	public Long getHezuChaoxiang() {
+	public Byte getHezuChaoxiang() {
 		return hezuChaoxiang;
 	}
 
-	public void setHezuChaoxiang(Long hezuChaoxiang) {
+	public void setHezuChaoxiang(Byte hezuChaoxiang) {
 		this.hezuChaoxiang = hezuChaoxiang;
 	}
 
-	public Long getHezuResource() {
+	public String getHezuChaoxiangStr() {
+		return hezuChaoxiangStr;
+	}
+
+	public void setHezuChaoxiangStr(String hezuChaoxiangStr) {
+		this.hezuChaoxiangStr = hezuChaoxiangStr;
+	}
+
+	public Byte getHezuResource() {
 		return hezuResource;
 	}
 
-	public void setHezuResource(Long hezuResource) {
+	public void setHezuResource(Byte hezuResource) {
 		this.hezuResource = hezuResource;
+	}
+
+	public String getHezuResourceStr() {
+		return hezuResourceStr;
+	}
+
+	public void setHezuResourceStr(String hezuResourceStr) {
+		this.hezuResourceStr = hezuResourceStr;
 	}
 
 	public BigDecimal getRoomAcreage() {

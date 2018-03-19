@@ -110,6 +110,18 @@ public class HouseInfoService {
 						Integer.valueOf(houseInfo.getChaoxiang()));
 				houseInfo.setChaoxiangStr(chaoxiang.getMessage());
 			}
+			// 处理合租朝向
+			if(houseInfo.getHezuChaoxiang()!=null){
+				BusinessHouseTypeEnums hzchaoxiang = BusinessHouseTypeEnums.valueOfCX(
+						Integer.valueOf(houseInfo.getHezuChaoxiang()));
+				houseInfo.setHezuChaoxiangStr(hzchaoxiang.getMessage());
+			}
+			// 处理合租介绍朝向
+			if(houseInfo.getHezuResource()!=null){
+				BusinessHouseTypeEnums hzresource = BusinessHouseTypeEnums.valueOfCZJS(
+						Integer.valueOf(houseInfo.getHezuResource()));
+				houseInfo.setHezuResourceStr(hzresource.getMessage());
+			}
 
 			// 替换公司Logo
 			String companyLogo = houseInfo.getCompanyLogo();

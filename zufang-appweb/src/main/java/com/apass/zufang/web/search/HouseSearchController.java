@@ -150,11 +150,8 @@ public class HouseSearchController {
 			if(StringUtils.isEmpty(deviceId)){
 				throw new RuntimeException("请传入设备号deviceId");
 			}
-			// 用户id
+			// 用户id:用户没登陆也可以搜索
 			String userId = CommonUtils.getValue(paramMap, "userId");
-			if(StringUtils.isEmpty(userId)){
-				throw new RuntimeException("请传入用户id");
-			}
 			//页面和数量
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
@@ -299,7 +296,7 @@ public class HouseSearchController {
 			multiMatchQueryBuilder2.field("district", 1f);
 			boolQueryBuilder.must(multiMatchQueryBuilder2);
 			if(StringUtils.isNotEmpty(apartmentName)){
-				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName));
+				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName).operator(Operator.AND));
 			}
 			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));

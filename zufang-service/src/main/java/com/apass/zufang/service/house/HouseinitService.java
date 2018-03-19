@@ -164,6 +164,7 @@ public class HouseinitService {
 			HashMap<String, Integer> finMap) throws BusinessException {
 
 		List<HouseVo> nearHouses = new ArrayList<HouseVo>();
+		List<HouseVo> nearHouses1 = new ArrayList<HouseVo>();
 		// 获取用户当前经纬度追加2公里经纬度,
 		String pageNum = (String) paramMap.get("pageNum");// 页码
 		String longitude = (String) paramMap.get("longitude");// 经度
@@ -175,15 +176,15 @@ public class HouseinitService {
 			nearHouses = addTimeHouse(setHouses, norHouses, addTimeHouse, finMap);
 		} else {
 			// 去除按流量排进热门的数据
-			nearHouses = removeSetHouse(setHouses, norHouses, finMap);
-			if (ValidateUtils.listIsTrue(nearHouses)) {
+			nearHouses1 = removeSetHouse(setHouses, norHouses, finMap);
+			if (ValidateUtils.listIsTrue(nearHouses1)) {
 				// 按照房源距离由近到远排序
-				double[] disArray = new double[nearHouses.size()];
+				double[] disArray = new double[nearHouses1.size()];
 				HashMap<Double, HouseVo> disMap = Maps.newHashMap();
-				for (int i = 0; i < nearHouses.size(); i++) {
+				for (int i = 0; i < nearHouses1.size(); i++) {
 					double disOne = CommonService.distanceSimplify(new Double(longitude), new Double(latitude),
-							nearHouses.get(i).getLongitude(), nearHouses.get(i).getLatitude());
-					for (int j = 0; j < nearHouses.size(); j++) {
+							nearHouses1.get(i).getLongitude(), nearHouses1.get(i).getLatitude());
+					for (int j = 0; j < nearHouses1.size(); j++) {
 						if (disMap.containsKey(disOne)) {
 							BigDecimal bigDecimal = new BigDecimal(disOne);
 							disOne = bigDecimal.add(new BigDecimal(0.1)).doubleValue();
@@ -191,7 +192,7 @@ public class HouseinitService {
 							break;
 						}
 					}
-					disMap.put(disOne, nearHouses.get(i));
+					disMap.put(disOne, nearHouses1.get(i));
 					disArray[i] = disOne;
 				}
 				Arrays.sort(disArray);
@@ -214,6 +215,7 @@ public class HouseinitService {
 	}
 
 	// 按照上架时间排序
+	@SuppressWarnings("unchecked")
 	private List<HouseVo> addTimeHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, List<HouseVo> timeHouse, HashMap<String, Integer> finMap) {
 		
 		try {
@@ -226,22 +228,10 @@ public class HouseinitService {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
 					addSetList = norHouses.subList(0, 5 - currSize);
-				} else{
+				} else {
 					if (ValidateUtils.listIsTrue(norHouses)) {
 						addSetList = new PageBean(1, 5 - currSize, norHouses).getList();
 					}
-//					if (!ValidateUtils.listIsTrue(setHouse)) {
-//						addSetList = norHouses;
-//					} else {
-//						if (ValidateUtils.listIsTrue(norHouses)) {
-//							addSetList = setHouse;
-//							for (HouseVo houseVo : norHouses) {
-//								addSetList.add(houseVo);
-//							}
-//						} else {
-//							addSetList = setHouse;
-//						}
-//					}
 				}
 				// @2:正常房源+配置房源<5
 			}
@@ -260,28 +250,7 @@ public class HouseinitService {
 			return null;
 		}
 	}
-	// 按照浏览量排序
-	private List<HouseVo> addSetHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
-		
-		try {
-			Integer currSize = finMap.get("finSize");
-			
-			List<HouseVo> addSetList = null;
-			// 配置房源大于5
-			if (currSize <= 5) {
-				// @1:正常房源+配置房源>5
-				if (norHouses.size() + currSize > 5) {
-					addSetList = norHouses.subList(5 - currSize, norHouses.size());
-				}
-				// @2:正常房源+配置房源<5
-			} else {
-				addSetList = norHouses;
-			}
-			return addSetList;
-		} catch (Exception e) {
-			return null;
-		}
-}
+
 	private List<HouseVo> removeSetHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, HashMap<String, Integer> finMap) {
 		
 		List<HouseVo> removeList = null;
@@ -292,7 +261,7 @@ public class HouseinitService {
 			if (currSize < 5) {
 				// @1:正常房源+配置房源>5
 				if (norHouses.size() + currSize > 5) {
-					removeList = norHouses.subList(0, 5 - currSize);
+					removeList = norHouses.subList(5 - currSize, norHouses.size());
 				}
 				// @2:正常房源+配置房源<5
 			} else {
