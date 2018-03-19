@@ -70,7 +70,7 @@
        	<if test="reserveDateFloor!=null and reserveDateFloor!=''"> <![CDATA[ AND x.reserve_date >= #{reserveDateFloor} ]]></if>
        	<if test="reserveDateCeiling!=null and reserveDateCeiling!=''"> <![CDATA[ AND x.reserve_date <= #{reserveDateCeiling} ]]></if>
        	<![CDATA[ 
-        	ORDER BY x.created_time DESC
+        	ORDER BY x.reserve_date DESC
         ]]>
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
