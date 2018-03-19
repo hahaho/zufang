@@ -73,6 +73,25 @@ public class SecurityController {
         String userName = SpringSecurityUtils.getCurrentUser();
         resultMap.put("username",userName);
         resultMap.put("login","login_success");
+        resultMap.put("jurisdiction","yf");
+        if(StringUtils.equals(userName,"xuwenda")){
+            resultMap.put("jurisdiction","kf_l");
+        }else if(StringUtils.equals(userName,"zhanglili")||StringUtils.equals(userName,"dengchengsen")
+                ||StringUtils.equals(userName,"wangfeifei")||StringUtils.equals(userName,"shuxuefei")
+                ||StringUtils.equals(userName,"hedongdong")){
+            resultMap.put("jurisdiction","kf");
+        }else if(StringUtils.equals(userName,"maoyanping")){
+            resultMap.put("jurisdiction","yy_l");
+        }else if(StringUtils.equals(userName,"wangyuting")||StringUtils.equals(userName,"huangbeifang")){
+            resultMap.put("jurisdiction","yy_l");
+        }else if(StringUtils.equals(userName,"yangxiaoqing")){
+            resultMap.put("jurisdiction","yy_fl");
+        }else if(StringUtils.equals(userName,"liucong")){
+            resultMap.put("jurisdiction","ds_l");
+        }else if(StringUtils.equals(userName,"luxiquan")||StringUtils.equals(userName,"zhangyinling")
+                ||StringUtils.equals(userName,"zhoumenmen")||StringUtils.equals(userName,"yuqiannan")){
+            resultMap.put("jurisdiction","ds");
+        }
         return Response.success("登陆成功",resultMap);
     }
 
