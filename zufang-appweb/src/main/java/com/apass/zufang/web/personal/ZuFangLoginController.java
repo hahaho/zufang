@@ -274,18 +274,15 @@ public class ZuFangLoginController {
 			}
 			try {
 				 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
-				 if(zfselecetmobile == null){
-					 resultMap.put("user", "xinyonghu");
-					 resultMap.put("password", "false");
-					 return Response.success("您暂未设置密码，请使用验证码登录后前往个人中心设置密码",resultMap);
-				 }else{
-					 resultMap.put("user", "laoyonghu");
+				 
 					 if(StringUtils.isBlank( zfselecetmobile.getPassword())){
-						 resultMap.put("password", "false");
+						 resultMap.put("password", false);
 						 return Response.success("您暂未设置密码，请使用验证码登录后前往个人中心设置密码",resultMap);
+					 }else{
+						 resultMap.put("password", true);
 					 }
-				 }
-				 resultMap.put("password", "true");
+				 
+				 
 				return Response.success("已经设置密码进行修改",resultMap);
 			} catch (BusinessException e) {
 				logger.error("mobile verification code send fail", e);
