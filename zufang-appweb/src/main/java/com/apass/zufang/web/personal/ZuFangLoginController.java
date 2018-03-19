@@ -253,5 +253,37 @@ public class ZuFangLoginController {
 			return Response.fail("网络异常,发送验证码失败,请稍后再试");
 		}
 	}
+	
+	
+	//被判断是不是有密码
+		@POST
+		@Path("/zfquerypassword")
+		public Response zfquerypassword(Map<String, Object> paramMap)throws BusinessException {
+			
+			Map<String, Object> resultMap = new HashMap<>();
+			String mobile = CommonUtils.getValue(paramMap, "mobile");// 电话
+			logger.info("入参 mobile"+mobile);
+			
+			if (StringUtils.isBlank(mobile) && mobile.length()<12 ) {
+				return Response.fail("手机号不能为空");
+			}
+			
+			try {
+				 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
+				 if(zfselecetmobile == null){
+					 resultMap.put("user", "xinyonghu");
+					 return Response.success("您暂未设置密码，请使用验证码登录后前往个人中心设置密码",resultMap);
+				 }else{
+					 resultMap.put("user", "laoyonghu");
+					 if(StringUtils.isBlank( zfselecetmobile.getPassword())){
+						 return Response.success("您暂未设置密码，请使用验证码登录后前往个人中心设置密码",resultMap);
+					 }
+				 }
+				return Response.success("已经设置密码进行修改",resultMap);
+			} catch (BusinessException e) {
+				logger.error("mobile verification code send fail", e);
+				return Response.fail("查询密码失败,请稍后再试");
+			}
+		}
 
 }
