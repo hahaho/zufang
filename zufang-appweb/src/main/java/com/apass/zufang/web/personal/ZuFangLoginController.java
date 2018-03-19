@@ -83,7 +83,7 @@ public class ZuFangLoginController {
 	        		 return Response.fail("类型不能为空");
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(code)){
 	        		//手机号不合规
-	        		 return Response.fail("验证码不能为空");
+	        		 return Response.fail("请输入验证码");
 	        	}
 	        	
 	        	//验证码校验
@@ -114,7 +114,7 @@ public class ZuFangLoginController {
 						returnMap.put("gfbRegisterIn", userInfo);
 						return Response.success("用户重置密码成功", returnMap);
 	        	}else{
-	        		return Response.fail("验证码错误");
+	        		return Response.fail("验证码错误，请重新输入");
 	        	}
 	        } catch (Exception e) {
 	        	logger.error("设置密码失败"+e);
@@ -179,6 +179,9 @@ public class ZuFangLoginController {
 	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
 	        		//手机号不合规
 	        		 return Response.success("手机号不合规");
+	        	}else if(org.apache.commons.lang3.StringUtils.isBlank(code)){
+	        		//手机号不合规
+	        		 return Response.success("请输入验证码");
 	        	}
 	        	//发短信到手机
 	     //   boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
