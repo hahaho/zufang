@@ -142,9 +142,9 @@ public class AppointmentJourneyController {
         	
         	String houseId = CommonUtils.getValue(map, "houseId");
         	ValidateUtils.isNotBlank(houseId, "参数houseId为空！");
+        	entity.setHouseId(Long.parseLong(houseId));
         	String reserveHouseId = CommonUtils.getValue(map, "reserveHouseId");
         	ValidateUtils.isNotBlank(reserveHouseId, "参数reserveHouseId为空！");
-        	entity.setHouseId(Long.parseLong(houseId));
         	entity.setReserveHouseId(Long.parseLong(reserveHouseId));
         	
         	String visitStatus = CommonUtils.getValue(map, "visitStatus");
@@ -171,8 +171,10 @@ public class AppointmentJourneyController {
         	entity.setRentStatus(rent);
         	
         	String feedBack = CommonUtils.getValue(map, "feedBack");
-        	String memo = CommonUtils.getValue(map, "memo");
+        	ValidateUtils.isNotBlank(feedBack, "参数feedBack为空！");
         	entity.setFeedBack(feedBack);
+        	String memo = CommonUtils.getValue(map, "memo");
+//        	ValidateUtils.isNotBlank(memo, "参数memo为空！");
         	entity.setMemo(memo);
         	
         	return appointmentJourneyService.addReturnVisit(entity,username);
