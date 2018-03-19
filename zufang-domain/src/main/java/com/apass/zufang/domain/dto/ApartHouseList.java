@@ -10,6 +10,8 @@ public class ApartHouseList{
     private String name;
     private String city;
     
+    private Integer amountH;//当前公寓城市下房源数量
+    
     private List<HouseVo> rows = new ArrayList<HouseVo>();
 
 	public Long getId() {
@@ -50,6 +52,14 @@ public class ApartHouseList{
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public Integer getAmountH() {
+		return amountH;
+	}
+
+	public void setAmountH(Integer amountH) {
+		this.amountH = amountH;
 	}
 
 }
