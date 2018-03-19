@@ -85,6 +85,7 @@ public class ApartHouseService {
 			paramMap1.put("city", city);
 			paramMap1.put("apartId", resultApartment.get(i).getId().toString());
 			List<HouseVo> houseListById = houseMapper.getHouseById(paramMap1);
+			int amountH = houseListById.size();
 			if (ValidateUtils.listIsTrue(houseListById)) {
 			if (houseListById.size() > 4) {
 				PageBean<HouseVo> pageBean1 = new PageBean<HouseVo>(new Integer(pageNum)+1, 5, houseListById);
@@ -99,6 +100,7 @@ public class ApartHouseService {
 			eachAPH.setName(resultApartment.get(i).getName());
 			eachAPH.setArea(resultApartment.get(i).getArea());
 			eachAPH.setCity(resultApartment.get(i).getCity());
+			eachAPH.setAmountH(amountH);
 //			List<String> imgList = houseImgService.getImgList(resultApartment.get(i).getId(), (byte) 1);
 			eachAPH.setRows(houseListById);
 			apartHouseList.add(eachAPH);
