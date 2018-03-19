@@ -22,7 +22,7 @@
 		GROUP BY
 			key_value
 		HAVING
-			count(*) > 1
+			count(*) >= 1
 		ORDER BY
 			updated_time DESC
 		LIMIT 0, 10;

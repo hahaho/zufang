@@ -267,18 +267,20 @@ public class ZuFangLoginController {
 			if (StringUtils.isBlank(mobile) && mobile.length()<12 ) {
 				return Response.fail("手机号不能为空");
 			}
-			
 			try {
 				 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 				 if(zfselecetmobile == null){
 					 resultMap.put("user", "xinyonghu");
+					 resultMap.put("password", "false");
 					 return Response.success("您暂未设置密码，请使用验证码登录后前往个人中心设置密码",resultMap);
 				 }else{
 					 resultMap.put("user", "laoyonghu");
 					 if(StringUtils.isBlank( zfselecetmobile.getPassword())){
+						 resultMap.put("password", "false");
 						 return Response.success("您暂未设置密码，请使用验证码登录后前往个人中心设置密码",resultMap);
 					 }
 				 }
+				 resultMap.put("password", "true");
 				return Response.success("已经设置密码进行修改",resultMap);
 			} catch (BusinessException e) {
 				logger.error("mobile verification code send fail", e);
