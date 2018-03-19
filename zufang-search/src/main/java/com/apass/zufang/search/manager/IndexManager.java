@@ -73,30 +73,11 @@ public class IndexManager<T> {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder
                 .must(QueryBuilders.multiMatchQuery(condition.getCity(),"province","city", "district").operator(Operator.AND).boost(2.5f))
-                .should(QueryBuilders.wildcardQuery("apartmentName", "*" + value + "*").boost(1.5f))
-                .should(QueryBuilders.wildcardQuery("apartmentNamePinyin", "*" + value + "*").boost(1.5f))
-                .should(QueryBuilders.wildcardQuery("communityName", "*" + value + "*").boost(1.5f))
-                .should(QueryBuilders.wildcardQuery("communityNamePinyin", "*" + value + "*").boost(1.5f))
-                .should(QueryBuilders.wildcardQuery("houseTitle", "*" + value + "*").boost(2f))
-                .should(QueryBuilders.wildcardQuery("houseTitlePinyin", "*" + value + "*").boost(2f))
-                .should(QueryBuilders.wildcardQuery("detailAddr", "*" + value + "*").boost(1f))
-                .should(QueryBuilders.wildcardQuery("detailAddrPinyin", "*" + value + "*").boost(1f))
-                .should(QueryBuilders.queryStringQuery(value).field("communityName", 1.5f)
+                .must(QueryBuilders.queryStringQuery("*"+value+"*")
                         .field("communityNamePinyin", 1.5f)
-                        .field("apartmentName", 1.5f)
                         .field("apartmentNamePinyin", 1.5f)
-                        .field("houseTitle", 2f)
                         .field("houseTitlePinyin", 2f)
-                        .field("detailAddr", 1f)
-                        .field("detailAddrPinyin", 1f))
-                .should(QueryBuilders.termQuery("apartmentName", value).boost(1.5f))
-                .should(QueryBuilders.termQuery("apartmentNamePinyin", value).boost(1.5f))
-                .should(QueryBuilders.termQuery("communityName", value).boost(1.5f))
-                .should(QueryBuilders.termQuery("communityNamePinyin", value).boost(1.5f))
-                .should(QueryBuilders.termQuery("houseTitle", value).boost(2f))
-                .should(QueryBuilders.termQuery("houseTitlePinyin", value).boost(2f))
-                .should(QueryBuilders.termQuery("detailAddr", value).boost(1f))
-                .should(QueryBuilders.termQuery("detailAddrPinyin", value).boost(1f));
+                        .field("detailAddrPinyin", 1f));
         if(rentType != null){
             boolQueryBuilder.must(QueryBuilders.termQuery("rentType", rentType));
         }
