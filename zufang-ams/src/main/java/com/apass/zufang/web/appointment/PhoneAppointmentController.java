@@ -86,17 +86,17 @@ public class PhoneAppointmentController {
     		String username = SpringSecurityUtils.getCurrentUser();
     		
     		String houseId = CommonUtils.getValue(map, "houseId");
-    		ValidateUtils.isNotBlank(houseId, "参数houseId为空！");
+    		ValidateUtils.isNotBlank(houseId, "houseId为空！");
     		String userId = CommonUtils.getValue(map, "userId");
-    		ValidateUtils.isNotBlank(userId, "参数userId为空！");
+    		ValidateUtils.isNotBlank(userId, "userId为空！");
     		
     		String telphone = CommonUtils.getValue(map, "telphone");
-    		ValidateUtils.isNotBlank(telphone, "参数telphone为空！");
+    		ValidateUtils.isNotBlank(telphone, "电话（telphone）为空！");
     		String name = CommonUtils.getValue(map, "name");
     		ValidateUtils.isNotBlank(name, "参数name为空！");
     		
     		String reserveDate = CommonUtils.getValue(map, "reserveDate");
-    		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
+    		ValidateUtils.isNotBlank(reserveDate, "看房时间（reserveDate）为空！");
     		Date date = DateFormatUtil.string2date(reserveDate+":00",DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
     		String memo = CommonUtils.getValue(map, "memo");
     		
