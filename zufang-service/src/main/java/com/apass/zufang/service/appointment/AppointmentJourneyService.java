@@ -84,7 +84,7 @@ public class AppointmentJourneyService {
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response editReserveHouse(ReserveHouse entity, String username,Date reserveDate) throws BusinessException {
 		if(reserveDate==null){
-			throw new BusinessException("reserveDate字段格式化出错！");
+			throw new BusinessException("看房时间格式化出错！");
 		}
 		if(reserveDate.getTime()<new Date().getTime()){
 			throw new BusinessException("看房时间选择错误,请重新选择！");
