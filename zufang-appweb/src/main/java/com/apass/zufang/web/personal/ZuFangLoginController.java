@@ -145,23 +145,27 @@ public class ZuFangLoginController {
 	        	if(StringUtils.isBlank(mobile)){
 	        		//手机号不能为空
 	        		 return Response.success("手机号不能为空");
-	        	}else if(StringUtils.isBlank(password) && password.length()<=6){
+	        	}else if(StringUtils.isBlank(password)){
 	        		//密码不能为空
 	        		 return Response.success("请输入6-20位字母与数字组合，字母区分大小写");
 	        	}
 	        	
 	        	//是否有密码
 	        	 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
-	        	if(StringUtils.isBlank(zfselecetmobile.getPassword())){
-	        		//没设密码
-	        		return Response.success("请使用验证码登录后前往个人中心进设置密码后再次操作",returnMap);
-	        	}else{
-	        		returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
-	        		if(returnMap==null){
-	        			return Response.fail("密码不正确，请输入正确密码",returnMap);
-	        		}
-	        		return Response.success("登录成功",returnMap);
-	        	}
+	        	 if(zfselecetmobile != null){
+	        		 if(StringUtils.isBlank(zfselecetmobile.getPassword())){
+	        			 //没设密码
+	        			 return Response.fail("请使用验证码登录后前往个人中心进设置密码后再次操作",returnMap);
+	        		 }else{
+	        			 returnMap  = zuFangLoginSevice.zufangpasswordlogin(mobile,password);
+	        			 if(returnMap==null){
+	        				 return Response.fail("密码不正确，请输入正确密码",returnMap);
+	        			 }
+	        			 return Response.success("登录成功",returnMap);
+	        		 }
+	        	 }else{
+	        		 return Response.fail("请使用验证码登录后前往个人中心进设置密码后再次操作",returnMap);
+	        	 }
 	        } catch (Exception e) {
 	        	logger.error("密码登录失败"+e);
 	            return Response.fail("操作失败");
@@ -225,7 +229,7 @@ public class ZuFangLoginController {
 	        	
 	        } catch (Exception e) {
 	        	logger.error("验证码登录失败"+e);
-	            return Response.fail("操作失败");
+	            return Response.fail("操作失败");  
 	        }
 	    }
 	//发送验证码  时判断是不是新用户
