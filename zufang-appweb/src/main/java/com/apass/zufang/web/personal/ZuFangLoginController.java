@@ -264,16 +264,19 @@ public class ZuFangLoginController {
 			}
 			try {
 				 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
-				 
+				 if(zfselecetmobile != null){
 					 if(StringUtils.isBlank( zfselecetmobile.getPassword())){
 						 resultMap.put("password", false);
 						 return Response.success("您暂未设置密码，请使用验证码登录后前往个人中心设置密码",resultMap);
 					 }else{
 						 resultMap.put("password", true);
 					 }
+					 return Response.success("已经设置密码进行修改",resultMap);
+				 }else{
+					 resultMap.put("password", false);
+					 return Response.fail("当前手机号暂未注册",resultMap);
+				 }
 				 
-				 
-				return Response.success("已经设置密码进行修改",resultMap);
 			} catch (BusinessException e) {
 				logger.error("mobile verification code send fail", e);
 				return Response.fail("查询密码失败,请稍后再试");
@@ -304,8 +307,7 @@ public class ZuFangLoginController {
 					    //验证真确返回客户
 					    if(code.equals("123456")){
 					    	return Response.success("验证码真确");
-						
-					     }else{
+   					     }else{
 					  	    	return Response.fail("验证码错误，请重新输入",code);
 					  	  }
 						 
