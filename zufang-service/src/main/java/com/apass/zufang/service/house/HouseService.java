@@ -314,8 +314,10 @@ public class HouseService {
 			vo.setCityCode(c.getCode());
 			vo.setDistrict(d.getDistrict());
 			vo.setDistrictCode(d.getCode());
-			vo.setStreet(t.getTowns());
-			vo.setStreetCode(t.getCode());
+			if(t != null){
+				vo.setStreet(t.getTowns());
+				vo.setStreetCode(t.getCode());
+			}
 		}
 		
 		return vo;
