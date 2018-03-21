@@ -24,7 +24,7 @@
 		HAVING
 			count(*) >= 1
 		ORDER BY
-			updated_time DESC
+			updated_time 
 		LIMIT 0, 10;
 	]]>
 	</select>
