@@ -6,11 +6,11 @@ import javax.xml.bind.ValidationEventLocator;
  * Created by DELL on 2018/2/27.
  */
 public enum PriceRangeEnum {
-    PRICE_ONE(1,"￥1500以下"),
-    PRICE_TWO(2,"￥ 1501 - ￥ 2500"),
-    PRICE_THREE(3,"￥ 2501 - ￥ 3500"),
-    PRICE_FOUR(4,"￥ 3501 - ￥ 5500"),
-    PRICE_FIVE(5,"￥ 5501以上"),
+    PRICE_ONE(1,"¥1500以下"),
+    PRICE_TWO(2,"¥ 1501 - ¥ 2500"),
+    PRICE_THREE(3,"¥ 2501 - ¥ 3500"),
+    PRICE_FOUR(4,"¥ 3501 - ¥ 5500"),
+    PRICE_FIVE(5,"¥ 5501以上"),
     PRICE_ALL(6,"全部"),
     ;
 
