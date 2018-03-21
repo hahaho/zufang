@@ -8,7 +8,8 @@
     	付款方式，出租类型
    		&查询条件 
    		公寓名称  小区名称 房源标题（名称）房源编码  所在城 区 街 房源状态 
-   		面积 上下限 是否独立厨、卫，创建时间上下限
+   		面积 上下限 是否独立厨、卫，创建时间上下限   
+   		houseId 字段用于新增编辑看房记录验证   查询无该条件
     -->
     <select id="getReserveHouseList" resultType="com.apass.zufang.domain.vo.ReserveHouseVo" 
         parameterType="com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams">
@@ -69,6 +70,8 @@
        	
        	<if test="reserveDateFloor!=null and reserveDateFloor!=''"> <![CDATA[ AND x.reserve_date >= #{reserveDateFloor} ]]></if>
        	<if test="reserveDateCeiling!=null and reserveDateCeiling!=''"> <![CDATA[ AND x.reserve_date <= #{reserveDateCeiling} ]]></if>
+       	
+       	<if test="houserId!=null and houserId!=''"> AND x.houser_id = #{houserId} </if>
        	<![CDATA[ 
         	ORDER BY x.reserve_date DESC
         ]]>
