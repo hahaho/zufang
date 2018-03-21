@@ -106,7 +106,7 @@ public class PhoneAppointmentController {
     		entity.setTelphone(telphone);
     		entity.setName(name);
     		entity.setMemo(memo);
-    		return phoneAppointmentService.addReserveHouse(entity,username,date);
+    		return phoneAppointmentService.addReserveHouse(entity,username,date,houseId);
     	}catch (BusinessException e){
         	LOGGER.error("addReserveHouse BUSINESSEXCEPTION---->{}",e);
 			return Response.fail("预约行程管理 预约看房失败！"+e.getErrorDesc());

@@ -10,11 +10,13 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
+import com.apass.zufang.domain.vo.ReserveHouseVo;
 import com.apass.zufang.service.house.HousePeiZhiService;
 import com.apass.zufang.utils.ResponsePageBody;
 @Service
@@ -100,12 +102,22 @@ public class PhoneAppointmentService {
 	 * @throws BusinessException 
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate) throws BusinessException {
+	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate,String houserId) throws BusinessException {
 		if(reserveDate==null){
 			throw new BusinessException("看房时间格式化出错！");
 		}
 		if(reserveDate.getTime()<new Date().getTime()){
 			throw new BusinessException("看房时间选择错误,请重新选择！");
+		}
+		ApprintmentJourneyQueryParams count = new ApprintmentJourneyQueryParams();
+		count.setTelphone(entity.getTelphone());
+		count.setHouseId(houserId);
+		List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(count);
+		for(ReserveHouseVo vo : list){
+			if(reserveDate.getTime()<vo.getReserveDate().getTime()){
+				String rdate = DateFormatUtil.dateToString(vo.getReserveDate(),DateFormatUtil.YYYY_MM_DD_HH_MM);
+				throw new BusinessException("该租客已经在（"+rdate+"）时间预约完成该处房源，如需继续预约请延后看房时间,重新选择！");
+			}
 		}
 		entity.setType((byte)2);
 		entity.setReserveDate(reserveDate);
