@@ -25,8 +25,12 @@ public class MapEntryOrConverUtils {
 	 * @throws IllegalArgumentException 
 	 */
 	public static Object converMap(Class type,Map map) throws IntrospectionException, InstantiationException, IllegalAccessException, IllegalArgumentException{
-		BeanInfo beanInfo = Introspector.getBeanInfo(type); // 获取类属性  
+		
 		Object obj = type.newInstance(); // 创建 JavaBean 对象    
+		if(map == null){
+			return obj;
+		}
+		BeanInfo beanInfo = Introspector.getBeanInfo(type); // 获取类属性  
 		PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();    
         for (PropertyDescriptor descriptor: propertyDescriptors) {    
             String propertyName = descriptor.getName();
