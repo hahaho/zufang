@@ -103,10 +103,11 @@ public class PhoneAppointmentService {
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public Response addReserveHouse(ReserveHouse entity,String user,Date reserveDate,String houserId) throws BusinessException {
+		Long syscruent = new Date().getTime();
 		if(reserveDate==null){
 			throw new BusinessException("看房时间格式化出错！");
 		}
-		if(reserveDate.getTime()<new Date().getTime()){
+		if(reserveDate.getTime()<syscruent){
 			throw new BusinessException("看房时间选择错误,请重新选择！");
 		}
 		ApprintmentJourneyQueryParams count = new ApprintmentJourneyQueryParams();
@@ -114,9 +115,9 @@ public class PhoneAppointmentService {
 		count.setHouseId(houserId);
 		List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(count);
 		for(ReserveHouseVo vo : list){
-			if(reserveDate.getTime()<vo.getReserveDate().getTime()){
+			if(syscruent<vo.getReserveDate().getTime()){
 				String rdate = DateFormatUtil.dateToString(vo.getReserveDate(),DateFormatUtil.YYYY_MM_DD_HH_MM);
-				throw new BusinessException("该租客已经在（"+rdate+"）时间预约完成该处房源，如需继续预约请延后看房时间，重新选择！");
+				throw new BusinessException("该租客已经在（"+rdate+"）时间预约完成该处房源，如需继续预约请删除有效行程，或者等待该用户该房源有效看房行程结束才能继续预约！");
 			}
 		}
 		entity.setType((byte)2);
