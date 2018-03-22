@@ -71,7 +71,7 @@
        	<if test="reserveDateFloor!=null and reserveDateFloor!=''"> <![CDATA[ AND x.reserve_date >= #{reserveDateFloor} ]]></if>
        	<if test="reserveDateCeiling!=null and reserveDateCeiling!=''"> <![CDATA[ AND x.reserve_date <= #{reserveDateCeiling} ]]></if>
        	
-       	<if test="houserId!=null and houserId!=''"> AND x.houser_id = #{houserId} </if>
+       	<if test="houseId!=null and houseId!=''"> AND x.house_id = #{houseId} </if>
        	<![CDATA[ 
         	ORDER BY x.reserve_date DESC
         ]]>
