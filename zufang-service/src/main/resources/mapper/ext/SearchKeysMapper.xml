@@ -14,17 +14,19 @@
 			updated_time 	updatedTime,
 			device_id 	 	deviceId
 		FROM
+		(SELECT
+			*
+		FROM
 			t_zfang_search_keys
 		WHERE
-			key_status = '0'
-		AND	
 			device_id = #{deviceId}
-		GROUP BY
-			key_value
-		HAVING
-			count(*) >= 1
 		ORDER BY
-			updated_time DESC
+			updated_time desc 
+		) v
+		GROUP BY
+			keyValue
+		ORDER BY
+			updated_time desc 
 		LIMIT 0, 10;
 	]]>
 	</select>
