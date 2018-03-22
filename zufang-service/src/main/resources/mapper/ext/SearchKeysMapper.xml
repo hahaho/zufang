@@ -19,6 +19,8 @@
 		FROM
 			t_zfang_search_keys
 		WHERE
+			 key_status = '0'
+		and
 			device_id = #{deviceId}
 		ORDER BY
 			updated_time desc 
