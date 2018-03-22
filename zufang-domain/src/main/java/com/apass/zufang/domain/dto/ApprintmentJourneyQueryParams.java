@@ -20,6 +20,8 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	private String houseStreet;//房源街道
 	private String reserveDateFloor;//看房时间下限
 	private String reserveDateCeiling;//看房时间上限
+	
+	private String houseId;//houseId
 	public String getName() {
 		return name;
 	}
@@ -103,5 +105,11 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	}
 	public void setReserveDateCeiling(String reserveDateCeiling) {
 		this.reserveDateCeiling = reserveDateCeiling;
+	}
+	public String getHouseId() {
+		return houseId;
+	}
+	public void setHouseId(String houseId) {
+		this.houseId = houseId;
 	}
 }

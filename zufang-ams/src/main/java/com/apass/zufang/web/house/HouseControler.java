@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.jwt.common.ListeningRegExpUtils;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
+import com.apass.zufang.common.utils.MapEntryOrConverUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
@@ -56,32 +56,14 @@ public class HouseControler {
 	public Response getHouseList(Map<String,Object> paramMap){
 		ResponsePageBody<HouseBagVo> respBody = new ResponsePageBody<>();
         try {
-        	String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");//公寓名称
-        	String houseTitle = CommonUtils.getValue(paramMap, "houseTitle");//房源名称
-        	String houseCode = CommonUtils.getValue(paramMap, "houseCode");//房源编码
-        	String province = CommonUtils.getValue(paramMap, "province");//公寓所在省份
-        	String city = CommonUtils.getValue(paramMap, "city");//公寓所在省份
-        	String district = CommonUtils.getValue(paramMap, "district");//公寓所在省份
-        	String street = CommonUtils.getValue(paramMap, "street");//公寓所在省份
-        	
-        	String rows =  CommonUtils.getValue(paramMap, "rows");
-        	String page =  CommonUtils.getValue(paramMap, "page");
-        	
-        	rows = StringUtils.isNotBlank(rows) ? rows: "10";
-        	page = StringUtils.isNotBlank(page) ? page: "1";
         	//根据当前登录用户，获取所属公寓的Code
         	String apartmentCode = apartmentService.getApartmentCodeByCurrentUser(SpringSecurityUtils.getCurrentUser());
-        	HouseQueryParams dto = new HouseQueryParams();
-        	dto.setApartmentName(apartmentName);
-        	dto.setHouseTitle(houseTitle);
-        	dto.setHouseCode(houseCode);
-        	dto.setProvince(province);
-    		dto.setCity(city);
-        	dto.setDistrict(district);
-        	dto.setStreet(street);
-        	dto.setRows(Integer.parseInt(rows));
-        	dto.setPage(Integer.parseInt(page));
+        	HouseQueryParams dto = (HouseQueryParams) MapEntryOrConverUtils.converMap(HouseQueryParams.class, paramMap);
         	dto.setApartmentCode(apartmentCode);
+        	if(dto.getPage() == null || dto.getRows() == null){
+        		dto.setPage(1);
+        		dto.setRows(10);
+        	}
         	respBody = houseService.getHouseListExceptDelete(dto);
         	respBody.setMsg("房屋信息列表查询成功!");
         	return Response.success("查询房屋信息成功！", respBody);

@@ -81,15 +81,16 @@ public class ApartmentController {
 	public Response addApartment(Map<String, Object> map){
 		try{
 			LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
+			String province = CommonUtils.getValue(map, "province");
 			String provinceCode = CommonUtils.getValue(map, "provinceCode");
 			String cityCode = CommonUtils.getValue(map, "cityCode");
 			String areaCode = CommonUtils.getValue(map, "areaCode");
-			provinceCode = provinceCode.length()==1?"0"+provinceCode:provinceCode;
-			provinceCode = provinceCode.length()>2?provinceCode.substring(provinceCode.length()-2, provinceCode.length()):provinceCode;
-			if(CityEnums.isContains(provinceCode)){
+			if(CityEnums.isContains(province)){
 				cityCode = provinceCode;//去掉后缀zxs
 				areaCode = areaCode.substring(0, areaCode.length()-1);//去掉后缀T
 			}
+			provinceCode = provinceCode.length()==1?"0"+provinceCode:provinceCode;
+			provinceCode = provinceCode.length()>2?provinceCode.substring(provinceCode.length()-2, provinceCode.length()):provinceCode;
 			cityCode = cityCode.length()==1?"0"+cityCode:cityCode;
 			cityCode = cityCode.length()>2?cityCode.substring(cityCode.length()-2, cityCode.length()):cityCode;
 			areaCode = areaCode.length()==1?"0"+areaCode:areaCode;

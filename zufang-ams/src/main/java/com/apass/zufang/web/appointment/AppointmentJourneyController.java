@@ -87,25 +87,23 @@ public class AppointmentJourneyController {
         	String username = SpringSecurityUtils.getCurrentUser();
         	
         	String id = CommonUtils.getValue(map, "id");
-    		ValidateUtils.isNotBlank(id, "参数id为空！");
-    		
+    		ValidateUtils.isNotBlank(id, "看房记录不可为空！");
         	String name = CommonUtils.getValue(map, "name");
-    		ValidateUtils.isNotBlank(name, "参数name为空！");
+    		ValidateUtils.isNotBlank(name, "联系人姓名不可为空！");
     		
         	String reserveDate = CommonUtils.getValue(map, "reserveDate");
-    		ValidateUtils.isNotBlank(reserveDate, "参数reserveDate为空！");
+    		ValidateUtils.isNotBlank(reserveDate, "看房时间不可为空！");
     		Date date = DateFormatUtil.string2date(reserveDate+":00",DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
-    		if(date==null){
-    			return Response.fail("预约行程管理 预约看房编辑失败,reserveDate字段格式化出错！");
-    		}
     		String memo = CommonUtils.getValue(map, "memo");
     		
     		ReserveHouse entity = new ReserveHouse();
     		entity.setId(Long.parseLong(id));
     		entity.setName(name);
-    		entity.setReserveDate(date);
     		entity.setMemo(memo);
         	return appointmentJourneyService.editReserveHouse(entity,username,date);
+        }catch (BusinessException e){
+        	LOGGER.error("editReserveHouse BUSINESSEXCEPTION---->{}",e);
+			return Response.fail("预约行程管理 预约看房编辑失败！"+e.getErrorDesc());
         } catch (Exception e) {
             LOGGER.error("editReserveHouse EXCEPTION --- --->{}", e);
             return Response.fail("预约行程管理 预约看房编辑失败！");
@@ -143,16 +141,16 @@ public class AppointmentJourneyController {
         	ReturnVisit entity = new ReturnVisit();
         	
         	String houseId = CommonUtils.getValue(map, "houseId");
-        	ValidateUtils.isNotBlank(houseId, "参数houseId为空！");
-        	String reserveHouseId = CommonUtils.getValue(map, "reserveHouseId");
-        	ValidateUtils.isNotBlank(reserveHouseId, "参数reserveHouseId为空！");
+        	ValidateUtils.isNotBlank(houseId, "房源不可为空！");
         	entity.setHouseId(Long.parseLong(houseId));
+        	String reserveHouseId = CommonUtils.getValue(map, "reserveHouseId");
+        	ValidateUtils.isNotBlank(reserveHouseId, "看房记录不可为空！");
         	entity.setReserveHouseId(Long.parseLong(reserveHouseId));
         	
         	String visitStatus = CommonUtils.getValue(map, "visitStatus");
-        	ValidateUtils.isNotBlank(visitStatus, "参数visitStatus为空！");
+        	ValidateUtils.isNotBlank(visitStatus, "看房情况不可为空！");
         	String rentStatus = CommonUtils.getValue(map, "rentStatus");
-        	ValidateUtils.isNotBlank(rentStatus, "参数rentStatus为空！");
+        	ValidateUtils.isNotBlank(rentStatus, "是否租房不可为空！");
         	byte visit = (byte)1;
         	if(StringUtils.equals("未看房", visitStatus)){
         		visit = (byte)1;
@@ -173,11 +171,16 @@ public class AppointmentJourneyController {
         	entity.setRentStatus(rent);
         	
         	String feedBack = CommonUtils.getValue(map, "feedBack");
-        	String memo = CommonUtils.getValue(map, "memo");
+        	ValidateUtils.isNotBlank(feedBack, "需求反馈不可为空！");
         	entity.setFeedBack(feedBack);
+        	String memo = CommonUtils.getValue(map, "memo");
+//        	ValidateUtils.isNotBlank(memo, "参数memo为空！");
         	entity.setMemo(memo);
         	
         	return appointmentJourneyService.addReturnVisit(entity,username);
+        }catch (BusinessException e){
+        	LOGGER.error("addReturnVisit BUSINESSEXCEPTION---->{}",e);
+			return Response.fail("预约行程管理 客户回访新增失败！"+e.getErrorDesc());
         } catch (Exception e) {
             LOGGER.error("addReturnVisit EXCEPTION --- --->{}", e);
             return Response.fail("预约行程管理 客户回访新增失败！");
