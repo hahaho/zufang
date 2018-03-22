@@ -87,12 +87,12 @@ public class AppointmentJourneyController {
         	String username = SpringSecurityUtils.getCurrentUser();
         	
         	String id = CommonUtils.getValue(map, "id");
-    		ValidateUtils.isNotBlank(id, "id为空！");
+    		ValidateUtils.isNotBlank(id, "看房记录不可为空！");
         	String name = CommonUtils.getValue(map, "name");
-    		ValidateUtils.isNotBlank(name, "姓名（name）为空！");
+    		ValidateUtils.isNotBlank(name, "联系人姓名不可为空！");
     		
         	String reserveDate = CommonUtils.getValue(map, "reserveDate");
-    		ValidateUtils.isNotBlank(reserveDate, "看房时间（reserveDate）为空！");
+    		ValidateUtils.isNotBlank(reserveDate, "看房时间不可为空！");
     		Date date = DateFormatUtil.string2date(reserveDate+":00",DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
     		String memo = CommonUtils.getValue(map, "memo");
     		
@@ -141,16 +141,16 @@ public class AppointmentJourneyController {
         	ReturnVisit entity = new ReturnVisit();
         	
         	String houseId = CommonUtils.getValue(map, "houseId");
-        	ValidateUtils.isNotBlank(houseId, "houseId为空！");
+        	ValidateUtils.isNotBlank(houseId, "房源不可为空！");
         	entity.setHouseId(Long.parseLong(houseId));
         	String reserveHouseId = CommonUtils.getValue(map, "reserveHouseId");
-        	ValidateUtils.isNotBlank(reserveHouseId, "reserveHouseId为空！");
+        	ValidateUtils.isNotBlank(reserveHouseId, "看房记录不可为空！");
         	entity.setReserveHouseId(Long.parseLong(reserveHouseId));
         	
         	String visitStatus = CommonUtils.getValue(map, "visitStatus");
-        	ValidateUtils.isNotBlank(visitStatus, "看房情况（visitStatus）为空！");
+        	ValidateUtils.isNotBlank(visitStatus, "看房情况不可为空！");
         	String rentStatus = CommonUtils.getValue(map, "rentStatus");
-        	ValidateUtils.isNotBlank(rentStatus, "是否租房（rentStatus）为空！");
+        	ValidateUtils.isNotBlank(rentStatus, "是否租房不可为空！");
         	byte visit = (byte)1;
         	if(StringUtils.equals("未看房", visitStatus)){
         		visit = (byte)1;
@@ -171,7 +171,7 @@ public class AppointmentJourneyController {
         	entity.setRentStatus(rent);
         	
         	String feedBack = CommonUtils.getValue(map, "feedBack");
-        	ValidateUtils.isNotBlank(feedBack, "需求反馈（feedBack）为空！");
+        	ValidateUtils.isNotBlank(feedBack, "需求反馈不可为空！");
         	entity.setFeedBack(feedBack);
         	String memo = CommonUtils.getValue(map, "memo");
 //        	ValidateUtils.isNotBlank(memo, "参数memo为空！");

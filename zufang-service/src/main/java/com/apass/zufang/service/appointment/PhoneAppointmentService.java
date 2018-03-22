@@ -116,7 +116,7 @@ public class PhoneAppointmentService {
 		for(ReserveHouseVo vo : list){
 			if(reserveDate.getTime()<vo.getReserveDate().getTime()){
 				String rdate = DateFormatUtil.dateToString(vo.getReserveDate(),DateFormatUtil.YYYY_MM_DD_HH_MM);
-				throw new BusinessException("该租客已经在（"+rdate+"）时间预约完成该处房源，如需继续预约请延后看房时间,重新选择！");
+				throw new BusinessException("该租客已经在（"+rdate+"）时间预约完成该处房源，如需继续预约请延后看房时间，重新选择！");
 			}
 		}
 		entity.setType((byte)2);
