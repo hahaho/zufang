@@ -32,7 +32,7 @@ import com.apass.zufang.web.personal.ZuFangLoginController;
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class SearchHistoryController {
 
-private static final Logger logger = LoggerFactory.getLogger(ZuFangLoginController.class);
+private static final Logger logger = LoggerFactory.getLogger(SearchHistoryController.class);
 	
 	@Autowired
 	private SearchHistorySevice searchHistorySevice;
