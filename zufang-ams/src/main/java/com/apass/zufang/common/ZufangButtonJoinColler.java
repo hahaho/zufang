@@ -86,6 +86,6 @@ public class ZufangButtonJoinColler {
             return Response.fail("添加房源信息失败");
         }
 
-        return null;
+        return Response.success("添加房源信息成功");
     }
 }
