@@ -2,12 +2,14 @@ package com.apass.zufang.common;
 
 
 import com.apass.gfb.framework.jwt.TokenManager;
+import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.rbac.UsersDO;
 import com.apass.zufang.domain.enums.TokenCodeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.service.rbac.UsersService;
 import com.apass.zufang.web.house.HouseControler;
@@ -38,6 +40,8 @@ public class ZufangButtonJoinColler {
     private TokenManager tokenManager;
     @Autowired
     private HouseService houseService;
+    @Autowired
+    private ApartmentService apartmentService;
 
     @POST
     @Path("/noauth/token")
@@ -73,13 +77,15 @@ public class ZufangButtonJoinColler {
         try{
             //房源信息
             HouseVo houseVo = new HouseControler().getVoByParams(paramMap);
+            Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
+            houseVo.setApartmentId(apartmentId);
             houseService.addHouse(houseVo);
 
         }catch (Exception e){
             LOGGER.error("添加房源信息失败!",e);
             return Response.fail("添加房源信息失败");
-}
+        }
 
         return null;
-        }
-        }
+    }
+}
