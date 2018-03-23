@@ -11,11 +11,11 @@ import java.util.Calendar;
  */
 public class TokenInfo {
 	/**
-	 * 用户ID
+	 * 用户ID 或username
 	 */
 	private String userId;
 	/**
-	 * 手机号
+	 * 手机号 或password
 	 */
 	private String mobile;
 	/**

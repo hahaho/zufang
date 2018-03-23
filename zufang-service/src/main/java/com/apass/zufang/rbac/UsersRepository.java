@@ -70,4 +70,5 @@ public class UsersRepository extends BaseMybatisRepository<UsersDO, String> {
         tempUsersDO.setPassword(password);
         getSqlSession().update(getSQL("changePwd"), tempUsersDO);
     }
+
 }

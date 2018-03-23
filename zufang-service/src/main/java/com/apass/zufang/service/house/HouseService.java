@@ -574,7 +574,7 @@ public class HouseService {
 
 				//增加价格区间标记priceFlag
 				int priceFlag = 6;
-				if (h.getRentAmt().compareTo(new BigDecimal(1500)) < 0) {
+				if (h.getRentAmt().compareTo(new BigDecimal(1500)) < 0 && h.getRentAmt().compareTo(new BigDecimal(0))>0) {
 					priceFlag = 1;
 				} else if (h.getRentAmt().compareTo(new BigDecimal(1500)) >= 0 && h.getRentAmt().compareTo(new BigDecimal(2500)) <= 0) {
 					priceFlag = 2;

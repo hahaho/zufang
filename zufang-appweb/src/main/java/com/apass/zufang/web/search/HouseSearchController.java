@@ -73,8 +73,6 @@ public class HouseSearchController {
 	@Autowired
 	private WorkSubwaySevice workSubwaySevice;
 	@Autowired
-	private HouseInfoService houseInfoService;
-	@Autowired
 	private NationService nationService;
 	@Autowired
 	private ObtainGaodeLocation obtainGaodeLocation;
@@ -194,11 +192,11 @@ public class HouseSearchController {
 				String regex = "^[a-zA-Z0-9\\u4e00-\\u9fa5\\ ()（）.\\[\\]+=/\\-_\\【\\】]+$";
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(searchValue);
-				if (matcher.matches()) {
+//				if (matcher.matches()) {
 					searchValueFalge = true;
 					// 插入数据:搜索记录
 					searchKeyService.addCommonSearchKeys(searchValue, userId, deviceId);
-				}
+//				}
 				houseSearchCondition.setHouseTitle(searchValue);
 			}
 
@@ -298,7 +296,7 @@ public class HouseSearchController {
 			if(StringUtils.isNotEmpty(apartmentName)){
 				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName).operator(Operator.AND));
 			}
-			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
+				if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
 				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
 			}
 			//如果类型选不限，则不加此条件
