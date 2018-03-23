@@ -279,11 +279,13 @@ public class HouseSearchController {
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 			if(StringUtils.isNotEmpty(searchValue)){
 				MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchValue,
-						"communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
+						"communityName","houseTitle", "detailAddr","apartmentName","district").operator(Operator.AND);
 				multiMatchQueryBuilder.field("communityName", 1.5f);
 				multiMatchQueryBuilder.field("houseTitle", 2f);
 				multiMatchQueryBuilder.field("detailAddr", 1f);
 				multiMatchQueryBuilder.field("apartmentName", 1f);
+				multiMatchQueryBuilder.field("district", 2f);
+
 				boolQueryBuilder.must(multiMatchQueryBuilder);
 			}
 
