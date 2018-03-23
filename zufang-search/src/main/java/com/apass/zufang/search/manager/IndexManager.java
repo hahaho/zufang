@@ -286,6 +286,7 @@ public class IndexManager<T> {
                 multiMatchQueryBuilder.field("houseTitle", 2.5f);
                 multiMatchQueryBuilder.field("detailAddr", 1f);
                 multiMatchQueryBuilder.field("apartmentName", 1.5f);
+                multiMatchQueryBuilder.field("district", 2.5f);
                 boolQueryBuilder.must(multiMatchQueryBuilder);
             }else{
                 return boolSearch(sortField, desc, from, size, condition);
