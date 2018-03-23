@@ -281,7 +281,7 @@ public class IndexManager<T> {
         if (StringUtils.isNotEmpty(value)) {
             if(Pinyin4jUtil.isContainChinese(value)||Pinyin4jUtil.isContainSpecial(value)){
                 MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(value,
-                        "communityName","houseTitle", "detailAddr","apartmentName").operator(Operator.AND);
+                        "communityName","houseTitle", "detailAddr","apartmentName","district").operator(Operator.AND);
                 multiMatchQueryBuilder.field("communityName", 1.5f);
                 multiMatchQueryBuilder.field("houseTitle", 2.5f);
                 multiMatchQueryBuilder.field("detailAddr", 1f);

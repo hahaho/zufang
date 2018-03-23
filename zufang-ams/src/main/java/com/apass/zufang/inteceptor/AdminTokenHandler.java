@@ -1,7 +1,9 @@
 package com.apass.zufang.inteceptor;
 
-import java.util.Map;
-
+import com.apass.gfb.framework.jwt.core.JsonTokenHelper;
+import com.apass.gfb.framework.jwt.domains.TokenInfo;
+import com.apass.gfb.framework.utils.GsonUtils;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -15,10 +17,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.apass.gfb.framework.jwt.core.JsonTokenHelper;
-import com.apass.gfb.framework.jwt.domains.TokenInfo;
-import com.apass.gfb.framework.utils.GsonUtils;
-import com.google.common.collect.Maps;
+import java.util.Map;
 
 /**
  * 
@@ -40,8 +39,8 @@ public class AdminTokenHandler {
 
 	@Autowired
 	private JsonTokenHelper jsonTokenHelper;
-
-	private static final String EXPIRE_CODE = "-1"; //token失效
+	//token失效
+	private static final String EXPIRE_CODE = "-1";
 
 	/**
 	 * 拦截方法 - token校验
@@ -50,12 +49,10 @@ public class AdminTokenHandler {
 	 * @return Object
 	 * @throws Throwable
 	 */
-	@SuppressWarnings("unchecked")
-//    @Around("execution(* com.apass.zufang.web..*.*(..))")
+	@SuppressWarnings("all")
+    @Around("execution(* com.apass.zufang.common.ZufangButtonJoinColler.createHouse(..))")
 	private Object handleTokenInteceptor(ProceedingJoinPoint point)
 			throws Throwable {
-		// 研究怎样过滤掉 注册controller
-		// String className= point.getTarget().getClass().getSimpleName();
 		// //取得class类名的方式
 		Signature signature = point.getSignature();
 		Class<?> returnType = ((MethodSignature) signature).getReturnType(); 
@@ -77,7 +74,7 @@ public class AdminTokenHandler {
 			}
 			Map<String, Object> paraMap = (Map<String, Object>) arr[i];
 			// 参数token
-			String token = (String) paraMap.get("x-auth-token");
+			String token = (String) paraMap.get("token");
 			if (StringUtils.isBlank(token)) {
 				continue;
 			}
