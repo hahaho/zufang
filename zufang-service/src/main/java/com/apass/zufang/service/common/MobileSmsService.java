@@ -102,7 +102,7 @@ public class MobileSmsService {
 			Map<String, String> map = GsonUtils.convertMap(cacheCode);
 			String currDate = map.get("currDate");
 			long date = new Date().getTime() / 1000;
-			if (date - Long.valueOf(currDate) > 60) {
+			if (date - Long.valueOf(currDate) > 120) {
 				return true;
 			} else {
 				return false;
