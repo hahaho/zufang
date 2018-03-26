@@ -67,10 +67,10 @@ public class ZuFangLoginController {
 	        	String smsType = CommonUtils.getValue(paramMap, "smsType");
 	        	String code = CommonUtils.getValue(paramMap, "code");
 	        	logger.info("入参 ：userId————>"+userId+" mobile————>"+mobile+" password—————>"+password+" smsType—————>");
-	        	if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
+	        	/*if(org.apache.commons.lang3.StringUtils.isBlank(userId)){
         		//用户id不合规
 	        		 return Response.fail("用户id不合规");
-	        	}else 
+	        	}else */
 	        		if(org.apache.commons.lang3.StringUtils.isBlank(mobile)){
 	        		//手机号不合规
 	        		 return Response.fail("手机号不合规");
