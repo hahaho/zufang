@@ -78,10 +78,8 @@ public class HouseinitService {
 		// 优化请求过程
 		if (pageNum.equals("0")) {
 			// 获取url
-			List<String> imgList = houseImgService.initImg();
+			List<HashMap<String, String>> imgList = houseImgService.initImg();
 			resultMap.put("initImg", imgList);
-			List<String> buttonUrl = houseImgService.initButtonUrl();
-			resultMap.put("initButtonUrl", buttonUrl);
 			LOG.info("initHomePage_获取url成功");
 			// 封装热门房源
 			List<HouseVo> hotHouse = getHotHouse(setHouses, norHouses);
