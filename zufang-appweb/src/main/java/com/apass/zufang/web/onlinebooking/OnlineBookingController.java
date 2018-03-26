@@ -157,9 +157,12 @@ public class OnlineBookingController {
 			        			
 			        		}
 							
+		        			}else{ //验证码错误
+			        	return Response.fail("验证码错误，请重新输入", returnMap);
+			        	}
+	        		}else{
+	        		return Response.fail("验证码已失效，请重新获取");
 	        	}
-		        //验证码错误
-	        	return Response.fail("验证码错误，请重新输入", returnMap);
 			} else {
 				// 已登录操作
 				
@@ -184,9 +187,7 @@ public class OnlineBookingController {
                 	return Response.fail("您已经预约该房源");
                 }
 			}
-			}else{
-				return Response.fail("验证码已失效，请重新获取");
-			}
+			
 		} catch (BusinessException e) {
 			logger.error("mobile verification code send fail", e);
 			return Response.fail("网络异常,请稍后再试");
