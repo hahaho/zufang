@@ -100,10 +100,9 @@ public class OnlineBookingController {
 					return Response.fail("验证码不能为空");
 				}
 				// 未登录操作
-//					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
-//		        	//验证码真确
-//		        	if(mobileCodeValidate){
-				if(code.equals("123456")){
+					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+		        	//验证码真确
+		        	if(mobileCodeValidate){
 		        		//用户是否已经注册  未登录
 		        		GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 			        		if(zfselecetmobile == null){
@@ -157,7 +156,7 @@ public class OnlineBookingController {
 							
 	        	}
 		        //验证码错误
-	        	return Response.fail("验证码输入错误", returnMap);
+	        	return Response.fail("验证码错误，请重新输入", returnMap);
 			} else {
 				// 已登录操作
 				
