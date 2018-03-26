@@ -101,7 +101,7 @@ public class OnlineBookingController {
 				}
 				// 未登录操作
 				boolean code2 = mobileRandomService.getCode(smsType,mobile);
-	        	if(code2){
+	        	if(!code2){
 				
 					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
 		        	//验证码真确

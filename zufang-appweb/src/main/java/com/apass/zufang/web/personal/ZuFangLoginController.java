@@ -82,7 +82,7 @@ public class ZuFangLoginController {
 	        	
 	        	//验证码校验
 	        	boolean code2 = mobileRandomService.getCode(smsType,mobile);
-	        	if(code2){
+	        	if(!code2){
 	        		boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
 	        		if(mobileCodeValidate){
 	        			// 3.检查是否已注册(通过注册手机号检查)
@@ -190,7 +190,7 @@ public class ZuFangLoginController {
 	    
 	        	//验证码校验
 	        	boolean code2 = mobileRandomService.getCode(smsType,mobile);
-	        	if(code2){
+	        	if(!code2){
 	        	
 	        	boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
 	        	if(mobileCodeValidate){
@@ -315,7 +315,7 @@ public class ZuFangLoginController {
 					}
 					try {
 						boolean code2 = mobileRandomService.getCode(smsType,mobile);
-			        	if(code2){
+			        	if(!code2){
 				    	//发短信到手机
 			        		boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
 			        			//验证真确返回客户
