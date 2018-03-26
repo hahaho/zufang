@@ -2,6 +2,7 @@
 package com.apass.zufang.service.house;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -17,6 +18,7 @@ import com.apass.zufang.domain.enums.HomeInitEnum;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Maps;
 @Service
 public class HouseImgService {
 	
@@ -39,18 +41,16 @@ public class HouseImgService {
 	 * 首页初始信息
 	 * @return
 	 */
-	public List<String> initImg() {
-		List<String> initCity = new ArrayList<>();
-		initCity.add(HomeInitEnum.INIT_HOUSEIMG.getMessage());
-		return initCity;
-	}
-	/**
-	 * 首页初始信息_追加
-	 * @return
-	 */
-	public List<String> initButtonUrl() {
-		List<String> initCity = new ArrayList<>();
-		initCity.add(HomeInitEnum.INIT_BUTTONURL.getMessage());
+	public List<HashMap<String, String>> initImg() {
+		
+		HashMap<String, String> resMap = Maps.newHashMap();
+		List<HashMap<String, String>> initCity = new ArrayList<>();
+		
+		// 方便循环遍历
+		resMap.put("img", HomeInitEnum.INIT_HOUSEIMG.getMessage());
+		resMap.put("url", HomeInitEnum.INIT_URL.getMessage());
+		resMap.put("title", HomeInitEnum.INIT_TITLE.getMessage());
+		initCity.add(resMap);
 		return initCity;
 	}
 	/**
