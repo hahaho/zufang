@@ -100,6 +100,9 @@ public class OnlineBookingController {
 					return Response.fail("验证码不能为空");
 				}
 				// 未登录操作
+				boolean code2 = mobileRandomService.getCode(smsType,mobile);
+	        	if(code2){
+				
 					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
 		        	//验证码真确
 		        	if(mobileCodeValidate){
@@ -180,6 +183,9 @@ public class OnlineBookingController {
                 }else{
                 	return Response.fail("您已经预约该房源");
                 }
+			}
+			}else{
+				return Response.fail("验证码已失效，请重新获取");
 			}
 		} catch (BusinessException e) {
 			logger.error("mobile verification code send fail", e);

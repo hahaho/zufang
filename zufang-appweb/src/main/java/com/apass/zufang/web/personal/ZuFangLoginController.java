@@ -81,31 +81,36 @@ public class ZuFangLoginController {
 	        	}
 	        	
 	        	//验证码校验
-	        	boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
-	        	if(mobileCodeValidate){
-	        		// 3.检查是否已注册(通过注册手机号检查)
-					GfbRegisterInfoEntity userInfo = zuFangLoginSevice.zfselecetmobile(mobile);
-					if (userInfo == null) {
-						returnMap.put("operationResult", false);
-						returnMap.put("displayInfo", "该手机号尚未注册");
-						return Response.fail("该手机号尚未注册",returnMap);
-					}
-					//校验新旧密码是否一致
-					String newPassword = SaltEncodeUtils.sha1(password, userInfo.getSalt());
-					if(newPassword.equals(userInfo.getPassword())){
-						returnMap.put("operationResult", false);
-						returnMap.put("displayInfo", "此密码与旧密码一致");
-						return Response.fail("此密码与旧密码一致",returnMap);
-					}
-						userInfo.setPassword(password);
-						// 4. 客户保存重置密码
-						zuFangLoginSevice.zufangsetpassword(userInfo);
-						returnMap.put("operationResult", true);
-						returnMap.put("displayInfo", "用户重置密码成功");
-						returnMap.put("gfbRegisterIn", userInfo);
-						return Response.success("用户重置密码成功", returnMap);
+	        	boolean code2 = mobileRandomService.getCode(smsType,mobile);
+	        	if(code2){
+	        		boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+	        		if(mobileCodeValidate){
+	        			// 3.检查是否已注册(通过注册手机号检查)
+	        			GfbRegisterInfoEntity userInfo = zuFangLoginSevice.zfselecetmobile(mobile);
+	        			if (userInfo == null) {
+	        				returnMap.put("operationResult", false);
+	        				returnMap.put("displayInfo", "该手机号尚未注册");
+	        				return Response.fail("该手机号尚未注册",returnMap);
+	        			}
+	        			//校验新旧密码是否一致
+	        			String newPassword = SaltEncodeUtils.sha1(password, userInfo.getSalt());
+	        			if(newPassword.equals(userInfo.getPassword())){
+	        				returnMap.put("operationResult", false);
+	        				returnMap.put("displayInfo", "此密码与旧密码一致");
+	        				return Response.fail("此密码与旧密码一致",returnMap);
+	        			}
+	        			userInfo.setPassword(password);
+	        			// 4. 客户保存重置密码
+	        			zuFangLoginSevice.zufangsetpassword(userInfo);
+	        			returnMap.put("operationResult", true);
+	        			returnMap.put("displayInfo", "用户重置密码成功");
+	        			returnMap.put("gfbRegisterIn", userInfo);
+	        			return Response.success("用户重置密码成功", returnMap);
+	        		}else{
+	        			return Response.fail("验证码错误，请重新输入");
+	        		}
 	        	}else{
-	        		return Response.fail("验证码错误，请重新输入");
+	        		return Response.fail("验证码已失效，请重新获取");
 	        	}
 	        } catch (Exception e) {
 	        	logger.error("设置密码失败"+e);
@@ -184,6 +189,9 @@ public class ZuFangLoginController {
 	        	}
 	    
 	        	//验证码校验
+	        	boolean code2 = mobileRandomService.getCode(smsType,mobile);
+	        	if(code2){
+	        	
 	        	boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
 	        	if(mobileCodeValidate){
 	        		 GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
@@ -214,6 +222,9 @@ public class ZuFangLoginController {
 	        	}else{
 	        		 return Response.fail("验证码错误，请重新输入");  
 	        	}
+	        }else{
+	        	return Response.fail("验证码已失效，请重新获取");
+	        }
 	        } catch (Exception e) {
 	        	logger.error("验证码登录失败"+e);
 	            return Response.fail("操作失败");  
@@ -303,14 +314,19 @@ public class ZuFangLoginController {
 						return Response.fail("类型不能为空");
 					}
 					try {
+						boolean code2 = mobileRandomService.getCode(smsType,mobile);
+			        	if(code2){
 				    	//发短信到手机
-					    boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
-					    //验证真确返回客户
-					    if(mobileCodeValidate){
-					    	return Response.success("验证码真确");
-   					     }else{
-					  	    	return Response.fail("验证码错误，请重新输入",code);
-					  	  }
+			        		boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+			        			//验证真确返回客户
+						    if(mobileCodeValidate){
+						    	return Response.success("验证码真确");
+						     }else{
+						  	    	return Response.fail("验证码错误，请重新输入",code);
+						  	 }
+			        	}else{
+			        		return Response.fail("验证码已失效，请重新获取");
+			        	}
 						 
 					} catch (Exception e) {
 						logger.error("mobile verification code send fail", e);
