@@ -85,9 +85,9 @@ public class HouseControler {
 	public Response addHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("add house paramMap--->{}",GsonUtils.toJson(paramMap));
+			Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
 			validateParams(paramMap,false);
 			HouseVo vo = getVoByParams(paramMap);
-			Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
 			vo.setApartmentId(apartmentId);
 			houseService.addHouse(vo);
 			return Response.success("添加房屋信息成功!");

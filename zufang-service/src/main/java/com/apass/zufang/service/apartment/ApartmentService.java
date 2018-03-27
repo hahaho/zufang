@@ -136,15 +136,18 @@ public class ApartmentService {
 		if(StringUtils.isBlank(username)){
 			throw new BusinessException("登录人为空，或者登录人未查找到公寓信息！");
 		}
-        UsersDO usersDO = usersRepository.selectByUsername(username);
+        UsersDO usersDO = usersRepository.selectByUsername(username);//此处判断用户是否和公寓发生关联
+        if(StringUtils.isBlank(usersDO.getApartmentCode())){
+        	throw new BusinessException("该用户未关联公寓!");
+        }
         Map<String,String> parmMap = Maps.newHashMap();
         parmMap.put("code",usersDO.getApartmentCode());
-        List<Apartment> apartments = apartmentMapper.listAllValidApartment(parmMap);
+        List<Apartment> apartments = apartmentMapper.listAllValidApartment(parmMap);//此处根据用户表中的公寓code反查，公寓是否存在（可能被删或者其他的数据错误）
         if(CollectionUtils.isEmpty(apartments)){
             throw new BusinessException("该用户未关联公寓!");
         }
-        if(apartments.size()>1){
-            throw new BusinessException("用户关联公寓数据有误数据!");
+        if(apartments.size() > 1){
+            throw new BusinessException("用户关联公寓数据有误!");
         }
         return apartments.get(0).getId();
 	}
