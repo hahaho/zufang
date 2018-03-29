@@ -44,7 +44,7 @@ public class ZufangButtonJoinColler {
     private ApartmentService apartmentService;
 
     @POST
-    @Path("/noauth/token")
+    @Path("/api/token")
     public Response getToken(Map<String, Object> paramMap){
         String token = null;
         Map<String,Object> resultMap = Maps.newHashMap();
