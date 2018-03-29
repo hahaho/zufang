@@ -281,7 +281,7 @@
 		<dependency>
 			<groupId>com.tencent.tinker</groupId>
 			<artifactId>bsdiff-util</artifactId>
-			<version>RELEASE</version>
+			<version>1.9.5</version>
 		</dependency>
 	</dependencies>
 
