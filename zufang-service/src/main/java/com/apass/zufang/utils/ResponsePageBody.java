@@ -29,6 +29,9 @@ public class ResponsePageBody<T> {
      * Records Data List
      */
     private List<T> rows   = Lists.newArrayList();
+    
+    
+    private String apartmentCode;
 
     /**
      * Getter method for property <tt>total</tt>.
@@ -102,4 +105,12 @@ public class ResponsePageBody<T> {
         this.msg = msg;
     }
 
+	public String getApartmentCode() {
+		return apartmentCode;
+	}
+
+	public void setApartmentCode(String apartmentCode) {
+		this.apartmentCode = apartmentCode;
+	}
+    
 }

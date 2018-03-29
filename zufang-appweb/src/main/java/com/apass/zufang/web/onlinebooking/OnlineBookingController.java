@@ -100,10 +100,12 @@ public class OnlineBookingController {
 					return Response.fail("验证码不能为空");
 				}
 				// 未登录操作
-//					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
-//		        	//验证码真确
-//		        	if(mobileCodeValidate){
-				if(code.equals("123456")){
+				boolean code2 = mobileRandomService.getCode(smsType,mobile);
+	        	if(!code2){
+				
+					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+		        	//验证码真确
+		        	if(mobileCodeValidate){
 		        		//用户是否已经注册  未登录
 		        		GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
 			        		if(zfselecetmobile == null){
@@ -155,9 +157,12 @@ public class OnlineBookingController {
 			        			
 			        		}
 							
+		        			}else{ //验证码错误
+			        	return Response.fail("验证码错误，请重新输入", returnMap);
+			        	}
+	        		}else{
+	        		return Response.fail("验证码已失效，请重新获取");
 	        	}
-		        //验证码错误
-	        	return Response.fail("验证码输入错误", returnMap);
 			} else {
 				// 已登录操作
 				
@@ -182,6 +187,7 @@ public class OnlineBookingController {
                 	return Response.fail("您已经预约该房源");
                 }
 			}
+			
 		} catch (BusinessException e) {
 			logger.error("mobile verification code send fail", e);
 			return Response.fail("网络异常,请稍后再试");

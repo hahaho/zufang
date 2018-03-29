@@ -14,6 +14,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.dto.ApartHouseList;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.enums.HomeInitEnum;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -34,24 +35,14 @@ public class ApartHouseService {
     @Value("${zufang.image.uri}")
     private String imageUri;
     
-    private final static String apartInitImg = "http://espapp.apass.cn/static/eshop/other/1520911924231.jpg";
     /**
      * initImg
      * @return
      */
     public List<String> initImg() {
-//    	List<ApartmentVo> initImg = apartmentMapper.getApartmentList();
-//    	PageBean<ApartmentVo> pageBean = new PageBean<>(1, 10, initImg);
-//    	initImg = pageBean.getList();
-//    	List<String> initCity = new ArrayList<>();
-//    	for (ApartmentVo img : initImg) {
-//    		initCity.add(imageUri + "/static" +img.getCompanyLogo());
-//		}
-//    	for (int i = 0; i < initImg.size(); i++) {
-//    	}
     	
     	List<String> initCity = new ArrayList<>();
-    	initCity.add(apartInitImg);
+    	initCity.add(HomeInitEnum.INIT_APARTIMG.getMessage());
     	return initCity;
     }
 

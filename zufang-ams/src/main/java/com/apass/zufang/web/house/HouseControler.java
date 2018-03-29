@@ -29,6 +29,7 @@ import com.apass.zufang.service.apartment.ApartmentService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Maps;
 /**
  * 房源管理-房源信息管理
  * @author pyc
@@ -66,6 +67,7 @@ public class HouseControler {
         	}
         	respBody = houseService.getHouseListExceptDelete(dto);
         	respBody.setMsg("房屋信息列表查询成功!");
+        	respBody.setApartmentCode(apartmentCode);
         	return Response.success("查询房屋信息成功！", respBody);
         } catch (Exception e) {
             logger.error("getHouseList EXCEPTION --- --->{}", e);
@@ -85,9 +87,9 @@ public class HouseControler {
 	public Response addHouse(Map<String, Object> paramMap){
 		try {
 			logger.info("add house paramMap--->{}",GsonUtils.toJson(paramMap));
+			Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
 			validateParams(paramMap,false);
 			HouseVo vo = getVoByParams(paramMap);
-			Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
 			vo.setApartmentId(apartmentId);
 			houseService.addHouse(vo);
 			return Response.success("添加房屋信息成功!");

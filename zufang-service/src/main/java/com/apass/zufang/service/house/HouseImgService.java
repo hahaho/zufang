@@ -2,6 +2,7 @@
 package com.apass.zufang.service.house;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -13,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.entity.HouseImg;
+import com.apass.zufang.domain.enums.HomeInitEnum;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Maps;
 @Service
 public class HouseImgService {
 	
@@ -24,7 +27,6 @@ public class HouseImgService {
 	
 	@Value("${zufang.image.uri}")
 	private String imageUri;
-	private final static String homeInitImg = "http://espapp.apass.cn/static/eshop/other/1520907719383.jpg";
 	/**
 	 * 根据房屋Id，批量删除图片信息
 	 * deleteImgByHouseId
@@ -39,17 +41,16 @@ public class HouseImgService {
 	 * 首页初始信息
 	 * @return
 	 */
-	public List<String> initImg() {
-//		List<HouseImg> initImg = houseImgMapper.initImg();
-//		PageBean<HouseImg> pageBean = new PageBean<>(1, 10, initImg);
-//		initImg = pageBean.getList();
-//		List<String> initCity = new ArrayList<>();
-//		for (HouseImg string : initImg) {
-//			initCity.add(imageUri + "/static" +string.getUrl());
-//		}
+	public List<HashMap<String, String>> initImg() {
 		
-		List<String> initCity = new ArrayList<>();
-		initCity.add(homeInitImg);
+		HashMap<String, String> resMap = Maps.newHashMap();
+		List<HashMap<String, String>> initCity = new ArrayList<>();
+		
+		// 方便循环遍历
+		resMap.put("img", HomeInitEnum.INIT_HOUSEIMG.getMessage());
+		resMap.put("url", HomeInitEnum.INIT_URL.getMessage());
+		resMap.put("title", HomeInitEnum.INIT_TITLE.getMessage());
+		initCity.add(resMap);
 		return initCity;
 	}
 	/**

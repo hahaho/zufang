@@ -78,7 +78,7 @@ public class HouseinitService {
 		// 优化请求过程
 		if (pageNum.equals("0")) {
 			// 获取url
-			List<String> imgList = houseImgService.initImg();;
+			List<HashMap<String, String>> imgList = houseImgService.initImg();
 			resultMap.put("initImg", imgList);
 			LOG.info("initHomePage_获取url成功");
 			// 封装热门房源
@@ -215,7 +215,6 @@ public class HouseinitService {
 	}
 
 	// 按照上架时间排序
-	@SuppressWarnings("unchecked")
 	private List<HouseVo> addTimeHouse(List<HouseVo> setHouse, List<HouseVo> norHouses, List<HouseVo> timeHouse, HashMap<String, Integer> finMap) {
 		
 		try {
@@ -230,7 +229,7 @@ public class HouseinitService {
 					addSetList = norHouses.subList(0, 5 - currSize);
 				} else {
 					if (ValidateUtils.listIsTrue(norHouses)) {
-						addSetList = new PageBean(1, 5 - currSize, norHouses).getList();
+						addSetList = new PageBean<HouseVo>(1, 5 - currSize, norHouses).getList();
 					}
 				}
 				// @2:正常房源+配置房源<5
