@@ -120,6 +120,7 @@ public class SpringSecurityBasicConfiguration {
                       .regexMatchers("/logout|/listeningboot/.*|/noauth/.*").permitAll()
                       .antMatchers("/data/ws/rest/application/**").permitAll()
                       .antMatchers("/data/ws/rest/noauth/**").permitAll()
+                      .antMatchers("/data/ws/rest/api/**").permitAll()
                       .antMatchers("/data/ws/rest/producer/**").permitAll()
                       .antMatchers("/data/ws/rest/consumer/**").permitAll()
                       .anyRequest().authenticated()
