@@ -20,22 +20,18 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * 
- * @description token拦截器
- *
- * @author lixining
- * @version $Id: AdminTokenHandler.java, v 0.1 2016年4月7日 上午10:13:16 lixining Exp
- *          $
+ * 提供第三方接口调用拦截
  */
+
 @Aspect
 @Component
 @Order(value=Ordered.HIGHEST_PRECEDENCE + 100)
-public class AdminTokenHandler {
+public class APITokenHandler {
 	/**
 	 * 日志
 	 */
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminTokenHandler.class);
+			.getLogger(APITokenHandler.class);
 
 	@Autowired
 	private JsonTokenHelper jsonTokenHelper;
@@ -49,7 +45,6 @@ public class AdminTokenHandler {
 	 * @return Object
 	 * @throws Throwable
 	 */
-	@SuppressWarnings("all")
     @Around("execution(* com.apass.zufang.common.ZufangButtonJoinColler.createHouse(..))")
 	private Object handleTokenInteceptor(ProceedingJoinPoint point)
 			throws Throwable {
@@ -61,7 +56,7 @@ public class AdminTokenHandler {
 		boolean isJsonToken = false;
 		if (arr == null || arr.length == 0) {
 			Map<String, Object> resultMap = Maps.newHashMap();
-			resultMap.put("msg", "请先登录.");
+			resultMap.put("msg", "无效的token");
 			resultMap.put("status", EXPIRE_CODE);
 			return GsonUtils.convertObj(resultMap, returnType);
 		}
@@ -85,15 +80,15 @@ public class AdminTokenHandler {
 					isJsonToken = true;
 				} else {
 					Map<String, Object> resultMap = Maps.newHashMap();
-					resultMap.put("msg", "长时间未登录,请重新登录。");
+					resultMap.put("msg", "无效的token");
 					resultMap.put("status", EXPIRE_CODE);
 					return GsonUtils.convertObj(resultMap, returnType);
 				}
-				
+				paraMap.put("userId",tokenInfo.getUserId());
 			} catch (Exception e) {
 				LOGGER.error("token验证异常-------->", e);
 				Map<String, Object> resultMap = Maps.newHashMap();
-				resultMap.put("msg", "长时间未登录,请重新登录。");
+				resultMap.put("msg", "无效的token");
 				resultMap.put("status", EXPIRE_CODE);
 				return GsonUtils.convertObj(resultMap, returnType);
 			}
@@ -102,7 +97,7 @@ public class AdminTokenHandler {
 		if (!isJsonToken) {
 			// 无效jsontoken
 			Map<String, Object> resultMap = Maps.newHashMap();
-			resultMap.put("msg", "登录失效,请重新登录。");
+			resultMap.put("msg", "无效的token");
 			resultMap.put("status", EXPIRE_CODE);
 			return GsonUtils.convertObj(resultMap, returnType);
 		}

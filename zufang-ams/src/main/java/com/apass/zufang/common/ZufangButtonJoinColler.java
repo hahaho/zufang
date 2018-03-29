@@ -60,7 +60,7 @@ public class ZufangButtonJoinColler {
                 throw new RuntimeException("用户信息不存在，请联系管理员添加用户");
             }
             //2,生成token返回
-            token = tokenManager.createToken(username,password, ConstantsUtil.TOKEN_EXPIRES_HOUSE);
+            token = tokenManager.createToken(usersDO.getId().toString(),"", ConstantsUtil.TOKEN_EXPIRES_HOUSE);
             resultMap.put("access_token",token);
             resultMap.put("code", TokenCodeEnums.TOKEN_SUCCESS.getCode());
         }catch (Exception e){
@@ -77,7 +77,7 @@ public class ZufangButtonJoinColler {
         try{
             //房源信息
             HouseVo houseVo = new HouseControler().getVoByParams(paramMap);
-            Long apartmentId = apartmentService.getApartmentByCurrentUser(SpringSecurityUtils.getCurrentUser());
+            Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             houseVo.setApartmentId(apartmentId);
             houseService.addHouse(houseVo);
 

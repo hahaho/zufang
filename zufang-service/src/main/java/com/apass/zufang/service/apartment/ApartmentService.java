@@ -151,7 +151,25 @@ public class ApartmentService {
         }
         return apartments.get(0).getId();
 	}
-	
+
+	public Long getApartmentByUserId(String id) throws BusinessException {
+
+		UsersDO usersDO = usersRepository.select(id);//此处判断用户是否和公寓发生关联
+		if(StringUtils.isBlank(usersDO.getApartmentCode())){
+			throw new BusinessException("该用户未关联公寓!");
+		}
+		Map<String,String> parmMap = Maps.newHashMap();
+		parmMap.put("code",usersDO.getApartmentCode());
+		List<Apartment> apartments = apartmentMapper.listAllValidApartment(parmMap);//此处根据用户表中的公寓code反查，公寓是否存在（可能被删或者其他的数据错误）
+		if(CollectionUtils.isEmpty(apartments)){
+			throw new BusinessException("该用户未关联公寓!");
+		}
+		if(apartments.size() > 1){
+			throw new BusinessException("用户关联公寓数据有误!");
+		}
+		return apartments.get(0).getId();
+	}
+
 	/**
 	 * 根据当前登录的用户名，查询对应的公寓Code
 	 * @param username

@@ -117,7 +117,7 @@ public class JsonTokenHelper {
             String userIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("userId").getAsString();
             String mobileString = payload.getAsJsonObject("info").getAsJsonPrimitive("mobile").getAsString();
             TokenInfo resultToken = null;
-            if (!issuer.equals(issuerResult) || StringUtils.isBlank(userIdString) || StringUtils.isBlank(mobileString)) {
+            if (!issuer.equals(issuerResult) || StringUtils.isBlank(userIdString)) {
                 return null;
             }
             resultToken = new TokenInfo();
