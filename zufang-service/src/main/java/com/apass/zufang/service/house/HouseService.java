@@ -131,7 +131,7 @@ public class HouseService {
 	
 	/*** 添加房屋信息* @throws BusinessException*/
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public void addHouse(HouseVo houseVo) throws BusinessException{
+	public String addHouse(HouseVo houseVo) throws BusinessException{
 		
 		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
 		if(null == part || StringUtils.isBlank(part.getCode())){
@@ -142,7 +142,7 @@ public class HouseService {
 		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		
 		/*** 添加房屋信息入库*/
-		houseMapper.insertSelective(house);
+		int houseId = houseMapper.insertSelective(house);
 		houseVo.setHouseId(house.getId());
 		
 		/*** 添加位置入库*/
@@ -151,6 +151,8 @@ public class HouseService {
 		imgService.insertImg(houseVo);
 		/*** 添加配置入库*/
 		peizhiService.insertPeiZhi(houseVo);
+
+		return house.getCode();
 	}
 	
 	/**
