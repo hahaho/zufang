@@ -132,7 +132,7 @@ public class ZufangButtonJoinColler {
      * @return
      */
     @POST
-    @Path("/house/upHouse")
+    @Path("/house/upHouse") 
     public Response upHouse(Map<String, Object> map){
         try{
         	LOGGER.info("upHouse house map--->{}",GsonUtils.toJson(map));
