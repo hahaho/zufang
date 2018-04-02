@@ -6,6 +6,7 @@ import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.constants.ConstantsUtil;
+import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.rbac.UsersDO;
 import com.apass.zufang.domain.enums.TokenCodeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
@@ -15,7 +16,6 @@ import com.apass.zufang.service.rbac.UsersService;
 import com.apass.zufang.utils.ValidateUtils;
 import com.apass.zufang.web.house.HouseControler;
 import com.google.common.collect.Maps;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,18 +84,20 @@ public class ZufangButtonJoinColler {
     @POST
     @Path("/house/create")
     public Response createHouse(Map<String, Object> paramMap){
+        Map<String,Object> returnMap = Maps.newHashMap();
         try{
             //房源信息
             HouseVo houseVo = new HouseControler().getVoByParams(paramMap);
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             houseVo.setApartmentId(apartmentId);
-            houseService.addHouse(houseVo);
+            String houseCode = houseService.addHouse(houseVo);
+            returnMap.put("houseCode",houseCode);
 
         }catch (Exception e){
             LOGGER.error("添加房源信息失败!",e);
             return Response.fail("添加房源信息失败");
         }
-        return Response.success("添加房源信息成功");
+        return Response.success("添加房源信息成功",returnMap);
     }
     /**
      * downHouse  下架
