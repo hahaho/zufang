@@ -7,12 +7,12 @@
 		
 	<![CDATA[ 
 		SELECT t1.id apartmentId, 
-			t1.company_name companyName,
 	        t1.province province,
 	        t1.city city,
 			t1.area area,
 			t1.company_logo companyLogo,
 		    t2.id houseId,
+			t1.name companyName,
 			t2.title title,
 			t2.community_name communityName,
 			t2.acreage acreage,

@@ -89,12 +89,18 @@ public class ApartmentController {
 				cityCode = provinceCode;//去掉后缀zxs
 				areaCode = areaCode.substring(0, areaCode.length()-1);//去掉后缀T
 			}
-			provinceCode = provinceCode.length()==1?"0"+provinceCode:provinceCode;
-			provinceCode = provinceCode.length()>2?provinceCode.substring(provinceCode.length()-2, provinceCode.length()):provinceCode;
-			cityCode = cityCode.length()==1?"0"+cityCode:cityCode;
-			cityCode = cityCode.length()>2?cityCode.substring(cityCode.length()-2, cityCode.length()):cityCode;
-			areaCode = areaCode.length()==1?"0"+areaCode:areaCode;
-			areaCode = areaCode.length()>2?areaCode.substring(areaCode.length()-2, areaCode.length()):areaCode;
+			provinceCode = String.format("%02d",Integer.parseInt(provinceCode));
+			provinceCode = provinceCode.substring(provinceCode.length()-2, provinceCode.length());
+//			provinceCode = provinceCode.length()==1?"0"+provinceCode:provinceCode;
+//			provinceCode = provinceCode.length()>2?provinceCode.substring(provinceCode.length()-2, provinceCode.length()):provinceCode;
+			cityCode = String.format("%02d",Integer.parseInt(cityCode));
+			cityCode = cityCode.substring(cityCode.length()-2, cityCode.length());
+//			cityCode = cityCode.length()==1?"0"+cityCode:cityCode;
+//			cityCode = cityCode.length()>2?cityCode.substring(cityCode.length()-2, cityCode.length()):cityCode;
+			areaCode = String.format("%02d",Integer.parseInt(areaCode));
+			areaCode = areaCode.substring(areaCode.length()-2, areaCode.length());
+//			areaCode = areaCode.length()==1?"0"+areaCode:areaCode;
+//			areaCode = areaCode.length()>2?areaCode.substring(areaCode.length()-2, areaCode.length()):areaCode;
 			String code = provinceCode+cityCode+areaCode;
 			Apartment entity = (Apartment) FarmartJavaBean.map2entity(new Apartment(), Apartment.class, map);
 			String username = SpringSecurityUtils.getCurrentUser();
