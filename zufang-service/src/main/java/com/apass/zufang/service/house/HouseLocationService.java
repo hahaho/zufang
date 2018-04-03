@@ -94,4 +94,8 @@ public class HouseLocationService {
 		}
 		
 	}
+
+	public HouseLocation getLocationByHouseId(Long houseId) {
+		return locationMapper.getLocationByHouseId(houseId);
+	}
 }

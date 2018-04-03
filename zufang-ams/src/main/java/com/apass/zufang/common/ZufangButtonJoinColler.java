@@ -4,8 +4,10 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.apartment.ApartmentService;
+import com.apass.zufang.service.house.HouseLocationService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ValidateUtils;
 import com.apass.zufang.web.house.HouseControler;
@@ -35,6 +37,8 @@ public class ZufangButtonJoinColler {
     private HouseService houseService;
     @Autowired
     private ApartmentService apartmentService;
+    @Autowired
+    private HouseLocationService locationService;
     /**
      * createHouse 新增房源
      * @param paramMap
@@ -64,11 +68,17 @@ public class ZufangButtonJoinColler {
     public Response updateHouse(Map<String, Object> paramMap){
         //房源信息
         try{
-            LOGGER.info("edit house paramMap--->{}", GsonUtils.toJson(paramMap));
+            LOGGER.info("update house paramMap--->{}", GsonUtils.toJson(paramMap));
+            Long houseId = CommonUtils.getLong(paramMap,"houseId");
+            HouseLocation location = locationService.getLocationByHouseId(houseId);
+            paramMap.put("locationId",location.getId());
+
             new HouseControler().validateParams(paramMap,true);
             HouseVo vo = new HouseControler().getVoByParams(paramMap);
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             vo.setApartmentId(apartmentId);
+            vo.setLocationId(String.valueOf(location.getId()));
+
             houseService.editHouse(vo);
 
         }catch (Exception e){
