@@ -41,7 +41,7 @@ public class HouseLocationService {
 	}
 	
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public void insertOrUpdateLocation(HouseVo houseVo) throws BusinessException{
+	public Long insertOrUpdateLocation(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo){
 			throw new BusinessException("地址参数不能为空!");
 		}
@@ -53,8 +53,12 @@ public class HouseLocationService {
 		getAddressLngLat(houseVo, location);
 		if(null == location.getId()){
 			locationMapper.insertSelective(location);
+
+			return location.getId();
 		}else{
 			locationMapper.updateByPrimaryKeySelective(location);
+
+			return location.getId();
 		}
 	}
 	

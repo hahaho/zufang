@@ -4,6 +4,7 @@ package com.apass.zufang.common;
 import com.apass.gfb.framework.jwt.TokenManager;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.House;
@@ -77,18 +78,41 @@ public class ZufangButtonJoinColler {
     public Response createHouse(Map<String, Object> paramMap){
         Map<String,Object> returnMap = Maps.newHashMap();
         try{
+            LOGGER.info("create house paramMap--->{}",GsonUtils.toJson(paramMap));
+            new HouseControler().validateParams(paramMap,false);
             //房源信息
             HouseVo houseVo = new HouseControler().getVoByParams(paramMap);
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             houseVo.setApartmentId(apartmentId);
-            String houseCode = houseService.addHouse(houseVo);
-            returnMap.put("houseCode",houseCode);
+            returnMap = houseService.addHouse(houseVo);
 
         }catch (Exception e){
-            LOGGER.error("添加房源信息失败!",e);
+            LOGGER.error("添加房源信息失败:"+e.getMessage()+"Exception---->{}",e);
             return Response.fail("添加房源信息失败");
         }
 
         return Response.success("添加房源信息成功",returnMap);
     }
+
+    @POST
+    @Path("/api/house/update")
+    public Response updateHouse(Map<String, Object> paramMap){
+        //房源信息
+        try{
+            LOGGER.info("edit house paramMap--->{}", GsonUtils.toJson(paramMap));
+            new HouseControler().validateParams(paramMap,true);
+            HouseVo vo = new HouseControler().getVoByParams(paramMap);
+            Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
+            vo.setApartmentId(apartmentId);
+            houseService.editHouse(vo);
+
+        }catch (Exception e){
+            LOGGER.error("更新房源信息失败!",e);
+            return Response.fail("更新房源信息失败");
+        }
+
+        return Response.success("更新房源信息成功");
+    }
+
+
 }
