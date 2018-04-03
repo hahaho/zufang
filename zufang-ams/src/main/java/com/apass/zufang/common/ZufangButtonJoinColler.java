@@ -1,4 +1,5 @@
 package com.apass.zufang.common;
+
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -43,18 +45,41 @@ public class ZufangButtonJoinColler {
     public Response createHouse(Map<String, Object> paramMap){
         Map<String,Object> returnMap = Maps.newHashMap();
         try{
+            LOGGER.info("create house paramMap--->{}",GsonUtils.toJson(paramMap));
+            new HouseControler().validateParams(paramMap,false);
             //房源信息
             HouseVo houseVo = new HouseControler().getVoByParams(paramMap);
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             houseVo.setApartmentId(apartmentId);
-            String houseCode = houseService.addHouse(houseVo);
-            returnMap.put("houseCode",houseCode);
+            returnMap = houseService.addHouse(houseVo);
         }catch (Exception e){
-            LOGGER.error("添加房源信息失败!",e);
+            LOGGER.error("添加房源信息失败:"+e.getMessage()+"Exception---->{}",e);
             return Response.fail("添加房源信息失败");
         }
         return Response.success("添加房源信息成功",returnMap);
     }
+
+    @POST
+    @Path("/update")
+    public Response updateHouse(Map<String, Object> paramMap){
+        //房源信息
+        try{
+            LOGGER.info("edit house paramMap--->{}", GsonUtils.toJson(paramMap));
+            new HouseControler().validateParams(paramMap,true);
+            HouseVo vo = new HouseControler().getVoByParams(paramMap);
+            Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
+            vo.setApartmentId(apartmentId);
+            houseService.editHouse(vo);
+
+        }catch (Exception e){
+            LOGGER.error("更新房源信息失败!",e);
+            return Response.fail("更新房源信息失败");
+        }
+
+        return Response.success("更新房源信息成功");
+    }
+
+
     /**
      * downHouse  下架
      * @param map

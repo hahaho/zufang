@@ -23,7 +23,7 @@ import com.google.common.collect.Maps;
  * @author Administrator
  *
  */
-@Path("/api/TokenController")
+@Path("")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class TokenController {
@@ -38,7 +38,7 @@ public class TokenController {
      * @return
      */
     @POST
-    @Path("/token")
+    @Path("/api/token")
     public Response getToken(Map<String, Object> paramMap){
         String token = null;
         Map<String,Object> resultMap = Maps.newHashMap();
