@@ -1,5 +1,4 @@
 package com.apass.zufang.inteceptor;
-
 import com.apass.gfb.framework.jwt.core.JsonTokenHelper;
 import com.apass.gfb.framework.jwt.domains.TokenInfo;
 import com.apass.gfb.framework.utils.GsonUtils;
@@ -16,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
-
 /**
  * 提供第三方接口调用拦截
  */
@@ -27,25 +24,18 @@ import java.util.Map;
 @Component
 @Order(value=Ordered.HIGHEST_PRECEDENCE + 100)
 public class APITokenHandler {
-	/**
-	 * 日志
-	 */
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(APITokenHandler.class);
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(APITokenHandler.class);
 	@Autowired
 	private JsonTokenHelper jsonTokenHelper;
 	//token失效
 	private static final String EXPIRE_CODE = "-1";
-
 	/**
 	 * 拦截方法 - token校验
-	 *
 	 * @param point
 	 * @return Object
 	 * @throws Throwable
 	 */
-    @Around("execution(* com.apass.zufang.common.ZufangButtonJoinColler.createHouse(..))")
+    @Around("execution(* com.apass.zufang.common.ZufangButtonJoinColler.*(..))")
 	private Object handleTokenInteceptor(ProceedingJoinPoint point)
 			throws Throwable {
 		// //取得class类名的方式
@@ -59,13 +49,13 @@ public class APITokenHandler {
 			resultMap.put("status", EXPIRE_CODE);
 			return GsonUtils.convertObj(resultMap, returnType);
 		}
-
 		Object[] newPara = new Object[arr.length];
 		for (int i = 0; i < arr.length; i++) {
 			if (!(arr[i] instanceof Map)) {
 				newPara[i] = arr[i];
 				continue;
 			}
+			@SuppressWarnings("unchecked")
 			Map<String, Object> paraMap = (Map<String, Object>) arr[i];
 			// 参数token
 			String token = (String) paraMap.get("token");
@@ -92,7 +82,6 @@ public class APITokenHandler {
 				return GsonUtils.convertObj(resultMap, returnType);
 			}
 		}
-		
 		if (!isJsonToken) {
 			// 无效jsontoken
 			Map<String, Object> resultMap = Maps.newHashMap();
@@ -100,9 +89,6 @@ public class APITokenHandler {
 			resultMap.put("status", EXPIRE_CODE);
 			return GsonUtils.convertObj(resultMap, returnType);
 		}
-
 		return point.proceed(point.getArgs());
-
 	}
-
 }
