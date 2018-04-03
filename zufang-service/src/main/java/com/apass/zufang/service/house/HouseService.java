@@ -155,7 +155,6 @@ public class HouseService {
 
 		returnMap.put("houseId",house.getId());
 		returnMap.put("houseCode",house.getCode());
-		returnMap.put("locationId",locationId);
 		return returnMap;
 	}
 	
