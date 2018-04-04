@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.common.CoordinateAddress;
 import com.apass.zufang.domain.common.GaodeLocation;
+import com.apass.zufang.domain.common.Geocodes;
 import com.apass.zufang.domain.common.WorkSubwayContent;
 
 import net.sf.json.JSONArray;
@@ -162,6 +163,24 @@ public class ObtainGaodeLocation {
 			return result;
 		}
 		result = resultDto.getGeocodes().get(0).getLocation().split(",");
+
+		return result;
+	}
+	
+	/**
+	 * 根据具体信息
+	 * 
+	 * @param address
+	 * @return
+	 */
+	public Geocodes getLocationAddress(String address) {
+
+		Geocodes result = null;
+		GaodeLocation resultDto = addressToGPS(address);
+		if (resultDto.getStatus().equals("0")) {
+			return result;
+		}
+		result = resultDto.getGeocodes().get(0);
 
 		return result;
 	}
