@@ -214,7 +214,7 @@ public class ValidateUtils {
 	 */
 	public static void checkNonNumberRange(String value,long min,long max,String message) throws BusinessException{
 		isNonNumber(value);
-		long val = Long.parseLong(value);
+		double val = Double.parseDouble(value);
 		if(max == 0){
 			max = Long.MAX_VALUE;
 		}

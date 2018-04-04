@@ -131,8 +131,9 @@ public class HouseService {
 	
 	/*** 添加房屋信息* @throws BusinessException*/
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public String addHouse(HouseVo houseVo) throws BusinessException{
-		
+	public Map<String,Object> addHouse(HouseVo houseVo) throws BusinessException{
+		Map<String,Object> returnMap = Maps.newHashMap();
+
 		Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
 		if(null == part || StringUtils.isBlank(part.getCode())){
 			throw new BusinessException("房屋所属公寓的编号不存在!");
@@ -142,17 +143,19 @@ public class HouseService {
 		house.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
 		
 		/*** 添加房屋信息入库*/
-		int houseId = houseMapper.insertSelective(house);
+		houseMapper.insertSelective(house);
 		houseVo.setHouseId(house.getId());
-		
+
 		/*** 添加位置入库*/
-		locationService.insertOrUpdateLocation(houseVo);
+		Long locationId = locationService.insertOrUpdateLocation(houseVo);
 		/*** 添加图片入库*/
 		imgService.insertImg(houseVo);
 		/*** 添加配置入库*/
 		peizhiService.insertPeiZhi(houseVo);
 
-		return house.getCode();
+		returnMap.put("houseId",house.getId());
+		returnMap.put("houseCode",house.getCode());
+		return returnMap;
 	}
 	
 	/**
