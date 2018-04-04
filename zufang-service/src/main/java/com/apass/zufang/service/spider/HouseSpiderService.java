@@ -1,5 +1,9 @@
 package com.apass.zufang.service.spider;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
@@ -24,8 +28,14 @@ public class HouseSpiderService {
      */
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
-            houseUrl = "http://www.mogoroom.com/room/605086.shtml?page=list";
-            Document doc = Jsoup.connect(houseUrl).get();
+            houseUrl = "http://www.mogoroom.com/room/605086.shtml";
+            final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            webClient.getOptions().setCssEnabled(false);//关闭css
+            webClient.getOptions().setJavaScriptEnabled(true);
+            final HtmlPage page = webClient.getPage(houseUrl);
+            Thread.sleep(10000);
+            System.out.println(page.asXml());
+            Document doc = Jsoup.parse(page.asXml());
             System.out.println(doc.text());
             Elements titleElements = doc.select("span.room-info-tit");
             String title = titleElements.get(0).text(); //标题
@@ -49,7 +59,7 @@ public class HouseSpiderService {
             //图片url
             Elements scriptEles = doc.getElementsByTag("script");
             List<String> imgUrls = new ArrayList<>();
-          outer:  for(Element ele : scriptEles) {
+            outer:  for(Element ele : scriptEles) {
                 List<DataNode> children = ele.dataNodes();
                 for(DataNode cld : children){
                    Document scriptDoc = Jsoup.parse(children.get(0).getWholeData());
@@ -65,6 +75,32 @@ public class HouseSpiderService {
                    }
                 }
         }
+
+           //房源配置信息
+            List<String> roomConfigStrList = new ArrayList<>();
+            Element roomConfigEle = doc.getElementById("roomConfig");
+            Elements roomConfigs = roomConfigEle.select("li");
+            for(Element con : roomConfigs) {
+                if(con.hasClass("f12") && !con.hasClass("darkgray")){
+                    roomConfigStrList.add(con.text());
+                }
+            }
+
+            //朝向
+            Element roomMatesEle = doc.getElementById("roomMates");
+            Elements curEles = roomMatesEle.select("li.cur-rm");
+            String chaoxiang = curEles.select("li").get(3).text();
+
+
+            Elements addrEle = doc.select("span.roomInfo-mark");
+            String address = addrEle.get(0).text(); //翰盛家园（上海市浦东新区创新西路195号）
+
+            //小区名称
+            int index = StringUtils.indexOf(address,"（");
+            String communityName = null;
+            if(index != -1){
+                communityName = StringUtils.substring(address,0,index);
+            }
 
 
 
