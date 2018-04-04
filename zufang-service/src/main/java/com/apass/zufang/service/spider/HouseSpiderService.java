@@ -1,5 +1,4 @@
 package com.apass.zufang.service.spider;
-
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -12,17 +11,16 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  * Created by DELL on 2018/4/2.
  */
 @Service
 public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
-
     /**
      * 【蘑菇租房】解析房源详情页
      */
@@ -55,27 +53,36 @@ public class HouseSpiderService {
             String acreageStr = acreageEle.text();//面积： 28.0㎡/130.0㎡
             Element floorEle = ulEle.get(5);;
             String floorStr = floorEle.text();//楼层：1/6层
-
+            
+            List<String> huxinglist = getMatcheNum(huxingStr);
+            String room = huxinglist.get(0);
+            String hall = huxinglist.get(1);
+            String wei = huxinglist.get(2);
+            List<String> acreagelist = getMatcheNum(acreageStr);
+            String roomAcreage = acreagelist.get(0);
+            String acreage = acreagelist.get(1);
+            List<String> floorlist = getMatcheNum(floorStr);
+            String floor = floorlist.get(0);
+            String totalFloor = floorlist.get(1);
+            
             //图片url
             Elements scriptEles = doc.getElementsByTag("script");
             List<String> imgUrls = new ArrayList<>();
             outer:  for(Element ele : scriptEles) {
                 List<DataNode> children = ele.dataNodes();
                 for(DataNode cld : children){
-                   Document scriptDoc = Jsoup.parse(children.get(0).getWholeData());
-                   if(scriptDoc.select("div.ms-stage").size()>0){
-                     Elements imgEles =  scriptDoc.select("img");
-                     for (Element imgEle : imgEles){
-                         if(imgEle.hasClass("swiper-mobile-img")){
-                             imgUrls.add(imgEle.attr("data-src"));
-                         }
-                     }
-                     break outer;
-
-                   }
+                	Document scriptDoc = Jsoup.parse(children.get(0).getWholeData());
+                	if(scriptDoc.select("div.ms-stage").size()>0){
+                		Elements imgEles =  scriptDoc.select("img");
+                		for (Element imgEle : imgEles){
+                			if(imgEle.hasClass("swiper-mobile-img")){
+                				imgUrls.add(imgEle.attr("data-src"));
+                			}
+                		}
+                		break outer;
+                	}
                 }
-        }
-
+            }
            //房源配置信息
             List<String> roomConfigStrList = new ArrayList<>();
             Element roomConfigEle = doc.getElementById("roomConfig");
@@ -85,12 +92,10 @@ public class HouseSpiderService {
                     roomConfigStrList.add(con.text());
                 }
             }
-
             //朝向
             Element roomMatesEle = doc.getElementById("roomMates");
             Elements curEles = roomMatesEle.select("li.cur-rm");
             String chaoxiang = curEles.select("li").get(3).text();
-
 
             Elements addrEle = doc.select("span.roomInfo-mark");
             String address = addrEle.get(0).text(); //翰盛家园（上海市浦东新区创新西路195号）
@@ -102,16 +107,36 @@ public class HouseSpiderService {
                 communityName = StringUtils.substring(address,0,index);
             }
 
-
-
         }catch (Exception e){
             log.error("parseMogoroomHouseDetail error.......",e);
         }
-
     }
-
+    /**
+     * 截取数字
+     * @param target
+     * @return
+     */
+    private List<String> getMatcheNum(String target){
+    	List<String> result = new ArrayList<String>();
+    	Pattern p = Pattern.compile("([1-9]+[0-9]*|0)(\\.[\\d]+)?");
+    	Matcher m = p.matcher(target);
+    	while (m.find()) {
+    		result.add(m.group());
+    	}
+    	return result;
+    }
     public static void main(String[] args) {
         HouseSpiderService s = new HouseSpiderService();
         s.parseMogoroomHouseDetail("");
+    	
+    	
+//    	String target = "楼层：1/6层";
+//    	List<String> result = new ArrayList<String>();
+//    	Pattern p = Pattern.compile("([1-9]+[0-9]*|0)(\\.[\\d]+)?");
+//    	Matcher m = p.matcher(target);
+//    	while (m.find()) {
+//    		result.add(m.group());
+//    	}
+//    	System.out.println(result);
     }
 }
