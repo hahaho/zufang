@@ -8,6 +8,7 @@ import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +69,7 @@ public class HouseSpiderService {
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setCssEnabled(false);//关闭css
             webClient.getOptions().setJavaScriptEnabled(true);
+
             final HtmlPage page = webClient.getPage(houseUrl);
             Thread.sleep(10000);
             System.out.println(page.asXml());
@@ -107,8 +109,14 @@ public class HouseSpiderService {
             String hall = huxinglist.get(1);
             String wei = huxinglist.get(2);
             List<String> acreagelist = getMatcheNum(acreageStr);
-            String roomAcreage = acreagelist.get(0);
-            String acreage = acreagelist.get(1);
+            String roomAcreage = null;
+            String acreage = null;
+            if(acreagelist.size()  ==  1){
+                 acreage = acreagelist.get(0);
+            }else {
+                roomAcreage = acreagelist.get(0);
+                acreage = acreagelist.get(1);
+            }
             List<String> floorlist = getMatcheNum(floorStr);
             String floor = floorlist.get(0);
             String totalFloor = floorlist.get(1);
@@ -142,8 +150,12 @@ public class HouseSpiderService {
             }
             //朝向
             Element roomMatesEle = doc.getElementById("roomMates");
-            Elements curEles = roomMatesEle.select("li.cur-rm");
-            String chaoxiang = curEles.select("li").get(3).text();
+            String chaoxiang= "";
+            if(roomMatesEle != null){
+                Elements curEles = roomMatesEle.select("li.cur-rm");
+                 chaoxiang = curEles.select("li").get(3).text();
+
+            }
 
             Elements addrEle = doc.select("span.roomInfo-mark");
             String address = addrEle.get(0).text(); //翰盛家园（上海市浦东新区创新西路195号）
@@ -154,7 +166,8 @@ public class HouseSpiderService {
             if(index != -1){
                 communityName = StringUtils.substring(address,0,index);
             }
-
+            String[] titleArray = title.split("-");
+            address = titleArray[0] + address;
             Geocodes geocodes = otainGaodeLocation.getLocationAddress(address);
             String[] locationArray = StringUtils.split(geocodes.getLocation(),",");
             String lon = locationArray[0];//经度
@@ -163,7 +176,9 @@ public class HouseSpiderService {
             //数据库插入房源信息
             HouseVo houseVo = new HouseVo();
             houseVo.setApartmentId(100L);
-            houseVo.setAcreage(new BigDecimal(acreage));
+            if(acreage != null ){
+                houseVo.setAcreage(new BigDecimal(acreage));
+            }
             houseVo.setChaoxiang(Byte.valueOf(BusinessHouseTypeEnums.getCXCode(chaoxiang)));
             houseVo.setCommunityName(communityName);
             houseVo.setHall(Integer.valueOf(hall));
@@ -186,12 +201,15 @@ public class HouseSpiderService {
             houseVo.setDetailAddr(address);
             houseVo.setDistrict(geocodes.getDistrict());
             houseVo.setTitle(title);
-            houseVo.setRoomAcreage(new BigDecimal(roomAcreage));
+            if(roomAcreage != null){
+                houseVo.setRoomAcreage(new BigDecimal(roomAcreage));
+            }
             houseVo.setRentAmt(new BigDecimal(rentAmt));
             houseVo.setLatitude(Double.valueOf(lat));
             houseVo.setLongitude(Double.valueOf(lon));
             houseVo.setCreatedUser("spiderAdmin");
             houseVo.setUpdatedUser("spiderAdmin");
+            houseVo.setHouseStatus("1");
             Map<String,Object> result =  houseService.addHouse(houseVo);
             log.info("-------end visit mogo room,houseId: {}--------",result.get("houseId"));
         }catch (Exception e){
