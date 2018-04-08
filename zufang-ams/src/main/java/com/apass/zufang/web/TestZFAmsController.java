@@ -10,6 +10,9 @@ import com.apass.zufang.web.house.HouseControler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -20,17 +23,15 @@ import java.util.Map;
 /**
  * Created by DELL on 2018/4/8.
  */
-@Path("/noauth/test")
-@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Controller
+@RequestMapping("/noauth/test")
 public class TestZFAmsController {
     private static final Logger logger = LoggerFactory.getLogger(HouseControler.class);
     @Autowired
     private HouseSpiderService spiderService;
 
-    @GET
-    @Path("/batchMogoRoom")
-    public Response batchMogoRoom(Map<String, Object> paramMap){
+    @RequestMapping(value = "/batchMogoRoom", method = RequestMethod.GET)
+    public Response batchMogoRoom(){
         try {
             //http://www.mogoroom.com/list
             List<String> urls = new ArrayList<>();
