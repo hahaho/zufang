@@ -124,7 +124,7 @@ public class HouseSpiderService {
             Elements scriptEles = doc.getElementsByTag("script");
             List<String> imgUrls = new ArrayList<>();
             outer:  for(Element ele : scriptEles) {
-                  Element e =  ele.getElementById("swiperTemplate");
+                  Element e =  Jsoup.parse(ele.html().replace("//<![CDATA[",""));
                   if(e != null){
                       if(e.select("div.ms-stage").size()>0){
                           Elements imgEles =  e.select("img");
