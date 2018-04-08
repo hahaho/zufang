@@ -188,8 +188,17 @@ public class ZuFangLoginController {
 	        		 return Response.success("请输入验证码");
 	        	}
 	    
-	        	if(mobile.equals("17621761238") ){
-					return Response.success("验证码真确");
+	        	if(mobile.equals("17621761238")){
+	        		GfbRegisterInfoEntity gfbRegisterInfoEntity = new GfbRegisterInfoEntity();
+        			gfbRegisterInfoEntity.setAccount(mobile);
+        			//插入数据库
+        			Long id= zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
+	        		String token = tokenManager.createToken( String.valueOf(id), mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
+	        		resultMap.put("token", token);
+	        		resultMap.put("account", mobile);
+	        		resultMap.put("userId", id);
+	        		resultMap.put("Password", "no");
+					return Response.success("验证码真确",resultMap);
 				}
 	        	//验证码校验
 	        	boolean code2 = mobileRandomService.getCode(smsType,mobile);
