@@ -1,10 +1,6 @@
 package com.apass.zufang.web;
 
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
-import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.spider.HouseSpiderService;
 import com.apass.zufang.web.house.HouseControler;
 import org.slf4j.Logger;
@@ -14,11 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by DELL on 2018/4/8.
