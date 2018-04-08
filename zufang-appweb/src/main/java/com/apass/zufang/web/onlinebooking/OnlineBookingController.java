@@ -101,71 +101,65 @@ public class OnlineBookingController {
 				}
 				// 未登录操作
 				boolean code2 = mobileRandomService.getCode(smsType,mobile);
-	        	if(!code2){
-				
-					boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
-		        	//验证码真确
-		        	if(mobileCodeValidate){
-		        		//用户是否已经注册  未登录
-		        		GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
-			        		if(zfselecetmobile == null){
-			        			GfbRegisterInfoEntity gfbRegisterInfoEntity = new GfbRegisterInfoEntity();
-			        			gfbRegisterInfoEntity.setAccount(mobile);
-			        			// 插入数据库
-			        			Long saveRegisterInfo = zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
-			        			
-			        			Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,
-			        					memo);
-			        			// 生成token
-								String token = tokenManager.createToken(String.valueOf(saveRegisterInfo), mobile,
-										ConstantsUtil.TOKEN_EXPIRES_SPACE);
-								returnMap.put("token", token);
-								returnMap.put("account", mobile);
-								returnMap.put("userId", saveRegisterInfo);
-								returnMap.put("Password", "no");
-								if(insetReserveHouse == 1){
-									return Response.success("在线预约成功", returnMap);
-								}else{
-									return Response.fail("您近期行程已排满，暂时不能预约。");
-								}
-								
-			        		}else{
-			        			//已经注册    未登录
-			        			GfbRegisterInfoEntity zfselecetmobile2 = zuFangLoginSevice.zfselecetmobile(mobile);
-			        			
-			        			//是否已经预约过
-			                    Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
-			                    if(queryOverdue == null || queryOverdue ==0 ){
-			                    	
-			                    	Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,
-			                    			memo);
-			                    	// 生成token
-			                    	String token = tokenManager.createToken(String.valueOf(zfselecetmobile2.getId()), mobile,
-			                    			ConstantsUtil.TOKEN_EXPIRES_SPACE);
-			                    	returnMap.put("token", token);
-			                    	returnMap.put("account", mobile);
-			                    	returnMap.put("userId", zfselecetmobile2.getId());
-			                    	returnMap.put("Password", zfselecetmobile2.getPassword() == null||zfselecetmobile2.getPassword()== "" ? "no" :  "yes");
-			                    	if(insetReserveHouse == 1){
-			                    		return Response.success("在线预约成功", returnMap);
-			                    	}else{
-			                    		return Response.fail("您近期行程已排满，暂时不能预约。");
-			                    	}
-			                    }else{
-			                    	return Response.fail("您已经预约该房源");
-			                    }
-			        			
-			        		}
-							
-		        			}else{ //验证码错误
-			        	return Response.fail("验证码错误，请重新输入", returnMap);
-			        	}
-	        		}else{
+	        	if(code2){
 	        		return Response.fail("验证码已失效，请重新获取");
 	        	}
+				boolean mobileCodeValidate = mobileRandomService.mobileCodeValidate(smsType,mobile,code);
+		        	//验证码真确
+		        if(!mobileCodeValidate){	
+			        return Response.fail("验证码错误，请重新输入", returnMap);
+			       }
+		        		//用户是否已经注册  未登录
+        		GfbRegisterInfoEntity zfselecetmobile = zuFangLoginSevice.zfselecetmobile(mobile);
+	        		if(zfselecetmobile == null){
+	        			GfbRegisterInfoEntity gfbRegisterInfoEntity = new GfbRegisterInfoEntity();
+	        			gfbRegisterInfoEntity.setAccount(mobile);
+	        			// 插入数据库
+	        			Long saveRegisterInfo = zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
+	        			
+	        			Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,
+	        					memo);
+	        			// 生成token
+						String token = tokenManager.createToken(String.valueOf(saveRegisterInfo), mobile,
+								ConstantsUtil.TOKEN_EXPIRES_SPACE);
+						returnMap.put("token", token);
+						returnMap.put("account", mobile);
+						returnMap.put("userId", saveRegisterInfo);
+						returnMap.put("Password", "no");
+						if(insetReserveHouse == 1){
+							return Response.success("在线预约成功", returnMap);
+						}else{
+							return Response.fail("您近期行程已排满，暂时不能预约。");
+						}
+						
+	        		}else{
+	        			//已经注册    未登录
+	        			GfbRegisterInfoEntity zfselecetmobile2 = zuFangLoginSevice.zfselecetmobile(mobile);
+	        			
+	        			//是否已经预约过
+	                    Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
+	                    if(queryOverdue == null || queryOverdue ==0 ){
+	                    	Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,
+	                    			memo);
+	                    	// 生成token
+	                    	String token = tokenManager.createToken(String.valueOf(zfselecetmobile2.getId()), mobile,
+	                    			ConstantsUtil.TOKEN_EXPIRES_SPACE);
+	                    	returnMap.put("token", token);
+	                    	returnMap.put("account", mobile);
+	                    	returnMap.put("userId", zfselecetmobile2.getId());
+	                    	returnMap.put("Password", zfselecetmobile2.getPassword() == null||zfselecetmobile2.getPassword()== "" ? "no" :  "yes");
+	                    	if(insetReserveHouse == 1){
+	                    		return Response.success("在线预约成功", returnMap);
+	                    	}else{
+	                    		return Response.fail("您近期行程已排满，暂时不能预约。");
+	                    	}
+	                    }else{
+	                    	return Response.fail("您已经预约该房源");
+	                    }
+	        			
+	        		}
 			} else {
 				// 已登录操作
-				
 				//是否已经预约过
                 Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
                 if(queryOverdue == null || queryOverdue ==0 ){
