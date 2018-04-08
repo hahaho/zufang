@@ -1,4 +1,12 @@
 package com.apass.zufang.service.spider;
+import com.apass.zufang.domain.common.Geocodes;
+import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.vo.HouseVo;
+import com.apass.zufang.mapper.zfang.ApartmentMapper;
+import com.apass.zufang.service.house.HouseService;
+import com.apass.zufang.utils.ObtainGaodeLocation;
+import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -10,9 +18,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
@@ -21,12 +34,37 @@ import java.util.regex.Pattern;
 @Service
 public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
+
+    @Autowired
+    private ObtainGaodeLocation otainGaodeLocation;
+
+    @Autowired
+    private HouseService houseService;
+
+    @Autowired
+    private ApartmentMapper apartmentMapper;
+
+
+
+    public void batchParseMogoroomHouse(List<String> urls){
+        for(String url : urls){
+            parseMogoroomHouseDetail(url);
+            try {
+                Thread.sleep(2000);
+            }catch (Exception e){
+
+            }
+        }
+    }
+
+
     /**
      * 【蘑菇租房】解析房源详情页
      */
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
-            houseUrl = "http://www.mogoroom.com/room/605086.shtml";
+            houseUrl = "http://www.mogoroom.com/room/477627.shtml";
+            log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setCssEnabled(false);//关闭css
             webClient.getOptions().setJavaScriptEnabled(true);
@@ -34,7 +72,14 @@ public class HouseSpiderService {
             Thread.sleep(10000);
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
-            System.out.println(doc.text());
+
+           Elements noHouseEle = doc.select("div.f30.white");
+           String text = noHouseEle.get(0).text();
+           if(text.contains("已被出租")){
+               //该房源已被出租
+               return;
+           }
+
             Elements titleElements = doc.select("span.room-info-tit");
             String title = titleElements.get(0).text(); //标题
             Elements rentElements = doc.select("span.tx-middle");
@@ -107,6 +152,45 @@ public class HouseSpiderService {
                 communityName = StringUtils.substring(address,0,index);
             }
 
+            Geocodes geocodes = otainGaodeLocation.getLocationAddress(address);
+            String[] locationArray = StringUtils.split(geocodes.getLocation(),",");
+            String lon = locationArray[0];//经度
+            String lat = locationArray[1];//纬度
+
+            //数据库插入房源信息
+            HouseVo houseVo = new HouseVo();
+            houseVo.setApartmentId(100L);
+            houseVo.setAcreage(new BigDecimal(acreage));
+            houseVo.setChaoxiang(Byte.valueOf(BusinessHouseTypeEnums.getCXCode(chaoxiang)));
+            houseVo.setCommunityName(communityName);
+            houseVo.setHall(Integer.valueOf(hall));
+            houseVo.setFloor(Integer.valueOf(floor));
+            houseVo.setConfigs(roomConfigStrList);
+            houseVo.setHezuChaoxiang(Byte.valueOf(BusinessHouseTypeEnums.getCXCode(chaoxiang)));
+            houseVo.setHousekeeperTel(housekeeperTel);
+            houseVo.setRoom(Integer.valueOf(room));
+            houseVo.setWei(Integer.valueOf(wei));
+            houseVo.setTotalFloor(Integer.valueOf(totalFloor));
+            houseVo.setRentType(Byte.valueOf(BusinessHouseTypeEnums.getHZCode(rentTypeStr)));
+            houseVo.setZujinType(Byte.valueOf(BusinessHouseTypeEnums.getYJLXCode(zujinTypeStr)));
+            houseVo.setPictures(imgUrls);
+            houseVo.setCity(geocodes.getCity());
+            houseVo.setProvince(geocodes.getProvince());
+            Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
+            houseVo.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
+            houseVo.setCreatedTime(new Date());
+            houseVo.setUpdatedTime(new Date());
+            houseVo.setDetailAddr(address);
+            houseVo.setDistrict(geocodes.getDistrict());
+            houseVo.setTitle(title);
+            houseVo.setRoomAcreage(new BigDecimal(roomAcreage));
+            houseVo.setRentAmt(new BigDecimal(rentAmt));
+            houseVo.setLatitude(Double.valueOf(lat));
+            houseVo.setLongitude(Double.valueOf(lon));
+            houseVo.setCreatedUser("spiderAdmin");
+            houseVo.setUpdatedUser("spiderAdmin");
+            Map<String,Object> result =  houseService.addHouse(houseVo);
+            log.info("-------end visit mogo room,houseId: {}--------",result.get("houseId"));
         }catch (Exception e){
             log.error("parseMogoroomHouseDetail error.......",e);
         }

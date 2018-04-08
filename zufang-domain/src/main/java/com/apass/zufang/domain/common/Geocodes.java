@@ -15,7 +15,7 @@ public class Geocodes {
     // 城市编码  
     private String citycode;  
     // 地址所在的区  
-//    private String district;  
+    private String district;
     // 区域编码  
     private String adcode;  
     // 坐标点  
@@ -84,6 +84,13 @@ public class Geocodes {
   
     public void setLevel(String level) {  
         this.level = level;  
-    }  
-  
-}  
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+}

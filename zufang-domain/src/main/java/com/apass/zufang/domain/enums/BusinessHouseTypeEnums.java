@@ -112,5 +112,48 @@ public enum BusinessHouseTypeEnums {
 	public static BusinessHouseTypeEnums valueOfCZJS(Integer code) {
 		return BusinessHouseTypeEnums.valueOf("CZJS_"+code);
 	}
-	
+
+
+	/**
+	 * 获取朝向code
+	 */
+	public static String getCXCode(String message){
+		for(int i = 1;i<=10;i++){
+			BusinessHouseTypeEnums e = BusinessHouseTypeEnums.valueOf("CX_"+i);
+			if(e.getMessage().equals(message)){
+				return e.getCode().toString();
+			}
+		}
+		//默认返回1
+		return "1";
+	}
+
+
+	/**
+	 * 获取押金类型code
+	 */
+	public static String getYJLXCode(String message){
+		for(int i = 1;i<=10;i++){
+			BusinessHouseTypeEnums e = BusinessHouseTypeEnums.valueOf("YJLX_"+i);
+			if(e.getMessage().contains(message)){
+				return e.getCode().toString();
+			}
+		}
+		//默认返回1
+		return "1";
+	}
+
+	/**
+	 * 获取合租类型
+	 */
+	public static String getHZCode(String message){
+		for(int i = 0;i<=2;i++){
+			BusinessHouseTypeEnums e = BusinessHouseTypeEnums.valueOf("HZ_"+i);
+			if(e.getMessage().contains(message)){
+				return e.getCode().toString();
+			}
+		}
+		return "0";
+	}
+
 }
