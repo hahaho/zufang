@@ -74,11 +74,14 @@ public class HouseSpiderService {
             Document doc = Jsoup.parse(page.asXml());
 
            Elements noHouseEle = doc.select("div.f30.white");
-           String text = noHouseEle.get(0).text();
-           if(text.contains("已被出租")){
-               //该房源已被出租
-               return;
-           }
+            if(noHouseEle.size() > 0){
+                String text = noHouseEle.get(0).text();
+                if(text.contains("已被出租")){
+                    //该房源已被出租
+                    return;
+                }
+            }
+
 
             Elements titleElements = doc.select("span.room-info-tit");
             String title = titleElements.get(0).text(); //标题
