@@ -64,7 +64,6 @@ public class HouseSpiderService {
      */
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
-            houseUrl = "http://www.mogoroom.com/room/477627.shtml";
             log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setCssEnabled(false);//关闭css
@@ -125,19 +124,19 @@ public class HouseSpiderService {
             Elements scriptEles = doc.getElementsByTag("script");
             List<String> imgUrls = new ArrayList<>();
             outer:  for(Element ele : scriptEles) {
-                List<DataNode> children = ele.dataNodes();
-                for(DataNode cld : children){
-                	Document scriptDoc = Jsoup.parse(children.get(0).getWholeData());
-                	if(scriptDoc.select("div.ms-stage").size()>0){
-                		Elements imgEles =  scriptDoc.select("img");
-                		for (Element imgEle : imgEles){
-                			if(imgEle.hasClass("swiper-mobile-img")){
-                				imgUrls.add(imgEle.attr("data-src"));
-                			}
-                		}
-                		break outer;
-                	}
-                }
+                  Element e =  ele.getElementById("swiperTemplate");
+                  if(e != null){
+                      if(e.select("div.ms-stage").size()>0){
+                          Elements imgEles =  e.select("img");
+                          for (Element imgEle : imgEles){
+                              if(imgEle.hasClass("swiper-mobile-img")){
+                                  imgUrls.add(imgEle.attr("data-src"));
+                              }
+                          }
+                          break outer;
+                      }
+                  }
+
             }
            //房源配置信息
             List<String> roomConfigStrList = new ArrayList<>();
