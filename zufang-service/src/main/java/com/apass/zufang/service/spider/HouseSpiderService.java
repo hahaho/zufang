@@ -166,7 +166,7 @@ public class HouseSpiderService {
                 communityName = StringUtils.substring(address,0,index);
             }
             String[] titleArray = title.split("-");
-            address = titleArray[0] + address;
+            address = "上海市" + titleArray[0] + address;
             Geocodes geocodes = otainGaodeLocation.getLocationAddress(address);
             String[] locationArray = StringUtils.split(geocodes.getLocation(),",");
             String lon = locationArray[0];//经度
@@ -191,8 +191,8 @@ public class HouseSpiderService {
             houseVo.setRentType(Byte.valueOf(BusinessHouseTypeEnums.getHZCode(rentTypeStr)));
             houseVo.setZujinType(Byte.valueOf(BusinessHouseTypeEnums.getYJLXCode(zujinTypeStr)));
             houseVo.setPictures(imgUrls);
-            houseVo.setCity(geocodes.getCity());
-            houseVo.setProvince(geocodes.getProvince());
+            houseVo.setCity("上海");
+            houseVo.setProvince("上海");
             Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
             houseVo.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
             houseVo.setCreatedTime(new Date());
