@@ -1,6 +1,7 @@
 package com.apass.zufang.service.spider;
 import com.apass.zufang.domain.common.Geocodes;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
@@ -11,12 +12,15 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,7 @@ import java.util.regex.Pattern;
 @Service
 public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
+    public static final String baseUrl = "http://www.mogoroom.com";
 
     @Autowired
     private ObtainGaodeLocation otainGaodeLocation;
@@ -215,6 +220,46 @@ public class HouseSpiderService {
             log.error("parseMogoroomHouseDetail error.......",e);
         }
     }
+
+    /**
+     * 【蘑菇租房】解析房源列表
+     * @param houseUrl
+     */
+    public List<Map<String,String>> parseMogoroomHouseList(String houseUrl) {
+        //Map的key是id,value是url
+        List<Map<String,String>> hrefList = Lists.newArrayList();
+        try {
+            houseUrl = "http://www.mogoroom.com/list";
+            log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
+            final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            //关闭css
+            webClient.getOptions().setCssEnabled(false);
+            webClient.getOptions().setJavaScriptEnabled(true);
+
+            final HtmlPage page = webClient.getPage(houseUrl);
+            Thread.sleep(10000);
+            System.out.println(page.asXml());
+            Document doc = Jsoup.parse(page.asXml());
+            Elements ulElement = doc.select("ul.list-room.add-new-listroom.by-list");
+            Elements roomConfigs = ulElement.select("li");
+            for(int i=0; i<roomConfigs.size(); i++){
+                Map<String,String> hrefMap = Maps.newHashMap();
+                Element element = roomConfigs.get(i);
+                String idKey = element.select("a.inner").attr("data-roomid-md");
+                String hrefValue = element.select("a.inner").attr("href");
+                hrefMap.put(idKey,hrefValue);
+                hrefList.add(hrefMap);
+            }
+
+
+            return hrefList;
+
+        } catch (Exception e) {
+            log.error("爬取蘑菇租房列表页异常,----Splider Exception -----{}",e);
+        }
+        return null;
+    }
+
     /**
      * 截取数字
      * @param target
@@ -229,9 +274,11 @@ public class HouseSpiderService {
     	}
     	return result;
     }
+
+
     public static void main(String[] args) {
         HouseSpiderService s = new HouseSpiderService();
-        s.parseMogoroomHouseDetail("");
+        s.parseMogoroomHouseDetail("http://www.mogoroom.com/room/712583.shtml?page=list");
     	
     	
 //    	String target = "楼层：1/6层";
