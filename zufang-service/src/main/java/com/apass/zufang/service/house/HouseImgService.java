@@ -79,7 +79,11 @@ public class HouseImgService {
 		List<String> imgUrlList = new ArrayList<String>();
 		if (ValidateUtils.listIsTrue(houseImgList)) {
 		for (HouseImg Img : houseImgList) {
-			imgUrlList.add(imageUri+Img.getUrl());
+			if(Img.getUrl().contains("http")){
+				imgUrlList.add(Img.getUrl());
+			}else{
+				imgUrlList.add(imageUri+Img.getUrl());
+			}
 		}
 		}
 		return imgUrlList;
