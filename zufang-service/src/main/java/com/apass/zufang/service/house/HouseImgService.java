@@ -91,8 +91,7 @@ public class HouseImgService {
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void insertImg(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo || CollectionUtils.isEmpty(houseVo.getPictures())){
-			//throw new BusinessException("图片参数不能为空!");
-			return;
+			throw new BusinessException("图片参数不能为空!");
 		}
 		for (String pic : houseVo.getPictures()) {
 			HouseImg img = new HouseImg();

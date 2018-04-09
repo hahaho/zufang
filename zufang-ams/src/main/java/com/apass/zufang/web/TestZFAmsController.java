@@ -28,16 +28,13 @@ public class TestZFAmsController {
         try {
             //http://www.mogoroom.com/list
             List<String> urls = new ArrayList<>();
-            urls.add("http://www.mogoroom.com/room/477627.shtml");
-            urls.add("http://www.mogoroom.com/room/657403.shtml");
-            urls.add("http://www.mogoroom.com/room/2475583.shtml");
-            urls.add("http://www.mogoroom.com/room/2468677.shtml");
-            urls.add("http://www.mogoroom.com/room/61675.shtml");
-            urls.add("http://www.mogoroom.com/room/4368112.shtml");
-            urls.add("http://www.mogoroom.com/room/613443.shtml");
-            urls.add("http://www.mogoroom.com/room/1770568.shtml");
-            urls.add("http://www.mogoroom.com/room/328802.shtml");
-
+            urls.add("http://www.mogoroom.com/room/2538094.shtml");
+            urls.add("http://www.mogoroom.com/room/1198344.shtml");
+            urls.add("http://www.mogoroom.com/room/286005.shtml");
+            urls.add("http://www.mogoroom.com/room/1648015.shtml");
+            urls.add("http://www.mogoroom.com/room/3223045.shtml");
+            urls.add("http://www.mogoroom.com/room/464375.shtml");
+            urls.add("http://www.mogoroom.com/room/1347488.shtml");
             spiderService.batchParseMogoroomHouse(urls);
             return Response.successResponse();
         }catch (Exception e) {
