@@ -79,7 +79,11 @@ public class HouseImgService {
 		List<String> imgUrlList = new ArrayList<String>();
 		if (ValidateUtils.listIsTrue(houseImgList)) {
 		for (HouseImg Img : houseImgList) {
-			imgUrlList.add(imageUri+Img.getUrl());
+			if(Img.getUrl().contains("http")){
+				imgUrlList.add(Img.getUrl());
+			}else{
+				imgUrlList.add(imageUri+Img.getUrl());
+			}
 		}
 		}
 		return imgUrlList;
@@ -87,8 +91,7 @@ public class HouseImgService {
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void insertImg(HouseVo houseVo) throws BusinessException{
 		if(null == houseVo || CollectionUtils.isEmpty(houseVo.getPictures())){
-			//throw new BusinessException("图片参数不能为空!");
-			return;
+			throw new BusinessException("图片参数不能为空!");
 		}
 		for (String pic : houseVo.getPictures()) {
 			HouseImg img = new HouseImg();
