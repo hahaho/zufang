@@ -10,8 +10,11 @@ import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.javascript.DefaultJavaScriptErrorListener;
+import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -73,7 +76,8 @@ public class HouseSpiderService {
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setCssEnabled(false);//关闭css
             webClient.getOptions().setJavaScriptEnabled(true);
-
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
             final HtmlPage page = webClient.getPage(houseUrl);
             Thread.sleep(10000);
             System.out.println(page.asXml());
