@@ -65,6 +65,9 @@ public class HouseSpiderService {
             }
         }
     }
+    public void spiderMogoroomPageList(Integer page){
+            parseMogoroomHouseList(page);
+    }
 
 
     /**
@@ -227,13 +230,13 @@ public class HouseSpiderService {
 
     /**
      * 【蘑菇租房】解析房源列表
-     * @param houseUrl
+     * @param pageNum,页码
      */
-    public List<Map<String,String>> parseMogoroomHouseList(String houseUrl) {
+    public List<Map<String,String>> parseMogoroomHouseList(Integer pageNum) {
         //Map的key是id,value是url
         List<Map<String,String>> hrefList = Lists.newArrayList();
         try {
-            houseUrl = "http://www.mogoroom.com/list";
+            String houseUrl = "http://www.mogoroom.com/list?page="+pageNum;
             log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
             //关闭css
