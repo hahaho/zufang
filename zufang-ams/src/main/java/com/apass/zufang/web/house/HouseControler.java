@@ -317,7 +317,6 @@ public class HouseControler {
     	ValidateUtils.checkNonNumberRange(acreage, 1, 9999, "房屋面积");
 	    
 	    if(StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode()+"", rentType)){//如果出租类型为合租
-	    	
 	    	ValidateUtils.isNotBlank(totalDoors, "请填写合租户数");
 	    	ValidateUtils.checkNonNumberRange(totalDoors, 1, 99, "合租户数");
 	    	

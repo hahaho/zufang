@@ -64,6 +64,7 @@ public class ESClientManager {
                                 .builder()
                                 .put("cluster.name", esprop.getClusterName())
                                 .put("client.transport.ignore_cluster_name", true)
+                                //打开集群节点自动探查功能
                                 .put("client.transport.sniff", true).build();
                         client = new PreBuiltTransportClient(settings);
                         client = client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(esprop.getHost()), esprop.getPort()));
