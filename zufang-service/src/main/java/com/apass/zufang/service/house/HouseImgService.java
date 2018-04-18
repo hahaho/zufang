@@ -50,14 +50,14 @@ public class HouseImgService {
 		resMap1.put("img", HomeInitEnum.INIT_HOUSEIMG_1.getMessage());
 		resMap1.put("url", HomeInitEnum.INIT_URL_1.getMessage());
 		resMap1.put("title", HomeInitEnum.INIT_TITLE_1.getMessage());
-		initCity.add(resMap1);
 		
 		HashMap<String, String> resMap2 = Maps.newHashMap();
 		resMap2.put("img", HomeInitEnum.INIT_HOUSEIMG_2.getMessage());
 		resMap2.put("url", HomeInitEnum.INIT_URL_2.getMessage());
 		resMap2.put("title", HomeInitEnum.INIT_TITLE_2.getMessage());
-		initCity.add(resMap2);
 		
+		initCity.add(resMap2);
+		initCity.add(resMap1);
 		return initCity;
 	}
 	/**
