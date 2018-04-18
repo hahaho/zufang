@@ -19,9 +19,9 @@ public class PermissionsRepository extends BaseMybatisRepository<PermissionsDO, 
     /**
      * 删除角色权限表中的资源记录
      */
-    public void deleteRolePermissionsByPermissionId(Long permissionId) {
+    public void deleteRolePermissionsByPermissionId(Long id) {
         String sql = this.getSQL("deleteRolePermissionsByPermissionId");
-        this.getSqlSession().delete(sql, permissionId);
+        this.getSqlSession().delete(sql, id);
     }
 
     /**

@@ -44,9 +44,10 @@ public class PermissionsService {
      * 删除资源ID
      */
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-    public void delete(Long permissionId) {
-        permissionsRepository.deleteRolePermissionsByPermissionId(permissionId);
-        permissionsRepository.delete(permissionId);
+    public void delete(String permissionId) {
+    	Long id = Long.parseLong(permissionId);
+        permissionsRepository.deleteRolePermissionsByPermissionId(id);
+        permissionsRepository.delete(id);
     }
 
     /**
@@ -103,7 +104,7 @@ public class PermissionsService {
      * @throws BusinessException
      */
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-    public Response savePermission(String permissionId,PermissionsDO entity,String user) throws BusinessException {
+    public Response savePermissions(String permissionId,PermissionsDO entity,String user) throws BusinessException {
     	Long id = null;
     	if (StringUtils.isNotBlank(permissionId)) {
     		id = Long.parseLong(permissionId);
