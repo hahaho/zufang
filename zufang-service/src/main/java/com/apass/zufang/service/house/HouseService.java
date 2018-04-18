@@ -678,7 +678,7 @@ public class HouseService {
     			sb.append("房源信息：").append(str).append(",").append("上架详情：");
     			message = upHouse(str, user);
     			if(!message.endsWith("成功!")){
-    				auditHouse(str, "1", user);
+    				auditHouse(str, "0", user);
     				sb.append("房屋上架成功!");
     			}else{
     				sb.append(message);
