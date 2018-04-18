@@ -23,6 +23,8 @@ public class MenusDO {
      * 文本标题
      */
     private String        text;
+
+    private String title;
     /**
      * 图标样式
      */
@@ -176,5 +178,13 @@ public class MenusDO {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public String getTitle() {
+        return text;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
