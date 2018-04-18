@@ -1,125 +1,93 @@
 package com.apass.zufang.web.rbac;
+import java.util.Map;
 
-import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.entity.rbac.PermissionsDO;
-import com.apass.zufang.service.rbac.PermissionsService;
-import com.apass.zufang.utils.PaginationManage;
-import com.apass.zufang.utils.ResponsePageBody;
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.mybatis.page.Page;
-import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
-import com.apass.gfb.framework.utils.HttpWebUtils;
-import com.apass.gfb.framework.utils.RegExpUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.mybatis.page.Page;
+import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
+import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.GsonUtils;
+import com.apass.gfb.framework.utils.RegExpUtils;
+import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.entity.rbac.PermissionsDO;
+import com.apass.zufang.service.rbac.PermissionsService;
+import com.apass.zufang.utils.ResponsePageBody;
 /**
- * 
- * @description RBAC-资源管理
+ * 资源管理
+ * @author Administrator
  *
- * @author lixining
- * @version $Id: PermissionsController.java, v 0.1 2016年6月22日 上午11:15:57 lixining Exp $
  */
-@Path("/application/rbac/permission")
+@Path("/rbac/permissionsController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class PermissionsController {
-    /**
-     * 日志
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(PermissionsController.class);
-    /**
-     * Permission Service
-     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(PermissionsController.class);
     @Autowired
     private PermissionsService permissionsService;
-
     /**
-     * 资源页面
+     * INIT
+     * @return
      */
     @POST
-    @Path("/page")
-    public String handlePage() {
-        return "rbac/permissions-page";
+    @Path("/init")
+    public String init() {
+        return "rbac/permissionsmanage";
     }
-
     /**
-     * 资源列表
+     * 资源列表 分页查询
+     * @param map
+     * @return
      */
     @POST
-    @Path("/pagelist")
-    public ResponsePageBody<PermissionsDO> handlePageList(Map<String,String> paramMap) {
-        ResponsePageBody<PermissionsDO> respBody = new ResponsePageBody<PermissionsDO>();
+    @Path("/getPermissionsList")
+    public ResponsePageBody<PermissionsDO> getPermissionsList(Map<String,Object> map) {
+    	ResponsePageBody<PermissionsDO> respBody = new ResponsePageBody<PermissionsDO>();
         try {
-            String pageNo = paramMap.get("page");
-            String pageSize = paramMap.get("rows");
-            Integer pageNoNum = Integer.parseInt(pageNo);
-            Integer pageSizeNum = Integer.parseInt(pageSize);
-            Page page = new Page();
-            page.setPage(pageNoNum <= 0 ? 1 : pageNoNum);
-            page.setLimit(pageSizeNum <= 0 ? 1 : pageSizeNum);
-            String permissionCode = paramMap.get("permissionCode");
-            String permissionName = paramMap.get("permissionName");
+        	LOGGER.info("getPermissionsList map--->{}",GsonUtils.toJson(map));
+        	String permissionName = CommonUtils.getValue(map, "permissionName");
+        	String permissionCode = CommonUtils.getValue(map, "permissionCode");
+        	String page = CommonUtils.getValue(map, "page");
+        	String rows = CommonUtils.getValue(map, "rows");
             PermissionsDO paramDO = new PermissionsDO();
-            paramDO.setPermissionCode(StringUtils.isBlank(permissionCode) ? null : permissionCode);
-            paramDO.setPermissionName(StringUtils.isBlank(permissionName) ? null : permissionName);
-            PaginationManage<PermissionsDO> pagination = permissionsService.page(paramDO, page);
-            respBody.setTotal(pagination.getTotalCount());
-            respBody.setRows(pagination.getDataList());
-            respBody.setStatus(CommonCode.SUCCESS_CODE);
+            if(StringUtils.isNotBlank(permissionName)){
+            	paramDO.setPermissionName(permissionName);
+            }
+            if(StringUtils.isNotBlank(permissionCode)){
+            	paramDO.setPermissionCode(permissionCode);
+            }
+            Page p = new Page();
+            p.setPage(Integer.parseInt(page));
+            p.setLimit(Integer.parseInt(rows));
+            respBody = permissionsService.getPermissionsList(paramDO,p);
         } catch (Exception e) {
-            LOG.error("用户列表查询失败", e);
-            respBody.setMsg("用户列表查询失败");
+            LOGGER.error("getPermissionsList EXCEPTION --- --->{}", e);
+            respBody.setMsg("资源信息列表查询失败");
         }
         return respBody;
     }
-
     /**
      * 保存资源
+     * @param map
+     * @return
      */
     @POST
-    @Path("/load")
-    public Response handleLoad(Map<String,String> paramMap) {
+    @Path("/savePermission")
+    public Response savePermission(Map<String,String> map) {
         try {
-            String permissionId = paramMap.get("permissionId");
-            if (StringUtils.isBlank(permissionId)) {
-                return Response.fail("资源ID不能为空");
-            }
-            PermissionsDO permission = permissionsService.select(Long.valueOf(permissionId));
-            if (permission == null) {
-                throw new BusinessException("资源记录不存在,请刷新列表后重试");
-            }
-            return Response.success("success", permission);
-        } catch (BusinessException e) {
-            LOG.error(e.getErrorDesc(), e);
-            return Response.fail(e.getErrorDesc());
-        } catch (Exception e) {
-            LOG.error("加载资源失败", e);
-            return Response.fail("加载资源记录失败");
-        }
-    }
-
-    /**
-     * 保存资源
-     */
-    @POST
-    @Path("/save")
-    public Response handleSave(Map<String,String> paramMap) {
-        try {
-            String permissionId = paramMap.get("id");
-            String permissionCode = paramMap.get("permissionCode");
-            String permissionName = paramMap.get("permissionName");
-            String description = paramMap.get("description");
+            String permissionId = map.get("id");
+            String permissionCode = map.get("permissionCode");
+            String permissionName = map.get("permissionName");
+            String description = map.get("description");
             if (StringUtils.isAnyBlank(permissionCode, permissionName)) {
                 return Response.fail("资源编码或资源名称不能为空");
             }
@@ -132,40 +100,64 @@ public class PermissionsController {
             if (!RegExpUtils.length(description, 0, 200)) {
                 return Response.fail("资源描述长度不合法");
             }
-            PermissionsDO permission = new PermissionsDO();
-            permission.setId(Long.valueOf(permissionId));
-            permission.setPermissionCode(permissionCode);
-            permission.setPermissionName(permissionName);
-            permission.setDescription(description);
-            // 删除资源记录 
-            permissionsService.save(permission);
-            return Response.success("success");
+            PermissionsDO entity = new PermissionsDO();
+            entity.setPermissionCode(permissionCode);
+            entity.setPermissionName(permissionName);
+            entity.setDescription(description);
+            String user = SpringSecurityUtils.getCurrentUser();
+            return permissionsService.savePermission(permissionId,entity,user);
         } catch (BusinessException e) {
-            LOG.error(e.getErrorDesc(), e);
+            LOGGER.error(e.getErrorDesc(), e);
             return Response.fail(e.getErrorDesc());
         } catch (Exception e) {
-            LOG.error("保存资源失败", e);
-            return Response.fail("保存资源记录失败");
+            LOGGER.error("保存资源失败", e);
+            return Response.fail("保存资源失败!");
         }
     }
-
     /**
-     * 删除
+     * 删除资源
+     * @param map
+     * @return
      */
     @POST
     @Path("/delete")
-    public Response handleDelete(Map<String,String> paramMap) {
+    public Response handleDelete(Map<String,String> map) {
         try {
-            String permissionId = paramMap.get("permissionId");
+            String permissionId = map.get("permissionId");
             if (StringUtils.isBlank(permissionId)) {
                 return Response.fail("资源ID不能为空");
             }
-            // 删除资源记录 
             permissionsService.delete(Long.valueOf(permissionId));
             return Response.success("success");
         } catch (Exception e) {
-            LOG.error("删除资源失败", e);
+            LOGGER.error("删除资源失败", e);
             return Response.fail("删除资源记录失败");
+        }
+    }
+    /**
+     * 查询资源
+     * @param map
+     * @return
+     */
+    @POST
+    @Path("/load")
+    public Response handleLoad(Map<String,String> map) {
+        try {
+            String permissionId = map.get("permissionId");
+            if (StringUtils.isBlank(permissionId)) {
+                return Response.fail("资源ID不能为空");
+            }
+            PermissionsDO permission = permissionsService.select(Long.valueOf(permissionId));
+            if (permission == null) {
+                throw new BusinessException("资源记录不存在,请刷新列表后重试");
+            }
+            return Response.success("success", permission);
+        } catch (BusinessException e) {
+            LOGGER.error(e.getErrorDesc(), e);
+            return Response.fail(e.getErrorDesc());
+        } catch (Exception e) {
+            LOGGER.error("加载资源失败", e);
+            return Response.fail("加载资源记录失败");
         }
     }
 }

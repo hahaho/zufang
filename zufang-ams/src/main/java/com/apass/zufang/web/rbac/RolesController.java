@@ -1,5 +1,23 @@
 package com.apass.zufang.web.rbac;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.mybatis.page.Page;
+import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
+import com.apass.gfb.framework.utils.RegExpUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.rbac.MenusSettingDO;
 import com.apass.zufang.domain.entity.rbac.PermissionsDO;
@@ -7,24 +25,6 @@ import com.apass.zufang.domain.entity.rbac.RolesDO;
 import com.apass.zufang.service.rbac.RolesService;
 import com.apass.zufang.utils.PaginationManage;
 import com.apass.zufang.utils.ResponsePageBody;
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.mybatis.page.Page;
-import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
-import com.apass.gfb.framework.utils.HttpWebUtils;
-import com.apass.gfb.framework.utils.RegExpUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 
@@ -111,7 +111,9 @@ public class RolesController {
                 return Response.fail("角色描述长度不合法");
             }
             RolesDO role = new RolesDO();
-            role.setId(Long.valueOf(roleId));
+            if(StringUtils.isNotBlank(roleId)){
+            	role.setId(Long.valueOf(roleId));
+            }
             role.setRoleCode(roleCode);
             role.setRoleName(roleName);
             role.setDescription(description);
@@ -134,7 +136,7 @@ public class RolesController {
     @Path("/delete")
     public Response handleDelete(Map<String,String> paramMap) {
         try {
-            String roleId = paramMap.get( "roleId");
+            String roleId = paramMap.get("roleId");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
             }
@@ -154,7 +156,7 @@ public class RolesController {
     @Path("/load")
     public Response handleLoad(Map<String,String> paramMap) {
         try {
-            String roleId = paramMap.get( "roleId");
+            String roleId = paramMap.get("roleId");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
             }
@@ -168,8 +170,8 @@ public class RolesController {
             LOG.error(e.getErrorDesc(), e);
             return Response.fail(e.getErrorDesc());
         } catch (Exception e) {
-            LOG.error("删除角色失败", e);
-            return Response.fail("删除角色记录失败");
+            LOG.error("查询角色失败", e);
+            return Response.fail("查询角色记录失败");
         }
     }
 
@@ -180,8 +182,12 @@ public class RolesController {
     @Path("/load/rolemenu/settings")
     public Response handleLoadRoleMenuSettings(Map<String,String> paramMap) {
         try {
-            String roleId = paramMap.get( "roleId");
+            String roleId = paramMap.get("roleId");
             List<MenusSettingDO> menuList = rolesService.selectRoleMenuSettings(roleId);
+            for (MenusSettingDO menu : menuList) {
+				menu.setTitle(menu.getText());
+				menu.setExpand(menu.isChecked());
+			}
             return Response.success("success", menuList);
         } catch (Exception e) {
             LOG.error("加载角色菜单失败", e);
