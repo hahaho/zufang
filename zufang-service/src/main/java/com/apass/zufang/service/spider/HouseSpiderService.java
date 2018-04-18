@@ -1,6 +1,7 @@
 package com.apass.zufang.service.spider;
 import com.apass.zufang.domain.common.Geocodes;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
@@ -8,14 +9,21 @@ import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.javascript.DefaultJavaScriptErrorListener;
+import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +42,7 @@ import java.util.regex.Pattern;
 @Service
 public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
+    public static final String baseUrl = "http://www.mogoroom.com";
 
     @Autowired
     private ObtainGaodeLocation otainGaodeLocation;
@@ -56,6 +65,9 @@ public class HouseSpiderService {
             }
         }
     }
+    public void spiderMogoroomPageList(Integer page){
+            parseMogoroomHouseList(page);
+    }
 
 
     /**
@@ -63,11 +75,12 @@ public class HouseSpiderService {
      */
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
-            houseUrl = "http://www.mogoroom.com/room/477627.shtml";
             log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
             webClient.getOptions().setCssEnabled(false);//关闭css
             webClient.getOptions().setJavaScriptEnabled(true);
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
             final HtmlPage page = webClient.getPage(houseUrl);
             Thread.sleep(10000);
             System.out.println(page.asXml());
@@ -107,8 +120,14 @@ public class HouseSpiderService {
             String hall = huxinglist.get(1);
             String wei = huxinglist.get(2);
             List<String> acreagelist = getMatcheNum(acreageStr);
-            String roomAcreage = acreagelist.get(0);
-            String acreage = acreagelist.get(1);
+            String roomAcreage = null;
+            String acreage = null;
+            if(acreagelist.size()  ==  1){
+                 acreage = acreagelist.get(0);
+            }else {
+                roomAcreage = acreagelist.get(0);
+                acreage = acreagelist.get(1);
+            }
             List<String> floorlist = getMatcheNum(floorStr);
             String floor = floorlist.get(0);
             String totalFloor = floorlist.get(1);
@@ -117,19 +136,19 @@ public class HouseSpiderService {
             Elements scriptEles = doc.getElementsByTag("script");
             List<String> imgUrls = new ArrayList<>();
             outer:  for(Element ele : scriptEles) {
-                List<DataNode> children = ele.dataNodes();
-                for(DataNode cld : children){
-                	Document scriptDoc = Jsoup.parse(children.get(0).getWholeData());
-                	if(scriptDoc.select("div.ms-stage").size()>0){
-                		Elements imgEles =  scriptDoc.select("img");
-                		for (Element imgEle : imgEles){
-                			if(imgEle.hasClass("swiper-mobile-img")){
-                				imgUrls.add(imgEle.attr("data-src"));
-                			}
-                		}
-                		break outer;
-                	}
-                }
+                  Element e =  Jsoup.parse(ele.html().replace("//<![CDATA[",""));
+                  if(e != null){
+                      if(e.select("div.ms-stage").size()>0){
+                          Elements imgEles =  e.select("img");
+                          for (Element imgEle : imgEles){
+                              if(imgEle.hasClass("swiper-mobile-img")){
+                                  imgUrls.add(imgEle.attr("data-src"));
+                              }
+                          }
+                          break outer;
+                      }
+                  }
+
             }
            //房源配置信息
             List<String> roomConfigStrList = new ArrayList<>();
@@ -142,8 +161,12 @@ public class HouseSpiderService {
             }
             //朝向
             Element roomMatesEle = doc.getElementById("roomMates");
-            Elements curEles = roomMatesEle.select("li.cur-rm");
-            String chaoxiang = curEles.select("li").get(3).text();
+            String chaoxiang= "";
+            if(roomMatesEle != null){
+                Elements curEles = roomMatesEle.select("li.cur-rm");
+                 chaoxiang = curEles.select("li").get(3).text();
+
+            }
 
             Elements addrEle = doc.select("span.roomInfo-mark");
             String address = addrEle.get(0).text(); //翰盛家园（上海市浦东新区创新西路195号）
@@ -154,7 +177,8 @@ public class HouseSpiderService {
             if(index != -1){
                 communityName = StringUtils.substring(address,0,index);
             }
-
+            String[] titleArray = title.split("-");
+            address = "上海市" + titleArray[0] + address;
             Geocodes geocodes = otainGaodeLocation.getLocationAddress(address);
             String[] locationArray = StringUtils.split(geocodes.getLocation(),",");
             String lon = locationArray[0];//经度
@@ -163,7 +187,9 @@ public class HouseSpiderService {
             //数据库插入房源信息
             HouseVo houseVo = new HouseVo();
             houseVo.setApartmentId(100L);
-            houseVo.setAcreage(new BigDecimal(acreage));
+            if(acreage != null ){
+                houseVo.setAcreage(new BigDecimal(acreage));
+            }
             houseVo.setChaoxiang(Byte.valueOf(BusinessHouseTypeEnums.getCXCode(chaoxiang)));
             houseVo.setCommunityName(communityName);
             houseVo.setHall(Integer.valueOf(hall));
@@ -177,8 +203,8 @@ public class HouseSpiderService {
             houseVo.setRentType(Byte.valueOf(BusinessHouseTypeEnums.getHZCode(rentTypeStr)));
             houseVo.setZujinType(Byte.valueOf(BusinessHouseTypeEnums.getYJLXCode(zujinTypeStr)));
             houseVo.setPictures(imgUrls);
-            houseVo.setCity(geocodes.getCity());
-            houseVo.setProvince(geocodes.getProvince());
+            houseVo.setCity("上海");
+            houseVo.setProvince("上海");
             Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
             houseVo.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
             houseVo.setCreatedTime(new Date());
@@ -186,18 +212,61 @@ public class HouseSpiderService {
             houseVo.setDetailAddr(address);
             houseVo.setDistrict(geocodes.getDistrict());
             houseVo.setTitle(title);
-            houseVo.setRoomAcreage(new BigDecimal(roomAcreage));
+            if(roomAcreage != null){
+                houseVo.setRoomAcreage(new BigDecimal(roomAcreage));
+            }
             houseVo.setRentAmt(new BigDecimal(rentAmt));
             houseVo.setLatitude(Double.valueOf(lat));
             houseVo.setLongitude(Double.valueOf(lon));
             houseVo.setCreatedUser("spiderAdmin");
             houseVo.setUpdatedUser("spiderAdmin");
+            houseVo.setHouseStatus("1");
             Map<String,Object> result =  houseService.addHouse(houseVo);
             log.info("-------end visit mogo room,houseId: {}--------",result.get("houseId"));
         }catch (Exception e){
             log.error("parseMogoroomHouseDetail error.......",e);
         }
     }
+
+    /**
+     * 【蘑菇租房】解析房源列表
+     * @param pageNum,页码
+     */
+    public List<Map<String,String>> parseMogoroomHouseList(Integer pageNum) {
+        //Map的key是id,value是url
+        List<Map<String,String>> hrefList = Lists.newArrayList();
+        try {
+            String houseUrl = "http://www.mogoroom.com/list?page="+pageNum;
+            log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
+            final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            //关闭css
+            webClient.getOptions().setCssEnabled(false);
+            webClient.getOptions().setJavaScriptEnabled(true);
+
+            final HtmlPage page = webClient.getPage(houseUrl);
+            Thread.sleep(10000);
+            System.out.println(page.asXml());
+            Document doc = Jsoup.parse(page.asXml());
+            Elements ulElement = doc.select("ul.list-room.add-new-listroom.by-list");
+            Elements roomConfigs = ulElement.select("li");
+            for(int i=0; i<roomConfigs.size(); i++){
+                Map<String,String> hrefMap = Maps.newHashMap();
+                Element element = roomConfigs.get(i);
+                String idKey = element.select("a.inner").attr("data-roomid-md");
+                String hrefValue = element.select("a.inner").attr("href");
+                hrefMap.put(idKey,hrefValue);
+                hrefList.add(hrefMap);
+            }
+
+
+            return hrefList;
+
+        } catch (Exception e) {
+            log.error("爬取蘑菇租房列表页异常,----Splider Exception -----{}",e);
+        }
+        return null;
+    }
+
     /**
      * 截取数字
      * @param target
@@ -212,9 +281,11 @@ public class HouseSpiderService {
     	}
     	return result;
     }
+
+
     public static void main(String[] args) {
         HouseSpiderService s = new HouseSpiderService();
-        s.parseMogoroomHouseDetail("");
+        s.parseMogoroomHouseDetail("http://www.mogoroom.com/room/712583.shtml?page=list");
     	
     	
 //    	String target = "楼层：1/6层";

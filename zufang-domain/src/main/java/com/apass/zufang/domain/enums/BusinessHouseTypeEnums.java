@@ -118,7 +118,7 @@ public enum BusinessHouseTypeEnums {
 	 * 获取朝向code
 	 */
 	public static String getCXCode(String message){
-		for(int i = 1;i<=10;i++){
+		for(int i = 1;i<=8;i++){
 			BusinessHouseTypeEnums e = BusinessHouseTypeEnums.valueOf("CX_"+i);
 			if(e.getMessage().equals(message)){
 				return e.getCode().toString();
