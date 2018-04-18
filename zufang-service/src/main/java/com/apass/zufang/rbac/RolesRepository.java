@@ -66,6 +66,8 @@ public class RolesRepository extends BaseMybatisRepository<RolesDO, Long> {
             return null;
         }
         for (MenusSettingDO menu : tempList) {
+        	menu.setTitle(menu.getText());
+        	menu.setExpand(menu.isChecked());
             menu.setChildren(selectRoleMenuSettings(roleId, menu.getId()));
         }
         return tempList;
