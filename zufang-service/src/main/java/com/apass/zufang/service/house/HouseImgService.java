@@ -43,14 +43,21 @@ public class HouseImgService {
 	 */
 	public List<HashMap<String, String>> initImg() {
 		
-		HashMap<String, String> resMap = Maps.newHashMap();
 		List<HashMap<String, String>> initCity = new ArrayList<>();
 		
+		HashMap<String, String> resMap1 = Maps.newHashMap();
 		// 方便循环遍历
-		resMap.put("img", HomeInitEnum.INIT_HOUSEIMG.getMessage());
-		resMap.put("url", HomeInitEnum.INIT_URL.getMessage());
-		resMap.put("title", HomeInitEnum.INIT_TITLE.getMessage());
-		initCity.add(resMap);
+		resMap1.put("img", HomeInitEnum.INIT_HOUSEIMG_1.getMessage());
+		resMap1.put("url", HomeInitEnum.INIT_URL_1.getMessage());
+		resMap1.put("title", HomeInitEnum.INIT_TITLE_1.getMessage());
+		initCity.add(resMap1);
+		
+		HashMap<String, String> resMap2 = Maps.newHashMap();
+		resMap2.put("img", HomeInitEnum.INIT_HOUSEIMG_2.getMessage());
+		resMap2.put("url", HomeInitEnum.INIT_URL_2.getMessage());
+		resMap2.put("title", HomeInitEnum.INIT_TITLE_2.getMessage());
+		initCity.add(resMap2);
+		
 		return initCity;
 	}
 	/**
