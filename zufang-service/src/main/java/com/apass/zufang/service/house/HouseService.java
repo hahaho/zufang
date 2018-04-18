@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
+import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.dto.HouseQueryParams;
 import com.apass.zufang.domain.dto.WorkCityJdParams;
@@ -147,6 +148,7 @@ public class HouseService {
 		houseVo.setHouseId(house.getId());
 
 		/*** 添加位置入库*/
+		@SuppressWarnings("unused")
 		Long locationId = locationService.insertOrUpdateLocation(houseVo);
 		/*** 添加图片入库*/
 		imgService.insertImg(houseVo);
@@ -664,9 +666,25 @@ public class HouseService {
 		HouseEs es = houseInfoToHouseEs(houseId);
 		houseEsDao.update(es);
 	}
-
-
 	public List<HouseAppSearchVo> queryHouseBasicEntityByEntity(HouseQueryParams houseQueryParams) {
 		return houseMapper.queryHouseBasicEntityByEntity(houseQueryParams);
+	}
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+	public Response upHouseForDanke(String[] strarr, String user) throws BusinessException {
+		StringBuffer sb = new StringBuffer();
+		String message = null;
+    	for(String str : strarr){
+    		if(StringUtils.isNotBlank(str)){
+    			sb.append("房源信息：").append(str).append(",").append("上架详情：");
+    			message = upHouse(str, user);
+    			if(!message.endsWith("成功!")){
+    				auditHouse(str, "1", user);
+    				sb.append("房屋上架成功!");
+    			}else{
+    				sb.append(message);
+    			}
+    		}
+    	}
+    	return Response.success(sb.toString());
 	}
 }

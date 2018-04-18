@@ -1,5 +1,4 @@
 package com.apass.zufang.common;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
@@ -16,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -88,8 +86,6 @@ public class ZufangButtonJoinColler {
 
         return Response.success("更新房源信息成功");
     }
-
-
     /**
      * downHouse  下架
      * @param map
@@ -131,17 +127,8 @@ public class ZufangButtonJoinColler {
         	String idStr = CommonUtils.getValue(map, "idStr");
         	ValidateUtils.isNotBlank(idStr, "房屋Id字符串为空！");
         	String strarr[] = idStr.split(",");
-        	StringBuffer sb = new StringBuffer();
-        	String message = null;
         	String user = map.get("userId").toString();
-        	for(String str : strarr){
-        		if(StringUtils.isNotBlank(str)){
-        			sb.append("房源信息：").append(str).append(",").append("上架详情：");
-        			message = houseService.upHouse(str, user);
-        			sb.append(message).append("。");
-        		}
-        	}
-        	return Response.success(sb.toString());
+        	return houseService.upHouseForDanke(strarr,user);
         }catch (BusinessException e){
         	LOGGER.error("upHouse businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
