@@ -186,7 +186,7 @@ public class RolesController {
             List<MenusSettingDO> menuList = rolesService.selectRoleMenuSettings(roleId);
             for (MenusSettingDO menu : menuList) {
 				menu.setTitle(menu.getText());
-				menu.setExpand(menu.isChecked());
+				menu.setExpand(true);
 			}
             return Response.success("success", menuList);
         } catch (Exception e) {
