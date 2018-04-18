@@ -1,20 +1,20 @@
 package com.apass.zufang.service.rbac;
-
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.mybatis.page.Page;
-import com.apass.gfb.framework.mybatis.page.Pagination;
-import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
-import com.apass.zufang.domain.entity.rbac.PermissionsDO;
-import com.apass.zufang.rbac.PermissionsRepository;
-import com.apass.zufang.utils.PaginationManage;
+import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
+import com.apass.gfb.framework.exception.BusinessException;
+import com.apass.gfb.framework.mybatis.page.Page;
+import com.apass.gfb.framework.mybatis.page.Pagination;
+import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
+import com.apass.gfb.framework.utils.BaseConstants;
+import com.apass.zufang.domain.Response;
+import com.apass.zufang.domain.entity.rbac.PermissionsDO;
+import com.apass.zufang.rbac.PermissionsRepository;
+import com.apass.zufang.utils.PaginationManage;
+import com.apass.zufang.utils.ResponsePageBody;
 /**
  * 
  * @description Permission Service
@@ -24,14 +24,13 @@ import java.util.List;
  */
 @Component
 public class PermissionsService {
-    /**
-     * Permission Repository
-     */
     @Autowired
     private PermissionsRepository permissionsRepository;
-
     /**
      * 资源分页
+     * @param paramDO
+     * @param page
+     * @return
      */
     public PaginationManage<PermissionsDO> page(PermissionsDO paramDO, Page page) {
         PaginationManage<PermissionsDO> result = new PaginationManage<PermissionsDO>();
@@ -41,7 +40,6 @@ public class PermissionsService {
         result.setTotalCount(response.getTotalCount());
         return result;
     }
-
     /**
      * 删除资源ID
      */
@@ -78,12 +76,52 @@ public class PermissionsService {
         permissionDB.setDescription(permission.getDescription());
         permissionsRepository.updateAll(permissionDB);
     }
-
     /**
      * 主键加载
      */
     public PermissionsDO select(Long permissionId) {
         return permissionsRepository.select(permissionId);
     }
-
+    /**
+     * 资源分页
+     * @param paramDO
+     * @param page
+     * @return
+     */
+    public ResponsePageBody<PermissionsDO> getPermissionsList(PermissionsDO paramDO, Page page) {
+    	ResponsePageBody<PermissionsDO> result = new ResponsePageBody<PermissionsDO>();
+        Pagination<PermissionsDO> response = permissionsRepository.page(paramDO, page);
+        result.setRows(response.getDataList());
+        result.setTotal(response.getTotalCount());
+        result.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+        return result;
+	}
+    /**
+     * 资源维护
+     * @param permission
+     * @return
+     * @throws BusinessException
+     */
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+    public Response savePermission(String permissionId,PermissionsDO entity,String user) throws BusinessException {
+    	Long id = null;
+    	if (StringUtils.isNotBlank(permissionId)) {
+    		id = Long.parseLong(permissionId);
+    	}
+        String permissionCode = entity.getPermissionCode();
+        List<PermissionsDO> dataList = permissionsRepository.filter(permissionCode, id);
+        if (!CollectionUtils.isEmpty(dataList)) {
+            throw new BusinessException("资源编码已存在!");
+        }
+        if (StringUtils.isBlank(permissionId)) {
+        	entity.setCreatedBy(user);
+        	entity.setUpdatedBy(user);
+            permissionsRepository.insert(entity);
+            return Response.success("资源新增成功！");
+        }
+        entity.setId(id);
+        entity.setUpdatedBy(user);
+        permissionsRepository.updateAll(entity);
+        return Response.success("资源修改成功！");
+    }
 }

@@ -20,20 +20,19 @@
 			</if>
 		</where>
 	</sql>
-
-	<!-- 插入 -->
+	<!-- insert -->
 	<insert id="insert" parameterType="PermissionsDO">
 	<![CDATA[
 		INSERT INTO T_RBAC_PERMISSIONS (ID, PERMISSION_CODE, PERMISSION_NAME,
-		DESCRIPTION, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE) VALUES 
+		DESCRIPTION, CREATED_BY, CREATED_TIME, UPDATED_BY, UPDATED_TIME) 
+		VALUES 
 		(#{id, jdbcType=VARCHAR}, #{permissionCode, jdbcType=VARCHAR}, 
 		#{permissionName, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, 
 		#{createdBy, jdbcType=VARCHAR},	CURRENT_TIMESTAMP, 
 		#{updatedBy, jdbcType=VARCHAR},	CURRENT_TIMESTAMP)
 	]]>
 	</insert>
-
-	<!-- 分页查询&过滤查询 -->
+	<!-- select -->
 	<select id="select" parameterType="PermissionsDO" resultType="PermissionsDO">
 	<![CDATA[
 		SELECT ID                 ID,
@@ -41,26 +40,20 @@
 			   PERMISSION_NAME    PERMISSIONNAME,
 			   DESCRIPTION        DESCRIPTION,
 			   CREATED_BY         CREATEDBY,
-			   CREATED_DATE       CREATEDDATE,
+			   CREATED_TIME       CREATEDTIME,
 			   UPDATED_BY         UPDATEDBY,
-			   UPDATED_DATE       UPDATEDDATE 
+			   UPDATED_TIME       UPDATEDTIME 
 		  FROM T_RBAC_PERMISSIONS
 	]]>
-		<include refid="QueryConditionSql" />
-	<![CDATA[
-		ORDER BY CREATED_DATE DESC
-	]]>
+	<include refid="QueryConditionSql" />
+	<![CDATA[ ORDER BY CREATED_TIME DESC ]]>
 	</select>
-
 	<!-- 记录总数 -->
 	<select id="count" parameterType="PermissionsDO" resultType="Integer">
-	<![CDATA[
-		SELECT COUNT(1) FROM T_RBAC_PERMISSIONS
-	]]>
-		<include refid="QueryConditionSql" />
+	<![CDATA[ SELECT COUNT(1) FROM T_RBAC_PERMISSIONS ]]>
+	<include refid="QueryConditionSql" />
 	</select>
-
-	<!-- 主键查询 -->
+	<!-- selectByPK -->
 	<select id="selectByPK" parameterType="String" resultType="PermissionsDO">
 	<![CDATA[
 		SELECT ID                 ID,
@@ -68,28 +61,26 @@
 			   PERMISSION_NAME    PERMISSIONNAME,
 			   DESCRIPTION        DESCRIPTION,
 			   CREATED_BY         CREATEDBY,
-			   CREATED_DATE       CREATEDDATE,
+			   CREATED_TIME       CREATEDTIME,
 			   UPDATED_BY         UPDATEDBY,
-			   UPDATED_DATE       UPDATEDDATE 
+			   UPDATED_TIME       UPDATEDTIME 
 		  FROM T_RBAC_PERMISSIONS WHERE ID = #{value}
 	]]>
 	</select>
-
-	<!-- 删除 -->
+	<!-- delete -->
 	<delete id="delete" parameterType="String">
 	<![CDATA[
 		DELETE FROM T_RBAC_PERMISSIONS WHERE ID = #{value}
 	]]>
 	</delete>
-
-	<!-- 更新 -->
+	<!-- update -->
 	<update id="update" parameterType="PermissionsDO">
 	<![CDATA[
 		UPDATE T_RBAC_PERMISSIONS
 	]]>
 		<set>
 			UPDATED_BY = #{updatedBy, jdbcType=VARCHAR}, 
-			UPDATED_DATE = CURRENT_TIMESTAMP,
+			UPDATED_TIME = CURRENT_TIMESTAMP,
 			<if test="permissionCode != null and permissionCode != ''">
 				PERMISSION_CODE = #{permissionCode, jdbcType=VARCHAR},
 			</if>
@@ -100,29 +91,24 @@
 				DESCRIPTION = #{description, jdbcType=VARCHAR},
 			</if>
 		</set>
-	<![CDATA[
-		WHERE ID = #{id}
-	]]>
+	<![CDATA[ WHERE ID = #{id} ]]>
 	</update>
-
-	<!-- 更新所有 -->
+	<!-- updateAll -->
 	<update id="updateAll" parameterType="PermissionsDO">
 	<![CDATA[
 		UPDATE T_RBAC_PERMISSIONS
 			SET UPDATED_BY = #{updatedBy, jdbcType=VARCHAR},
-				UPDATED_DATE = CURRENT_TIMESTAMP,
+				UPDATED_TIME = CURRENT_TIMESTAMP,
 				PERMISSION_CODE = #{permissionCode, jdbcType=VARCHAR},  
 				PERMISSION_NAME = #{permissionName, jdbcType=VARCHAR},
 				DESCRIPTION = #{description, jdbcType=VARCHAR}
 			WHERE ID = #{id}
 	]]>
 	</update>
-	
 	<!-- 删除角色权限表资源记录 -->
 	<delete id="deleteRolePermissionsByPermissionId" parameterType="String">
 	<![CDATA[
 		DELETE FROM T_RBAC_ROLE_PERMISSION WHERE PERMISSION_ID = #{value}
 	]]>
 	</delete>
-	
-</mapper> 
+</mapper>
