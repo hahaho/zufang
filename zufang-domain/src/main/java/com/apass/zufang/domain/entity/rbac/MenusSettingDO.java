@@ -23,11 +23,16 @@ public class MenusSettingDO {
      * 文本标题
      */
     private String               text;
+    
+    
+    private String title;
     /**
      * 是否选中
      */
     @JsonIgnore
     private String               checkSign;
+    
+    private Boolean expand;
     /**
      * 父节点
      */
@@ -80,4 +85,20 @@ public class MenusSettingDO {
     public Boolean isChecked() {
         return CollectionUtils.isEmpty(children) ? "Y".equals(checkSign) : null;
     }
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Boolean getExpand() {
+		return expand;
+	}
+
+	public void setExpand(Boolean expand) {
+		this.expand = expand;
+	}
 }

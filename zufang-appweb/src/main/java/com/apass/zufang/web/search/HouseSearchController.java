@@ -445,7 +445,11 @@ public class HouseSearchController {
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
 		HouseAppSearchVo vo = new HouseAppSearchVo();
 		if(StringUtils.isNotEmpty(houseEs.getUrl())){
-			vo.setUrl(appWebDomain+houseEs.getUrl().split(",")[0]);
+			if(!houseEs.getUrl().contains("http:")){
+				vo.setUrl(appWebDomain+houseEs.getUrl().split(",")[0]);
+			}else {
+				vo.setUrl(houseEs.getUrl().split(",")[0]);
+			}
 		}
 		vo.setHouseTitle(houseEs.getHouseTitle());
 		vo.setDetailAddr(houseEs.getDetailAddr());
