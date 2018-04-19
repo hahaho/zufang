@@ -53,6 +53,7 @@ public class UsersController {
 
 	private static final String SUCCESS = "success";
 	private static final String USERNAME = "username";
+	private static final String REALNAME = "realName";
 	private static final String RESETPWD_FAIL = "重置密码失败";
 	private static final String USER_ID = "userId";
 	private static final String APARTMENT_CODE = "apartmentCode";
@@ -90,7 +91,7 @@ public class UsersController {
 			// 用户帐号
 			String username = paramMap.get(USERNAME);
 			// 用户真实姓名
-			String realName = paramMap.get("realName");
+			String realName = paramMap.get(REALNAME);
 			UsersDO paramDO = new UsersDO();
 			paramDO.setUserName(username);
 			paramDO.setRealName(realName);
@@ -365,6 +366,11 @@ public class UsersController {
 			UsersDO usersDO = new UsersDO();
 			String userId = paramMap.get(USER_ID);
 			String apartmentCode = paramMap.get(APARTMENT_CODE);
+			LOG.info("userId:{},apartmentCode:{}",userId,apartmentCode);
+			if(StringUtils.isEmpty(userId) || StringUtils.isEmpty(apartmentCode)){
+				throw new RuntimeException("userId或apartmentCode不能为空");
+			}
+
 			usersDO.setId(Long.valueOf(userId));
 			usersDO.setApartmentCode(apartmentCode);
 			usersDO.setUpdatedBy(SpringSecurityUtils.getCurrentUser());
@@ -374,7 +380,7 @@ public class UsersController {
 			return Response.success("用户关联公寓成功！","");
 		}catch (Exception e){
 			LOG.error("用户关联公寓失败,-----Exception---->{}",e);
-			return Response.fail("用户关联公寓失败!");
+			return Response.fail("用户关联公寓失败:"+e.getMessage());
 		}
 	}
 

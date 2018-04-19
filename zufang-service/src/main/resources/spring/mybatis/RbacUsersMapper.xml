@@ -64,7 +64,8 @@
 	<!-- 分页查询&过滤查询 -->
 	<select id="select" parameterType="UsersDO" resultType="UsersDO">
 	<![CDATA[
-		SELECT   t_uses.ID               ID,
+		SELECT
+				 t_uses.ID               ID,
 				 t_uses.USER_NAME        USERNAME,
 				 t_uses.REAL_NAME        REALNAME,
 				 t_uses.MOBILE           MOBILE,
@@ -75,12 +76,14 @@
 				 t_uses.CREATED_TIME     createdTime,
 				 t_uses.UPDATED_BY       UPDATEDBY,
 				 t_uses.UPDATED_TIME     updatedTime,
-				 t_uses.APARTMENT_CODE   apartmentCode
-		FROM T_RBAC_USERS t_uses
+				 t_uses.APARTMENT_CODE   apartmentCode,
+				 t_apart.name   apartmentName
+		FROM T_RBAC_USERS t_uses LEFT JOIN t_zfang_apartment t_apart
+		ON	t_uses.apartment_code =t_apart.code
 	]]>
 		<include refid="QueryConditionSql" />
 	<![CDATA[
-		ORDER BY CREATED_TIME DESC
+		ORDER BY t_uses.CREATED_TIME DESC
 	]]>
 	</select>
 
@@ -107,7 +110,7 @@
 				 UPDATED_BY       UPDATEDBY,
 				 UPDATED_TIME     updatedTime,
 				 APARTMENT_CODE   apartmentCode
-		FROM T_RBAC_USERS WHERE ID = #{value}
+		FROM T_RBAC_USERS WHERE status = 1 AND ID = #{value}
 	]]>
 	</select>
 	
@@ -127,14 +130,14 @@
 				 UPDATED_BY       UPDATEDBY,
 				 UPDATED_TIME     updatedTime,
 				 APARTMENT_CODE   apartmentCode
-		FROM T_RBAC_USERS WHERE USER_NAME = #{value}
+		FROM T_RBAC_USERS WHERE status = 1 AND USER_NAME = #{value}
 	]]>
 	</select>
 
-	<!-- 删除 -->
+	<!-- 删除:逻辑删除 -->
 	<delete id="delete" parameterType="String">
 	<![CDATA[
-		DELETE FROM T_RBAC_USERS WHERE ID = #{value}
+		UPDATE T_RBAC_USERS set status = 0 WHERE  ID = #{value}
 	]]>
 	</delete>
 
@@ -169,7 +172,7 @@
 			</if>
 		</set>
 	<![CDATA[
-		WHERE ID = #{id, jdbcType=VARCHAR} 
+		WHERE status = 1 AND ID = #{id, jdbcType=VARCHAR}
 	]]>
 	</update>
 
@@ -185,7 +188,7 @@
 				DEPARTMENT     = #{department, jdbcType=VARCHAR},    
 				STATUS         = #{status, jdbcType=VARCHAR},
 				APARTMENT_CODE     = #{apartmentCode, jdbcType=VARCHAR}
-		 WHERE ID = #{id, jdbcType=VARCHAR}
+		 WHERE status = 1 and ID = #{id, jdbcType=VARCHAR}
 	]]>
 	</update>
 	
@@ -208,7 +211,7 @@
 			SELECT  ID           ID,
 					ROLE_CODE    ROLECODE,
 					ROLE_NAME    ROLENAME
-		  FROM T_RBAC_ROLES WHERE ID NOT IN 
+		  FROM T_RBAC_ROLES WHERE status = 1 AND ID NOT IN
 			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
 			  ORDER BY CREATED_TIME DESC
 	]]>
@@ -222,22 +225,22 @@
 					ROLE_CODE    ROLECODE,
 					ROLE_NAME    ROLENAME
 		  FROM T_RBAC_ROLES WHERE ID IN 
-			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
+			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE id = #{value})
 			  ORDER BY CREATED_TIME DESC
 	]]>
 	</select>
 
-	<!-- 删除用户角色列表 -->
+	<!-- 删除用户角色列表:逻辑删除 -->
 	<delete id="deleteUserRolesByUserId" parameterType="String">
 	<![CDATA[
-		DELETE FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value}
+		UPDATE T_RBAC_USERS set status = 0 WHERE id = #{value}
 	]]>
 	</delete>
 
 	<!-- 插入用户角色 -->
 	<insert id="insertUserRole" parameterType="UserRoleDO">
 	<![CDATA[
-		INSERT INTO T_RBAC_USER_ROLE (ID, USER_ID, ROLE_ID, 
+		INSERT INTO T_RBAC_USER_ROLE (ID, id, ROLE_ID,
 		CREATED_BY,	CREATED_TIME, UPDATED_BY, UPDATED_TIME) 
 		VALUES (#{id, jdbcType=VARCHAR}, 
 		#{userId, jdbcType=VARCHAR}, #{roleId, jdbcType=VARCHAR}, 
