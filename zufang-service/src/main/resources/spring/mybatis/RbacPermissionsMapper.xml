@@ -64,13 +64,13 @@
 			   CREATED_TIME       CREATEDTIME,
 			   UPDATED_BY         UPDATEDBY,
 			   UPDATED_TIME       UPDATEDTIME 
-		  FROM T_RBAC_PERMISSIONS WHERE ID = #{value}
+		  FROM T_RBAC_PERMISSIONS WHERE ID = #{id}
 	]]>
 	</select>
 	<!-- delete -->
-	<delete id="delete" parameterType="String">
+	<delete id="delete" parameterType="java.lang.Long">
 	<![CDATA[
-		DELETE FROM T_RBAC_PERMISSIONS WHERE ID = #{value}
+		DELETE FROM T_RBAC_PERMISSIONS WHERE ID = #{id}
 	]]>
 	</delete>
 	<!-- update -->
@@ -106,9 +106,9 @@
 	]]>
 	</update>
 	<!-- 删除角色权限表资源记录 -->
-	<delete id="deleteRolePermissionsByPermissionId" parameterType="String">
+	<delete id="deleteRolePermissionsByPermissionId" parameterType="java.lang.Long">
 	<![CDATA[
-		DELETE FROM T_RBAC_ROLE_PERMISSION WHERE PERMISSION_ID = #{value}
+		DELETE FROM T_RBAC_ROLE_PERMISSION WHERE PERMISSION_ID = #{id}
 	]]>
 	</delete>
 </mapper>

@@ -81,9 +81,10 @@ public class PermissionsController {
      * @return
      */
     @POST
-    @Path("/savePermission")
-    public Response savePermission(Map<String,String> map) {
+    @Path("/savePermissions")
+    public Response savePermissions(Map<String,String> map) {
         try {
+        	LOGGER.info("savePermissions map--->{}",GsonUtils.toJson(map));
             String permissionId = map.get("id");
             String permissionCode = map.get("permissionCode");
             String permissionName = map.get("permissionName");
@@ -105,7 +106,7 @@ public class PermissionsController {
             entity.setPermissionName(permissionName);
             entity.setDescription(description);
             String user = SpringSecurityUtils.getCurrentUser();
-            return permissionsService.savePermission(permissionId,entity,user);
+            return permissionsService.savePermissions(permissionId,entity,user);
         } catch (BusinessException e) {
             LOGGER.error(e.getErrorDesc(), e);
             return Response.fail(e.getErrorDesc());
@@ -120,18 +121,19 @@ public class PermissionsController {
      * @return
      */
     @POST
-    @Path("/delete")
-    public Response handleDelete(Map<String,String> map) {
+    @Path("/deletePermissions")
+    public Response deletePermissions(Map<String,String> map) {
         try {
-            String permissionId = map.get("permissionId");
+        	LOGGER.info("deletePermissions map--->{}",GsonUtils.toJson(map));
+            String permissionId = map.get("id");
             if (StringUtils.isBlank(permissionId)) {
                 return Response.fail("资源ID不能为空");
             }
-            permissionsService.delete(Long.valueOf(permissionId));
-            return Response.success("success");
+            permissionsService.delete(permissionId);
+            return Response.success("删除资源成功");
         } catch (Exception e) {
             LOGGER.error("删除资源失败", e);
-            return Response.fail("删除资源记录失败");
+            return Response.fail("删除资源失败");
         }
     }
     /**
