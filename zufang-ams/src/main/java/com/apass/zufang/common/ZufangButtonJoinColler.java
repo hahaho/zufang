@@ -54,9 +54,13 @@ public class ZufangButtonJoinColler {
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             houseVo.setApartmentId(apartmentId);
             returnMap = houseService.addHouse(houseVo);
-        }catch (Exception e){
-            LOGGER.error("添加房源信息失败:"+e.getMessage()+"Exception---->{}",e);
-            return Response.fail("添加房源信息失败");
+        }catch (BusinessException e){
+            LOGGER.error("添加房源信息失败:Exception---->{}",e);
+            return Response.fail("添加房源信息失败"+e.getErrorDesc());
+        }
+        catch (Exception e){
+            LOGGER.error("添加房源信息失败:Exception---->{}",e);
+            return Response.fail("添加房源信息失败"+e.getMessage());
         }
         return Response.success("添加房源信息成功",returnMap);
     }
