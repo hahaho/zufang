@@ -5,7 +5,7 @@ public enum HomeInitEnum {
 //	http://espapp.apass.cn/static/eshop/other/1520907719383.jpg
 	//	http://espapp.apass.cn/static/eshop/other/1522233133300.jpg
 	INIT_HOUSEIMG_1("1", "http://espapp.apass.cn/static/eshop/other/1522233133300.jpg"),// 首页初始img
-	INIT_URL_1("3", "http://gfbapp.vcash.cn/v2/#/zufangUserRepay"),// 追加url
+	INIT_URL_1("3", "http://ajqh.app.apass.cn/v2/#/zufangUserRepay"),// 追加url
 	INIT_TITLE_1("4", "用户还款指引"),
 	
 	
