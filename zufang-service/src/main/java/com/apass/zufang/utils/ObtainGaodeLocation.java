@@ -40,7 +40,7 @@ public class ObtainGaodeLocation {
 	 * @return
 	 */
 	public GaodeLocation addressToGPS(String address) {
-
+		address = address.replaceAll(" +","");
 		try {
 
 			String url = String.format("http://restapi.amap.com/v3/geocode/geo?&s=rsv3&address=%s&key=%s", address,

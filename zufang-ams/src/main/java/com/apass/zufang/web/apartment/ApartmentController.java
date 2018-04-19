@@ -53,7 +53,8 @@ public class ApartmentController {
         ResponsePageBody<ApartmentVo> respBody = new ResponsePageBody<ApartmentVo>();
         try {
         	LOGGER.info("getApartmentList map--->{}",GsonUtils.toJson(map));
-        	String name = CommonUtils.getValue(map, "name");//公寓名称
+			//公寓名称
+        	String name = CommonUtils.getValue(map, "name");
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
         	ApprintmentQueryParams entity = new ApprintmentQueryParams();

@@ -72,6 +72,11 @@ public class UsersDO {
 	 */
 	private String apartmentCode;
 
+	/**
+	 * 公寓名称
+	 */
+	private String apartmentName;
+
 	public Long getId() {
 		return id;
 	}
@@ -174,5 +179,13 @@ public class UsersDO {
 
 	public void setUpdatedTime(Date updatedTime) {
 		this.updatedTime = updatedTime;
+	}
+
+	public String getApartmentName() {
+		return apartmentName;
+	}
+
+	public void setApartmentName(String apartmentName) {
+		this.apartmentName = apartmentName;
 	}
 }
