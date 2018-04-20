@@ -12,7 +12,9 @@ public class SubmitMessage {
     private String submitMessage;
 
     private Date submitTime;
-
+    
+    private String pictureUrl;
+    
     private Date createdTime;
 
     private Date updatedTime;
@@ -61,6 +63,14 @@ public class SubmitMessage {
         this.submitTime = submitTime;
     }
 
+    public String getPictureUrl() {
+		return pictureUrl;
+	}
+
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
+	}
+	
     public Date getCreatedTime() {
         return createdTime;
     }
