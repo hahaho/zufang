@@ -202,8 +202,8 @@ public class RolesController {
     @Path("/save/rolemenu/settings")
     public Response handleSaveRoleMenuSettings(Map<String,String> paramMap) {
         try {
-            String roleId = paramMap.get( "roleId");
-            String menus = paramMap.get( "menus");
+            String roleId = paramMap.get("roleId");
+            String menus = paramMap.get("menus");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
             }
