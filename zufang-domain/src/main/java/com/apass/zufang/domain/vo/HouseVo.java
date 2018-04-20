@@ -96,26 +96,6 @@ public class HouseVo{
 	private double latitude;//维度
 	
 	private BigDecimal roomAcreage;//单间房屋面积
-	
-	private String traffic;//交通
-	
-	private String around;//周边
-
-	public String getTraffic() {
-		return traffic;
-	}
-
-	public void setTraffic(String traffic) {
-		this.traffic = traffic;
-	}
-
-	public String getAround() {
-		return around;
-	}
-
-	public void setAround(String around) {
-		this.around = around;
-	}
 
 	private String extHouseId;//外部房源id
 
