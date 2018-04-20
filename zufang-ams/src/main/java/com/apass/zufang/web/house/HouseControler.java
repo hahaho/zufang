@@ -280,6 +280,10 @@ public class HouseControler {
 	    
 	    String houseId = CommonUtils.getValue(paramMap,"houseId");
 	    String locationId = CommonUtils.getValue(paramMap,"locationId");
+	    
+	    String traffic = CommonUtils.getValue(paramMap,"traffic");
+	    String around = CommonUtils.getValue(paramMap,"around");
+	    
 	    if(bl){//修改
 	    	ValidateUtils.isNotBlank(houseId, "房屋Id不能为!");
 		    ValidateUtils.isNotBlank(locationId, "地址编号不能为空");
@@ -330,6 +334,14 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(rentAmt, "请填写租金");
 	    ValidateUtils.checkNumberRange(rentAmt, 0, 0, "租金");
 	    ValidateUtils.isNotBlank(zujinType, "请选择租金支付方式");
+	    
+	    if(StringUtils.isNotBlank(traffic)){
+	    	ValidateUtils.checkLength(traffic, 1, 300, "请填写1-300个字");
+	    }
+	    
+	    if(StringUtils.isNotBlank(around)){
+	    	ValidateUtils.checkLength(around, 1, 300, "请填写1-300个字");
+	    }
 	    
 	    ValidateUtils.isNotBlank(title, "请填写房源标题");
 		ValidateUtils.checkLength(title, 6, 30, "请填写6-30个字");
@@ -414,6 +426,11 @@ public class HouseControler {
 		    house.setHezuChaoxiang(Byte.valueOf(hezuChaoxiang));
 		    house.setRoomAcreage(new BigDecimal(roomAcreage));
 	    }
+	    String traffic = CommonUtils.getValue(paramMap, "traffic");
+	    house.setTraffic(traffic);
+	    
+	    String around = CommonUtils.getValue(paramMap, "around");
+	    house.setAround(around);
 	    
 	    String title = CommonUtils.getValue(paramMap, "title");
 	    house.setTitle(title);
