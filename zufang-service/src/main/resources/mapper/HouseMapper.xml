@@ -36,13 +36,16 @@
     <result column="hezu_chaoxiang" property="hezuChaoxiang" jdbcType="TINYINT" />
     <result column="hezu_resource" property="hezuResource" jdbcType="TINYINT" />
     <result column="room_acreage" property="roomAcreage" jdbcType="DECIMAL" />
+    <result column="ext_house_id" property="extHouseId" jdbcType="VARCHAR" />
+    <result column="traffic" property="traffic" jdbcType="VARCHAR" />
+    <result column="around" property="around" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, code, apartment_id, type, sort_no, rent_type, community_name, acreage, room, 
     hall, wei, floor, total_floor, lift_type, rent_amt, zujin_type, chaoxiang, zhuangxiu, 
     status, list_time, delist_time, title, edit_flag, created_time, updated_time, created_user, 
     updated_user, is_delete, page_view, housekeeper_tel, total_doors, hezu_chaoxiang, 
-    hezu_resource, room_acreage
+    hezu_resource, room_acreage, ext_house_id, traffic, around
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -65,7 +68,8 @@
       edit_flag, created_time, updated_time, 
       created_user, updated_user, is_delete, 
       page_view, housekeeper_tel, total_doors, 
-      hezu_chaoxiang, hezu_resource, room_acreage
+      hezu_chaoxiang, hezu_resource, room_acreage, 
+      ext_house_id, traffic, around
       )
     values (#{code,jdbcType=VARCHAR}, #{apartmentId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, 
       #{sortNo,jdbcType=INTEGER}, #{rentType,jdbcType=TINYINT}, #{communityName,jdbcType=VARCHAR}, 
@@ -77,7 +81,8 @@
       #{editFlag,jdbcType=TINYINT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
       #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, 
       #{pageView,jdbcType=BIGINT}, #{housekeeperTel,jdbcType=VARCHAR}, #{totalDoors,jdbcType=VARCHAR}, 
-      #{hezuChaoxiang,jdbcType=TINYINT}, #{hezuResource,jdbcType=TINYINT}, #{roomAcreage,jdbcType=DECIMAL}
+      #{hezuChaoxiang,jdbcType=TINYINT}, #{hezuResource,jdbcType=TINYINT}, #{roomAcreage,jdbcType=DECIMAL}, 
+      #{extHouseId,jdbcType=VARCHAR}, #{traffic,jdbcType=VARCHAR}, #{around,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.House" useGeneratedKeys="true" keyProperty="id" >
@@ -182,6 +187,15 @@
       <if test="roomAcreage != null" >
         room_acreage,
       </if>
+      <if test="extHouseId != null" >
+        ext_house_id,
+      </if>
+      <if test="traffic != null" >
+        traffic,
+      </if>
+      <if test="around != null" >
+        around,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="code != null" >
@@ -282,6 +296,15 @@
       </if>
       <if test="roomAcreage != null" >
         #{roomAcreage,jdbcType=DECIMAL},
+      </if>
+      <if test="extHouseId != null" >
+        #{extHouseId,jdbcType=VARCHAR},
+      </if>
+      <if test="traffic != null" >
+        #{traffic,jdbcType=VARCHAR},
+      </if>
+      <if test="around != null" >
+        #{around,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -387,6 +410,15 @@
       <if test="roomAcreage != null" >
         room_acreage = #{roomAcreage,jdbcType=DECIMAL},
       </if>
+      <if test="extHouseId != null" >
+        ext_house_id = #{extHouseId,jdbcType=VARCHAR},
+      </if>
+      <if test="traffic != null" >
+        traffic = #{traffic,jdbcType=VARCHAR},
+      </if>
+      <if test="around != null" >
+        around = #{around,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -424,7 +456,10 @@
       total_doors = #{totalDoors,jdbcType=VARCHAR},
       hezu_chaoxiang = #{hezuChaoxiang,jdbcType=TINYINT},
       hezu_resource = #{hezuResource,jdbcType=TINYINT},
-      room_acreage = #{roomAcreage,jdbcType=DECIMAL}
+      room_acreage = #{roomAcreage,jdbcType=DECIMAL},
+      ext_house_id = #{extHouseId,jdbcType=VARCHAR},
+      traffic = #{traffic,jdbcType=VARCHAR},
+      around = #{around,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

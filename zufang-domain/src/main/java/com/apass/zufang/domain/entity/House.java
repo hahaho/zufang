@@ -72,6 +72,12 @@ public class House {
 
     private BigDecimal roomAcreage;
 
+    private String extHouseId;
+
+    private String traffic;
+
+    private String around;
+
     public Long getId() {
         return id;
     }
@@ -342,5 +348,29 @@ public class House {
 
     public void setRoomAcreage(BigDecimal roomAcreage) {
         this.roomAcreage = roomAcreage;
+    }
+
+    public String getExtHouseId() {
+        return extHouseId;
+    }
+
+    public void setExtHouseId(String extHouseId) {
+        this.extHouseId = extHouseId;
+    }
+
+    public String getTraffic() {
+        return traffic;
+    }
+
+    public void setTraffic(String traffic) {
+        this.traffic = traffic;
+    }
+
+    public String getAround() {
+        return around;
+    }
+
+    public void setAround(String around) {
+        this.around = around;
     }
 }
