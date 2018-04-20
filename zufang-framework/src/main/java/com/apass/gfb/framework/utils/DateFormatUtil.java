@@ -429,11 +429,29 @@ public class DateFormatUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.DATE, day);
-        
+
         return calendar.getTime();
     }
 
-	/**
+    /**
+     *
+     * @param date：时间
+     * @param house：要合并的数据，house
+     * @param minute：要合并的数据，minute
+     * @return
+     */
+    public static Date mergeHouseAndMinute(Date date, int house, int minute){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.set(year,month,day,house,minute,0);
+
+        return calendar.getTime();
+    }
+
+    /**
 	 * 判断某时间是否在另一个时间段内
 	 * 
 	 * @param current
