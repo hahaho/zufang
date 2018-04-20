@@ -42,4 +42,14 @@ public class TestZFAmsController {
             return Response.fail("添加房屋信息失败！");
         }
     }
+    @RequestMapping(value = "/batchMogoRoomList", method = RequestMethod.GET)
+    public Response batchMogoRoomList(){
+        try {
+            spiderService.spiderMogoroomPageList("http://www.mogoroom.com/list",1);
+            return Response.successResponse();
+        }catch (Exception e) {
+            logger.error("batchMogoRoom EXCEPTION --- --->{}", e);
+            return Response.fail("添加房屋信息失败！");
+        }
+    }
 }

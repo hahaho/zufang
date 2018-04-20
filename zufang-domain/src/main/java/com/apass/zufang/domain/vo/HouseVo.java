@@ -117,6 +117,36 @@ public class HouseVo{
 		this.around = around;
 	}
 
+	private String extHouseId;//外部房源id
+
+	private String traffic;//交通
+
+	private String around;//周边
+
+	public String getExtHouseId() {
+		return extHouseId;
+	}
+
+	public void setExtHouseId(String extHouseId) {
+		this.extHouseId = extHouseId;
+	}
+
+	public String getTraffic() {
+		return traffic;
+	}
+
+	public void setTraffic(String traffic) {
+		this.traffic = traffic;
+	}
+
+	public String getAround() {
+		return around;
+	}
+
+	public void setAround(String around) {
+		this.around = around;
+	}
+
 	public double getLongitude() {
 		return longitude;
 	}

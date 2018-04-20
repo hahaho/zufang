@@ -1,33 +1,35 @@
 package com.apass.zufang.service.spider;
+
+import com.apass.gfb.framework.logstash.LOG;
+import com.apass.gfb.framework.utils.DateFormatUtil;
+import com.apass.gfb.framework.utils.GsonUtils;
+import com.apass.zufang.common.utils.MyStringUtil;
 import com.apass.zufang.domain.common.Geocodes;
 import com.apass.zufang.domain.entity.Apartment;
-import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.entity.ZfangSpiderHouseEntity;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
+import com.apass.zufang.mapper.zfang.ZfangSpiderHouseEntityMapper;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.javascript.DefaultJavaScriptErrorListener;
-import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -43,6 +45,16 @@ import java.util.regex.Pattern;
 public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
     public static final String baseUrl = "http://www.mogoroom.com";
+    /**
+     * 蘑菇公寓id
+     */
+    //TODO 生产环境会有改动
+    private static final Long APARTMENT_ID = Long.valueOf(100);
+    /**
+     * 最近跑job时间的house和minute:每天00:10跑job
+     */
+    private static final int CRON_HOUSE = 0;
+    private static final int CRON_MINUTE = 10;
 
     @Autowired
     private ObtainGaodeLocation otainGaodeLocation;
@@ -52,6 +64,9 @@ public class HouseSpiderService {
 
     @Autowired
     private ApartmentMapper apartmentMapper;
+
+    @Autowired
+    private ZfangSpiderHouseEntityMapper spiderHouseMapper;
 
 
 
@@ -65,14 +80,18 @@ public class HouseSpiderService {
             }
         }
     }
-    public void spiderMogoroomPageList(Integer page){
-            parseMogoroomHouseList(page);
+
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+    public void spiderMogoroomPageList(String baseUrl,Integer page){
+        List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = parseMogoroomHouseList(baseUrl, page);
+        LOG.info("第{}页添加的房源内容有:{}",page.toString(), GsonUtils.toJson(zfangSpiderHouseEntities));
     }
 
 
     /**
      * 【蘑菇租房】解析房源详情页
      */
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
             log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
@@ -186,7 +205,9 @@ public class HouseSpiderService {
 
             //数据库插入房源信息
             HouseVo houseVo = new HouseVo();
-            houseVo.setApartmentId(100L);
+            String extHouseId = MyStringUtil.getNumFromStr(houseUrl);
+            houseVo.setExtHouseId(extHouseId);
+            houseVo.setApartmentId(APARTMENT_ID);
             if(acreage != null ){
                 houseVo.setAcreage(new BigDecimal(acreage));
             }
@@ -222,6 +243,14 @@ public class HouseSpiderService {
             houseVo.setUpdatedUser("spiderAdmin");
             houseVo.setHouseStatus("1");
             Map<String,Object> result =  houseService.addHouse(houseVo);
+            if(result.get("houseId") != null ) {
+                //把t_zfang_spider_house对应此条数据标记为删除
+                ZfangSpiderHouseEntity entity = new ZfangSpiderHouseEntity();
+                entity.setExtHouseId(MyStringUtil.getNumFromStr(houseUrl));
+                entity.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
+                spiderHouseMapper.updateByExtHouseIdSelective(entity);
+            }
+
             log.info("-------end visit mogo room,houseId: {}--------",result.get("houseId"));
         }catch (Exception e){
             log.error("parseMogoroomHouseDetail error.......",e);
@@ -232,11 +261,12 @@ public class HouseSpiderService {
      * 【蘑菇租房】解析房源列表
      * @param pageNum,页码
      */
-    public List<Map<String,String>> parseMogoroomHouseList(Integer pageNum) {
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+    public List<ZfangSpiderHouseEntity> parseMogoroomHouseList(String baseUrl,Integer pageNum) {
         //Map的key是id,value是url
-        List<Map<String,String>> hrefList = Lists.newArrayList();
+        List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = Lists.newArrayList();
         try {
-            String houseUrl = "http://www.mogoroom.com/list?page="+pageNum;
+            String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
             //关闭css
@@ -247,24 +277,41 @@ public class HouseSpiderService {
             Thread.sleep(10000);
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
+            //当前城市
+            String city = doc.select("div.current-city").get(0).text();
             Elements ulElement = doc.select("ul.list-room.add-new-listroom.by-list");
             Elements roomConfigs = ulElement.select("li");
             for(int i=0; i<roomConfigs.size(); i++){
+                ZfangSpiderHouseEntity zfangSpiderHouseEntity = new ZfangSpiderHouseEntity();
+                zfangSpiderHouseEntity.setCity(city);
+                zfangSpiderHouseEntity.setApartmentId(APARTMENT_ID);
+                zfangSpiderHouseEntity.setCreatedTime(new Date());
+                zfangSpiderHouseEntity.setUpdatedTime(new Date());
+                Date jobTime = DateFormatUtil.mergeHouseAndMinute(new Date(),CRON_HOUSE,CRON_MINUTE);
+                zfangSpiderHouseEntity.setLastJobTime(jobTime);
                 Map<String,String> hrefMap = Maps.newHashMap();
                 Element element = roomConfigs.get(i);
+                //外部房源id
                 String idKey = element.select("a.inner").attr("data-roomid-md");
+                zfangSpiderHouseEntity.setExtHouseId(idKey);
+                //外部房源url
                 String hrefValue = element.select("a.inner").attr("href");
-                hrefMap.put(idKey,hrefValue);
-                hrefList.add(hrefMap);
+                zfangSpiderHouseEntity.setUrl(hrefValue);
+                zfangSpiderHouseEntity.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
+
+                zfangSpiderHouseEntities.add(zfangSpiderHouseEntity);
+                ZfangSpiderHouseEntity entity = spiderHouseMapper.selectByExtHouseId(idKey);
+                if(entity != null){
+                    continue;
+                }
+                spiderHouseMapper.insertSelective(zfangSpiderHouseEntity);
             }
 
-
-            return hrefList;
-
+            return zfangSpiderHouseEntities;
         } catch (Exception e) {
             log.error("爬取蘑菇租房列表页异常,----Splider Exception -----{}",e);
+            return null;
         }
-        return null;
     }
 
     /**
@@ -296,5 +343,10 @@ public class HouseSpiderService {
 //    		result.add(m.group());
 //    	}
 //    	System.out.println(result);
+    }
+
+    public List<ZfangSpiderHouseEntity> listAllExtHouse() {
+
+        return spiderHouseMapper.listAllExtHouse();
     }
 }
