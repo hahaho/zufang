@@ -112,4 +112,5 @@ public class Banner {
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
     }
+
 }
