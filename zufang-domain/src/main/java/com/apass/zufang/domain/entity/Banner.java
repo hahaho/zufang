@@ -25,8 +25,6 @@ public class Banner {
 
     private String isDelete;
 
-    private String isDelete;
-
     public Long getId() {
         return id;
     }
@@ -115,11 +113,4 @@ public class Banner {
         this.isDelete = isDelete;
     }
 
-    public String getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete;
-    }
 }
