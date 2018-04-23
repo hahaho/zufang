@@ -1,165 +1,74 @@
 package com.apass.zufang.web.banner;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.apass.gfb.framework.exception.BusinessException;
-import com.apass.gfb.framework.log.LogAnnotion;
-import com.apass.gfb.framework.log.LogValueTypeEnum;
-import com.apass.gfb.framework.mybatis.page.Page;
-import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
-import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
 import com.apass.gfb.framework.utils.HttpWebUtils;
 import com.apass.gfb.framework.utils.ImageUtils;
+import com.apass.zufang.common.utils.MapEntryOrConverUtils;
 import com.apass.zufang.domain.Response;
-import com.apass.zufang.domain.entity.Banner;
+import com.apass.zufang.domain.dto.BannerQueryParams;
+import com.apass.zufang.domain.vo.BannerVo;
 import com.apass.zufang.service.banner.BannerService;
-import com.apass.zufang.utils.FileUtilsCommons;
-import com.apass.zufang.utils.ImageTools;
-import com.apass.zufang.utils.PaginationManage;
 import com.apass.zufang.utils.ResponsePageBody;
 
-@Controller
-@RequestMapping(value = "/application/banner/management")
+@Path("/banner")
+@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class BannerController{
-    /**
-     * 日志
-     */
-    private static final Logger LOGGER                 = LoggerFactory.getLogger(BannerController.class);
-    private static final String CREDIT_GOOD_BANNER_URL = "banner/bannerList";
-
-    private static final String FILE_NAME_PREFIX       = "banner_";  
-    
-    // 上传文件名前缀
+    /*** 日志*/
+    private static final Logger logger = LoggerFactory.getLogger(BannerController.class);
+   
     @Autowired
-    private BannerService   bannerInfoService;
+    private BannerService bannerService;
     
-    private static final String BANNER_TYPE            = "bannerType";
+    private static final String BANNER_TYPE = "bannerType";
     /**
      * 图片服务器地址
      */
 //    @Value("${nfs.rootPath}")
-    private String              rootPath;
+    private String rootPath;
 
 //    @Value("${nfs.banner}")
-    private String              nfsBanner;
+    private String nfsBanner;
 
-    /**
-     * banner信息初始化
-     */
-//    @RequestMapping("/page")
-//    public ModelAndView bannerPage() {
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        if(SpringSecurityUtils.hasPermission("BANNER_LIST_EDIT")) {
-//        	map.put("grantedAuthority", "permission");
-//		}
-//		//查询一级类目
-//        CategoryDto dto = new CategoryDto();
-//        List<CategoryVo> list = cateService.listCategory(dto);
-//        map.put("oneLevelCateList",list);
-//        return new ModelAndView(CREDIT_GOOD_BANNER_URL, map);
-//    }
-
-    @RequestMapping("/getById")
-    @ResponseBody
-    public Response getById(Long id){
-        Banner Banner =  bannerInfoService.selectById(id);
-        return Response.successResponse(Banner);
-    }
-
-    /**
-     * banner信息分页查询
-     */
-//    @ResponseBody
-//    @RequestMapping("/query")
-//    public ResponsePageBody<Banner> queryBannerPage(HttpServletRequest request) {
-//        ResponsePageBody<Banner> respBody = new ResponsePageBody<Banner>();
-//        try {
-//            Page page = getPageParam(request);
-//
-//            String bannerType = HttpWebUtils.getValue(request, BANNER_TYPE);
-//
-//            Map<String, Object> map = new HashMap<String, Object>();
-//            map.put(BANNER_TYPE, bannerType);
-//            if(org.apache.commons.lang.StringUtils.isEmpty(bannerType)){
-//                List<String> bannerTypeParams = new ArrayList<>();
-//                bannerTypeParams.add(BannerType.BANNER_INDEX.getIdentify());
-//                bannerTypeParams.add(BannerType.BANNER_SIFT.getIdentify());
-//                CategoryDto dto = new CategoryDto();
-//                List<CategoryVo> list = cateService.listCategory(dto);
-//                for(CategoryVo c : list){
-//                    bannerTypeParams.add("category_" + c.getCategoryId());
-//                }
-//                map.put("bannerTypeParams",bannerTypeParams);
-//            }
-//
-//            // 获取分页结果返回给页面
-//            PaginationManage<Banner> pagination = bannerInfoService.loadBanners(map, page);
-//            if (pagination == null) {
-//                respBody.setTotal(0);
-//                respBody.setStatus(CommonCode.SUCCESS_CODE);
-//                return respBody;
-//            }
-//            respBody.setTotal(pagination.getTotalCount());
-//            respBody.setRows(pagination.getDataList());
-//            respBody.setStatus(CommonCode.SUCCESS_CODE);
-//        } catch (Exception e) {
-//            LOGGER.error("banner信息查询失败", e);
-//            respBody.setMsg("banner图列表查询失败");
-//        }
-//        return respBody;
-//    }
-
-    //获取分页数据
-    private Page getPageParam(HttpServletRequest request) {
-        // 获取分页数据
-        String pageNo = HttpWebUtils.getValue(request, "page");
-        String pageSize = HttpWebUtils.getValue(request, "rows");
-        Integer pageNoNum = Integer.parseInt(pageNo);
-        Integer pageSizeNum = Integer.parseInt(pageSize);
-        Page page = new Page();
-        page.setPage(pageNoNum <= 0 ? 1 : pageNoNum);
-        page.setLimit(pageSizeNum <= 0 ? 1 : pageSizeNum);
-        return page;
-    }
-
-    /**
-     * banner信息删除
-     */
-    @ResponseBody
-    @RequestMapping("/delete")
-    @LogAnnotion(operationType = "删除banner信息", valueType = LogValueTypeEnum.VALUE_REQUEST)
-    public Response deleteBanner(HttpServletRequest request) {
-        try {
-            String id = HttpWebUtils.getValue(request, "id");
-            Integer respBody = bannerInfoService.deleteBannerInfor(Long.parseLong(id));
-            if (respBody == 1) {
-                return Response.success("删除成功！");
-            } else {
-                return Response.fail("删除失败");
-            }
-        } catch (Exception e) {
-            LOGGER.error("banner信息查询失败", e);
-            return Response.fail("删除失败");
-        }
+   
+    @POST
+	@Path("/queryBanner")
+	public Response queryBannerList(Map<String,Object> paramMap){
+		ResponsePageBody<BannerVo> respBody = new ResponsePageBody<>();
+		try {
+			BannerQueryParams dto = (BannerQueryParams) MapEntryOrConverUtils.converMap(BannerQueryParams.class, paramMap);
+			if(dto.getPage() == null || dto.getRows() == null){
+        		dto.setPage(1);
+        		dto.setRows(10);
+        	}
+			respBody = bannerService.getBannerListsExceptDelete(dto);
+        	respBody.setMsg("banner信息列表查询成功!");
+			return Response.success("查询banner信息成功！", respBody);
+		} catch (Exception e) {
+			 logger.error("getBannerListsExceptDelete EXCEPTION --- --->{}", e);
+	         respBody.setMsg("banner信息列表查询失败!");
+			 return Response.fail("查询banner信息失败!");
+		}
+		
     }
 
     /**
@@ -176,7 +85,7 @@ public class BannerController{
         try {
             writer = response.getWriter();
         } catch (IOException e1) {
-            LOGGER.error("系统出错:", e1);
+            logger.error("系统出错:", e1);
         }
         if (null == writer) {
             return;

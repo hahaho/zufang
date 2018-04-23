@@ -1,5 +1,7 @@
 package com.apass.zufang.domain.vo;
 
+import com.apass.zufang.domain.enums.BannerTypeEnums;
+
 public class BannerVo {
 	
 	private Long id;
@@ -7,6 +9,12 @@ public class BannerVo {
 	private String activityUrl;
 	
 	private String name;
+	
+	private Integer type;
+	
+	private Long sort;
+	
+	private String typeMsg;
 
 	public Long getId() {
 		return id;
@@ -30,6 +38,26 @@ public class BannerVo {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Long getSort() {
+		return sort;
+	}
+
+	public void setSort(Long sort) {
+		this.sort = sort;
+	}
+
+	public String getTypeMsg() {
+		return BannerTypeEnums.getMessge(this.type);
 	}
 	
 }

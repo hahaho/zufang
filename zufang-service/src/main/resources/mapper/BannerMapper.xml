@@ -12,10 +12,11 @@
     <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, banner_name, banner_img_url, banner_type, banner_sort, activity_url, create_user, 
-    update_user, create_time, update_time
+    update_user, create_time, update_time, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -30,12 +31,12 @@
   <insert id="insert" parameterType="com.apass.zufang.domain.entity.Banner" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_banner (banner_name, banner_img_url, banner_type, 
       banner_sort, activity_url, create_user, 
-      update_user, create_time, update_time
-      )
+      update_user, create_time, update_time, 
+      is_delete)
     values (#{bannerName,jdbcType=VARCHAR}, #{bannerImgUrl,jdbcType=VARCHAR}, #{bannerType,jdbcType=TINYINT}, 
       #{bannerSort,jdbcType=BIGINT}, #{activityUrl,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
-      #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.Banner" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_banner
@@ -67,6 +68,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="bannerName != null" >
@@ -95,6 +99,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -128,6 +135,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -141,7 +151,8 @@
       create_user = #{createUser,jdbcType=VARCHAR},
       update_user = #{updateUser,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -23,6 +23,8 @@ public class Banner {
 
     private Date updateTime;
 
+    private String isDelete;
+
     public Long getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class Banner {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 }
