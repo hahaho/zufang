@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.SubmitMessage" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="submit_message" property="submitMessage" jdbcType="VARCHAR" />
     <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
@@ -12,10 +13,11 @@
     <result column="created_user" property="createdUser" jdbcType="VARCHAR" />
     <result column="updated_user" property="updatedUser" jdbcType="VARCHAR" />
     <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, user_name, submit_message, submit_time, created_time, updated_time, 
-    created_user, updated_user, picture_url
+    id, user_id, phone, user_name, submit_message, submit_time, created_time, updated_time, 
+    created_user, updated_user, picture_url, is_delete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -28,22 +30,23 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.apass.zufang.domain.entity.SubmitMessage" useGeneratedKeys="true" keyProperty="id" >
-    insert into t_zfang_submit_message 
-    	(user_id, user_name, submit_message, submit_time, 
-    	 created_time, updated_time, created_user, updated_user,
-    	 picture_url)
-    values 
-    	(#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, 
-    	 #{submitMessage,jdbcType=VARCHAR}, #{submitTime,jdbcType=TIMESTAMP}, 
-    	 #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
-    	 #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR},
-    	 #{pictureUrl,jdbcType=VARCHAR})
+    insert into t_zfang_submit_message (user_id, phone, user_name, 
+      submit_message, submit_time, created_time, 
+      updated_time, created_user, updated_user, 
+      picture_url, is_delete)
+    values (#{userId,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{submitMessage,jdbcType=VARCHAR}, #{submitTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR}, 
+      #{pictureUrl,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.SubmitMessage" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_submit_message
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
         user_id,
+      </if>
+      <if test="phone != null" >
+        phone,
       </if>
       <if test="userName != null" >
         user_name,
@@ -69,10 +72,16 @@
       <if test="pictureUrl != null" >
         picture_url,
       </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
       </if>
       <if test="userName != null" >
         #{userName,jdbcType=VARCHAR},
@@ -96,7 +105,10 @@
         #{updatedUser,jdbcType=VARCHAR},
       </if>
       <if test="pictureUrl != null" >
-      	#{pictureUrl,jdbcType=VARCHAR},
+        #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -105,6 +117,9 @@
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
       </if>
       <if test="userName != null" >
         user_name = #{userName,jdbcType=VARCHAR},
@@ -130,12 +145,16 @@
       <if test="pictureUrl != null" >
         picture_url = #{pictureUrl,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.SubmitMessage" >
     update t_zfang_submit_message
     set user_id = #{userId,jdbcType=BIGINT},
+      phone = #{phone,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
       submit_message = #{submitMessage,jdbcType=VARCHAR},
       submit_time = #{submitTime,jdbcType=TIMESTAMP},
@@ -143,7 +162,8 @@
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       created_user = #{createdUser,jdbcType=VARCHAR},
       updated_user = #{updatedUser,jdbcType=VARCHAR},
-      picture_url = #{pictureUrl,jdbcType=VARCHAR}
+      picture_url = #{pictureUrl,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
