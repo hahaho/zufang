@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.dto.ApprintmentQueryParams;
-import com.apass.zufang.domain.entity.SubmitMessage;
+import com.apass.zufang.domain.vo.SubmitMessageVo;
 import com.apass.zufang.service.operation.SubmitMessageService;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
@@ -43,14 +43,13 @@ public class SubmitMessageController {
      */
     @POST
 	@Path("/getSubmitMessageList")
-    public ResponsePageBody<SubmitMessage> getSubmitMessageList(Map<String,Object> map) {
-        ResponsePageBody<SubmitMessage> respBody = new ResponsePageBody<SubmitMessage>();
+    public ResponsePageBody<SubmitMessageVo> getSubmitMessageList(Map<String,Object> map) {
+        ResponsePageBody<SubmitMessageVo> respBody = new ResponsePageBody<SubmitMessageVo>();
         try {
         	LOGGER.info("getSubmitMessageList map--->{}",GsonUtils.toJson(map));
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
         	ApprintmentQueryParams entity = new ApprintmentQueryParams();
-        	entity.setIsDelete("00");
         	entity.setPage(Integer.parseInt(page));
         	entity.setRows(Integer.parseInt(rows));
         	respBody = submitMessageService.getSubmitMessageList(entity);
