@@ -42,7 +42,7 @@ public class UsersRepository extends BaseMybatisRepository<UsersDO, String> {
     /**
      * 删除用户角色列表
      */
-    public void deleteUserRolesByUserId(String userId) {
+    public void deleteUserRolesByUserId(Long userId) {
         getSqlSession().delete(getSQL("deleteUserRolesByUserId"), userId);
     }
 

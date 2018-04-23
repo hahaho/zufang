@@ -211,7 +211,7 @@
 			SELECT  ID           ID,
 					ROLE_CODE    ROLECODE,
 					ROLE_NAME    ROLENAME
-		  FROM T_RBAC_ROLES WHERE status = 1 AND ID NOT IN
+		  FROM T_RBAC_ROLES WHERE ID NOT IN
 			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
 			  ORDER BY CREATED_TIME DESC
 	]]>
@@ -225,22 +225,24 @@
 					ROLE_CODE    ROLECODE,
 					ROLE_NAME    ROLENAME
 		  FROM T_RBAC_ROLES WHERE ID IN 
-			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE id = #{value})
+			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
 			  ORDER BY CREATED_TIME DESC
 	]]>
 	</select>
 
-	<!-- 删除用户角色列表:逻辑删除 -->
-	<delete id="deleteUserRolesByUserId" parameterType="String">
+	<!-- 删除用户角色列表:逻辑删除 以后会加上逻辑删除字段
+	UPDATE T_RBAC_USERS set status = 0 WHERE USER_ID = #{value}
+	-->
+	<delete id="deleteUserRolesByUserId" parameterType="java.lang.Long">
 	<![CDATA[
-		UPDATE T_RBAC_USERS set status = 0 WHERE id = #{value}
+		DELETE FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value}
 	]]>
 	</delete>
 
 	<!-- 插入用户角色 -->
 	<insert id="insertUserRole" parameterType="UserRoleDO">
 	<![CDATA[
-		INSERT INTO T_RBAC_USER_ROLE (ID, id, ROLE_ID,
+		INSERT INTO T_RBAC_USER_ROLE (ID, USER_ID, ROLE_ID,
 		CREATED_BY,	CREATED_TIME, UPDATED_BY, UPDATED_TIME) 
 		VALUES (#{id, jdbcType=VARCHAR}, 
 		#{userId, jdbcType=VARCHAR}, #{roleId, jdbcType=VARCHAR}, 
