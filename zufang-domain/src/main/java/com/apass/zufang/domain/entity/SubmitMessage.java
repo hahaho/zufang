@@ -7,14 +7,14 @@ public class SubmitMessage {
 
     private Long userId;
 
+    private String phone;
+
     private String userName;
 
     private String submitMessage;
 
     private Date submitTime;
-    
-    private String pictureUrl;
-    
+
     private Date createdTime;
 
     private Date updatedTime;
@@ -22,6 +22,10 @@ public class SubmitMessage {
     private String createdUser;
 
     private String updatedUser;
+
+    private String pictureUrl;
+
+    private String isDelete;
 
     public Long getId() {
         return id;
@@ -37,6 +41,14 @@ public class SubmitMessage {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getUserName() {
@@ -63,14 +75,6 @@ public class SubmitMessage {
         this.submitTime = submitTime;
     }
 
-    public String getPictureUrl() {
-		return pictureUrl;
-	}
-
-	public void setPictureUrl(String pictureUrl) {
-		this.pictureUrl = pictureUrl;
-	}
-	
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -101,5 +105,21 @@ public class SubmitMessage {
 
     public void setUpdatedUser(String updatedUser) {
         this.updatedUser = updatedUser;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 }

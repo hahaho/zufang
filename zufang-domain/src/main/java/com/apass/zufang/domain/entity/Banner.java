@@ -19,9 +19,11 @@ public class Banner {
 
     private String updateUser;
 
-    private Date createTime;
+    private Date createdTime;
 
-    private Date updateTime;
+    private Date updatedTime;
+
+    private String isDelete;
 
     public Long getId() {
         return id;
@@ -87,19 +89,27 @@ public class Banner {
         this.updateUser = updateUser;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdatedTime(Date updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 }
