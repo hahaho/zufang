@@ -66,7 +66,7 @@ public class UsersService {
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void saveAssignedRoles(String userId, String roles) {
-		usersRepository.deleteUserRolesByUserId(userId);
+		usersRepository.deleteUserRolesByUserId(Long.valueOf(userId));
 		Set<String> roleIds = ListeningCollectionUtils.tokenizeToSet(roles, ",");
 		if (CollectionUtils.isEmpty(roleIds)) {
 			return;
@@ -96,7 +96,7 @@ public class UsersService {
 		if (StringUtils.equals(usersDO.getUserName(), "admin")) {
 			throw new BusinessException("管理员(admin)不可删除");
 		}
-		usersRepository.deleteUserRolesByUserId(userId);
+		usersRepository.deleteUserRolesByUserId(Long.valueOf(userId));
 		usersRepository.delete(userId);
 	}
 
