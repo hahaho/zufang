@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
-import com.apass.zufang.domain.dto.ApprintmentQueryParams;
+import com.apass.zufang.domain.dto.SubmitMessageQueryParams;
 import com.apass.zufang.domain.entity.SubmitMessage;
 import com.apass.zufang.domain.vo.SubmitMessageVo;
 import com.apass.zufang.mapper.zfang.SubmitMessageMapper;
@@ -20,7 +20,7 @@ public class SubmitMessageService {
 	 * @param entity
 	 * @return
 	 */
-	public ResponsePageBody<SubmitMessageVo> getSubmitMessageList(ApprintmentQueryParams entity) {
+	public ResponsePageBody<SubmitMessageVo> getSubmitMessageList(SubmitMessageQueryParams entity,SubmitMessageQueryParams count) {
 		ResponsePageBody<SubmitMessageVo> pageBody = new ResponsePageBody<SubmitMessageVo>();
         List<SubmitMessage> list = submitMessageMapper.getSubmitMessageList(entity);
         List<SubmitMessageVo> list1 = new ArrayList<SubmitMessageVo>();
@@ -32,7 +32,7 @@ public class SubmitMessageService {
         	list1.add(vo);
         }
         pageBody.setRows(list1);
-        list = submitMessageMapper.getSubmitMessageList(null);
+        list = submitMessageMapper.getSubmitMessageList(count);
         pageBody.setTotal(list.size());
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;
