@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.SubmitMessageMapper" >
+	<!-- 分页查询 -->
+    <select id="getSubmitMessageList" resultType="com.apass.zufang.domain.entity.SubmitMessage"
+        parameterType="com.apass.zufang.domain.dto.ApprintmentQueryParams">
+        <![CDATA[ 
+        SELECT 
+            id id, user_id userId, user_name userName, submit_message submitMessage, submit_time submitTime,
+            created_time createdTime, updated_time updatedTime, 
+            created_user createdUser, updated_user updatedUser,
+            picture_url pictureUrl
+        FROM t_zfang_submit_message
+        ORDER BY created_time DESC
+        ]]>
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+</mapper>
