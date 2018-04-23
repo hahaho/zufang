@@ -6,12 +6,13 @@
         parameterType="com.apass.zufang.domain.dto.ApprintmentQueryParams">
         <![CDATA[ 
         SELECT 
-            id id, user_id userId, user_name userName, submit_message submitMessage, submit_time submitTime,
+            id id, user_id userId, phone phone,user_name userName, submit_message submitMessage, submit_time submitTime,
             created_time createdTime, updated_time updatedTime, 
             created_user createdUser, updated_user updatedUser,
-            picture_url pictureUrl
+            picture_url pictureUrl,is_delete isDelete
         FROM t_zfang_submit_message
-        ORDER BY created_time DESC
+        WHERE is_delete = '00'
+        	ORDER BY created_time DESC
         ]]>
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
