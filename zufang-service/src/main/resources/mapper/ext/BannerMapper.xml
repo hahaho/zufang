@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.BannerMapper" >
+	<!-- 初始es分页查询条件 -->
+    <sql id="QueryConditionSql">
+        <where>
+			<if test="bannerType!=null and bannerType!=''"> AND banner.banner_type = #{bannerType} </if>
+        	<if test="isDelete!=null and isDelete!=''"> AND banner.is_delete = #{isDelete} </if>
+        </where>
+    </sql>
+   <!-- 房源信息管理 -->
+    <select id="getBannerLists" resultType="com.apass.zufang.domain.vo.BannerVo" 
+        parameterType="com.apass.zufang.domain.dto.BannerQueryParams">
+        SELECT 
+            banner.id id,
+            banner.banner_name name,
+            banner.activity_url activityUrl,
+            banner.banner_type type,
+            banner.banner_sort sort
+        FROM t_zfang_banner banner
+        <include refid="QueryConditionSql" />
+        ORDER BY banner.banner_type ASC,banner.banner_order ASC,banner.update_date DESC
+        <if test="startRecordIndex != null">
+            <include refid="PAGINATION.MYSQL_PAGINATION" />
+        </if>
+    </select>
+    <!-- 房源信息管理分页查询数量 -->
+    <select id ="getBannerListsCount" resultType="java.lang.Integer"
+       parameterType="com.apass.zufang.domain.dto.BannerQueryParams">
+        SELECT 
+            COUNT(*)
+        FROM t_zfang_banner banner 
+        <include refid="QueryConditionSql" />
+        ORDER BY banner.banner_type ASC,banner.banner_order ASC,banner.update_date DESC
+    </select>
+</mapper>

@@ -5,21 +5,25 @@ import java.util.Date;
 public class Banner {
     private Long id;
 
-    private Byte bannerType;
+    private String bannerName;
 
     private String bannerImgUrl;
 
-    private Long bannerSortNo;
+    private Byte bannerType;
 
-    private String bannerUrl;
+    private Long bannerSort;
+
+    private String activityUrl;
+
+    private String createUser;
+
+    private String updateUser;
 
     private Date createdTime;
 
     private Date updatedTime;
 
-    private String createdUser;
-
-    private String updatedUser;
+    private String isDelete;
 
     public Long getId() {
         return id;
@@ -29,12 +33,12 @@ public class Banner {
         this.id = id;
     }
 
-    public Byte getBannerType() {
-        return bannerType;
+    public String getBannerName() {
+        return bannerName;
     }
 
-    public void setBannerType(Byte bannerType) {
-        this.bannerType = bannerType;
+    public void setBannerName(String bannerName) {
+        this.bannerName = bannerName;
     }
 
     public String getBannerImgUrl() {
@@ -45,20 +49,44 @@ public class Banner {
         this.bannerImgUrl = bannerImgUrl;
     }
 
-    public Long getBannerSortNo() {
-        return bannerSortNo;
+    public Byte getBannerType() {
+        return bannerType;
     }
 
-    public void setBannerSortNo(Long bannerSortNo) {
-        this.bannerSortNo = bannerSortNo;
+    public void setBannerType(Byte bannerType) {
+        this.bannerType = bannerType;
     }
 
-    public String getBannerUrl() {
-        return bannerUrl;
+    public Long getBannerSort() {
+        return bannerSort;
     }
 
-    public void setBannerUrl(String bannerUrl) {
-        this.bannerUrl = bannerUrl;
+    public void setBannerSort(Long bannerSort) {
+        this.bannerSort = bannerSort;
+    }
+
+    public String getActivityUrl() {
+        return activityUrl;
+    }
+
+    public void setActivityUrl(String activityUrl) {
+        this.activityUrl = activityUrl;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
     }
 
     public Date getCreatedTime() {
@@ -77,19 +105,12 @@ public class Banner {
         this.updatedTime = updatedTime;
     }
 
-    public String getCreatedUser() {
-        return createdUser;
+    public String getIsDelete() {
+        return isDelete;
     }
 
-    public void setCreatedUser(String createdUser) {
-        this.createdUser = createdUser;
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 
-    public String getUpdatedUser() {
-        return updatedUser;
-    }
-
-    public void setUpdatedUser(String updatedUser) {
-        this.updatedUser = updatedUser;
-    }
 }

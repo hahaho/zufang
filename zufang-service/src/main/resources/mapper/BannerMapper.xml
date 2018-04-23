@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.BannerMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.Banner" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="banner_name" property="bannerName" jdbcType="VARCHAR" />
+    <result column="banner_img_url" property="bannerImgUrl" jdbcType="VARCHAR" />
+    <result column="banner_type" property="bannerType" jdbcType="TINYINT" />
+    <result column="banner_sort" property="bannerSort" jdbcType="BIGINT" />
+    <result column="activity_url" property="activityUrl" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, banner_name, banner_img_url, banner_type, banner_sort, activity_url, create_user, 
+    update_user, created_time, updated_time, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zfang_banner
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_zfang_banner
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.entity.Banner" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_banner (banner_name, banner_img_url, banner_type, 
+      banner_sort, activity_url, create_user, 
+      update_user, created_time, updated_time, 
+      is_delete)
+    values (#{bannerName,jdbcType=VARCHAR}, #{bannerImgUrl,jdbcType=VARCHAR}, #{bannerType,jdbcType=TINYINT}, 
+      #{bannerSort,jdbcType=BIGINT}, #{activityUrl,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateUser,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.Banner" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_banner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bannerName != null" >
+        banner_name,
+      </if>
+      <if test="bannerImgUrl != null" >
+        banner_img_url,
+      </if>
+      <if test="bannerType != null" >
+        banner_type,
+      </if>
+      <if test="bannerSort != null" >
+        banner_sort,
+      </if>
+      <if test="activityUrl != null" >
+        activity_url,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bannerName != null" >
+        #{bannerName,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerImgUrl != null" >
+        #{bannerImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerType != null" >
+        #{bannerType,jdbcType=TINYINT},
+      </if>
+      <if test="bannerSort != null" >
+        #{bannerSort,jdbcType=BIGINT},
+      </if>
+      <if test="activityUrl != null" >
+        #{activityUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.Banner" >
+    update t_zfang_banner
+    <set >
+      <if test="bannerName != null" >
+        banner_name = #{bannerName,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerImgUrl != null" >
+        banner_img_url = #{bannerImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerType != null" >
+        banner_type = #{bannerType,jdbcType=TINYINT},
+      </if>
+      <if test="bannerSort != null" >
+        banner_sort = #{bannerSort,jdbcType=BIGINT},
+      </if>
+      <if test="activityUrl != null" >
+        activity_url = #{activityUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.Banner" >
+    update t_zfang_banner
+    set banner_name = #{bannerName,jdbcType=VARCHAR},
+      banner_img_url = #{bannerImgUrl,jdbcType=VARCHAR},
+      banner_type = #{bannerType,jdbcType=TINYINT},
+      banner_sort = #{bannerSort,jdbcType=BIGINT},
+      activity_url = #{activityUrl,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

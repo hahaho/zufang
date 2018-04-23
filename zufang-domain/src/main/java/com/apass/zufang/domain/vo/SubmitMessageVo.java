@@ -1,8 +1,8 @@
-package com.apass.zufang.domain.entity;
+package com.apass.zufang.domain.vo;
 
 import java.util.Date;
 
-public class SubmitMessage {
+public class SubmitMessageVo {
     private Long id;
 
     private Long userId;
@@ -26,8 +26,9 @@ public class SubmitMessage {
     private String pictureUrl;
 
     private String isDelete;
-
-    public Long getId() {
+    private String submitTimeStr;
+    private String createdTimeStr;
+	public Long getId() {
         return id;
     }
 
@@ -122,4 +123,17 @@ public class SubmitMessage {
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
     }
+
+	public String getSubmitTimeStr() {
+		return submitTimeStr;
+	}
+	public void setSubmitTimeStr(String submitTimeStr) {
+		this.submitTimeStr = submitTimeStr;
+	}
+	public String getCreatedTimeStr() {
+		return createdTimeStr;
+	}
+	public void setCreatedTimeStr(String createdTimeStr) {
+		this.createdTimeStr = createdTimeStr;
+	}
 }
