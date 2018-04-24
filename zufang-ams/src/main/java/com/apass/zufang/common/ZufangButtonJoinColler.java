@@ -60,7 +60,12 @@ public class ZufangButtonJoinColler {
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             houseVo.setApartmentId(apartmentId);
             houseVo.setCity(CommonService.cityValidation(houseVo.getCity()));
-            houseVo.setProvince(workCityJdService.getByCityName(houseVo.getCity()).getProvince());
+            if(CommonService.CROWNA_CITY_LIST.contains(houseVo.getCity())){
+                //直辖市处理
+                houseVo.setProvince(houseVo.getCity());
+            }else{
+                houseVo.setProvince(workCityJdService.getByCityName(houseVo.getCity()).getProvince());
+            }
             returnMap = houseService.addHouse(houseVo);
         }catch (BusinessException e){
             LOGGER.error("添加房源信息失败:Exception---->{}",e);
