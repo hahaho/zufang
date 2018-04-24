@@ -46,7 +46,6 @@ public class BannerController{
     @Autowired
     private BannerService bannerService;
     
-    private static final String BANNER_TYPE = "bannerType";
     /*** 图片服务器地址*/
     @Value("${nfs.rootPath}")
     private String rootPath;
@@ -120,34 +119,5 @@ public class BannerController{
 		    return Response.fail("删除banner信息失败！");
 		}
 	}
-
-    /**
-     * 查看图片
-     * 
-     * @param request
-     * @param response
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping("/getPoto")
-    public void getPoto(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        PrintWriter writer = null;
-        try {
-            writer = response.getWriter();
-        } catch (IOException e1) {
-            logger.error("系统出错:", e1);
-        }
-        if (null == writer) {
-            return;
-        }
-        // 从缓存获取图片
-        JSONObject obj = new JSONObject();
-
-        String bannerImgUrl = HttpWebUtils.getValue(request, "bannerImgUrl");
-        if (!StringUtils.isBlank(bannerImgUrl)) {
-            obj.put("showPicture", ImageUtils.imageToBase64(rootPath + bannerImgUrl));
-        }
-        writer.write(obj.toString());
-    }
     
 }
