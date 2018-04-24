@@ -9,21 +9,12 @@ import com.apass.zufang.domain.vo.BannerVo;
 
 public interface BannerMapper extends GenericMapper<Banner,Long> {
 
-	List<Banner> loadIndexBanners(String type);
-	
-	List<Banner> getActivityUrlLikeActivityId(String activityId);
+	/*** 根据banner 类型查询Banner*/
+	List<Banner> loadIndexBanners(BannerQueryParams entity);
 	 
-	 /**
-	 * 房源信息管理
-	 * @param entity
-	 * @return
-	 */
+	 /*** 房源信息管理* @param entity  @return*/
     List<BannerVo> getBannerLists(BannerQueryParams entity);
 	
-	/**
-	 * 房源信息管理数量查询
-	 * @param entity
-	 * @return
-	 */
+	/** 房源信息管理数量查询 @param entity  @return*/
 	Integer getBannerListsCount(BannerQueryParams entity);
 }

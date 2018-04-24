@@ -13,6 +13,10 @@ public class BannerQueryParams extends QueryParams{
 	
 	private String bannerType;
 	
+	private String id;
+
+	private String sort;
+	
 	private String isDelete;//banner是否删除
 
 	public String getBannerType() {
@@ -30,5 +34,20 @@ public class BannerQueryParams extends QueryParams{
 	public void setIsDelete(String isDelete) {
 		this.isDelete = isDelete;
 	}
-	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
 }

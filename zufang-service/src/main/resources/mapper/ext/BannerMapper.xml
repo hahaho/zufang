@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.apass.zufang.mapper.zfang.BannerMapper" >
-	<!-- 初始es分页查询条件 -->
+	<!-- 分页查询条件 -->
     <sql id="QueryConditionSql">
         <where>
 			<if test="bannerType!=null and bannerType!=''"> AND banner.banner_type = #{bannerType} </if>
         	<if test="isDelete!=null and isDelete!=''"> AND banner.is_delete = #{isDelete} </if>
+        	<if test="sort!=null and sort!=''"> AND banner.banner_sort = #{sort} </if>
+        	<if test="id!=null and id!=''"> AND banner.id != #{id} </if>
         </where>
     </sql>
    <!-- 房源信息管理 -->
@@ -16,10 +18,11 @@
             banner.banner_name name,
             banner.activity_url activityUrl,
             banner.banner_type type,
-            banner.banner_sort sort
+            banner.banner_sort sort,
+            banner.banner_img_url imgUrl
         FROM t_zfang_banner banner
         <include refid="QueryConditionSql" />
-        ORDER BY banner.banner_type ASC,banner.banner_order ASC,banner.update_date DESC
+        ORDER BY banner.banner_type ASC,banner.banner_sort ASC,banner.updated_time DESC
         <if test="startRecordIndex != null">
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
@@ -31,6 +34,20 @@
             COUNT(*)
         FROM t_zfang_banner banner 
         <include refid="QueryConditionSql" />
-        ORDER BY banner.banner_type ASC,banner.banner_order ASC,banner.update_date DESC
+        ORDER BY banner.banner_type ASC,banner.banner_sort ASC,banner.updated_time DESC
     </select>
+    
+    <select id="loadIndexBanners" resultMap="BaseResultMap" parameterType="com.apass.zufang.domain.dto.BannerQueryParams">
+		SELECT
+		    banner.id id,
+			banner.banner_img_url bannerImgUrl,
+			banner.activity_url activityUrl,
+			banner.banner_type bannerType,
+			banner.banner_sort bannerSort
+		FROM
+			t_zfang_banner banner
+		<include refid="QueryConditionSql" />
+		ORDER BY
+			banner.banner_sort ASC
+	</select>
 </mapper>
