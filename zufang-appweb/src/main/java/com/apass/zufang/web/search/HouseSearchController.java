@@ -445,7 +445,7 @@ public class HouseSearchController {
 	private HouseAppSearchVo houseEsToHouseAppSearchVo(HouseEs houseEs) {
 		HouseAppSearchVo vo = new HouseAppSearchVo();
 		if(StringUtils.isNotEmpty(houseEs.getUrl())){
-			if(!houseEs.getUrl().contains("http:")){
+			if(!houseEs.getUrl().contains("http")){
 				vo.setUrl(appWebDomain+houseEs.getUrl().split(",")[0]);
 			}else {
 				vo.setUrl(houseEs.getUrl().split(",")[0]);
