@@ -8,6 +8,15 @@
         where parent = #{code} order by (code+0)
     </select>
 
+
+    <select id="selectByCityName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from t_zufang_work_city_jd
+        where city = #{city}
+    </select>
+
+
 	<select id="selectCodeByName" resultMap="BaseResultMap" parameterType="com.apass.zufang.domain.dto.WorkCityJdParams">
         select
           CODE code,
