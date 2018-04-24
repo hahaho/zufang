@@ -22,7 +22,7 @@ import com.apass.zufang.utils.ResponsePageBody;
  * @author haotian
  *
  */
-@Path("/operations/SubmitMessageController")
+@Path("/operations/submitMessageController")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class SubmitMessageController {

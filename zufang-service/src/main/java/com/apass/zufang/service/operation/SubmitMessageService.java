@@ -4,8 +4,11 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
+import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.SubmitMessageQueryParams;
 import com.apass.zufang.domain.entity.SubmitMessage;
 import com.apass.zufang.domain.vo.SubmitMessageVo;
@@ -36,5 +39,14 @@ public class SubmitMessageService {
         pageBody.setTotal(list.size());
         pageBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
         return pageBody;
+	}
+	/**
+	 * 意见反馈新增
+	 * @param entity
+	 * @return
+	 */
+	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+	public Response addSubmitMessage(SubmitMessage entity) {
+		return Response.success("意见反馈新增成功！");
 	}
 }
