@@ -34,6 +34,15 @@ public class CommonService {
 		}
 		return city;
 	}
+
+	/**
+	 * 地址带省，则去处省字
+	 */
+	public static String provinceShort(String province){
+		province = province.replace("省", "");
+		return province;
+	}
+
 	/**
 	 * 效验是不是直辖市
 	 * @param city

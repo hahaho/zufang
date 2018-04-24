@@ -6,6 +6,7 @@ import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.HouseLocation;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.service.apartment.ApartmentService;
+import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.service.house.HouseLocationService;
 import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ValidateUtils;
@@ -53,6 +54,8 @@ public class ZufangButtonJoinColler {
             HouseVo houseVo = new HouseControler().getVoByParams(paramMap);
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             houseVo.setApartmentId(apartmentId);
+            houseVo.setCity(CommonService.cityValidation(houseVo.getCity()));
+            houseVo.setCity(CommonService.provinceShort(houseVo.getProvince()));
             returnMap = houseService.addHouse(houseVo);
         }catch (BusinessException e){
             LOGGER.error("添加房源信息失败:Exception---->{}",e);
