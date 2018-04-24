@@ -23,11 +23,7 @@ public class WorkCityJdService {
        if(workCityJd == null){
            throw new BusinessException("未查询到该省份，city = " + city);
        }
-        List<WorkCityJd> list= workCityJdMapper.selectDateByParentId(workCityJd.getParent().toString());
-        if(CollectionUtils.isEmpty(list)){
-            throw new BusinessException("未查询到该省份，city = " + city);
-        }
-        return list.get(0);
+       return workCityJdMapper.selectWorkCityByCode(workCityJd.getParent().toString());
     }
 
 }
