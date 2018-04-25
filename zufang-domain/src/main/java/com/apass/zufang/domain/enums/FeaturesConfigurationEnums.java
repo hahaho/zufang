@@ -1,7 +1,5 @@
 package com.apass.zufang.domain.enums;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * 特色配置
  * @author zwd
@@ -50,7 +48,7 @@ public enum FeaturesConfigurationEnums {
 
 	public static FeaturesConfigurationEnums getEnum(String name){
 		for(FeaturesConfigurationEnums e : values()){
-			if(StringUtils.equals(e.getMessage(),name)){
+			if(name.contains(e.getMessage())){
 				return e;
 			}
 		}
