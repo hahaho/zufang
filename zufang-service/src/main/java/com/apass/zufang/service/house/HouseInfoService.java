@@ -1,25 +1,12 @@
 package com.apass.zufang.service.house;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.House;
 import com.apass.zufang.domain.entity.HouseInfoRela;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.FeaturesConfigurationEnums;
 import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -28,6 +15,19 @@ import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.utils.PageBean;
 import com.apass.zufang.utils.ValidateUtils;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class HouseInfoService {
@@ -137,7 +137,10 @@ public class HouseInfoService {
 			List<HousePeizhi> housePeizhiList = peizhiMapper
 					.getPeiZhiByHouseId(houseInfo.getHouseId());
 			for (HousePeizhi Peizhi : housePeizhiList) {
-				houseConfigList.add(Peizhi.getName());
+				//先过滤枚举中没有的配置
+				if(FeaturesConfigurationEnums.isValidate(Peizhi.getName())){
+					houseConfigList.add(Peizhi.getName());
+				}
 			}
 			houseInfo.setHouseConfigList(houseConfigList);
 		}
