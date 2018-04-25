@@ -72,10 +72,12 @@ public class SpiderHouseListTask {
     @RequestMapping("/houseList2")
     public void initExtHouseList2(){
         try{
-            for (int i=0; i<PAGENUM; i++){
-                houseSpiderService.spiderMogoroomPageList(BASE_URLLIST,i);
-            }
+            for(String listUrl : BASE_URLLIST){
+                for (int i=0; i<PAGENUM; i++){
+                    houseSpiderService.spiderMogoroomPageList(listUrl,i);
+                }
 
+            }
         }catch (Exception e){
             LOGGER.error("获取数据失败！------Exception=====>{}",e);
         }
