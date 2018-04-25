@@ -138,7 +138,7 @@ public class HouseInfoService {
 					.getPeiZhiByHouseId(houseInfo.getHouseId());
 			for (HousePeizhi Peizhi : housePeizhiList) {
 				//先过滤枚举中没有的配置
-				FeaturesConfigurationEnums configurationEnum = FeaturesConfigurationEnums.getEnum(Peizhi.getName())
+				FeaturesConfigurationEnums configurationEnum = FeaturesConfigurationEnums.getEnum(Peizhi.getName());
 				if(configurationEnum != null){
 					houseConfigList.add(configurationEnum.getMessage());
 				}
