@@ -42,27 +42,6 @@ public class BannerService {
 		return body;
 	}
 
-    /**
-     * 通过id查询banner信息
-     * @param id
-     * @return
-     */
-//    public Banner selectById(Long id) {
-//        return bannerDao.selectByPrimaryKey(id);
-//    }
-
-    /**
-     * 后台新增banner信息
-     * @return
-     */
-//    @Transactional(rollbackFor = Exception.class)
-//    public Integer addBannerInfor(Banner entity) {
-//        return bannerDao.insertSelective(entity);
-//    }
-
-//    public Integer update(Banner entity){
-//        return bannerDao.updateByPrimaryKeySelective(entity);
-//    }
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
 	public void saveOrUpdateBanner(BannerVo banner) throws BusinessException{
 		
@@ -166,53 +145,5 @@ public class BannerService {
 		bannerDao.updateByPrimaryKeySelective(banner);
 		
 	}
-    /**
-     * 新增
-     * @param entity
-     */
-//    @Transactional(rollbackFor = Exception.class)
-//    public void insert(Banner entity) {
-//        bannerDao.insert(entity);
-//    }
 
-    /**
-     * 删除
-     */
-//    @Transactional(rollbackFor = Exception.class)
-//    public void delete(Long id) {
-//        bannerDao.deleteByPrimaryKey(id);
-//    }
-
-    //查询所有banner图
-//    public List<Banner> loadBannersList(Map<String, Object> map) {
-//        return bannerDao.loadBannersList(map);
-//    }
-    
-    /**
-     * 通过activityId查询banner信息
-     * @param id
-     * @return
-     */
-//    public List<Banner> getActivityUrlLikeActivityId(String activityId) {
-//        return bannerDao.getActivityUrlLikeActivityId(activityId);
-//    }
-    
-//    public BannerVo getBannerVoLikeActivityId(String activityId){
-//    	List<Banner> bannerList = getActivityUrlLikeActivityId("%?activityId="+activityId);
-//    	Banner banner = null;
-//    	if(CollectionUtils.isNotEmpty(bannerList)){
-//    		banner = bannerList.get(0);
-//    	}
-//    	return getBannerPoToVo(banner);
-//    }
-    
-//    public BannerVo getBannerPoToVo(Banner banner){
-//    	BannerVo vo = new BannerVo();
-//    	if(null != banner){
-//    		vo.setActivityUrl(banner.getActivityUrl().replace("ajqh://cn.apass.ajqh/web?url=", ""));
-//    		vo.setId(banner.getId());
-//    		vo.setName(banner.getBannerName());
-//    	}
-//    	return vo;
-//    }
 }
