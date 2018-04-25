@@ -30,7 +30,12 @@ public class SpiderHouseListTask {
     /**
      * 蘑菇房源列表页根路径
      */
-    private static final String BASE_URLLIST = "http://www.mogoroom.com/list";
+    private static final String[] BASE_URLLIST = {"http://www.mogoroom.com/list",
+        "http://bj.mogoroom.com/list", "http://sz.mogoroom.com/list", "http://hz.mogoroom.com/list",
+        "http://nj.mogoroom.com/list", "http://cd.mogoroom.com/list", "http://cq.mogoroom.com/list",
+        "http://xa.mogoroom.com/list", "http://gz.mogoroom.com/list", "http://tj.mogoroom.com/list"
+    }
+        ;
 
     /**
      * 蘑菇房源详情页根路径
@@ -53,8 +58,11 @@ public class SpiderHouseListTask {
     @Scheduled(cron = "0 10 0 * * *")
     public void initExtHouseList(){
         try{
-            for (int i=0; i<PAGENUM; i++){
-                houseSpiderService.spiderMogoroomPageList(BASE_URLLIST,i);
+            for(String listUrl : BASE_URLLIST){
+                for (int i=0; i<PAGENUM; i++){
+                    houseSpiderService.spiderMogoroomPageList(listUrl,i);
+                }
+
             }
 
         }catch (Exception e){
