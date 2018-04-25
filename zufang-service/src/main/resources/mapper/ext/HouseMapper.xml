@@ -274,8 +274,8 @@
         FROM t_zfang_house_location z
 			LEFT JOIN t_zfang_house x ON x.id = z.house_id  
         	LEFT JOIN t_zfang_apartment y ON y.id = x.apartment_id
-        	JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id AND a1.`name` = '独卫' AND a1.is_delete = '00'
-        	JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id AND a2.`name` = '可做饭' AND a2.is_delete = '00'
+        	LEFT JOIN t_zfang_house_peizhi a1 ON a1.house_id = x.id AND a1.`name` = '独卫' AND a1.is_delete = '00'
+        	LEFT JOIN t_zfang_house_peizhi a2 ON a2.house_id = x.id AND a2.`name` = '可做饭' AND a2.is_delete = '00'
        	WHERE 1=1 AND x.is_delete = '00' AND y.is_delete = '00' AND z.is_delete = '00'
        	]]>
        	<if test="apartmentName!=null and apartmentName!=''"> AND y.`name` LIKE '%${apartmentName}%' </if>
