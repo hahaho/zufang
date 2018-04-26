@@ -70,16 +70,20 @@ public class HouseInfoController {
 				}
 				boo = true;
 			}
-			
+			String statusMsg = "已出租房源";
 			HouseInfoRela houseInfoRela = targetHouseInfoList.get(0);
 			if (houseInfoRela != null) {
 				Long pageview = houseInfoRela.getPageView();
 				House house = new House();
 				house.setId(Long.valueOf(houseId));
 				house.setPageView(pageview + new Long(1));
+				if(houseInfoRela.getStatus().intValue() == BusinessHouseTypeEnums.ZT_2.getCode()){
+					statusMsg = "可出租房源";
+				}
 				houseInfoService.addPageView(house);
 			}
 			resultMap.put("targetHouseInfo", houseInfoRela);
+			resultMap.put("statusMsg", statusMsg);
 			if (boo) {
 				resultMap.put("statusBuff", "0");
 				return Response.success("操作成功", resultMap);

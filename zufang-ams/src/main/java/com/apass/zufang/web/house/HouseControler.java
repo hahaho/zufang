@@ -336,11 +336,11 @@ public class HouseControler {
 	    ValidateUtils.isNotBlank(zujinType, "请选择租金支付方式");
 	    
 	    if(StringUtils.isNotBlank(traffic)){
-	    	ValidateUtils.checkLength(traffic, 1, 300, "请填写1-300个字");
+	    	ValidateUtils.checkLength(traffic, 1, 300, "输入内容不能超过300字");
 	    }
 	    
 	    if(StringUtils.isNotBlank(around)){
-	    	ValidateUtils.checkLength(around, 1, 300, "请填写1-300个字");
+	    	ValidateUtils.checkLength(around, 1, 300, "输入内容不能超过300字");
 	    }
 	    
 	    ValidateUtils.isNotBlank(title, "请填写房源标题");
