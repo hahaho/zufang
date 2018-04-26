@@ -88,6 +88,21 @@ public class PhoneAppointmentService {
         	}
         	//创建时间
         	vo.setCreatedDateTime(DateFormatUtil.dateToString(vo.getCreatedTime(),null));
+        	List<HousePeizhi> pzlist = housePeiZhiService.getHousePeizhiList(vo.getHouseId());
+        	for(HousePeizhi pz : pzlist){
+        	    if(StringUtils.equals("独卫", pz.getName())){
+                    vo.setHouseKitchenFalg("是");
+                    break;
+                }
+        	    vo.setHouseKitchenFalg("否");
+        	}
+        	for(HousePeizhi pz : pzlist){
+                if(StringUtils.equals("可做饭", pz.getName())){
+                    vo.setHouseToiletFalg("是");
+                    break;
+                }
+                vo.setHouseToiletFalg("否");
+            }
         }
         pageBody.setRows(list);
         list = reserveHouseService.getHouseListForPhoneAppointment(count);
