@@ -1,37 +1,25 @@
 package com.apass.zufang.web.banner;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
 import com.apass.gfb.framework.utils.GsonUtils;
-import com.apass.gfb.framework.utils.HttpWebUtils;
-import com.apass.gfb.framework.utils.ImageUtils;
 import com.apass.zufang.common.utils.MapEntryOrConverUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.BannerQueryParams;
 import com.apass.zufang.domain.vo.BannerVo;
-import com.apass.zufang.service.apartment.ImageService;
 import com.apass.zufang.service.banner.BannerService;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
@@ -87,7 +75,7 @@ public class BannerController{
 			
 			vo.setOperationName(SpringSecurityUtils.getCurrentUser());
 			bannerService.saveOrUpdateBanner(vo);
-			return Response.success("add banner信息成功！");
+			return Response.success("添加成功！");
 		}catch (BusinessException e){
 			logger.error("add/edit banner businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
@@ -110,7 +98,7 @@ public class BannerController{
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "bannerId为空！");
 			bannerService.deleteBanner(id, SpringSecurityUtils.getCurrentUser());
-			return Response.success("删除banner信息成功！");
+			return Response.success("删除成功，相应数据被删除！");
 		}catch (BusinessException e){
 			logger.error("delete banner businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());

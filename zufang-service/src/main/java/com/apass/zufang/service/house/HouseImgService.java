@@ -2,7 +2,6 @@
 package com.apass.zufang.service.house;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -14,16 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.zufang.domain.entity.HouseImg;
-import com.apass.zufang.domain.enums.HomeInitEnum;
+import com.apass.zufang.domain.enums.BannerTypeEnums;
+import com.apass.zufang.domain.vo.BannerToFrontVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseImgMapper;
 import com.apass.zufang.utils.ValidateUtils;
-import com.google.common.collect.Maps;
 @Service
 public class HouseImgService {
 	
 	@Autowired
 	private HouseImgMapper houseImgMapper;
+	
+	@Autowired
+	private ApartHouseService apartHouseService;
 	
 	@Value("${zufang.image.uri}")
 	private String imageUri;
@@ -40,25 +42,10 @@ public class HouseImgService {
 	/**
 	 * 首页初始信息
 	 * @return
+	 * @throws BusinessException 
 	 */
-	public List<HashMap<String, String>> initImg() {
-		
-		List<HashMap<String, String>> initCity = new ArrayList<>();
-		
-		HashMap<String, String> resMap1 = Maps.newHashMap();
-		// 方便循环遍历
-		resMap1.put("img", HomeInitEnum.INIT_HOUSEIMG_1.getMessage());
-		resMap1.put("url", HomeInitEnum.INIT_URL_1.getMessage());
-		resMap1.put("title", HomeInitEnum.INIT_TITLE_1.getMessage());
-		
-		HashMap<String, String> resMap2 = Maps.newHashMap();
-		resMap2.put("img", HomeInitEnum.INIT_HOUSEIMG_2.getMessage());
-		resMap2.put("url", HomeInitEnum.INIT_URL_2.getMessage());
-		resMap2.put("title", HomeInitEnum.INIT_TITLE_2.getMessage());
-		
-		initCity.add(resMap2);
-		initCity.add(resMap1);
-		return initCity;
+	public List<BannerToFrontVo> initImg() throws BusinessException {
+		return apartHouseService.getBannerByType(BannerTypeEnums.TYPE_1.getCode());
 	}
 	/**
 	 * getHouseImgList
