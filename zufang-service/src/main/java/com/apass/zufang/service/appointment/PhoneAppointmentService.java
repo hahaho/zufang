@@ -150,7 +150,7 @@ public class PhoneAppointmentService {
 		record.setReserveHouseId(entity.getId());
 		record.setOperateType((byte)1);//新增的看房行程 :新增的看房记录  操作类型，1:预约看房   默认状态
 		record.setOperateTime(new Date());
-		record.setRemark("用户第一次预约操作成功！");
+		record.setRemark("用户第1次预约操作成功！");
 		record.setCreatedTime(new Date());
 		record.setUpdatedTime(new Date());
 		record.setCreatedUser(user);
