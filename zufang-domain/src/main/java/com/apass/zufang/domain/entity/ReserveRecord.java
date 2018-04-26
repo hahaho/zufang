@@ -2,7 +2,7 @@ package com.apass.zufang.domain.entity;
 
 import java.util.Date;
 
-public class ZfangReserveRecordEntity {
+public class ReserveRecord {
     private Long id;
 
     private Long reserveHouseId;
