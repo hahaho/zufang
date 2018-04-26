@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.ZfangReserveRecordEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="reserve_house_id" property="reserveHouseId" jdbcType="BIGINT" />
+    <result column="operate_type" property="operateType" jdbcType="TINYINT" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="created_user" property="createdUser" jdbcType="VARCHAR" />
+    <result column="updated_user" property="updatedUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, reserve_house_id, operate_type, operate_time, remark, created_time, updated_time, 
+    created_user, updated_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zfang_reserve_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_zfang_reserve_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_reserve_record (reserve_house_id, operate_type, operate_time, 
+      remark, created_time, updated_time, 
+      created_user, updated_user)
+    values (#{reserveHouseId,jdbcType=BIGINT}, #{operateType,jdbcType=TINYINT}, #{operateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_reserve_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reserveHouseId != null" >
+        reserve_house_id,
+      </if>
+      <if test="operateType != null" >
+        operate_type,
+      </if>
+      <if test="operateTime != null" >
+        operate_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="createdUser != null" >
+        created_user,
+      </if>
+      <if test="updatedUser != null" >
+        updated_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reserveHouseId != null" >
+        #{reserveHouseId,jdbcType=BIGINT},
+      </if>
+      <if test="operateType != null" >
+        #{operateType,jdbcType=TINYINT},
+      </if>
+      <if test="operateTime != null" >
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdUser != null" >
+        #{createdUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedUser != null" >
+        #{updatedUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" >
+    update t_zfang_reserve_record
+    <set >
+      <if test="reserveHouseId != null" >
+        reserve_house_id = #{reserveHouseId,jdbcType=BIGINT},
+      </if>
+      <if test="operateType != null" >
+        operate_type = #{operateType,jdbcType=TINYINT},
+      </if>
+      <if test="operateTime != null" >
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdUser != null" >
+        created_user = #{createdUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedUser != null" >
+        updated_user = #{updatedUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" >
+    update t_zfang_reserve_record
+    set reserve_house_id = #{reserveHouseId,jdbcType=BIGINT},
+      operate_type = #{operateType,jdbcType=TINYINT},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      created_user = #{createdUser,jdbcType=VARCHAR},
+      updated_user = #{updatedUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
