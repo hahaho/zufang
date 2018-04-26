@@ -80,15 +80,10 @@
 	 <!-- 搜索所有公寓codes -->
 	<select id="getApartmentBylistCity" resultMap="BaseResultMap"
 		parameterType="com.apass.zufang.domain.entity.Apartment">
-		SELECT a.id,a.code,a.name,a.area  FROM t_zfang_apartment a
-		WHERE a.id IN (SELECT apartment_id FROM  t_zfang_house h
-		LEFT JOIN t_zfang_house_location l ON  h.id=l.house_id
-		WHERE l.city= #{city} 
-		AND h.is_delete = '00'
-		AND l.is_delete = '00' 	
-		GROUP BY h.apartment_id)
-		AND a.is_delete = '00'
-		ORDER BY a.created_time DESC;
+
+		select DISTINCT a.name from t_zfang_apartment a,
+        t_zfang_house b,t_zfang_house_location c
+        where a.id = b.apartment_id and b.id = c.house_id and b.status = '2' and c.city = #{city}
 	</select>
 
 	<select id="listAllValidApartment" resultMap="BaseResultMap">
