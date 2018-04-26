@@ -16,6 +16,7 @@ import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.common.WorkCityJd;
 import com.apass.zufang.domain.dto.WorkCityJdParams;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.vo.BannerToFrontVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.HouseLocationMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
@@ -78,7 +79,7 @@ public class HouseinitService {
 		// 优化请求过程
 		if (pageNum.equals("0")) {
 			// 获取url
-			List<HashMap<String, String>> imgList = houseImgService.initImg();
+			List<BannerToFrontVo> imgList = houseImgService.initImg();
 			resultMap.put("initImg", imgList);
 			LOG.info("initHomePage_获取url成功");
 			// 封装热门房源

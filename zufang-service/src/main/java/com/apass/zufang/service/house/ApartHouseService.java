@@ -13,14 +13,21 @@ import org.springframework.stereotype.Component;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.dto.ApartHouseList;
+import com.apass.zufang.domain.dto.BannerQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
-import com.apass.zufang.domain.enums.HomeInitEnum;
+import com.apass.zufang.domain.entity.Banner;
+import com.apass.zufang.domain.enums.BannerTypeEnums;
+import com.apass.zufang.domain.enums.IsDeleteEnums;
+import com.apass.zufang.domain.vo.BannerToFrontVo;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
+import com.apass.zufang.mapper.zfang.BannerMapper;
 import com.apass.zufang.mapper.zfang.HouseMapper;
+import com.apass.zufang.service.apartment.ImageService;
 import com.apass.zufang.service.commons.CommonService;
 import com.apass.zufang.utils.PageBean;
 import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 @Component
@@ -28,24 +35,42 @@ public class ApartHouseService {
 	
 	@Autowired
 	private HouseImgService houseImgService;
+	
 	@Autowired
 	private ApartmentMapper apartmentMapper;
+	
 	@Autowired
 	private HouseMapper houseMapper;
-    @Value("${zufang.image.uri}")
-    private String imageUri;
+	
+	@Autowired
+	private BannerMapper bannerMapper;
+	
+	@Autowired
+	private ImageService imageService;
     
     /**
      * initImg
      * @return
+     * @throws BusinessException 
      */
-    public List<String> initImg() {
-    	
-    	List<String> initCity = new ArrayList<>();
-    	initCity.add(HomeInitEnum.INIT_APARTIMG.getMessage());
-    	return initCity;
+    public List<BannerToFrontVo> initImg() throws BusinessException {
+    	return getBannerByType(BannerTypeEnums.TYPE_2.getCode());
     }
 
+    public List<BannerToFrontVo> getBannerByType(String type) throws BusinessException{
+    	BannerQueryParams entity = new BannerQueryParams();
+    	entity.setBannerType(type);
+    	entity.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
+    	List<Banner> banners = bannerMapper.loadIndexBanners(entity);
+    	List<BannerToFrontVo> bannerVos = Lists.newArrayList();
+    	for (Banner banner : banners) {
+    		BannerToFrontVo vo = new BannerToFrontVo();
+    		vo.setActivityUrl(banner.getActivityUrl());
+    		vo.setBannerImgUrl(imageService.getComplateUrl(banner.getBannerImgUrl()));
+    		bannerVos.add(vo);	
+		}
+    	return bannerVos;
+    }
 	/**
 	 * 获取公寓Id
 	 * @return
@@ -54,7 +79,7 @@ public class ApartHouseService {
 		
 		// 获取公寓循环图
 		HashMap<String, Object> resultMap = Maps.newHashMap();
-		List<String> initImg = initImg();
+		List<BannerToFrontVo> initImg = initImg();
 		resultMap.put("initImg", initImg);
 		
 		// 获取公寓列表以及对应房源
