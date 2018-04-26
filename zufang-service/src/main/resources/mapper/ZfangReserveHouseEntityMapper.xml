@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.apass.zufang.mapper.zfang.ZfangReserveHouseEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.ZfangReserveHouseEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="house_id" property="houseId" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="reserve_date" property="reserveDate" jdbcType="TIMESTAMP" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="reserve_status" property="reserveStatus" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, house_id, type, user_id, telphone, name, reserve_date, memo, is_delete, created_time, 
+    updated_time, reserve_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_zfang_reserve_house
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_zfang_reserve_house
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.apass.zufang.domain.entity.ZfangReserveHouseEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_reserve_house (house_id, type, user_id, 
+      telphone, name, reserve_date, 
+      memo, is_delete, created_time, 
+      updated_time, reserve_status)
+    values (#{houseId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{userId,jdbcType=VARCHAR}, 
+      #{telphone,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{reserveDate,jdbcType=TIMESTAMP}, 
+      #{memo,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{reserveStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.ZfangReserveHouseEntity" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_zfang_reserve_house
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="houseId != null" >
+        house_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="telphone != null" >
+        telphone,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="reserveDate != null" >
+        reserve_date,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="reserveStatus != null" >
+        reserve_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="houseId != null" >
+        #{houseId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="reserveDate != null" >
+        #{reserveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reserveStatus != null" >
+        #{reserveStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.ZfangReserveHouseEntity" >
+    update t_zfang_reserve_house
+    <set >
+      <if test="houseId != null" >
+        house_id = #{houseId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        telphone = #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="reserveDate != null" >
+        reserve_date = #{reserveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reserveStatus != null" >
+        reserve_status = #{reserveStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.ZfangReserveHouseEntity" >
+    update t_zfang_reserve_house
+    set house_id = #{houseId,jdbcType=BIGINT},
+      type = #{type,jdbcType=TINYINT},
+      user_id = #{userId,jdbcType=VARCHAR},
+      telphone = #{telphone,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      reserve_date = #{reserveDate,jdbcType=TIMESTAMP},
+      memo = #{memo,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      reserve_status = #{reserveStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

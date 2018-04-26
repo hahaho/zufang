@@ -467,14 +467,174 @@ public class HouseSearchController {
 
     /**
      * 附近房源搜索查询
+	 * 思路:根据交通方式和时间计算距离，去es中把对应数据查出
      * @param paramMap
      * @return
      */
     @POST
     @Path(value = "/search/traffix")
     public Response traffixSearch(@RequestBody Map<String, Object> paramMap){
+		LOGGER.info("房屋筛选执行,参数:{}", GsonUtils.toJson(paramMap));
+		try{
+			String city = CommonUtils.getValue(paramMap, "city");
+			if(StringUtils.isEmpty(city)){
+				throw new RuntimeException("请传入地址！");
+			}
+			if(CENTRL_CITY_LIST2.contains(city)){
+				city = city.substring(0, city.length()-1);
+			}
+			String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");
+			String priceFlag = CommonUtils.getValue(paramMap,"priceFlag");
+			String rentType = CommonUtils.getValue(paramMap, "rentType");
+			String room = CommonUtils.getValue(paramMap, "room");
+			String configName = CommonUtils.getValue(paramMap, "configName");
+			String areaCode = CommonUtils.getValue(paramMap, "areaCode");
+			String subCode = CommonUtils.getValue(paramMap, "subCode");
 
-        return null;
+			String page = CommonUtils.getValue(paramMap, "page");
+			String rows = CommonUtils.getValue(paramMap, "rows");
+			Integer pages = null;
+			Integer row = null;
+			if (StringUtils.isNotEmpty(rows)) {
+				row = Integer.valueOf(rows);
+			} else {
+				row = 20;
+			}
+			pages = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
+			Integer offset = (pages-1)*row;
+
+			/**
+			 * 思路：先根据品牌、价格、筛选条件查询房源List,然后遍历结果计算每个house与目标位置距离，如果<1km,返回。否则过虑掉
+			 */
+			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+
+			MultiMatchQueryBuilder multiMatchQueryBuilder2 = QueryBuilders.multiMatchQuery(city,
+					"province","city", "district").operator(Operator.AND);
+			multiMatchQueryBuilder2.field("province", 2f);
+			multiMatchQueryBuilder2.field("city", 2f);
+			multiMatchQueryBuilder2.field("district", 1f);
+			boolQueryBuilder.must(multiMatchQueryBuilder2);
+			if(StringUtils.isNotEmpty(apartmentName)){
+				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName).operator(Operator.AND));
+			}
+			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
+				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
+			}
+			//如果类型选不限，则不加此条件
+			if(StringUtils.isNotEmpty(rentType)){
+				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
+						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
+					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(2.5f));
+				}
+			}
+			if(StringUtils.isNotEmpty(room)){
+				String[] roomArr = room.split(",");
+				List roomList = Arrays.asList(roomArr);
+				//如果户型选不限,则无此条件
+				if(!roomList.contains(HuxingEnums.HUXING_0.getCode().toString())){
+					if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
+						boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
+					}
+					switch(roomArr.length)
+					{
+						case 1:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
+							break;
+						case 2:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
+							break;
+						case 3:
+							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
+							break;
+						case 4:
+							boolQueryBuilder.must(QueryBuilders
+									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+							break;
+						case 5:
+							boolQueryBuilder.must(QueryBuilders
+									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			if(StringUtils.isNotEmpty(configName)){
+				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName).operator(Operator.AND));
+			}
+			if(StringUtils.isNotEmpty(subCode) && StringUtils.isNotEmpty(areaCode)){
+				throw new RuntimeException("subCode和areaCode不可同时传入!");
+			}
+
+			String[] location = null;
+			//传入地铁线路编码
+			if(StringUtils.isNotEmpty(subCode)){
+				//根据code查询经纬度，计算距离
+				WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
+				LOGGER.info("subCode:{}查询地铁线路表结果：{}",subCode,GsonUtils.toJson(workSubway));
+				String nearestPoint = workSubway.getNearestPoint();
+				location = nearestPoint.split(",");
+				if(location==null || location.length!=2){
+					throw new RuntimeException("地铁线路表经纬度数据有误!");
+				}
+				boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("location")
+						.point(Double.valueOf(location[1]), Double.valueOf(location[0]))
+						.distance(ROUND_DISTANSE, DistanceUnit.KILOMETERS));
+			}
+
+			//传入区域编码
+			if(StringUtils.isNotEmpty(areaCode)) {
+				//根据code查询经纬度，计算距离
+				//towns
+				WorkCityJd townJd = nationService.selectWorkCityByCode(areaCode);
+				//district
+				WorkCityJd districtJd = nationService.selectWorkCityByCode(String.valueOf(townJd.getParent()));
+				//city
+				WorkCityJd cityJd = nationService.selectWorkCityByCode(String.valueOf(districtJd.getParent()));
+				String address = null;
+				StringBuffer sb = new StringBuffer();
+				//说明是直辖市，townJd无数据，areaCode为县code
+				if(CENTRL_CITY_LIST.contains(cityJd.getCode())){
+					address = sb.append(cityJd.getProvince()).append(districtJd.getCity())
+							.append(townJd.getDistrict()).toString();
+				}else{
+					//province
+					WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
+					address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
+							.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
+				}
+
+				location = obtainGaodeLocation.getLocation(address);
+				LOGGER.info("参数address:{}调用ObtainGaodeLocation.getgetLocation方法返回数据：{}",address,location);
+				boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("location")
+						.point(Double.valueOf(location[1]), Double.valueOf(location[0]))
+						.distance(ROUND_DISTANSE, DistanceUnit.KILOMETERS));
+			}
+
+			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
+					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
+					.setTypes(IndexType.HOUSE.getDataName())
+					.setQuery(boolQueryBuilder)
+					.setFrom(offset).setSize(row);
+			SearchResponse response = serachBuilder.execute().actionGet();
+			SearchHit[] hits = response.getHits().getHits();
+
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put("totalCount", response.getHits().getTotalHits());
+			//查询出的总房源：未先地点时返回
+			List<HouseAppSearchVo> houseList = Lists.newArrayList();
+			for(SearchHit hit: hits){
+				//如果位置筛选不为空，计算所查结果与目标经纬度的距离
+				HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
+				houseList.add(houseEsToHouseAppSearchVo(houseEs));
+			}
+
+			returnMap.put("houseDataList", houseList);
+			return Response.success("ES查询成功",returnMap);
+		}catch (Exception e){
+			LOGGER.error("ES查询失败！",e);
+			return Response.fail("ES查询失败");
+		}
     }
 
 
