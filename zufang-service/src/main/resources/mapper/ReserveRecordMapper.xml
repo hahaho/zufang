@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.apass.zufang.mapper.zfang.ZfangReserveRecordEntityMapper" >
-  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" >
+<mapper namespace="com.apass.zufang.mapper.zfang.ReserveRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.apass.zufang.domain.entity.ReserveRecord" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="reserve_house_id" property="reserveHouseId" jdbcType="BIGINT" />
     <result column="operate_type" property="operateType" jdbcType="TINYINT" />
@@ -26,7 +26,7 @@
     delete from t_zfang_reserve_record
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" useGeneratedKeys="true" keyProperty="id" >
+  <insert id="insert" parameterType="com.apass.zufang.domain.entity.ReserveRecord" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_reserve_record (reserve_house_id, operate_type, operate_time, 
       remark, created_time, updated_time, 
       created_user, updated_user)
@@ -34,7 +34,7 @@
       #{remark,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
       #{createdUser,jdbcType=VARCHAR}, #{updatedUser,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" useGeneratedKeys="true" keyProperty="id" >
+  <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.ReserveRecord" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_reserve_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="reserveHouseId != null" >
@@ -89,7 +89,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.apass.zufang.domain.entity.ReserveRecord" >
     update t_zfang_reserve_record
     <set >
       <if test="reserveHouseId != null" >
@@ -119,7 +119,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.ZfangReserveRecordEntity" >
+  <update id="updateByPrimaryKey" parameterType="com.apass.zufang.domain.entity.ReserveRecord" >
     update t_zfang_reserve_record
     set reserve_house_id = #{reserveHouseId,jdbcType=BIGINT},
       operate_type = #{operateType,jdbcType=TINYINT},
