@@ -30,13 +30,11 @@ import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.unit.DistanceUnit;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.Operator;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -396,8 +394,7 @@ public class HouseSearchController {
 					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
 					.setTypes(IndexType.HOUSE.getDataName())
 					.setQuery(boolQueryBuilder)
-					.setFrom(pages).setSize(row);
-			serachBuilder.setFrom(offset).setSize(row);
+                    .setFrom(offset).setSize(row);
 			SearchResponse response = serachBuilder.execute().actionGet();
 			SearchHit[] hits = response.getHits().getHits();
 
@@ -419,6 +416,71 @@ public class HouseSearchController {
 		}
 
 	}
+
+	/**
+	 * 前缀搜索查询
+	 * @param paramMap
+	 * @return
+	 */
+	@POST
+	@Path(value = "/search/prefix")
+	public Response prefixSearch(@RequestBody Map<String, Object> paramMap){
+        List<String> results = Lists.newArrayList();
+
+        try{
+            String searchValue = CommonUtils.getValue(paramMap, "searchValue");
+            String page = CommonUtils.getValue(paramMap, "page");
+            String rows = CommonUtils.getValue(paramMap, "rows");
+            Integer pages = null;
+            Integer row = null;
+            if (StringUtils.isNotEmpty(rows)) {
+                row = Integer.valueOf(rows);
+            } else {
+                row = 20;
+            }
+            pages = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
+            Integer offset = (pages-1)*row;
+
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
+                    .should(QueryBuilders.prefixQuery("detailAddr", searchValue))
+                    .should(QueryBuilders.prefixQuery("street", searchValue))
+                    .should(QueryBuilders.prefixQuery("district", searchValue))
+                    .should(QueryBuilders.prefixQuery("houseTitle", searchValue));
+
+            SearchRequestBuilder searchBuilder = ESClientManager.getClient().prepareSearch()
+                    .setTypes(IndexType.HOUSE.getDataName())
+                    .setQuery(boolQueryBuilder)
+                    .setFrom(offset).setSize(row);
+            SearchResponse response = searchBuilder.get();
+            SearchHit[] hits = response.getHits().getHits();
+            for(SearchHit hit : hits){
+                HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
+                results.add(houseEs.getDetailAddr());
+            }
+
+            return Response.success("前缀查询成功",results);
+        }catch(Exception e){
+            LOGGER.error("前缀查询失败！",e);
+            return Response.fail("前缀查询失败");
+        }
+	}
+
+    /**
+     * 附近房源搜索查询
+     * @param paramMap
+     * @return
+     */
+    @POST
+    @Path(value = "/search/traffix")
+    public Response traffixSearch(@RequestBody Map<String, Object> paramMap){
+
+        return null;
+    }
+
+
+
+
+
 
 	/**
 	 * HouseEs-->HouseInfoRela

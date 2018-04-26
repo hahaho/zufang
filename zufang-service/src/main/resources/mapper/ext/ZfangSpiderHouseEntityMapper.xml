@@ -24,7 +24,7 @@
         select
           <include refid="Base_Column_List" />
         from t_zfang_spider_house
-        WHERE is_delete = 00 AND ext_house_id = #{value}
+        WHERE ext_house_id = #{value}
     </select>
 
     <!--根据extHouseId逻辑删除数据-->
