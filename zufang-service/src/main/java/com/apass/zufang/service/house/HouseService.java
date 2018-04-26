@@ -247,9 +247,12 @@ public class HouseService {
 		WorkCityJdVo locationVo = getVoByPo(location);
 		
 		List<HouseImg> imgs = imgMapper.getImgByRealHouseId(house.getId());
-		
 		List<HousePeizhi> peizhis = peizhiMapper.getPeiZhiByHouseId(house.getId());
-		
+		for(HouseImg img : imgs){
+            if(!img.getUrl().contains("http")){
+                img.setUrl(imageUri+img.getUrl());
+            }
+        }
 		values.put("house", house);
 		values.put("location",location);
 		values.put("locationVo",locationVo);
