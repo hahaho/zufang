@@ -12,6 +12,7 @@ import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.dto.BannerQueryParams;
 import com.apass.zufang.domain.entity.Banner;
+import com.apass.zufang.domain.enums.BannerTypeEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
 import com.apass.zufang.domain.vo.BannerVo;
 import com.apass.zufang.mapper.zfang.BannerMapper;
@@ -139,11 +140,25 @@ public class BannerService {
 		if(null == banner){
 			throw new BusinessException("id为{}的banner的不存在!",id);
 		}
+		/*** 增加判断如果当前类型下，只有一条数据，不能删除*/
+		List<Banner> banners = getBannersByType(banner.getBannerType().toString());
+		
+		if(CollectionUtils.isEmpty(banners)){
+			return;//数据有误
+		}
+		
+		if(banners.size() == 1){
+			if(StringUtils.equals(banner.getBannerType().toString(), BannerTypeEnums.TYPE_1.getCode())){
+				throw new BusinessException("首页banner至少添加一个，请添加其他banner后再次操作。");
+			}else if(StringUtils.equals(banner.getBannerType().toString(), BannerTypeEnums.TYPE_2.getCode())){
+				throw new BusinessException("精选banner至少添加一个，请添加其他banner后再次操作。");
+			}
+		}
+		
 		banner.setUpdatedTime(new Date());
 		banner.setUpdateUser(updateUser);
 		banner.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
 		bannerDao.updateByPrimaryKeySelective(banner);
-		
 	}
 
 }
