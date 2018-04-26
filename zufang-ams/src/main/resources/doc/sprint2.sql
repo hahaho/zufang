@@ -52,3 +52,18 @@ CREATE TABLE `t_zfang_banner` (
 ALTER TABLE `t_zfang_house`
 ADD COLUMN `traffic`  varchar(255)  NOT NULL DEFAULT '' COMMENT '交通',
 ADD COLUMN `around`  varchar(255) NOT NULL DEFAULT '' COMMENT '周边';
+
+CREATE TABLE `t_zfang_reserve_record` (
+  `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `reserve_house_id` bigint(10) NOT NULL COMMENT '预约看房表id外键',
+  `operate_type` tinyint(4) NOT NULL COMMENT '记录变更操作类型，1:预约看房，2:变更看房信息，3：取消行程',
+  `operate_time` datetime NOT NULL COMMENT '记录变更操作时间',
+  `remark` varchar(255) NOT NULL COMMENT '操作备注：用户第1次预约成功，用户第2次变更看房信息，用户第3次取消看房行程 等等。。',
+  `created_time` datetime NOT NULL COMMENT '创建时间',
+  `updated_time` datetime NOT NULL COMMENT '更新时间',
+  `created_user` varchar(20) NOT NULL DEFAULT '' COMMENT '创建人',
+  `updated_user` varchar(20) NOT NULL DEFAULT '' COMMENT '更新人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COMMENT='预约看房记录变更表';
+
+ALTER TABLE `t_zfang_reserve_house` ADD COLUMN `reserve_status` tinyint(4) NOT NULL COMMENT '预约看房状态 1：已预约（首次预约成功默认状态），2：已变更（编辑预约行程，变更为此状态），3：已取消（删除预约行程，变更为此状态），4：已失效（看房时间过期，变更为此状态），';
