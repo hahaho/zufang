@@ -15,8 +15,8 @@ public class CommonService {
 	
 	private static final String[] CROWN_CITY_ARRAY = { "上海市", "天津市", "北京市", "重庆市" };
 	private static final List<String> CROWN_CITY_LIST = Arrays.asList(CROWN_CITY_ARRAY);
-	private static final String[] CROWNA_CITY_ARRAY = { "上海", "天津", "北京", "重庆" };
-	private static final List<String> CROWNA_CITY_LIST = Arrays.asList(CROWNA_CITY_ARRAY);
+	public static final String[] CROWNA_CITY_ARRAY = { "上海", "天津", "北京", "重庆" };
+	public static final List<String> CROWNA_CITY_LIST = Arrays.asList(CROWNA_CITY_ARRAY);
 
 	/**
 	 * 默认地球半径
@@ -34,6 +34,15 @@ public class CommonService {
 		}
 		return city;
 	}
+
+	/**
+	 * 地址带省，则去处省字
+	 */
+	public static String provinceShort(String province){
+		province = province.replace("省", "");
+		return province;
+	}
+
 	/**
 	 * 效验是不是直辖市
 	 * @param city

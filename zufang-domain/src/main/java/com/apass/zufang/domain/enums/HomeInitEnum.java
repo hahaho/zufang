@@ -9,7 +9,7 @@ public enum HomeInitEnum {
 	INIT_TITLE_1("4", "用户还款指引"),
 	
 	
-	INIT_HOUSEIMG_2("5", "http://espapp.apass.cn/static/eshop/other/1524045549871.jpg"),// 首页初始img
+	INIT_HOUSEIMG_2("5", "http://espapp.apass.cn/static/eshop/other/1524635128238.jpg"),// 首页初始img
 	INIT_URL_2("6", "http://ajqh.wap.apass.cn/#/downAppReg?channel=ajp"),// 追加url
 	INIT_TITLE_2("7", "借款注册"),
 	

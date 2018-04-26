@@ -171,6 +171,11 @@ public class ValidateUtils {
 		}
 	}
 	
+	public static void isPositiveNumber(String value,String message) throws BusinessException{
+		if(!isPositiveNumber(value)){
+			throw new BusinessException(message+"值应为大于0的正整数字");
+		}
+	}
 	/**
 	 * 验证是数字，并且长度在某一区间内
 	 * @param value
@@ -241,6 +246,15 @@ public class ValidateUtils {
 	 */
 	public static boolean isNumber(String value){
 		Pattern pattern = Pattern.compile("^-?[0-9]+");
+	    Matcher isNum = pattern.matcher(value);
+	    if(!isNum.matches() ){
+	       return false; 
+	    } 
+		return true;
+	}
+	
+	public static boolean isPositiveNumber(String value){
+		Pattern pattern = Pattern.compile("^[1-9]+");
 	    Matcher isNum = pattern.matcher(value);
 	    if(!isNum.matches() ){
 	       return false; 

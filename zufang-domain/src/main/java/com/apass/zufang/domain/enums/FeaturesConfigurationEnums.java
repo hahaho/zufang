@@ -1,4 +1,5 @@
 package com.apass.zufang.domain.enums;
+
 /**
  * 特色配置
  * @author zwd
@@ -43,5 +44,22 @@ public enum FeaturesConfigurationEnums {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public static FeaturesConfigurationEnums getEnum(String name){
+		for(FeaturesConfigurationEnums e : values()){
+			if(name.contains(e.getMessage())){
+				return e;
+			}
+		}
+		return null;
+	}
+
+
+	/**
+	 * 判断外部配置是否合法
+	 */
+	public static boolean isValidate(String name){
+		return getEnum(name) != null;
 	}
 }

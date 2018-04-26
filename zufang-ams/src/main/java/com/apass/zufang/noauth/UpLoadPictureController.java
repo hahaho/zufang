@@ -28,16 +28,36 @@ public class UpLoadPictureController {
     @Value("${nfs.house}")
     private String nfsHouse;
     
+    /*** 房屋图片存放地址*/
+    @Value("${nfs.banner}")
+    private String nfsBanner;
+    
     @Value("${zufang.image.uri}")
     private String imageUri;
     
 	@ResponseBody
     @RequestMapping(value = "/uppicture320", method = RequestMethod.POST)
 	public Response uploadPicture320(@ModelAttribute("file") MultipartFile file){
-		return uploadImg(file, 750,850,562,662);
+		return uploadImg(nfsHouse,1024*1024*2,file, 750,850,562,662);
     }
 	
-	public Response uploadImg(MultipartFile file,int minWidths,int maxWidths,int minHeights,int maxHeights){
+	@ResponseBody
+    @RequestMapping(value = "/uppicture428", method = RequestMethod.POST)
+	public Response uploadPicture428(@ModelAttribute("file") MultipartFile file){
+		return uploadImg(nfsBanner,1024*500,file, 750,750,428,428);
+    }
+	/**
+	 * 
+	 * @param fileFolder 文件夹
+	 * @param fileSize 文件大小
+	 * @param file 文件
+	 * @param minWidths 最小宽度
+	 * @param maxWidths 最大宽度
+	 * @param minHeights最小高度
+	 * @param maxHeights最大高度
+	 * @return
+	 */
+	public Response uploadImg(String fileFolder,long fileSize,MultipartFile file,int minWidths,int maxWidths,int minHeights,int maxHeights){
 		try{
     		if(null == file){
         		throw new BusinessException("上传文件不能为空!");
@@ -47,14 +67,26 @@ public class UpLoadPictureController {
         	int size = file.getInputStream().available();
         	
         	if(!(checkImgType && checkImgSize)){
-        		throw new BusinessException("文件尺寸不符,上传图片尺寸必须是宽：["+minWidths+"~"+maxWidths+"]px,高：["+minHeights+"~"+maxHeights+"]px,格式：.jpg,.png");
-        	}else if(size > 1024 * 1024 * 2){
+        		String width = "";
+        		String height = "";
+        		if(minWidths == maxWidths){
+        			width = minWidths+"";
+        		}else{
+        			width = minWidths+"~"+maxWidths+"";
+        		}
+        		if(minHeights == maxHeights){
+        			height = minHeights+"";
+        		}else{
+        			height = minHeights+"~"+maxHeights+"";
+        		}
+        		throw new BusinessException("文件尺寸不符,上传图片尺寸必须是宽：["+width+"]px,高：["+height+"]px,格式：.jpg,.png");
+        	}else if(size > fileSize){
         		file.getInputStream().close();
-        		throw new BusinessException("文件不能大于2MB!");
+        		throw new BusinessException("文件不能大于"+fileSize+"K!");
         	}
         	String imgType = ImageTools.getImgType(file);
         	String fileName = "logo_" + System.currentTimeMillis()+"_"+ file.getName()+ "." + imgType;
-            String url = nfsHouse + fileName;
+            String url = fileFolder + fileName;
             /*** 上传文件*/
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
             Map<String,Object> values = Maps.newHashMap();
@@ -65,10 +97,11 @@ public class UpLoadPictureController {
 			logger.error("delpicture businessException---->{}",e);
 			return Response.fail(e.getErrorDesc());
 		}catch (Exception e) {
-			logger.error("上传house logo失败!", e);
+			logger.error("上传 logo失败!", e);
 			return Response.fail("上传图片失败!");
         }
     }
+	
 	/**
      * 上传公司LOGO成功
      * @param siftGoodFileModel

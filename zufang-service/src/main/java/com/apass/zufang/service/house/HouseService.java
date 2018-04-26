@@ -1,19 +1,4 @@
 package com.apass.zufang.service.house;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
@@ -48,6 +33,20 @@ import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 /**
  * 房源管理
  * @author Administrator
@@ -296,8 +295,10 @@ public class HouseService {
 		district.setParentCode(c.getCode());
 		WorkCityJd d = cityJdMapper.selectCodeByName(district);
 		if(null == d){
-			logger.error("selectCodeByDistrictName is failed!");
-			throw new BusinessException("查询区县编码失败!");
+//			logger.error("selectCodeByDistrictName is failed!");
+//			throw new BusinessException("查询区县编码失败!");
+			//蛋壳公寓该字段无法和我们地址库对应
+			d = new WorkCityJd();
 		}
 		
 		WorkCityJdParams street = new WorkCityJdParams();

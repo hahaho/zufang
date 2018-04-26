@@ -72,7 +72,12 @@ public class OnlineBookingService {
 		List<HouseShowingsEntity> houseList = reserveHouseMapper.getHouseLists(crmety);
 		//设置图片地址
 		for (HouseShowingsEntity houseShowingsEntity : houseList) {
-			houseShowingsEntity.setUrl(imageUri+houseShowingsEntity.getUrl());
+			if(houseShowingsEntity.getUrl().contains("http")){
+				houseShowingsEntity.setUrl(houseShowingsEntity.getUrl());
+			}else{
+				houseShowingsEntity.setUrl(imageUri+houseShowingsEntity.getUrl());
+			}
+
 		}
 		body.setRows(houseList);
 		body.setTotal(reserveHouseMapper.getCount(crmety.getTelphone()));
