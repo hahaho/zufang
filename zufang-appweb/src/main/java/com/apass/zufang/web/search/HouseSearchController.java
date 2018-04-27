@@ -13,10 +13,12 @@ import com.apass.zufang.domain.entity.WorkSubway;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.HuxingEnums;
 import com.apass.zufang.domain.enums.PriceRangeEnum;
+import com.apass.zufang.domain.enums.TrafficEnums;
 import com.apass.zufang.domain.vo.HouseAppSearchVo;
 import com.apass.zufang.search.condition.HouseSearchCondition;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.enums.IndexType;
+import com.apass.zufang.search.enums.SortFieldEnum;
 import com.apass.zufang.search.enums.SortMode;
 import com.apass.zufang.search.manager.ESClientManager;
 import com.apass.zufang.search.manager.IndexManager;
@@ -28,6 +30,7 @@ import com.apass.zufang.service.search.SearchKeyService;
 import com.apass.zufang.service.searchhistory.WorkSubwaySevice;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder;
@@ -52,6 +55,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.apass.zufang.search.enums.IndexType.HOUSE;
 
@@ -200,7 +204,7 @@ public class HouseSearchController {
 
 			if(StringUtils.isNotEmpty(rentType)){
 				searchValueFalge = true;
-				houseSearchCondition.setRentType(Byte.valueOf(rentType));
+				houseSearchCondition.setRentType(rentType);
 			}
 
 
@@ -474,22 +478,67 @@ public class HouseSearchController {
     @POST
     @Path(value = "/search/traffix")
     public Response traffixSearch(@RequestBody Map<String, Object> paramMap){
-		LOGGER.info("房屋筛选执行,参数:{}", GsonUtils.toJson(paramMap));
+		LOGGER.info("the interface of nearHouse params are:{}", GsonUtils.toJson(paramMap));
+
+		HouseSearchCondition condition = new HouseSearchCondition();
 		try{
-			String city = CommonUtils.getValue(paramMap, "city");
-			if(StringUtils.isEmpty(city)){
-				throw new RuntimeException("请传入地址！");
-			}
-			if(CENTRL_CITY_LIST2.contains(city)){
-				city = city.substring(0, city.length()-1);
-			}
-			String apartmentName = CommonUtils.getValue(paramMap, "apartmentName");
-			String priceFlag = CommonUtils.getValue(paramMap,"priceFlag");
+
+			//筛选字段:类型,户型,房屋配置
 			String rentType = CommonUtils.getValue(paramMap, "rentType");
 			String room = CommonUtils.getValue(paramMap, "room");
 			String configName = CommonUtils.getValue(paramMap, "configName");
-			String areaCode = CommonUtils.getValue(paramMap, "areaCode");
-			String subCode = CommonUtils.getValue(paramMap, "subCode");
+			condition.setRentType(rentType);
+			condition.setRoom(room);
+			condition.setConfigName(configName);
+
+			//附近房源时间，位置，出行方式
+			String minute = CommonUtils.getValue(paramMap, "minute");
+			String area = CommonUtils.getValue(paramMap, "area");
+			String trafficType = CommonUtils.getValue(paramMap, "trafficType");
+
+			//根据交通方式和时间计算
+			String distance = TrafficEnums.getDistance(Integer.valueOf(trafficType==null ? "1" :trafficType),
+					Double.valueOf(minute==null ?"30":minute));
+			if(StringUtils.isEmpty(distance)){
+				throw new RuntimeException("交通方式参数有误：只能是1，2，3，4");
+			}
+			condition.setDistance(distance);
+
+			//根据位置计算经纬度
+			String[] location = obtainGaodeLocation.getLocation(area);
+			LOGGER.info("位置area:{}调用ObtainGaodeLocation.getLocation方法返回数据：{}",area,Arrays.toString(location));
+			condition.setLongitude(location[0]);
+			condition.setLatitude(location[1]);
+
+			//排序字段:pageView,listTime,rentAmt 与排序方式desc,asc
+			String sort = CommonUtils.getValue(paramMap, "sort");
+			String order = CommonUtils.getValue(paramMap, "order");
+
+			if(StringUtils.isEmpty(sort)){
+				condition.setSortMode(SortMode.DISTANCE_DESC);
+			}else{
+				if (SortFieldEnum.SORTFIE_DEFAULT.getField().equals(sort)) {//默认:根据距离排序由近及远
+					if (StringUtils.equalsIgnoreCase("DESC", order)) {
+						condition.setSortMode(SortMode.DISTANCE_DESC);
+					} else {
+						condition.setSortMode(SortMode.DISTANCE_DESC);
+					}
+				} else if (SortFieldEnum.SORTFIE_NEWESET.getField().equals(sort)) {//新品
+					if (StringUtils.equalsIgnoreCase("DESC", order)) {
+						condition.setSortMode(SortMode.ORDERLIST_DESC);
+					} else {
+						condition.setSortMode(SortMode.ORDERLIST_ASC);
+					}
+				} else if (SortFieldEnum.SORTFIE_PRICE.getField().equals(sort)) {// 价格
+					if (StringUtils.equalsIgnoreCase("DESC", order)) {
+						condition.setSortMode(SortMode.RENTAMT_DESC);
+					} else {
+						condition.setSortMode(SortMode.RENTAMT_ASC);
+					}
+				} else {
+					throw new RuntimeException("缺少排序字段和排序方式");
+				}
+			}
 
 			String page = CommonUtils.getValue(paramMap, "page");
 			String rows = CommonUtils.getValue(paramMap, "rows");
@@ -503,134 +552,19 @@ public class HouseSearchController {
 			pages = StringUtils.isEmpty(page) ? 1 : Integer.valueOf(page);
 			Integer offset = (pages-1)*row;
 
-			/**
-			 * 思路：先根据品牌、价格、筛选条件查询房源List,然后遍历结果计算每个house与目标位置距离，如果<1km,返回。否则过虑掉
-			 */
-			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+			condition.setOffset(offset);
+			condition.setPageSize(row);
 
-			MultiMatchQueryBuilder multiMatchQueryBuilder2 = QueryBuilders.multiMatchQuery(city,
-					"province","city", "district").operator(Operator.AND);
-			multiMatchQueryBuilder2.field("province", 2f);
-			multiMatchQueryBuilder2.field("city", 2f);
-			multiMatchQueryBuilder2.field("district", 1f);
-			boolQueryBuilder.must(multiMatchQueryBuilder2);
-			if(StringUtils.isNotEmpty(apartmentName)){
-				boolQueryBuilder.must(QueryBuilders.matchQuery("apartmentName",apartmentName).operator(Operator.AND));
-			}
-			if(StringUtils.isNotEmpty(priceFlag) && !priceFlag.equals(String.valueOf(PriceRangeEnum.PRICE_ALL.getVal()))){
-				boolQueryBuilder.must(QueryBuilders.termQuery("priceFlag",priceFlag).boost(2.5f));
-			}
-			//如果类型选不限，则不加此条件
-			if(StringUtils.isNotEmpty(rentType)){
-				if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),rentType)
-						|| StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),rentType)){
-					boolQueryBuilder.must(QueryBuilders.termQuery("rentType",rentType).boost(2.5f));
-				}
-			}
-			if(StringUtils.isNotEmpty(room)){
-				String[] roomArr = room.split(",");
-				List roomList = Arrays.asList(roomArr);
-				//如果户型选不限,则无此条件
-				if(!roomList.contains(HuxingEnums.HUXING_0.getCode().toString())){
-					if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
-						boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
-					}
-					switch(roomArr.length)
-					{
-						case 1:
-							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
-							break;
-						case 2:
-							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
-							break;
-						case 3:
-							boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
-							break;
-						case 4:
-							boolQueryBuilder.must(QueryBuilders
-									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
-							break;
-						case 5:
-							boolQueryBuilder.must(QueryBuilders
-									.termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
-							break;
-						default:
-							break;
-					}
-				}
-			}
-			if(StringUtils.isNotEmpty(configName)){
-				boolQueryBuilder.must(QueryBuilders.matchQuery("configName",configName).operator(Operator.AND));
-			}
-			if(StringUtils.isNotEmpty(subCode) && StringUtils.isNotEmpty(areaCode)){
-				throw new RuntimeException("subCode和areaCode不可同时传入!");
-			}
+			Pagination<HouseEs> pagination = IndexManager.traffixSearch(condition);
 
-			String[] location = null;
-			//传入地铁线路编码
-			if(StringUtils.isNotEmpty(subCode)){
-				//根据code查询经纬度，计算距离
-				WorkSubway workSubway = workSubwaySevice.selectSubwaybyCode(subCode);
-				LOGGER.info("subCode:{}查询地铁线路表结果：{}",subCode,GsonUtils.toJson(workSubway));
-				String nearestPoint = workSubway.getNearestPoint();
-				location = nearestPoint.split(",");
-				if(location==null || location.length!=2){
-					throw new RuntimeException("地铁线路表经纬度数据有误!");
-				}
-				boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("location")
-						.point(Double.valueOf(location[1]), Double.valueOf(location[0]))
-						.distance(ROUND_DISTANSE, DistanceUnit.KILOMETERS));
-			}
-
-			//传入区域编码
-			if(StringUtils.isNotEmpty(areaCode)) {
-				//根据code查询经纬度，计算距离
-				//towns
-				WorkCityJd townJd = nationService.selectWorkCityByCode(areaCode);
-				//district
-				WorkCityJd districtJd = nationService.selectWorkCityByCode(String.valueOf(townJd.getParent()));
-				//city
-				WorkCityJd cityJd = nationService.selectWorkCityByCode(String.valueOf(districtJd.getParent()));
-				String address = null;
-				StringBuffer sb = new StringBuffer();
-				//说明是直辖市，townJd无数据，areaCode为县code
-				if(CENTRL_CITY_LIST.contains(cityJd.getCode())){
-					address = sb.append(cityJd.getProvince()).append(districtJd.getCity())
-							.append(townJd.getDistrict()).toString();
-				}else{
-					//province
-					WorkCityJd provinceJd = nationService.selectWorkCityByCode(String.valueOf(cityJd.getParent()));
-					address = sb.append(provinceJd.getProvince()).append(cityJd.getCity())
-							.append(districtJd.getDistrict()).append(townJd.getTowns()).toString();
-				}
-
-				location = obtainGaodeLocation.getLocation(address);
-				LOGGER.info("参数address:{}调用ObtainGaodeLocation.getgetLocation方法返回数据：{}",address,location);
-				boolQueryBuilder.must(QueryBuilders.geoDistanceQuery("location")
-						.point(Double.valueOf(location[1]), Double.valueOf(location[0]))
-						.distance(ROUND_DISTANSE, DistanceUnit.KILOMETERS));
-			}
-
-			SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch()
-					.addSort(SortMode.PAGEVIEW_DESC.getSortField(),SortOrder.DESC)
-					.setTypes(IndexType.HOUSE.getDataName())
-					.setQuery(boolQueryBuilder)
-					.setFrom(offset).setSize(row);
-			SearchResponse response = serachBuilder.execute().actionGet();
-			SearchHit[] hits = response.getHits().getHits();
-
-			Map<String, Object> returnMap = new HashMap<String, Object>();
-			returnMap.put("totalCount", response.getHits().getTotalHits());
-			//查询出的总房源：未先地点时返回
 			List<HouseAppSearchVo> houseList = Lists.newArrayList();
-			for(SearchHit hit: hits){
-				//如果位置筛选不为空，计算所查结果与目标经纬度的距离
-				HouseEs houseEs  = (HouseEs)ESDataUtil.readValue(hit.source(), HOUSE.getTypeClass());
-				houseList.add(houseEsToHouseAppSearchVo(houseEs));
-			}
+			houseList.addAll(pagination.getDataList().stream().map(this::houseEsToHouseAppSearchVo).collect(Collectors.toList()));
 
-			returnMap.put("houseDataList", houseList);
-			return Response.success("ES查询成功",returnMap);
+			Map<String,Object> resultMap = Maps.newHashMap();
+			resultMap.put("houseList",houseList);
+			resultMap.put("totalcount",pagination.getTotalCount());
+
+			return Response.success("附近房源查询成功",resultMap);
 		}catch (Exception e){
 			LOGGER.error("ES查询失败！",e);
 			return Response.fail("ES查询失败");

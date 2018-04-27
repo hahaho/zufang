@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.HuxingEnums;
 import com.apass.zufang.search.condition.HouseSearchCondition;
 import com.apass.zufang.search.entity.HouseEs;
 import com.apass.zufang.search.utils.Pinyin4jUtil;
@@ -21,9 +24,12 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +75,7 @@ public class IndexManager<T> {
      */
     private static <T> Pagination<T> boolSearch(String sortField, boolean desc, int from, int size, HouseSearchCondition condition) {
         String value = condition.getHouseTitle();
-        Byte rentType = condition.getRentType();
+        String rentType = condition.getRentType();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder
                 .must(QueryBuilders.multiMatchQuery(condition.getCity(),"province","city", "district").operator(Operator.AND).boost(2.5f))
@@ -194,7 +200,7 @@ public class IndexManager<T> {
         return null;
     }
 
-
+    private static HouseSearchCondition houseCondition = new HouseSearchCondition();
     /**
      * 根据条件分页查询，且按照指定字段排序
      *
@@ -213,9 +219,17 @@ public class IndexManager<T> {
         SearchRequestBuilder serachBuilder = ESClientManager.getClient().prepareSearch(esprop.getIndice())
                 .setTypes(type.getDataName())
                 .setQuery(queryBuilder);
+
         if (sortFields != null) {
-            for (int i = 0; i <sortFields.length ; i++) {
-                serachBuilder.addSort(sortFields[i], desc ? SortOrder.DESC : SortOrder.ASC);
+            if("distance".equals(sortFields[0])){
+                //根据距离排序
+                GeoDistanceSortBuilder geoSortBuilder = SortBuilders.geoDistanceSort("location", Double.valueOf(houseCondition.getLatitude()),
+                        Double.valueOf(houseCondition.getLongitude())).order(SortOrder.ASC);
+                serachBuilder.addSort(geoSortBuilder);
+            }else{
+                for (int i = 0; i <sortFields.length ; i++) {
+                    serachBuilder.addSort(sortFields[i], desc ? SortOrder.DESC : SortOrder.ASC);
+                }
             }
         }
         serachBuilder.addSort("_score", SortOrder.DESC);
@@ -264,7 +278,7 @@ public class IndexManager<T> {
         int size = condition.getPageSize();
 
         String value = condition.getHouseTitle();
-        Byte rentType = condition.getRentType();
+        String rentType = condition.getRentType();
         String city = condition.getCity();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
@@ -298,4 +312,63 @@ public class IndexManager<T> {
     }
 
 
+    /**
+     * 查询附近房源
+     * @param condition
+     * @return
+     */
+    public static Pagination<HouseEs> traffixSearch(HouseSearchCondition condition) {
+        houseCondition = condition;
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        GeoDistanceQueryBuilder geoDistanceQueryBuilder = QueryBuilders.geoDistanceQuery("location").point(Double.valueOf(condition.getLatitude()),
+                Double.valueOf(condition.getLongitude())).distance(condition.getDistance(), DistanceUnit.KILOMETERS);
+
+        boolQueryBuilder.must(geoDistanceQueryBuilder);
+        //如果类型选不限，则不加此条件
+        if(StringUtils.isNotEmpty(condition.getRentType())){
+            if(StringUtils.equals(BusinessHouseTypeEnums.HZ_1.getCode().toString(),condition.getRentType())
+                    || StringUtils.equals(BusinessHouseTypeEnums.HZ_2.getCode().toString(),condition.getRentType())){
+                boolQueryBuilder.must(QueryBuilders.termQuery("rentType",condition.getRentType()).boost(2.5f));
+            }
+        }
+        if(StringUtils.isNotEmpty(condition.getRoom())){
+            String[] roomArr = condition.getRoom().split(",");
+            List roomList = Arrays.asList(roomArr);
+            //如果户型选不限,则无此条件
+            if(!roomList.contains(HuxingEnums.HUXING_0.getCode().toString())){
+                if(roomList.contains(HuxingEnums.HUXING_MAX.getCode().toString())){
+                    boolQueryBuilder.should(QueryBuilders.rangeQuery("room").gt(4));
+                }
+                switch(roomArr.length)
+                {
+                    case 1:
+                        boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0]).boost(1.5f));
+                        break;
+                    case 2:
+                        boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1]).boost(1.5f));
+                        break;
+                    case 3:
+                        boolQueryBuilder.must(QueryBuilders.termsQuery("room", roomArr[0],roomArr[1],roomArr[2]).boost(1.5f));
+                        break;
+                    case 4:
+                        boolQueryBuilder.must(QueryBuilders
+                                .termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+                        break;
+                    case 5:
+                        boolQueryBuilder.must(QueryBuilders
+                                .termsQuery("room", roomArr[0],roomArr[1],roomArr[2],roomArr[3]).boost(1.5f));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        //配置
+        if(StringUtils.isNotEmpty(condition.getConfigName())){
+            boolQueryBuilder.must(QueryBuilders.matchQuery("configName",condition.getConfigName()).operator(Operator.AND));
+        }
+
+        return search(boolQueryBuilder,IndexType.HOUSE,condition.getSortMode().isDesc(),condition.getOffset(),condition.getPageSize(),condition.getSortMode().getSortField());
+    }
 }
