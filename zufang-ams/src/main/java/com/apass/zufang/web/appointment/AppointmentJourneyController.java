@@ -140,11 +140,11 @@ public class AppointmentJourneyController {
     public Response getReserveRecordList(Map<String,Object> map) {
         try {
         	LOGGER.info("getReserveRecordList map--->{}",GsonUtils.toJson(map));
-        	String reserveHouseId = CommonUtils.getValue(map, "id");//预约看房记录ID
+        	String reserveHouseId = CommonUtils.getValue(map, "reserveHouseId");//预约看房记录ID
         	return appointmentJourneyService.getReserveRecordList(reserveHouseId);
         } catch (Exception e) {
             LOGGER.error("deleReserveHouse EXCEPTION --- --->{}", e);
-            return Response.fail("预约行程管理 预约看房删除失败！");
+            return Response.fail("预约行程管理 看房记录查询失败！");
         }
     }
 	/**

@@ -154,7 +154,7 @@ public class AppointmentJourneyService {
 		for(ReserveRecord entity : recordlist){
 			entity.getOperateType();
 		}
-		return null;
+		return Response.success("预约行程管理 看房记录查询成功！", recordlist);
 	}
 	/**
 	 * 预约行程管理 客户回访记录新增

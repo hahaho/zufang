@@ -24,6 +24,7 @@
 			x.reserve_date reserveDate,
 			x.memo memo,
 			x.created_time createdTime,
+			x.reserve_status reserveStatus,
 			z.id apartmentId,
 			z.`name` apartmentName,
 			z.`code` apartmentCode,

@@ -8,7 +8,7 @@ public class ReserveRecord {
     private Long reserveHouseId;
 
     private Byte operateType;
-
+    private Date reserveDate;
     private Date operateTime;
 
     private String remark;
@@ -44,7 +44,12 @@ public class ReserveRecord {
     public void setOperateType(Byte operateType) {
         this.operateType = operateType;
     }
-
+    public Date getReserveDate() {
+		return reserveDate;
+	}
+	public void setReserveDate(Date reserveDate) {
+		this.reserveDate = reserveDate;
+	}
     public Date getOperateTime() {
         return operateTime;
     }
