@@ -16,6 +16,7 @@ import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.Lists;
@@ -96,8 +97,12 @@ public class HouseSpiderService {
         try {
             log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
             final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+            webClient.getOptions().setTimeout(90000);  //Set Connection Timeout to 1.5 minute
+            webClient.setJavaScriptTimeout(45000);     //Set JavaScript Timeout to 0.75 minute
+
             webClient.getOptions().setCssEnabled(false);//关闭css
             webClient.getOptions().setJavaScriptEnabled(true);
+            webClient.setAjaxController(new NicelyResynchronizingAjaxController());
             webClient.getOptions().setThrowExceptionOnScriptError(false);
             webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
             final HtmlPage page = webClient.getPage(houseUrl);
