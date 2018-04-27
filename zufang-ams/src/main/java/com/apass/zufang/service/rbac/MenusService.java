@@ -90,7 +90,6 @@ public class MenusService {
         menusDB.setUpdatedBy(operator);
         menusDB.setText(menusDO.getText());
         menusDB.setUrl(menusDO.getUrl());
-        menusDB.setIconCls(menusDO.getIconCls());
         menusDB.setParentId(menusDO.getParentId());
         menusDB.setDisplay(menusDO.getDisplay());
         menusRepository.updateAll(menusDB);

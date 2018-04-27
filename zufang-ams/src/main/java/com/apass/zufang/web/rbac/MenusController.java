@@ -97,14 +97,10 @@ public class MenusController {
             String menuId = paramMap.get("id");
             String text = paramMap.get("text");
             String url = paramMap.get("url");
-            String iconCls = paramMap.get("iconCls");
             String display = paramMap.get("display");
             String parentId = paramMap.get("parentId");
             if (!RegExpUtils.length(text, 1, 50)) {
                 return Response.fail("菜单名称长度不合法");
-            }
-            if (!RegExpUtils.length(iconCls, 0, 50)) {
-                return Response.fail("菜单图标长度不合法");
             }
             if (!RegExpUtils.length(url, 0, 100)) {
                 return Response.fail("链接地址长度不合法");
@@ -118,7 +114,7 @@ public class MenusController {
             MenusDO menusDO = new MenusDO();
             //menusDO.setId(Long.valueOf(menuId));
             menusDO.setDisplay(Integer.parseInt(display));
-            menusDO.setIconCls(iconCls);
+            menusDO.setIconCls("");
             menusDO.setParentId(Long.valueOf(parentId));
             menusDO.setText(text);
             menusDO.setUrl(url);
