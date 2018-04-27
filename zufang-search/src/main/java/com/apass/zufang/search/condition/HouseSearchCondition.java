@@ -27,7 +27,7 @@ public class HouseSearchCondition {
     /**
      * 1:整租；2:合租
      */
-    private Byte rentType;
+    private String rentType;
 
     /**
      * 公寓名称
@@ -41,7 +41,7 @@ public class HouseSearchCondition {
     /**
      * 室
      */
-    private Integer room;
+    private String room;
 
     /**
      * 电视，空调等配置信息
@@ -73,6 +73,44 @@ public class HouseSearchCondition {
      * 多少条
      */
     private Integer pageSize = Pagination.DEFAULT_PAGE_SIZE;
+
+    /**
+     * 距离
+     */
+    private String distance;
+
+    /**
+     * 经度
+     */
+    private String longitude;
+    /**
+     * 纬度
+     */
+    private String latitude;
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
     public Integer getPriceFlag() {
         return priceFlag;
@@ -130,11 +168,11 @@ public class HouseSearchCondition {
         this.detailAddr = detailAddr;
     }
 
-    public Byte getRentType() {
+    public String getRentType() {
         return rentType;
     }
 
-    public void setRentType(Byte rentType) {
+    public void setRentType(String rentType) {
         this.rentType = rentType;
     }
 
@@ -154,11 +192,11 @@ public class HouseSearchCondition {
         this.rentAmt = rentAmt;
     }
 
-    public Integer getRoom() {
+    public String getRoom() {
         return room;
     }
 
-    public void setRoom(Integer room) {
+    public void setRoom(String room) {
         this.room = room;
     }
 

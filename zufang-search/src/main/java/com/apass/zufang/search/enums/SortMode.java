@@ -20,11 +20,17 @@ public enum SortMode implements Serializable {
      */
     PAGEVIEW_ASC("pageView", false),
     PAGEVIEW_DESC("pageView", true),
+
+    /**
+     * 浏览量
+     */
+    DISTANCE_ASC("distance", false),
+    DISTANCE_DESC("distance", true),
     /**
      * 上架时间
      */
-    ORDERVALUE_ASC("listTime", false),
-    ORDERVALUE_DESC("listTime", true),
+    ORDERLIST_ASC("listTime", false),
+    ORDERLIST_DESC("listTime", true),
     /**
      * 创建时间
      */
