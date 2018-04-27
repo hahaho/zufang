@@ -8,6 +8,7 @@
 			x.id id,
 			x.reserve_house_id reserveHouseId,
 			x.operate_type operateType, 
+			x.reserve_date reserveDate, 
 			x.operate_time operateTime, 
 			x.remark remark, 
 			x.created_time createdTime, 

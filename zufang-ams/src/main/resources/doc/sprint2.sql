@@ -67,3 +67,5 @@ CREATE TABLE `t_zfang_reserve_record` (
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COMMENT='预约看房记录变更表';
 
 ALTER TABLE `t_zfang_reserve_house` ADD COLUMN `reserve_status` tinyint(4) NOT NULL COMMENT '预约看房状态 1：已预约（首次预约成功默认状态），2：已变更（编辑预约行程，变更为此状态），3：已取消（删除预约行程，变更为此状态），4：已失效（看房时间过期，变更为此状态），';
+
+ALTER TABLE `t_zfang_reserve_record` ADD COLUMN `reserve_data` datetime NOT NULL COMMENT '变更记录看房时间冗余字段，每次变更看房信息记录变更前看房时间' AFTER `operate_type`
