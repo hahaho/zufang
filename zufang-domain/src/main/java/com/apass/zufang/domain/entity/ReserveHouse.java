@@ -23,7 +23,9 @@ public class ReserveHouse {
     private String isDelete;
     private Date createdTime;
     private Date updatedTime;
-
+    
+    private Byte reserveStatus;
+    
     public Date getCreatedTime() {
 		return createdTime;
 	}
@@ -111,5 +113,13 @@ public class ReserveHouse {
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
     }
+
+	public Byte getReserveStatus() {
+		return reserveStatus;
+	}
+
+	public void setReserveStatus(Byte reserveStatus) {
+		this.reserveStatus = reserveStatus;
+	}
 
 }

@@ -77,7 +77,7 @@ public class MenusService {
         if (!CollectionUtils.isEmpty(dataList)) {
             throw new BusinessException("菜单名称已存在");
         }
-        if (id != null) {
+        if (id == null) {
             menusDO.setCreatedBy(operator);
             menusDO.setUpdatedBy(operator);
             menusRepository.insert(menusDO);
@@ -90,7 +90,6 @@ public class MenusService {
         menusDB.setUpdatedBy(operator);
         menusDB.setText(menusDO.getText());
         menusDB.setUrl(menusDO.getUrl());
-        menusDB.setIconCls(menusDO.getIconCls());
         menusDB.setParentId(menusDO.getParentId());
         menusDB.setDisplay(menusDO.getDisplay());
         menusRepository.updateAll(menusDB);

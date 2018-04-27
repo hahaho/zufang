@@ -1,18 +1,17 @@
 package com.apass.zufang.service.appointment;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
 import com.apass.zufang.domain.entity.ReserveHouse;
+import com.apass.zufang.domain.entity.ReserveRecord;
 import com.apass.zufang.domain.entity.ReturnVisit;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
@@ -23,6 +22,8 @@ public class AppointmentJourneyService {
 	private ReserveHouseService reserveHouseService;
 	@Autowired
 	private ReturnVisitService returnVisitService;
+	@Autowired
+	private ReserveRecordService reserveRecordService;
 	/**
 	 * 预约行程管理 预约看房记录列表查询
 	 * @param entity
@@ -90,26 +91,70 @@ public class AppointmentJourneyService {
 			throw new BusinessException("看房时间选择错误,请重新选择！");
 		}
 		entity.setReserveDate(reserveDate);
-		if(reserveHouseService.updateEntity(entity)==1){
-			return Response.success("预约行程管理 预约看房编辑成功！");
+		entity.setUpdatedTime(new Date());
+		entity.setReserveStatus((byte)2);//修改的看房行程  为2：已变更（编辑预约行程，变更为此状态）
+		if(reserveHouseService.updateEntity(entity)!=1){
+			throw new BusinessException("预约行程管理 预约看房编辑失败！");
 		}
-		return Response.fail("预约行程管理 预约看房编辑失败！");
+		ReserveRecord record = new ReserveRecord();
+		record.setReserveHouseId(entity.getId());
+		List<ReserveRecord> recordlist = reserveRecordService.getReserveRecordList(record);
+		record.setOperateType((byte)2);//修改的看房行程   :新增的看房记录 操作类型，2:变更看房信息
+		record.setOperateTime(new Date());
+		record.setRemark("用户第"+(recordlist.size()+1)+"次变更看房信息！");
+		record.setCreatedTime(new Date());
+		record.setUpdatedTime(new Date());
+		record.setCreatedUser(username);
+		record.setUpdatedUser(username);
+		if(reserveRecordService.createEntity(record)!=1){
+			throw new BusinessException("电话预约管理 预约看房变更记录新增失败！");
+		}
+		return Response.success("预约行程管理 预约看房编辑成功！");
 	}
 	/**
 	 * 预约行程管理 预约看房记录删除
 	 * @param reserveHouseId
 	 * @param username
 	 * @return
+	 * @throws BusinessException 
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response deleReserveHouse(String reserveHouseId, String username) {
+	public Response deleReserveHouse(String reserveHouseId, String username) throws BusinessException {
 		ReserveHouse entity = reserveHouseService.readEntity(Long.parseLong(reserveHouseId));
-		entity.setIsDelete("01");
 		entity.setUpdatedTime(new Date());
-		if(reserveHouseService.updateEntity(entity)==1){
-			return Response.success("预约行程管理 预约看房删除成功！");
+		entity.setReserveStatus((byte)3);//删除（取消）的看房行程  为3：已取消（删除预约行程，变更为此状态）
+		if(reserveHouseService.updateEntity(entity)!=1){
+			throw new BusinessException("预约行程管理 预约看房取消失败！");
 		}
-		return Response.fail("预约行程管理 预约看房删除失败！");
+		ReserveRecord record = new ReserveRecord();
+		record.setReserveHouseId(entity.getId());
+		List<ReserveRecord> recordlist = reserveRecordService.getReserveRecordList(record);
+		record.setOperateType((byte)3);//删除（取消）的看房行程   :新增的看房记录 操作类型，3：取消行程
+		record.setOperateTime(new Date());
+		record.setRemark("用户第"+(recordlist.size()+1)+"次取消看房行程！");
+		record.setCreatedTime(new Date());
+		record.setUpdatedTime(new Date());
+		record.setCreatedUser(username);
+		record.setUpdatedUser(username);
+		if(reserveRecordService.createEntity(record)!=1){
+			throw new BusinessException("电话预约管理 预约看房变更记录新增失败！");
+		}
+		return Response.success("预约行程管理 预约看房取消成功！");
+	}
+	/**
+	 * 预约行程管理 预约看房行程  看房记录查询
+	 * @param reserveHouseId
+	 * @return
+	 */
+	public Response getReserveRecordList(String id) {
+		Long reserveHouseId = Long.parseLong(id);
+		ReserveRecord record = new ReserveRecord();
+		record.setReserveHouseId(reserveHouseId);
+		List<ReserveRecord> recordlist = reserveRecordService.getReserveRecordList(record);
+		for(ReserveRecord entity : recordlist){
+			entity.getOperateType();
+		}
+		return Response.success("预约行程管理 看房记录查询成功！", recordlist);
 	}
 	/**
 	 * 预约行程管理 客户回访记录新增

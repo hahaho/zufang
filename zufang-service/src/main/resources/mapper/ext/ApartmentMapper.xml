@@ -81,7 +81,7 @@
 	<select id="getApartmentBylistCity" resultMap="BaseResultMap"
 		parameterType="com.apass.zufang.domain.entity.Apartment">
 
-		select DISTINCT a.name from t_zfang_apartment a,
+		select a.id,a.code,a.name,a.area from t_zfang_apartment a,
         t_zfang_house b,t_zfang_house_location c
         where a.id = b.apartment_id and b.id = c.house_id and b.status = '2' and c.city = #{city}
         GROUP BY name

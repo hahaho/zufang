@@ -3,12 +3,14 @@ package com.apass.zufang.service.spider;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.gfb.framework.utils.GsonUtils;
+import com.apass.gfb.framework.utils.HttpClientUtils;
 import com.apass.zufang.common.utils.MyStringUtil;
 import com.apass.zufang.domain.common.Geocodes;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.ZfangSpiderHouseEntity;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.IsDeleteEnums;
+import com.apass.zufang.domain.enums.SpiderCityUrlsEnum;
 import com.apass.zufang.domain.vo.HouseVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
 import com.apass.zufang.mapper.zfang.ZfangSpiderHouseEntityMapper;
@@ -16,6 +18,7 @@ import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.Lists;
@@ -45,6 +48,20 @@ import java.util.regex.Pattern;
 public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
     public static final String baseUrl = "http://www.mogoroom.com";
+
+    public static WebClient webClient = new WebClient(BrowserVersion.CHROME);
+    static {
+        webClient.getOptions().setTimeout(90000);  //Set Connection Timeout to 1.5 minute
+        webClient.setJavaScriptTimeout(45000);     //Set JavaScript Timeout to 0.75 minute
+
+        webClient.getOptions().setCssEnabled(false);//关闭css
+        webClient.getOptions().setJavaScriptEnabled(true);
+//        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+    }
+
+
     /**
      * 蘑菇公寓id
      */
@@ -95,11 +112,7 @@ public class HouseSpiderService {
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
             log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
-            final WebClient webClient = new WebClient(BrowserVersion.CHROME);
-            webClient.getOptions().setCssEnabled(false);//关闭css
-            webClient.getOptions().setJavaScriptEnabled(true);
-            webClient.getOptions().setThrowExceptionOnScriptError(false);
-            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+            Thread.sleep(10000);
             final HtmlPage page = webClient.getPage(houseUrl);
             Thread.sleep(10000);
             System.out.println(page.asXml());
@@ -196,8 +209,9 @@ public class HouseSpiderService {
             if(index != -1){
                 communityName = StringUtils.substring(address,0,index);
             }
+            SpiderCityUrlsEnum spiderCityUrlsEnum =  SpiderCityUrlsEnum.getEnum(houseUrl);
             String[] titleArray = title.split("-");
-            address = "上海市" + titleArray[0] + address;
+            address = spiderCityUrlsEnum.getProvince() + spiderCityUrlsEnum.getCity() + titleArray[0] + address;
             Geocodes geocodes = otainGaodeLocation.getLocationAddress(address);
             String[] locationArray = StringUtils.split(geocodes.getLocation(),",");
             String lon = locationArray[0];//经度
@@ -224,8 +238,8 @@ public class HouseSpiderService {
             houseVo.setRentType(Byte.valueOf(BusinessHouseTypeEnums.getHZCode(rentTypeStr)));
             houseVo.setZujinType(Byte.valueOf(BusinessHouseTypeEnums.getYJLXCode(zujinTypeStr)));
             houseVo.setPictures(imgUrls);
-            houseVo.setCity("上海");
-            houseVo.setProvince("上海");
+            houseVo.setCity(spiderCityUrlsEnum.getCity());
+            houseVo.setProvince(spiderCityUrlsEnum.getProvince());
             Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
             houseVo.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
             houseVo.setCreatedTime(new Date());
@@ -268,11 +282,7 @@ public class HouseSpiderService {
         try {
             String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
-            final WebClient webClient = new WebClient(BrowserVersion.CHROME);
-            //关闭css
-            webClient.getOptions().setCssEnabled(false);
-            webClient.getOptions().setJavaScriptEnabled(true);
-
+            Thread.sleep(10000);
             final HtmlPage page = webClient.getPage(houseUrl);
             Thread.sleep(10000);
             System.out.println(page.asXml());
@@ -330,11 +340,12 @@ public class HouseSpiderService {
     }
 
 
-    public static void main(String[] args) {
-        HouseSpiderService s = new HouseSpiderService();
-        s.parseMogoroomHouseDetail("http://www.mogoroom.com/room/712583.shtml?page=list");
-    	
-    	
+    public static void main(String[] args) throws Exception{
+//        HouseSpiderService s = new HouseSpiderService();
+//        s.parseMogoroomHouseDetail("http://www.mogoroom.com/room/712583.shtml?page=list");
+       byte[] bytes = HttpClientUtils.getMethodGetContent("http://www.mogoroom.com/room/6763962.shtml?page=list");
+        System.out.println(new String(bytes));
+
 //    	String target = "楼层：1/6层";
 //    	List<String> result = new ArrayList<String>();
 //    	Pattern p = Pattern.compile("([1-9]+[0-9]*|0)(\\.[\\d]+)?");

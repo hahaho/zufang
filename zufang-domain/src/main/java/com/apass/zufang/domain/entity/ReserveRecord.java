@@ -2,13 +2,13 @@ package com.apass.zufang.domain.entity;
 
 import java.util.Date;
 
-public class ZfangReserveRecordEntity {
+public class ReserveRecord {
     private Long id;
 
     private Long reserveHouseId;
 
     private Byte operateType;
-
+    private Date reserveDate;
     private Date operateTime;
 
     private String remark;
@@ -44,7 +44,12 @@ public class ZfangReserveRecordEntity {
     public void setOperateType(Byte operateType) {
         this.operateType = operateType;
     }
-
+    public Date getReserveDate() {
+		return reserveDate;
+	}
+	public void setReserveDate(Date reserveDate) {
+		this.reserveDate = reserveDate;
+	}
     public Date getOperateTime() {
         return operateTime;
     }

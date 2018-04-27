@@ -1,16 +1,12 @@
 package com.apass.zufang.service.onlinebooking;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.entity.HouseShowingsEntity;
@@ -18,7 +14,6 @@ import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.vo.ReservationsShowingsEntity;
 import com.apass.zufang.mapper.zfang.ReserveHouseMapper;
 import com.apass.zufang.utils.ResponsePageBody;
-
 /**
  * 在线预约看房
  */
@@ -28,12 +23,18 @@ public class OnlineBookingService {
 
 	@Autowired
 	private ReserveHouseMapper reserveHouseMapper;
-	
 	@Value("${zufang.image.uri}")
 	private   String imageUri;
-
 	/**
 	 * 插入数据库
+	 * @param houseId
+	 * @param userId
+	 * @param telphone
+	 * @param name
+	 * @param reservedate
+	 * @param memo
+	 * @return
+	 * @throws BusinessException
 	 */
 	public Integer insetReserveHouse(String houseId, String userId, String telphone, String name, String reservedate,String memo) throws BusinessException {
 		ReserveHouse setreserveHouse = new ReserveHouse();
@@ -49,7 +50,7 @@ public class OnlineBookingService {
 			setreserveHouse.setIsDelete("00");
 			setreserveHouse.setCreatedTime(new Date());
 			setreserveHouse.setUpdatedTime(new Date());
-			
+			setreserveHouse.setReserveStatus((byte)1);//新增的看房行程  为1：已预约（首次预约成功默认状态）  默认状态
 			//判断是否重复   
 			Integer selectByPrimaryKey = reserveHouseMapper.selectRepeat(setreserveHouse);
 			//已经预约了5次
@@ -65,8 +66,12 @@ public class OnlineBookingService {
 		}
 		return null;
 	}
-	
-	
+	/**
+	 * queryReservations
+	 * @param crmety
+	 * @return
+	 * @throws BusinessException
+	 */
 	public ResponsePageBody<HouseShowingsEntity> queryReservations(ReservationsShowingsEntity crmety)throws BusinessException {
  		ResponsePageBody<HouseShowingsEntity> body = new ResponsePageBody<>();
 		List<HouseShowingsEntity> houseList = reserveHouseMapper.getHouseLists(crmety);
@@ -84,11 +89,11 @@ public class OnlineBookingService {
 		body.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
 		return body;
 	}
-
-
 	/**
 	 * 是否过期
 	 * @param telphone
+	 * @param houseId
+	 * @return
 	 */
 	public Integer queryOverdue(String telphone ,String houseId) {
 		ReservationsShowingsEntity reservationsShowingsEntity = new ReservationsShowingsEntity();
@@ -96,6 +101,4 @@ public class OnlineBookingService {
 		reservationsShowingsEntity.setHouseId(Long.parseLong(houseId));
 		return reserveHouseMapper.queryOverdue(reservationsShowingsEntity);
 	}
-
-
 }

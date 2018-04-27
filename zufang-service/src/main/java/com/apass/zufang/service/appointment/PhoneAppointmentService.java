@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
@@ -14,6 +13,7 @@ import com.apass.zufang.domain.dto.ApprintmentJourneyQueryParams;
 import com.apass.zufang.domain.dto.HouseAppointmentQueryParams;
 import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.entity.ReserveHouse;
+import com.apass.zufang.domain.entity.ReserveRecord;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
@@ -25,6 +25,8 @@ public class PhoneAppointmentService {
 	private HousePeiZhiService housePeiZhiService;
 	@Autowired
 	private ReserveHouseService reserveHouseService;
+	@Autowired
+	private ReserveRecordService reserveRecordService;
 	/**
 	 * 电话预约管理 房源列表查询
 	 * @param entity
@@ -140,10 +142,23 @@ public class PhoneAppointmentService {
 		entity.setIsDelete("00");
 		entity.setCreatedTime(new Date());
 		entity.setUpdatedTime(new Date());
-		if(reserveHouseService.createEntity(entity)==1){
-			return Response.success("电话预约管理 预约看房新增成功！");
+		entity.setReserveStatus((byte)1);//新增的看房行程  为1：已预约（首次预约成功默认状态）  默认状态
+		if(reserveHouseService.createEntity(entity)!=1){
+			throw new BusinessException("电话预约管理 预约看房新增失败！");
 		}
-		return Response.fail("电话预约管理 预约看房新增失败！");
+		ReserveRecord record = new ReserveRecord();
+		record.setReserveHouseId(entity.getId());
+		record.setOperateType((byte)1);//新增的看房行程 :新增的看房记录  操作类型，1:预约看房   默认状态
+		record.setOperateTime(new Date());
+		record.setRemark("用户第1次预约操作成功！");
+		record.setCreatedTime(new Date());
+		record.setUpdatedTime(new Date());
+		record.setCreatedUser(user);
+		record.setUpdatedUser(user);
+		if(reserveRecordService.createEntity(record)!=1){
+			throw new BusinessException("电话预约管理 预约看房变更记录新增失败！");
+		}
+		return Response.success("电话预约管理 预约看房新增成功！");
 	}
 	@SuppressWarnings("unused")
 	private List<HouseAppointmentVo> checkHouseList(List<HouseAppointmentVo> list){
