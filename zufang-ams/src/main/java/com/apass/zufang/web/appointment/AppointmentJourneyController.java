@@ -143,7 +143,7 @@ public class AppointmentJourneyController {
         	String reserveHouseId = CommonUtils.getValue(map, "reserveHouseId");//预约看房记录ID
         	return appointmentJourneyService.getReserveRecordList(reserveHouseId);
         } catch (Exception e) {
-            LOGGER.error("deleReserveHouse EXCEPTION --- --->{}", e);
+            LOGGER.error("getReserveRecordList EXCEPTION --- --->{}", e);
             return Response.fail("预约行程管理 看房记录查询失败！");
         }
     }

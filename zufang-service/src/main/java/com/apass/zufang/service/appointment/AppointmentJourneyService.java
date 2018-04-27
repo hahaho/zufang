@@ -1,7 +1,9 @@
 package com.apass.zufang.service.appointment;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,9 @@ import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.entity.ReserveRecord;
 import com.apass.zufang.domain.entity.ReturnVisit;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.ReserveOperateTypeEnums;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
+import com.apass.zufang.domain.vo.ReserveRecordVo;
 import com.apass.zufang.utils.ResponsePageBody;
 @Service
 public class AppointmentJourneyService {
@@ -100,6 +104,7 @@ public class AppointmentJourneyService {
 		record.setReserveHouseId(entity.getId());
 		List<ReserveRecord> recordlist = reserveRecordService.getReserveRecordList(record);
 		record.setOperateType((byte)2);//修改的看房行程   :新增的看房记录 操作类型，2:变更看房信息
+		record.setReserveDate(reserveDate);
 		record.setOperateTime(new Date());
 		record.setRemark("用户第"+(recordlist.size()+1)+"次变更看房信息！");
 		record.setCreatedTime(new Date());
@@ -130,6 +135,7 @@ public class AppointmentJourneyService {
 		record.setReserveHouseId(entity.getId());
 		List<ReserveRecord> recordlist = reserveRecordService.getReserveRecordList(record);
 		record.setOperateType((byte)3);//删除（取消）的看房行程   :新增的看房记录 操作类型，3：取消行程
+		record.setReserveDate(entity.getReserveDate());
 		record.setOperateTime(new Date());
 		record.setRemark("用户第"+(recordlist.size()+1)+"次取消看房行程！");
 		record.setCreatedTime(new Date());
@@ -151,10 +157,23 @@ public class AppointmentJourneyService {
 		ReserveRecord record = new ReserveRecord();
 		record.setReserveHouseId(reserveHouseId);
 		List<ReserveRecord> recordlist = reserveRecordService.getReserveRecordList(record);
+		List<ReserveRecordVo> recordvolist = new ArrayList<ReserveRecordVo>();
 		for(ReserveRecord entity : recordlist){
-			entity.getOperateType();
+			ReserveRecordVo vo = new ReserveRecordVo();
+			BeanUtils.copyProperties(entity, vo);
+			Byte operateType = entity.getOperateType();
+			String operate = operateType.toString();
+			vo.setOperateTypeStr(ReserveOperateTypeEnums.getMessge(operate));
+			vo.setOperateTimeStr(DateFormatUtil.dateToString(vo.getOperateTime(),null));
+			if(StringUtils.equals(operate, ReserveOperateTypeEnums.MAKE_APPOINTMENT_1.getCode())
+					||StringUtils.equals(operate, ReserveOperateTypeEnums.CHANGE_APPOINTMENT_2.getCode())){
+				vo.setReserveDateStr(DateFormatUtil.dateToString(vo.getReserveDate(),null));
+			}else{
+				vo.setReserveDateStr("已取消看房");
+			}
+			recordvolist.add(vo);
 		}
-		return Response.success("预约行程管理 看房记录查询成功！", recordlist);
+		return Response.success("预约行程管理 看房记录查询成功！", recordvolist);
 	}
 	/**
 	 * 预约行程管理 客户回访记录新增
