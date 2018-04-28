@@ -69,6 +69,15 @@
        	<if test="houseDistrict!=null and houseDistrict!=''"> AND a.district = #{houseDistrict} </if>
        	<if test="houseStreet!=null and houseStreet!=''"> AND a.street = #{houseStreet} </if>
        	
+       	<if test="reserveStatus!=null and reserveStatus!=''"> 
+	       	<![CDATA[
+		       	AND CASE 
+	       			WHEN #{reserveStatus} IN ( '1', '2','3') THEN x.reserve_status = #{reserveStatus} AND x.reserve_date > CURRENT_TIMESTAMP
+					WHEN #{reserveStatus} IN ( '4')  THEN x.reserve_date < CURRENT_TIMESTAMP
+				END 
+			]]>
+		</if>
+       	
        	<if test="reserveDateFloor!=null and reserveDateFloor!=''"> <![CDATA[ AND x.reserve_date >= #{reserveDateFloor} ]]></if>
        	<if test="reserveDateCeiling!=null and reserveDateCeiling!=''"> <![CDATA[ AND x.reserve_date <= #{reserveDateCeiling} ]]></if>
        	
@@ -80,10 +89,6 @@
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
     </select>
-    
-    
-    
-    
      <select id="selectrepeat" resultType="java.lang.Integer" parameterType="java.lang.String">
 		SELECT
 			COUNT(1)
@@ -94,11 +99,6 @@
 		AND is_delete ='00'
 		AND reserve_date > (select current_timestamp())
     </select>
-    
-    
-    
-    
-    
     <!-- 分页查询 -->
 	<select id="getHouseLists"  resultType="com.apass.zufang.domain.entity.HouseShowingsEntity" parameterType="com.apass.zufang.domain.vo.ReservationsShowingsEntity">
 	<![CDATA[
@@ -149,8 +149,6 @@
             <include refid="PAGINATION.MYSQL_PAGINATION" />
         </if>
 	</select>
-
-
 	<!-- 记录总数 -->
 	<select id="getCount"  resultType="java.lang.Integer" parameterType="java.lang.String"   >
 	<![CDATA[
@@ -173,8 +171,6 @@
 
 		]]>
 	</select>
-	
-	
 	<!-- 是否过期 -->
 	<select id="queryOverdue"  resultType="java.lang.Integer" parameterType="com.apass.zufang.domain.vo.ReservationsShowingsEntity"   >
 	<![CDATA[
@@ -189,8 +185,6 @@
 		AND reserve_date > (select current_timestamp())
 		]]>
 	</select>
-	
-	
 	<select id="selectRepeat"  resultType="java.lang.Integer" parameterType="com.apass.zufang.domain.entity.ReserveHouse"   >
 	<![CDATA[
 		SELECT
@@ -204,6 +198,4 @@
 		AND reserve_date > (select current_timestamp())
 		]]>
 	</select>
-	
-    
 </mapper>

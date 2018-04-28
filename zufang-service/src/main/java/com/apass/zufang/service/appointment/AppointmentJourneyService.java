@@ -17,6 +17,7 @@ import com.apass.zufang.domain.entity.ReserveRecord;
 import com.apass.zufang.domain.entity.ReturnVisit;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
 import com.apass.zufang.domain.enums.ReserveOperateTypeEnums;
+import com.apass.zufang.domain.enums.ReserveStatusEnums;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
 import com.apass.zufang.domain.vo.ReserveRecordVo;
 import com.apass.zufang.utils.ResponsePageBody;
@@ -71,6 +72,12 @@ public class AppointmentJourneyService {
         		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_9.getMessage());
         	}else{
         		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_10.getMessage());
+        	}
+        	String reserveStatus = vo.getReserveStatus().toString();
+        	if(new Date().getTime()>vo.getReserveDate().getTime()){
+        		vo.setReserveStatusStr("已失效");//预约状态列表
+        	}else{
+        		vo.setReserveStatusStr(ReserveStatusEnums.getMessge(reserveStatus));//预约状态列表
         	}
         }
         pageBody.setRows(list);
@@ -235,6 +242,13 @@ public class AppointmentJourneyService {
         	}else{
         		vo.setHouseZujinType(BusinessHouseTypeEnums.YJLX_10.getMessage());
         	}
+        	//预约状态暂时导出功能前端未实现
+        	/*String reserveStatus = vo.getReserveStatus().toString();
+        	if(new Date().getTime()>vo.getReserveDate().getTime()){
+        		vo.setReserveStatusStr("已失效");//预约状态列表
+        	}else{
+        		vo.setReserveStatusStr(ReserveStatusEnums.getMessge(reserveStatus));//预约状态列表
+        	}*/
         }
 		return Response.success("预约行程管理 看房行程导出成功！",list);
 	}
