@@ -19,6 +19,7 @@ public class ReserveHouseVo{
     private Date createdTime;
     private Date updatedTime;
     private Byte reserveStatus;
+    private String reserveStatusStr;
     private String reserveType;//预约看房新增字段 预约类型
     private String createdDateTime;//预约看房新增字段 申请预约时间
     private String reserveDateTime;//预约看房新增字段 看房时间
@@ -119,6 +120,12 @@ public class ReserveHouseVo{
 	}
 	public void setReserveStatus(Byte reserveStatus) {
 		this.reserveStatus = reserveStatus;
+	}
+	public String getReserveStatusStr() {
+		return reserveStatusStr;
+	}
+	public void setReserveStatusStr(String reserveStatusStr) {
+		this.reserveStatusStr = reserveStatusStr;
 	}
 	public String getReserveType() {
 		return reserveType;

@@ -18,6 +18,7 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	private String houseCity;//房源城市
 	private String houseDistrict;//房源区域
 	private String houseStreet;//房源街道
+	private String reserveStatus;//预约状态
 	private String reserveDateFloor;//看房时间下限
 	private String reserveDateCeiling;//看房时间上限
 	
@@ -94,6 +95,12 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	public void setHouseStreet(String houseStreet) {
 		this.houseStreet = houseStreet;
 	}
+	public String getReserveStatus() {
+		return reserveStatus;
+	}
+	public void setReserveStatus(String reserveStatus) {
+		this.reserveStatus = reserveStatus;
+	}
 	public String getReserveDateFloor() {
 		return reserveDateFloor;
 	}
@@ -106,6 +113,7 @@ public class ApprintmentJourneyQueryParams extends QueryParams{
 	public void setReserveDateCeiling(String reserveDateCeiling) {
 		this.reserveDateCeiling = reserveDateCeiling;
 	}
+	
 	public String getHouseId() {
 		return houseId;
 	}
