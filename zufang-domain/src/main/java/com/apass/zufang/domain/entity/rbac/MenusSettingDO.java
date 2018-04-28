@@ -83,7 +83,7 @@ public class MenusSettingDO {
     }
 
     public Boolean isChecked() {
-        return CollectionUtils.isEmpty(children) ? "Y".equals(checkSign) : null;
+        return CollectionUtils.isEmpty(children) ? "Y".equals(checkSign) : false;
     }
 
 	public String getTitle() {
