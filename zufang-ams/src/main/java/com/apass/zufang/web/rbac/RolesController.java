@@ -241,7 +241,7 @@ public class RolesController {
     @Path("/load/assigned/permissions")
     public Response handleLoadAssignedPermissions(Map<String,String> paramMap) {
         try {
-            String roleId = paramMap.get( "roleId");
+            String roleId = paramMap.get("roleId");
             if (StringUtils.isBlank(roleId)) {
                 return null;
             }
