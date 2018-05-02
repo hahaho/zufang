@@ -35,6 +35,8 @@
 			t2.hezu_chaoxiang hezuChaoxiang,
 			t2.hezu_resource hezuResource,
 			t2.room_acreage roomAcreage,
+			t2.traffic traffic,
+			t2.around around,
 			t4.latitude latitude,
 			t4.longitude longitude,
             t4.district district,
