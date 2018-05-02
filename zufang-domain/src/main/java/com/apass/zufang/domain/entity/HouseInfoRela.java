@@ -209,6 +209,16 @@ public class HouseInfoRela {
 	 */
 	private String cityH;
 	
+	/**
+	 * 周边
+	 */
+	private String around;
+	
+	/**
+	 * 交通
+	 */
+	private String traffic;
+	
 	public Long getHouseId() {
 		return houseId;
 	}
@@ -583,6 +593,22 @@ public class HouseInfoRela {
 
 	public void setCityH(String cityH) {
 		this.cityH = cityH;
+	}
+
+	public String getAround() {
+		return around;
+	}
+
+	public void setAround(String around) {
+		this.around = around;
+	}
+
+	public String getTraffic() {
+		return traffic;
+	}
+
+	public void setTraffic(String traffic) {
+		this.traffic = traffic;
 	}
 
 }
