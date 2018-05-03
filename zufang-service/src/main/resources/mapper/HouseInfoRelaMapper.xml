@@ -67,6 +67,7 @@
 	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt >= ]]>  #{minRentAmt} </if>
 	<if test="rentAmt!=null and rentAmt!=''"><![CDATA[  AND t2.rent_amt <= ]]>  #{maxRentAmt} </if>
 	<if test="sortField!=null and sortField!=''"><![CDATA[ ORDER BY listTime DESC LIMIT ]]>  #{sortField} </if>
+	limit 0,30
 	</select>
 	
 	<select id="getHouseInfoByHouseId" resultType="com.apass.zufang.domain.entity.HouseInfoRela"
