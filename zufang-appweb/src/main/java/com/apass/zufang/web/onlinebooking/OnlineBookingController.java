@@ -19,13 +19,13 @@ import com.apass.zufang.domain.ajp.entity.GfbRegisterInfoEntity;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.HouseShowingsEntity;
 import com.apass.zufang.domain.vo.ReservationsShowingsEntity;
+import com.apass.zufang.service.appointment.OnlineAppointmentService;
 import com.apass.zufang.service.common.MobileSmsService;
-import com.apass.zufang.service.onlinebooking.OnlineBookingService;
 import com.apass.zufang.service.personal.ZuFangLoginSevice;
 import com.apass.zufang.utils.ResponsePageBody;
 import com.apass.zufang.utils.ValidateUtils;
 /**
- * APP端预约看房模块
+ * APP端在线预约看房模块
  */
 @Path("/onlinebooking")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -33,7 +33,7 @@ import com.apass.zufang.utils.ValidateUtils;
 public class OnlineBookingController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(OnlineBookingController.class);
 	@Autowired
-	private OnlineBookingService onlineBookingService;
+	private OnlineAppointmentService onlineAppointmentService;
 	@Autowired
 	public TokenManager tokenManager;
 	@Autowired
@@ -81,7 +81,7 @@ public class OnlineBookingController {
         			gfbRegisterInfoEntity.setAccount(mobile);
         			// 插入数据库
         			Long saveRegisterInfo = zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
-        			Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,memo);
+        			Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,memo);
         			// 生成token
 					String token = tokenManager.createToken(String.valueOf(saveRegisterInfo), mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
 					returnMap.put("token", token);
@@ -97,9 +97,9 @@ public class OnlineBookingController {
         			//已经注册    未登录
         			GfbRegisterInfoEntity zfselecetmobile2 = zuFangLoginSevice.zfselecetmobile(mobile);
         			//是否已经预约过
-                    Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
+                    Integer queryOverdue = onlineAppointmentService.queryOverdue(mobile,houseId);
                     if(queryOverdue == null || queryOverdue ==0 ){
-                    	Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,memo);
+                    	Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,memo);
                     	// 生成token
                     	String token = tokenManager.createToken(String.valueOf(zfselecetmobile2.getId()), mobile,ConstantsUtil.TOKEN_EXPIRES_SPACE);
                     	returnMap.put("token", token);
@@ -117,9 +117,9 @@ public class OnlineBookingController {
         		}
 			} else {//已登录判断
 				//是否已经预约过
-                Integer queryOverdue = onlineBookingService.queryOverdue(mobile,houseId);
+                Integer queryOverdue = onlineAppointmentService.queryOverdue(mobile,houseId);
                 if(queryOverdue == null || queryOverdue ==0 ){
-					Integer insetReserveHouse = onlineBookingService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
+					Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
 					if(insetReserveHouse==1){
 						// 生成token
 						String token = tokenManager.createToken(String.valueOf(userId), mobile,ConstantsUtil.TOKEN_EXPIRES_SPACE);
@@ -168,7 +168,7 @@ public class OnlineBookingController {
             if (userid!=null) {
             	crmety.setUserId(userid);
             }
-            ResponsePageBody<HouseShowingsEntity> resultPage = onlineBookingService.queryReservations(crmety);
+            ResponsePageBody<HouseShowingsEntity> resultPage = onlineAppointmentService.queryReservations(crmety);
 /*            if (resultPage == null) {
                 respBody.setTotal(0);
                 respBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
@@ -203,7 +203,7 @@ public class OnlineBookingController {
             ReservationsShowingsEntity crmety = new ReservationsShowingsEntity();
             crmety.setTelphone(telphone);
             crmety.setUserId(houseId);
-            Integer resultPage = onlineBookingService.queryOverdue(telphone,houseId);
+            Integer resultPage = onlineAppointmentService.queryOverdue(telphone,houseId);
             if(resultPage < 1){
             	returnMap.put("isabout", "no");
             	return Response.success("没预约过房源", returnMap);

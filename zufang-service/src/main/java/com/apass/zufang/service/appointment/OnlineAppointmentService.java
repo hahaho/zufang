@@ -1,4 +1,4 @@
-package com.apass.zufang.service.onlinebooking;
+package com.apass.zufang.service.appointment;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,13 +18,12 @@ import com.apass.zufang.utils.ResponsePageBody;
  * 在线预约看房
  */
 @Component
-public class OnlineBookingService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(OnlineBookingService.class);
-
+public class OnlineAppointmentService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OnlineAppointmentService.class);
 	@Autowired
 	private ReserveHouseMapper reserveHouseMapper;
 	@Value("${zufang.image.uri}")
-	private   String imageUri;
+	private String imageUri;
 	/**
 	 * 插入数据库
 	 * @param houseId
