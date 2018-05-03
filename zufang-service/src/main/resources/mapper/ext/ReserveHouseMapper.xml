@@ -128,7 +128,7 @@
 			  z.reserve_date			reserveDate,
 			  w.detail_addr				detailAddr
 
-		FROM (SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00') z 
+		FROM (SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00' AND reserve_status !='3') z 
 		LEFT JOIN 
 			(SELECT * FROM t_zfang_house_img where  is_delete = '00') y on y.house_id = z.house_id
 		LEFT JOIN 

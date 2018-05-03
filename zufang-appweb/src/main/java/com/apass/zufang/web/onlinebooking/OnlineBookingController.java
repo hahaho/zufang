@@ -1,4 +1,5 @@
 package com.apass.zufang.web.onlinebooking;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.Consumes;
@@ -12,13 +13,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.jwt.TokenManager;
+import com.apass.gfb.framework.security.toolkit.SpringSecurityUtils;
 import com.apass.gfb.framework.utils.CommonUtils;
+import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.ajp.entity.GfbRegisterInfoEntity;
 import com.apass.zufang.domain.constants.ConstantsUtil;
 import com.apass.zufang.domain.entity.HouseShowingsEntity;
+import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.vo.ReservationsShowingsEntity;
+import com.apass.zufang.service.appointment.AppointmentJourneyService;
 import com.apass.zufang.service.appointment.OnlineAppointmentService;
 import com.apass.zufang.service.common.MobileSmsService;
 import com.apass.zufang.service.personal.ZuFangLoginSevice;
@@ -40,6 +45,8 @@ public class OnlineBookingController {
 	private ZuFangLoginSevice zuFangLoginSevice;
 	@Autowired
 	private MobileSmsService mobileRandomService;
+	@Autowired
+	public AppointmentJourneyService appointmentJourneyService;
 	/**
 	 * 在线预约看房新增
 	 * @param paramMap
@@ -63,6 +70,7 @@ public class OnlineBookingController {
 			ValidateUtils.isNotBlank(houseId, "房源主键不可为空！");
 			ValidateUtils.isNotBlank(reservedate, "看房时间不可为空！");
 			ValidateUtils.isNotBlank(name, "用户姓名不可为空！");
+			String user = SpringSecurityUtils.getCurrentUser();
 			if (StringUtils.isBlank(userId)) {//未登录判断
 				ValidateUtils.isNotBlank(smsType, "类型不可为空！");
 				ValidateUtils.isNotBlank(code, "验证码不可为空！");
@@ -81,7 +89,7 @@ public class OnlineBookingController {
         			gfbRegisterInfoEntity.setAccount(mobile);
         			// 插入数据库
         			Long saveRegisterInfo = zuFangLoginSevice.saveRegisterInfo(gfbRegisterInfoEntity);
-        			Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,memo);
+        			Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, saveRegisterInfo.toString(), mobile, name, reservedate,memo,user);
         			// 生成token
 					String token = tokenManager.createToken(String.valueOf(saveRegisterInfo), mobile, ConstantsUtil.TOKEN_EXPIRES_SPACE);
 					returnMap.put("token", token);
@@ -99,7 +107,7 @@ public class OnlineBookingController {
         			//是否已经预约过
                     Integer queryOverdue = onlineAppointmentService.queryOverdue(mobile,houseId);
                     if(queryOverdue == null || queryOverdue ==0 ){
-                    	Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,memo);
+                    	Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, zfselecetmobile2.getId().toString(), mobile, name, reservedate,memo,user);
                     	// 生成token
                     	String token = tokenManager.createToken(String.valueOf(zfselecetmobile2.getId()), mobile,ConstantsUtil.TOKEN_EXPIRES_SPACE);
                     	returnMap.put("token", token);
@@ -119,7 +127,7 @@ public class OnlineBookingController {
 				//是否已经预约过
                 Integer queryOverdue = onlineAppointmentService.queryOverdue(mobile,houseId);
                 if(queryOverdue == null || queryOverdue ==0 ){
-					Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo);
+					Integer insetReserveHouse = onlineAppointmentService.insetReserveHouse(houseId, userId, mobile, name, reservedate, memo,user);
 					if(insetReserveHouse==1){
 						// 生成token
 						String token = tokenManager.createToken(String.valueOf(userId), mobile,ConstantsUtil.TOKEN_EXPIRES_SPACE);
@@ -217,4 +225,52 @@ public class OnlineBookingController {
 			return Response.fail("预约看房查询失败",returnMap);
 		}
 	}
+	/**
+	 * 预约行程管理 预约看房记录删除  (取消)
+	 * @param map
+	 * @return
+	 */
+	@POST
+	@Path("/deleReserveHouse")
+    public Response deleReserveHouse(Map<String,Object> map) {
+        try {
+        	LOGGER.info("deleReserveHouse map--->{}",GsonUtils.toJson(map));
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	String reserveHouseId = CommonUtils.getValue(map, "id");//预约看房记录ID
+        	return appointmentJourneyService.deleReserveHouse(reserveHouseId,username);
+        }catch (BusinessException e){
+        	LOGGER.error("deleReserveHouse BUSINESSEXCEPTION---->{}",e);
+			return Response.fail("预约行程管理 预约看房删除失败！"+e.getErrorDesc());
+        } catch (Exception e) {
+            LOGGER.error("deleReserveHouse EXCEPTION --- --->{}", e);
+            return Response.fail("预约行程管理 预约看房删除失败！");
+        }
+    }
+	/**
+	 * 预约行程管理 预约看房记录编辑  只预留编辑看房时间接口
+	 * @param map
+	 * @return
+	 */
+	@POST
+	@Path("/editReserveHouse")
+    public Response editReserveHouse(Map<String,Object> map) {
+        try {
+        	LOGGER.info("editReserveHouse map--->{}",GsonUtils.toJson(map));
+        	String username = SpringSecurityUtils.getCurrentUser();
+        	String id = CommonUtils.getValue(map, "id");
+    		ValidateUtils.isNotBlank(id, "看房记录不可为空！");
+        	String reserveDate = CommonUtils.getValue(map, "reserveDate");
+    		ValidateUtils.isNotBlank(reserveDate, "看房时间不可为空！");
+    		Date date = DateFormatUtil.string2date(reserveDate+":00",DateFormatUtil.YYYY_MM_DD_HH_MM_SS);
+    		ReserveHouse entity = new ReserveHouse();
+    		entity.setId(Long.parseLong(id));
+        	return appointmentJourneyService.editReserveHouse(entity,username,date);
+        }catch (BusinessException e){
+        	LOGGER.error("editReserveHouse BUSINESSEXCEPTION---->{}",e);
+			return Response.fail("预约行程管理 预约看房编辑失败！"+e.getErrorDesc());
+        } catch (Exception e) {
+            LOGGER.error("editReserveHouse EXCEPTION --- --->{}", e);
+            return Response.fail("预约行程管理 预约看房编辑失败！");
+        }
+    }
 }
