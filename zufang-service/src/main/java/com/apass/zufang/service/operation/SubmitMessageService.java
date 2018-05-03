@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.zufang.domain.Response;
@@ -44,9 +45,15 @@ public class SubmitMessageService {
 	 * 意见反馈新增
 	 * @param entity
 	 * @return
+	 * @throws BusinessException 
 	 */
 	@Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-	public Response addSubmitMessage(SubmitMessage entity) {
+	public Response addSubmitMessage(SubmitMessage entity,String username) throws BusinessException {
+		entity.setUpdatedUser(username);
+		entity.setCreatedUser(username);
+		if(submitMessageMapper.insertSelective(entity)!=1){
+			throw new BusinessException("意见反馈新增失败！");
+		}
 		return Response.success("意见反馈新增成功！");
 	}
 }
