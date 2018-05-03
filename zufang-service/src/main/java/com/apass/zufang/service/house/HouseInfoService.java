@@ -1,12 +1,9 @@
 package com.apass.zufang.service.house;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.apass.zufang.domain.dto.SimpleNearHouseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,32 +189,31 @@ public class HouseInfoService {
 		List<HouseInfoRela> houseInfos = new ArrayList<HouseInfoRela>();
 		if (ValidateUtils.listIsTrue(houseInfoList)) {
 			// 按照房源距离由近到远排序
-			double[] disArray = new double[houseInfoList.size()];
-			HashMap<Double, HouseInfoRela> disMap = Maps.newHashMap();
+			List<SimpleNearHouseDto> nearList = new ArrayList<>();
 			for (int i = 0; i < houseInfoList.size(); i++) {
 				double disOne = CommonService.distanceSimplify(new Double(longitude), new Double(latitude),
 						houseInfoList.get(i).getLongitude(), houseInfoList.get(i).getLatitude());
-				for (int j = 0; j < houseInfoList.size(); j++) {
-					if (disMap.containsKey(disOne)) {
-						BigDecimal bigDecimal = new BigDecimal(disOne);
-						disOne = bigDecimal.add(new BigDecimal(0.1)).doubleValue();
-					} else {
-						break;
+				nearList.add(new SimpleNearHouseDto(disOne,houseInfoList.get(i)));
+			}
+			//距离从小到大排序
+			Collections.sort(nearList, new Comparator<SimpleNearHouseDto>() {
+				@Override
+				public int compare(SimpleNearHouseDto o1, SimpleNearHouseDto o2) {
+					if(o1.getDisOne() < o2.getDisOne()){
+						return -1;
+					}else if(o1.getDisOne() == o2.getDisOne()){
+						return 0;
+					}else{
+						return 1;
 					}
 				}
-				disMap.put(disOne, houseInfoList.get(i));
-				disArray[i] = disOne;
+			});
+			if(nearList.size() > 10){
+				nearList = nearList.subList(0,10);
 			}
-			Arrays.sort(disArray);
-
-			for (int i = 0; i < disArray.length; i++) {
-				double disance = disArray[i];
-				houseInfos.add(disMap.get(disance));
-			}
-			if (houseInfos.size() > 10) {
-				PageBean<HouseInfoRela> pageBean = new PageBean<HouseInfoRela>(1, 10, houseInfos);
-				houseInfos = pageBean.getList();
-			}
+		   for(SimpleNearHouseDto simpleNearHouseDto : nearList){
+			   houseInfos.add(simpleNearHouseDto.getHouseInfoRela());
+		   }
 		}
 		return houseInfos;
 	}
@@ -236,12 +232,6 @@ public class HouseInfoService {
 			 *  setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
 			 *  直接根据房屋Id，获取房屋的位置信息，不需要多表联查，获取信息
 			 */
-//			HouseInfoRela queryCondition = new HouseInfoRela();
-//			queryCondition.setHouseId(houseId);
-//			queryCondition.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
-//			HouseInfoRela houseInfo = houseInfoRelaMapper.getHouseInfoRelaList(
-//					queryCondition).get(0);
-			
 			HouseLocation location = locationMapper.getLocationByHouseId(houseId);
 			
 			// setp 2 根据目标房源的所在位置查询所在城市的所有房源
@@ -249,6 +239,7 @@ public class HouseInfoService {
 			queryInfo.setCityH(location.getCity());
 			queryInfo.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			queryInfo.setTargetHouseId(houseId);
+			queryInfo.setDistrict(location.getDistrict());
 			List<HouseInfoRela> houseInfoList = queryHouseInfoRela(queryInfo);
 			
 			if (!ValidateUtils.listIsTrue(houseInfoList)) {
@@ -286,36 +277,5 @@ public class HouseInfoService {
 		return Math.sqrt(Lx * Lx + Ly * Ly); // 用平面的矩形对角距离公式计算总距离
 	}
 
-	public List<HouseAppSearchVo> calculateDistanceAndSort2(Double latitude, Double longitude,
-														List<HouseAppSearchVo> houseInfoList) {
-		int number = ConstantsUtil.THE_NEARBY_HOUSES_NUMBER;
-		List<HouseAppSearchVo> voList = new ArrayList<HouseAppSearchVo>();
-		//计算目标房源和附近房源的距离，并绑定映射关系
-		Map<Double, HouseAppSearchVo> houseDistanceMap = new HashMap<Double, HouseAppSearchVo>();
-		double[] resultArray = new double[houseInfoList.size()];
-		for (int i=0 ;i< houseInfoList.size();i++) {
-			HouseAppSearchVo vo=houseInfoList.get(i);
-			double distance = this.distanceSimplify(latitude, longitude,
-					vo.getLatitude(), vo.getLongitude());
 
-			for (int j = 0; j < houseInfoList.size(); j++) {
-				if (houseDistanceMap.containsKey(distance)) {
-					BigDecimal bigDecimal = new BigDecimal(distance);
-					distance = bigDecimal.add(new BigDecimal(0.1)).doubleValue();
-				} else {
-					break;
-				}
-			}
-			houseDistanceMap.put(distance, vo);
-			resultArray[i]=distance;
-		}
-		//对距离按照升序排序
-		Arrays.sort(resultArray);
-
-		for (int i = 0; i < resultArray.length; i++) {
-			double disance = resultArray[i];
-			voList.add(houseDistanceMap.get(disance));
-		}
-		return voList;
-	}
 }
