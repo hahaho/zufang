@@ -15,6 +15,7 @@ import com.apass.zufang.domain.entity.HousePeizhi;
 import com.apass.zufang.domain.entity.ReserveHouse;
 import com.apass.zufang.domain.entity.ReserveRecord;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.ReserveStatusEnums;
 import com.apass.zufang.domain.vo.HouseAppointmentVo;
 import com.apass.zufang.domain.vo.ReserveHouseVo;
 import com.apass.zufang.service.house.HousePeiZhiService;
@@ -132,9 +133,9 @@ public class PhoneAppointmentService {
 		count.setHouseId(houserId);
 		List<ReserveHouseVo> list = reserveHouseService.getReserveHouseList(count);
 		for(ReserveHouseVo vo : list){
-			if(syscruent<vo.getReserveDate().getTime()){
+			if(syscruent<vo.getReserveDate().getTime()&&vo.getReserveStatus()!=null&&!StringUtils.equals(vo.getReserveStatus().toString(), ReserveStatusEnums.CANCEL_3.getCode())){
 				String rdate = DateFormatUtil.dateToString(vo.getReserveDate(),DateFormatUtil.YYYY_MM_DD_HH_MM);
-				throw new BusinessException("该租客已经在（"+rdate+"）时间预约完成该处房源，如需继续预约请删除有效行程，或者等待该用户该房源有效看房行程结束才能继续预约！");
+				throw new BusinessException("该租客已经在（"+rdate+"）时间预约完成该处房源，如需继续预约请取消有效行程，或者等待该用户该房源有效看房行程结束才能继续预约！");
 			}
 		}
 		entity.setType((byte)2);
