@@ -31,7 +31,7 @@
 	<logger name="org.springframework.boot" level="INFO"/>
 	<logger name="org.springframework.context" level="INFO"/>
 	<logger name="org.apache.ibatis.io" level="ERROR"/>
-	<logger name="apass.mybatis" level="DEBUG" />
+	<!--<logger name="apass.mybatis" level="DEBUG" />-->
 
 	<root level="ERROR">
 		<appender-ref ref="console" />
