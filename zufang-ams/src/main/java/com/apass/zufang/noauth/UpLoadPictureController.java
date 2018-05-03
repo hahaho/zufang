@@ -129,7 +129,7 @@ public class UpLoadPictureController {
             }else if (!checkImgType) {
                 return Response.fail("图片尺寸格式不符,格式要求：.jpg,.png");
             } else if (size > 1024 * 500) {
-                return Response.fail("图片不能大于501kb!");
+                return Response.fail("图片不能大于500kb!");
             }
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
             Map<String,Object> map = Maps.newHashMap();
@@ -174,8 +174,8 @@ public class UpLoadPictureController {
                 return Response.fail("图片尺寸格式不符,尺寸要求：750*320");
             }else if (!checkImgType) {
                 return Response.fail("图片尺寸格式不符,格式要求：.jpg,.png");
-            } else if (size > 1024 * 1024) {
-                return Response.fail("图片不能大于1024kb!");
+            } else if (size > 1024 * 300) {
+                return Response.fail("图片不能大于300kb!");
             }
             FileUtilsCommons.uploadFilesUtil(rootPath, url, file);
             return Response.success("上传热门图片成功！",url);
