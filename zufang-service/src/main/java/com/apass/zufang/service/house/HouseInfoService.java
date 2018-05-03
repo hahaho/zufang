@@ -1,20 +1,12 @@
 package com.apass.zufang.service.house;
 
-import com.apass.gfb.framework.logstash.LOG;
-import com.apass.zufang.domain.constants.ConstantsUtil;
-import com.apass.zufang.domain.entity.House;
-import com.apass.zufang.domain.entity.HouseInfoRela;
-import com.apass.zufang.domain.entity.HousePeizhi;
-import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
-import com.apass.zufang.domain.enums.FeaturesConfigurationEnums;
-import com.apass.zufang.domain.vo.HouseAppSearchVo;
-import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
-import com.apass.zufang.mapper.zfang.HouseMapper;
-import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
-import com.apass.zufang.service.commons.CommonService;
-import com.apass.zufang.utils.PageBean;
-import com.apass.zufang.utils.ValidateUtils;
-import com.google.common.collect.Maps;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +14,23 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.apass.gfb.framework.logstash.LOG;
+import com.apass.zufang.domain.constants.ConstantsUtil;
+import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.entity.HouseInfoRela;
+import com.apass.zufang.domain.entity.HouseLocation;
+import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.FeaturesConfigurationEnums;
+import com.apass.zufang.domain.vo.HouseAppSearchVo;
+import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
+import com.apass.zufang.mapper.zfang.HouseLocationMapper;
+import com.apass.zufang.mapper.zfang.HouseMapper;
+import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
+import com.apass.zufang.service.commons.CommonService;
+import com.apass.zufang.utils.PageBean;
+import com.apass.zufang.utils.ValidateUtils;
+import com.google.common.collect.Maps;
 
 @Service
 public class HouseInfoService {
@@ -47,6 +50,8 @@ public class HouseInfoService {
 	private HouseInfoRelaMapper houseInfoRelaMapper;
 	@Autowired
 	private HouseImgService houseImgService;
+	@Autowired
+	private HouseLocationMapper locationMapper;
 
 	/**
 	 * 查询房源信息
@@ -227,15 +232,21 @@ public class HouseInfoService {
 	 */
 	public List<HouseInfoRela> getNearbyhouseId(long houseId) {
 		try {
-			// setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
-			HouseInfoRela queryCondition = new HouseInfoRela();
-			queryCondition.setHouseId(houseId);
-			queryCondition.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
-			HouseInfoRela houseInfo = houseInfoRelaMapper.getHouseInfoRelaList(
-					queryCondition).get(0);
+			/**
+			 *  setp 1 根据目标房源id查询目标房源所在位置信息 (province，citycode)
+			 *  直接根据房屋Id，获取房屋的位置信息，不需要多表联查，获取信息
+			 */
+//			HouseInfoRela queryCondition = new HouseInfoRela();
+//			queryCondition.setHouseId(houseId);
+//			queryCondition.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
+//			HouseInfoRela houseInfo = houseInfoRelaMapper.getHouseInfoRelaList(
+//					queryCondition).get(0);
+			
+			HouseLocation location = locationMapper.getLocationByHouseId(houseId);
+			
 			// setp 2 根据目标房源的所在位置查询所在城市的所有房源
 			HouseInfoRela queryInfo = new HouseInfoRela();
-			queryInfo.setCityH(houseInfo.getCityH());
+			queryInfo.setCityH(location.getCity());
 			queryInfo.setStatus(BusinessHouseTypeEnums.ZT_2.getCode().byteValue());
 			queryInfo.setTargetHouseId(houseId);
 			List<HouseInfoRela> houseInfoList = queryHouseInfoRela(queryInfo);
@@ -244,7 +255,7 @@ public class HouseInfoService {
 				return null;
 			}
 			// setp 3 根据目标经纬度和房源list 根据距离进行排序并取前number的房源数据
-			return calculateDistanceAndSort(houseInfo.getLatitude(), houseInfo.getLongitude(), houseInfoList);
+			return calculateDistanceAndSort(location.getLatitude(), location.getLongitude(), houseInfoList);
 		} catch (Exception e) {
 			LOGGER.error("获取附近房源方法getNearbyhouseInfo出错==》", e);
 			throw e;
