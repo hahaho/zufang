@@ -6,6 +6,7 @@
 	<!-- 查询条件 -->
 	<sql id="QueryConditionSql">
 		<where>
+			is_delete = '00'
 			<if test="id != null">
 				AND ID = #{id}
 			</if>
