@@ -176,6 +176,7 @@ public class OnlineBookingController {
             if (userid!=null) {
             	crmety.setUserId(userid);
             }
+            crmety.setReserveStatus("3");
             ResponsePageBody<HouseShowingsEntity> resultPage = onlineAppointmentService.queryReservations(crmety);
 /*            if (resultPage == null) {
                 respBody.setTotal(0);
@@ -273,4 +274,47 @@ public class OnlineBookingController {
             return Response.fail("预约行程管理 预约看房编辑失败！");
         }
     }
+	/**
+	 * 在线预约看房   看房历史记录查询
+	 * @param paramMap
+	 * @return
+	 */
+	@POST
+	@Path("/getReserveHouseHistoryList")
+	public Response getReserveHouseHistoryList(Map<String, Object> paramMap) {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			LOGGER.info("getReserveHouseHistoryList map--->{}",GsonUtils.toJson(paramMap));
+			String page = CommonUtils.getValue(paramMap, "page");
+			String rows = CommonUtils.getValue(paramMap, "rows");
+			rows = StringUtils.isNotBlank(rows) ? "20": rows;
+        	page = StringUtils.isNotBlank(page) ? page: "1";
+            String userid = CommonUtils.getValue(paramMap, "userid");//用户id
+            String telphone = CommonUtils.getValue(paramMap, "telphone");//电话
+            ReservationsShowingsEntity crmety = new ReservationsShowingsEntity();
+            crmety.setRows(Integer.parseInt(rows));
+            crmety.setPage(Integer.parseInt(page));
+            if (telphone!=null) {
+            	crmety.setTelphone(telphone);
+            }
+            if (userid!=null) {
+            	crmety.setUserId(userid);
+            }
+            ResponsePageBody<HouseShowingsEntity> resultPage = onlineAppointmentService.queryReservations(crmety);
+/*            if (resultPage == null) {
+                respBody.setTotal(0);
+                respBody.setStatus(BaseConstants.CommonCode.SUCCESS_CODE);
+                return Response.success("在线预约记录查询成功", returnMap);
+            }*/
+            returnMap.put("total", resultPage.getTotal());
+            returnMap.put("rows", resultPage.getRows());
+            return Response.success("在线预约看房历史记录查询成功", returnMap);
+		} catch (BusinessException e) {
+			LOGGER.error("reservationsshowings BusinessException", e);
+			return Response.fail("在线预约看房历史记录查询失败", returnMap);
+		} catch (Exception e) {
+			LOGGER.error("reservationsshowings Exception", e);
+			return Response.fail("在线预约看房历史记录查询失败", returnMap);
+		}
+	}
 }

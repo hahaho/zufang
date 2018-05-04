@@ -128,7 +128,12 @@
 			  z.reserve_date			reserveDate,
 			  w.detail_addr				detailAddr
 
-		FROM (SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00' AND reserve_status !='3') z 
+		FROM (
+		SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00' 
+	]]>
+		<if test="reserveStatus!=null and reserveStatus!=''"><![CDATA[AND reserve_status !=#{reserveStatus}]]></if>
+	<![CDATA[
+		) z 
 		LEFT JOIN 
 			(SELECT * FROM t_zfang_house_img where  is_delete = '00') y on y.house_id = z.house_id
 		LEFT JOIN 
@@ -140,14 +145,13 @@
 			x.id
 		HAVING
 			count(*) >= 1
-
-		  ]]>
+	]]>
 	<![CDATA[
 		ORDER BY z.reserve_date ASC
 	]]>
 	<if test="_parameter  != null">
-            <include refid="PAGINATION.MYSQL_PAGINATION" />
-        </if>
+        <include refid="PAGINATION.MYSQL_PAGINATION" />
+    </if>
 	</select>
 	<!-- 记录总数 -->
 	<select id="getCount"  resultType="java.lang.Integer" parameterType="java.lang.String"   >
@@ -156,7 +160,12 @@
 			  count(*)
 		FROM (SELECT 
 			  x.*
-		FROM (SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00') z 
+		FROM (
+		SELECT * FROM t_zfang_reserve_house where  telphone =#{telphone} and is_delete = '00'
+	]]>
+		<if test="reserveStatus!=null and reserveStatus!=''"><![CDATA[AND reserve_status !=#{reserveStatus}]]></if>
+	<![CDATA[
+		) z 
 		LEFT JOIN 
 			(SELECT * FROM t_zfang_house_img where  is_delete = '00') y on y.house_id = z.house_id
 		LEFT JOIN 
@@ -168,8 +177,7 @@
 			x.id
 		HAVING
 			count(*) >= 1) v
-
-		]]>
+	]]>
 	</select>
 	<!-- 是否过期 -->
 	<select id="queryOverdue"  resultType="java.lang.Integer" parameterType="com.apass.zufang.domain.vo.ReservationsShowingsEntity"   >

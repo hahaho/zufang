@@ -20,7 +20,8 @@ public class ReservationsShowingsEntity extends QueryParams{
     private String isDelete;
     private Date createdTime;
     private Date updatedTime;
-
+    private String reserveStatus;
+    
     public Date getCreatedTime() {
 		return createdTime;
 	}
@@ -109,4 +110,11 @@ public class ReservationsShowingsEntity extends QueryParams{
         this.isDelete = isDelete;
     }
 
+	public String getReserveStatus() {
+		return reserveStatus;
+	}
+
+	public void setReserveStatus(String reserveStatus) {
+		this.reserveStatus = reserveStatus;
+	}
 }
