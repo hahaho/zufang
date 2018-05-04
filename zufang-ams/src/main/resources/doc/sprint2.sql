@@ -68,3 +68,18 @@ CREATE TABLE `t_zfang_reserve_record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约看房记录变更表';
 
 ALTER TABLE `t_zfang_reserve_house` ADD COLUMN `reserve_status` tinyint(4) NOT NULL COMMENT '预约看房状态 1：已预约（首次预约成功默认状态），2：已变更（编辑预约行程，变更为此状态），3：已取消（删除预约行程，变更为此状态），4：已失效（看房时间过期，变更为此状态），';
+
+
+alter table  t_rbac_menus add column `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)';
+
+alter table  t_rbac_permissions add column `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)';
+
+alter table  t_rbac_role_menu add column `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)';
+
+alter table  t_rbac_role_permission add column `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)';
+
+alter table  t_rbac_roles add column `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)';
+
+alter table  t_rbac_user_role add column `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)';
+
+alter table  t_rbac_users add column `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)';
