@@ -90,11 +90,6 @@ public class HouseSpiderService {
     public void batchParseMogoroomHouse(List<String> urls){
         for(String url : urls){
             parseMogoroomHouseDetail(url);
-            try {
-                Thread.sleep(2000);
-            }catch (Exception e){
-
-            }
         }
     }
 
