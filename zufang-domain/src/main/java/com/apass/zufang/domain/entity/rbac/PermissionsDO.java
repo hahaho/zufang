@@ -53,7 +53,7 @@ public class PermissionsDO {
 
     // not id
     private Long neId;
-
+    private String isDelete;
     public Long getNeId() {
         return neId;
     }
@@ -125,4 +125,10 @@ public class PermissionsDO {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+	public String getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
+	}
 }
