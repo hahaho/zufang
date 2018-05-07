@@ -117,8 +117,8 @@
 	<![CDATA[
 		DELETE FROM T_RBAC_ROLE_PERMISSION WHERE PERMISSION_ID = #{id}
 	]]>
-	</update>
-	<delete id="updateRolePermissionsByPermissionId" parameterType="java.lang.Long">
+	</delete>
+	<update id="updateRolePermissionsByPermissionId" parameterType="java.lang.Long">
 	<![CDATA[
 		UPDATE T_RBAC_ROLE_PERMISSION SET IS_DELETE = '01' WHERE PERMISSION_ID = #{id}
 	]]>
