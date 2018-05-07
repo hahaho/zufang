@@ -16,18 +16,16 @@ import com.apass.zufang.rbac.PermissionsRepository;
 import com.apass.zufang.utils.PaginationManage;
 import com.apass.zufang.utils.ResponsePageBody;
 /**
- * 
- * @description Permission Service
+ * 资源管理
+ * @author Administrator
  *
- * @author lixining
- * @version $Id: PermissionsService.java, v 0.1 2016年6月23日 下午3:43:47 lixining Exp $
  */
 @Component
 public class PermissionsService {
     @Autowired
     private PermissionsRepository permissionsRepository;
     /**
-     * 资源分页
+     * 资源分页   旧方法弃用
      * @param paramDO
      * @param page
      * @return
@@ -41,7 +39,7 @@ public class PermissionsService {
         return result;
     }
     /**
-     * 删除资源ID
+     * 删除资源ID 旧方法弃用
      */
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void delete(String permissionId) {
@@ -49,9 +47,10 @@ public class PermissionsService {
         permissionsRepository.deleteRolePermissionsByPermissionId(id);
         permissionsRepository.delete(id);
     }
-
     /**
-     * 保存资源数据
+     * 保存资源数据 旧方法弃用
+     * @param permission
+     * @throws BusinessException
      */
     public void save(PermissionsDO permission) throws BusinessException {
         Long id = permission.getId();
@@ -78,19 +77,22 @@ public class PermissionsService {
         permissionsRepository.updateAll(permissionDB);
     }
     /**
-     * 主键加载
+     * 主键加载 旧方法弃用
+     * @param permissionId
+     * @return
      */
     public PermissionsDO select(Long permissionId) {
         return permissionsRepository.select(permissionId);
     }
     /**
-     * 资源分页
+     * 资源分页   新方法
      * @param paramDO
      * @param page
      * @return
      */
     public ResponsePageBody<PermissionsDO> getPermissionsList(PermissionsDO paramDO, Page page) {
     	ResponsePageBody<PermissionsDO> result = new ResponsePageBody<PermissionsDO>();
+    	paramDO.setIsDelete("00");
         Pagination<PermissionsDO> response = permissionsRepository.page(paramDO, page);
         result.setRows(response.getDataList());
         result.setTotal(response.getTotalCount());
@@ -98,7 +100,7 @@ public class PermissionsService {
         return result;
 	}
     /**
-     * 资源维护
+     * 资源维护 新方法
      * @param permission
      * @return
      * @throws BusinessException
@@ -117,6 +119,7 @@ public class PermissionsService {
         if (StringUtils.isBlank(permissionId)) {
         	entity.setCreatedBy(user);
         	entity.setUpdatedBy(user);
+        	entity.setIsDelete("00");
             permissionsRepository.insert(entity);
             return Response.success("资源新增成功！");
         }
@@ -124,5 +127,18 @@ public class PermissionsService {
         entity.setUpdatedBy(user);
         permissionsRepository.updateAll(entity);
         return Response.success("资源修改成功！");
+    }
+    /**
+     * 删除资源ID  新方法
+     * @param permissionId
+     */
+    @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
+    public Response deletePermissions(String permissionId) {
+    	Long id = Long.parseLong(permissionId);
+        permissionsRepository.updateRolePermissionsByPermissionId(id);
+        PermissionsDO entity = select(id);
+        entity.setIsDelete("01");
+        permissionsRepository.update(entity);
+        return Response.success("删除资源成功");
     }
 }

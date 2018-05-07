@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <!-- CRM权限管理-权限资源 Mybatis Mapper -->
 <mapper namespace="PermissionsDO">
 	<!-- 查询条件 -->
@@ -18,18 +17,23 @@
 			<if test="neId != null and neId != ''">
 				AND ID != #{neId, jdbcType=VARCHAR}
 			</if>
+			<if test="isDelete != null and isDelete != ''">
+				AND IS_DELETE = #{isDelete, jdbcType=VARCHAR}
+			</if>
 		</where>
 	</sql>
 	<!-- insert -->
 	<insert id="insert" parameterType="PermissionsDO">
 	<![CDATA[
 		INSERT INTO T_RBAC_PERMISSIONS (ID, PERMISSION_CODE, PERMISSION_NAME,
-		DESCRIPTION, CREATED_BY, CREATED_TIME, UPDATED_BY, UPDATED_TIME) 
+		DESCRIPTION, CREATED_BY, CREATED_TIME, UPDATED_BY, UPDATED_TIME,IS_DELETE) 
 		VALUES 
 		(#{id, jdbcType=VARCHAR}, #{permissionCode, jdbcType=VARCHAR}, 
 		#{permissionName, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR}, 
 		#{createdBy, jdbcType=VARCHAR},	CURRENT_TIMESTAMP, 
-		#{updatedBy, jdbcType=VARCHAR},	CURRENT_TIMESTAMP)
+		#{updatedBy, jdbcType=VARCHAR},	CURRENT_TIMESTAMP,
+		#{isDelete, jdbcType=VARCHAR}
+		)
 	]]>
 	</insert>
 	<!-- select -->
@@ -90,6 +94,9 @@
 			<if test="description != null and description != ''">
 				DESCRIPTION = #{description, jdbcType=VARCHAR},
 			</if>
+			<if test="isDelete != null and isDelete != ''">
+				IS_DELETE = #{isDelete, jdbcType=VARCHAR},
+			</if>
 		</set>
 	<![CDATA[ WHERE ID = #{id} ]]>
 	</update>
@@ -105,10 +112,15 @@
 			WHERE ID = #{id}
 	]]>
 	</update>
-	<!-- 删除角色权限表资源记录 -->
+	<!-- 删除角色权限表资源记录    见下面新SQL-->
 	<delete id="deleteRolePermissionsByPermissionId" parameterType="java.lang.Long">
 	<![CDATA[
 		DELETE FROM T_RBAC_ROLE_PERMISSION WHERE PERMISSION_ID = #{id}
 	]]>
-	</delete>
+	</update>
+	<delete id="updateRolePermissionsByPermissionId" parameterType="java.lang.Long">
+	<![CDATA[
+		UPDATE T_RBAC_ROLE_PERMISSION SET IS_DELETE = '01' WHERE PERMISSION_ID = #{id}
+	]]>
+	</update>
 </mapper>

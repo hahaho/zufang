@@ -129,8 +129,7 @@ public class PermissionsController {
             if (StringUtils.isBlank(permissionId)) {
                 return Response.fail("资源ID不能为空");
             }
-            permissionsService.delete(permissionId);
-            return Response.success("删除资源成功");
+            return permissionsService.deletePermissions(permissionId);
         } catch (Exception e) {
             LOGGER.error("删除资源失败", e);
             return Response.fail("删除资源失败");
@@ -140,7 +139,7 @@ public class PermissionsController {
      * 查询资源
      * @param map
      * @return
-     */
+     *//*
     @POST
     @Path("/load")
     public Response handleLoad(Map<String,String> map) {
@@ -161,5 +160,5 @@ public class PermissionsController {
             LOGGER.error("加载资源失败", e);
             return Response.fail("加载资源记录失败");
         }
-    }
+    }*/
 }

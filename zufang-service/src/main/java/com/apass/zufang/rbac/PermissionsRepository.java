@@ -1,29 +1,30 @@
 package com.apass.zufang.rbac;
-
 import com.apass.gfb.framework.annotation.MyBatisRepository;
 import com.apass.gfb.framework.mybatis.support.BaseMybatisRepository;
 import com.apass.zufang.domain.entity.rbac.PermissionsDO;
-
 import java.util.List;
-
 /**
- * 
- * @description Permissions Repository
+ * 资源管理
+ * @author Administrator
  *
- * @author lixining
- * @version $Id: PermissionsRepository.java, v 0.1 2016年6月22日 上午11:13:19 lixining Exp $
  */
 @MyBatisRepository
 public class PermissionsRepository extends BaseMybatisRepository<PermissionsDO, Long> {
-
     /**
-     * 删除角色权限表中的资源记录
+     * 删除角色权限表中的资源记录   旧方法弃用
      */
     public void deleteRolePermissionsByPermissionId(Long id) {
         String sql = this.getSQL("deleteRolePermissionsByPermissionId");
         this.getSqlSession().delete(sql, id);
     }
-
+    /**
+     * 删除角色权限表中的资源记录
+     * @param id
+     */
+    public void updateRolePermissionsByPermissionId(Long id) {
+        String sql = this.getSQL("updateRolePermissionsByPermissionId");
+        this.getSqlSession().delete(sql, id);
+    }
     /**
      * 删除角色权限表中的资源记录
      */
