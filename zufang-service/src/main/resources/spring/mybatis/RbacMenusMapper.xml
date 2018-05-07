@@ -70,7 +70,7 @@
 	</select>
 
 	<!-- 主键查询 -->
-	<select id="selectByPK" parameterType="String" resultType="MenusDO">
+	<select id="selectByPK" parameterType="java.lang.Long" resultType="MenusDO">
 	<![CDATA[
 		SELECT ID                    ID,
 			   TEXT                  TEXT,
@@ -129,8 +129,7 @@
 			SET UPDATED_BY = #{updatedBy, jdbcType=VARCHAR},  
 				updated_time = CURRENT_TIMESTAMP,
 				TEXT = #{text, jdbcType=VARCHAR},
-				ICON_CLS = #{iconCls, jdbcType=VARCHAR},  
-				URL = #{url, jdbcType=VARCHAR},  
+				URL = #{url, jdbcType=VARCHAR},
 				PARENT_ID = #{parentId, jdbcType=VARCHAR},  
 				DISPLAY = #{display, jdbcType=INTEGER} 
 		WHERE ID = #{id}
@@ -161,7 +160,7 @@
 	<!--  根据菜单ID删除角色菜单表数据  -->
 	<delete id="deleteRoleMenuByMenuId" parameterType="java.lang.Long">
 	<![CDATA[
-		UPDATE T_RBAC_ROLE_MENU SET IS_DELETE = '01' HERE MENU_ID = #{value}
+		UPDATE T_RBAC_ROLE_MENU SET IS_DELETE = '01' WHERE MENU_ID = #{value}
 	]]>
 	</delete>
 	

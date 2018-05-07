@@ -73,10 +73,6 @@ public class MenusService {
         String operator = SpringSecurityUtils.getCurrentUser();
 
         String text = menusDO.getText();
-        List<MenusDO> dataList = menusRepository.filter(text, id);
-        if (!CollectionUtils.isEmpty(dataList)) {
-            throw new BusinessException("菜单名称已存在");
-        }
         if (id == null) {
             menusDO.setCreatedBy(operator);
             menusDO.setUpdatedBy(operator);
