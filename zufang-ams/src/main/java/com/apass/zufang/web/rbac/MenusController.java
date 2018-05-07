@@ -112,7 +112,9 @@ public class MenusController {
                 return Response.fail("显示顺序必须为非0正整数");
             }
             MenusDO menusDO = new MenusDO();
-            //menusDO.setId(Long.valueOf(menuId));
+            if(StringUtils.isNotEmpty(menuId)){
+                menusDO.setId(Long.valueOf(menuId));
+            }
             menusDO.setDisplay(Integer.parseInt(display));
             menusDO.setIconCls("");
             menusDO.setParentId(Long.valueOf(parentId));
