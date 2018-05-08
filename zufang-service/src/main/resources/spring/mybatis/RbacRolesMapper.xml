@@ -18,6 +18,7 @@
 			<if test="neId != null and neId != ''">
 				AND ID != #{neId, jdbcType=VARCHAR}
 			</if>
+			AND IS_DELETE = '00'
 		</where>
 	</sql>
 
