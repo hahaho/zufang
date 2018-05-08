@@ -6,7 +6,6 @@
 	<!-- 查询条件 -->
 	<sql id="QueryConditionSql">
 		<where>
-			is_delete = '00'
 			<if test="id != null">
 				AND ID = #{id}
 			</if>
@@ -23,6 +22,7 @@
 			<if test="neId != null and neId != ''">
 				AND ID != #{neId, jdbcType=VARCHAR}
 			</if>
+			AND IS_DELETE = '00'
 		</where>
 	</sql>
 

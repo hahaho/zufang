@@ -6,7 +6,7 @@
 	<!-- 查询条件 -->
 	<sql id="QueryConditionSql">
 		<where>
-			AND status = 1
+			AND is_delete = '00'
 			<if test="id != null and id != ''">
 				AND ID = #{id, jdbcType=VARCHAR}
 			</if>
@@ -81,7 +81,15 @@
 		FROM T_RBAC_USERS t_uses LEFT JOIN t_zfang_apartment t_apart
 		ON	t_uses.apartment_code =t_apart.code
 	]]>
-		<include refid="QueryConditionSql" />
+		<where>
+			 and t_uses.is_delete = '00'
+			<if test="userName != null and userName != ''">
+				AND USER_NAME = #{userName, jdbcType=VARCHAR}
+			</if>
+			<if test="realName != null and realName != ''">
+				AND REAL_NAME = #{realName, jdbcType=VARCHAR}
+			</if>
+		</where>
 	<![CDATA[
 		ORDER BY t_uses.CREATED_TIME DESC
 	]]>
@@ -137,7 +145,7 @@
 	<!-- 删除:逻辑删除 -->
 	<delete id="delete" parameterType="String">
 	<![CDATA[
-		UPDATE T_RBAC_USERS set status = 0 WHERE  ID = #{value}
+		UPDATE T_RBAC_USERS set is_delete = '01' WHERE  ID = #{value}
 	]]>
 	</delete>
 
@@ -235,7 +243,7 @@
 	-->
 	<delete id="deleteUserRolesByUserId" parameterType="java.lang.Long">
 	<![CDATA[
-		DELETE FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value}
+		UPDATE T_RBAC_USER_ROLE set is_delete = '01' WHERE USER_ID = #{value}
 	]]>
 	</delete>
 

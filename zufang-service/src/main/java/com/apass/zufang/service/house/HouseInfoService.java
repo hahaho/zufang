@@ -1,9 +1,19 @@
 package com.apass.zufang.service.house;
 
-import java.math.BigDecimal;
-import java.util.*;
-
+import com.apass.gfb.framework.logstash.LOG;
 import com.apass.zufang.domain.dto.SimpleNearHouseDto;
+import com.apass.zufang.domain.entity.House;
+import com.apass.zufang.domain.entity.HouseInfoRela;
+import com.apass.zufang.domain.entity.HouseLocation;
+import com.apass.zufang.domain.entity.HousePeizhi;
+import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
+import com.apass.zufang.domain.enums.FeaturesConfigurationEnums;
+import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
+import com.apass.zufang.mapper.zfang.HouseLocationMapper;
+import com.apass.zufang.mapper.zfang.HouseMapper;
+import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
+import com.apass.zufang.service.commons.CommonService;
+import com.apass.zufang.utils.ValidateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +21,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.apass.gfb.framework.logstash.LOG;
-import com.apass.zufang.domain.constants.ConstantsUtil;
-import com.apass.zufang.domain.entity.House;
-import com.apass.zufang.domain.entity.HouseInfoRela;
-import com.apass.zufang.domain.entity.HouseLocation;
-import com.apass.zufang.domain.entity.HousePeizhi;
-import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
-import com.apass.zufang.domain.enums.FeaturesConfigurationEnums;
-import com.apass.zufang.domain.vo.HouseAppSearchVo;
-import com.apass.zufang.mapper.zfang.HouseInfoRelaMapper;
-import com.apass.zufang.mapper.zfang.HouseLocationMapper;
-import com.apass.zufang.mapper.zfang.HouseMapper;
-import com.apass.zufang.mapper.zfang.HousePeizhiMapper;
-import com.apass.zufang.service.commons.CommonService;
-import com.apass.zufang.utils.PageBean;
-import com.apass.zufang.utils.ValidateUtils;
-import com.google.common.collect.Maps;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class HouseInfoService {
