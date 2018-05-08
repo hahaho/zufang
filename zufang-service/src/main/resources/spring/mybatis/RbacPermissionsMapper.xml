@@ -58,7 +58,7 @@
 	<include refid="QueryConditionSql" />
 	</select>
 	<!-- selectByPK -->
-	<select id="selectByPK" parameterType="String" resultType="PermissionsDO">
+	<select id="selectByPK" parameterType="java.lang.Long" resultType="PermissionsDO">
 	<![CDATA[
 		SELECT ID                 ID,
 			   PERMISSION_CODE    PERMISSIONCODE,
