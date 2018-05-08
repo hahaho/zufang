@@ -32,6 +32,7 @@ public class PermissionsRepository extends BaseMybatisRepository<PermissionsDO, 
         PermissionsDO tempPermission = new PermissionsDO();
         tempPermission.setPermissionCode(permissionCode);
         tempPermission.setNeId(neId);
+        tempPermission.setIsDelete("00");
         return this.filter(tempPermission);
     }
 }
