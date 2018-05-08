@@ -19,7 +19,8 @@
 			FROM
 				T_RBAC_USERS 
 			WHERE
-				USER_NAME = ?
+			 	is_delete = '00'
+				and USER_NAME = ?
 	]]>
 	</script>
 
@@ -35,7 +36,10 @@
 			T_RBAC_ROLE_PERMISSION C,
 			T_RBAC_PERMISSIONS D
 		WHERE
-			A.ID = B.USER_ID
+			A.is_delete = '00'
+			AND B.is_delete = '00'
+			AND C.is_delete = '00'
+			AND A.ID = B.USER_ID
 			AND B.ROLE_ID = C.ROLE_ID
 			AND C.PERMISSION_ID = D.ID
 			AND A.USER_NAME = ?
@@ -52,7 +56,12 @@
 						D.PARENT_ID    PARENTID, 
 						D.DISPLAY      DISPLAY 
 			  FROM T_RBAC_USERS A, T_RBAC_USER_ROLE B, T_RBAC_ROLE_MENU C, T_RBAC_MENUS D
-		WHERE A.ID = B.USER_ID AND B.ROLE_ID = C.ROLE_ID AND C.MENU_ID = D.ID 
+		WHERE
+			A.is_delete = '00'
+			AND B.is_delete = '00'
+			AND C.is_delete = '00'
+			AND D.is_delete = '00'
+			AND A.ID = B.USER_ID AND B.ROLE_ID = C.ROLE_ID AND C.MENU_ID = D.ID
 			  AND D.PARENT_ID = 'ROOT' AND A.USER_NAME = ? ORDER BY D.DISPLAY ASC
 	]]>
 	</script>
@@ -67,7 +76,12 @@
 						D.PARENT_ID    PARENTID, 
 						D.DISPLAY      DISPLAY 
 			  FROM T_RBAC_USERS A, T_RBAC_USER_ROLE B, T_RBAC_ROLE_MENU C, T_RBAC_MENUS D
-		WHERE A.ID = B.USER_ID AND B.ROLE_ID = C.ROLE_ID AND C.MENU_ID = D.ID 
+		WHERE
+			  A.is_delete = '00'
+				AND B.is_delete = '00'
+				AND C.is_delete = '00'
+				AND D.is_delete = '00'
+			  AND A.ID = B.USER_ID AND B.ROLE_ID = C.ROLE_ID AND C.MENU_ID = D.ID
 			  AND D.PARENT_ID = ? AND A.USER_NAME = ? ORDER BY D.DISPLAY ASC
 	]]>
 	</script>
