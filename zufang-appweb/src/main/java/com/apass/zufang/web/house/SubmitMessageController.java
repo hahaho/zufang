@@ -90,7 +90,7 @@ public class SubmitMessageController {
 	 * @throws BusinessException 
      */
     @ResponseBody
-    @RequestMapping(value = "/upLoadCompanyLogo", method = RequestMethod.POST)
+    @RequestMapping(value = "/upLoadSubmitMessagePicture", method = RequestMethod.POST)
     public Response upLoadSubmitMessagePicture(@ModelAttribute("file") MultipartFile file) {
         InputStream is = null;
         try {
