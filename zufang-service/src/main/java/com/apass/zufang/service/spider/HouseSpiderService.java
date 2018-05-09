@@ -7,6 +7,7 @@ import com.apass.gfb.framework.utils.HttpClientUtils;
 import com.apass.gfb.framework.utils.RandomUtils;
 import com.apass.zufang.common.utils.MyStringUtil;
 import com.apass.zufang.domain.common.Geocodes;
+import com.apass.zufang.domain.dto.ProxyIpJo;
 import com.apass.zufang.domain.entity.Apartment;
 import com.apass.zufang.domain.entity.ZfangSpiderHouseEntity;
 import com.apass.zufang.domain.enums.BusinessHouseTypeEnums;
@@ -24,6 +25,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -47,17 +49,8 @@ public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
     public static final String baseUrl = "http://www.mogoroom.com";
 
-    public static WebClient webClient = new WebClient(BrowserVersion.CHROME);
-    static {
-        webClient.getOptions().setTimeout(90000);  //Set Connection Timeout to 1.5 minute
-        webClient.setJavaScriptTimeout(45000);     //Set JavaScript Timeout to 0.75 minute
-
-        webClient.getOptions().setCssEnabled(false);//关闭css
-        webClient.getOptions().setJavaScriptEnabled(true);
-//        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-    }
+    @Autowired
+    private ProxyIpHandler proxyIpHandler;
 
 
     /**
@@ -94,11 +87,16 @@ public class HouseSpiderService {
     /**
      * 通过不同的代理ip,获取WebClient实例
      */
-    private WebClient getWebClient(){
-        String proxyHost = "";
-        int proxyPort = 0;
+    private WebClient getWebClient()throws Exception{
+        List<ProxyIpJo> proxyIpJoList = proxyIpHandler.getIpListFromRedis();
+        if(CollectionUtils.isEmpty(proxyIpJoList)){
+            proxyIpJoList = proxyIpHandler.putIntoRedis();
+        }
+        int size = proxyIpJoList.size();
+        int random = RandomUtils.getRandomInt(0,size);
+        ProxyIpJo proxyIpJo = proxyIpJoList.get(random);
 
-        WebClient webClient = new WebClient(BrowserVersion.CHROME,proxyHost,proxyPort);
+        WebClient webClient = new WebClient(BrowserVersion.CHROME,proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
         webClient.getOptions().setTimeout(90000);  //Set Connection Timeout to 1.5 minute
         webClient.setJavaScriptTimeout(45000);     //Set JavaScript Timeout to 0.75 minute
 
@@ -133,7 +131,7 @@ public class HouseSpiderService {
         try {
             log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
             Thread.sleep(getSleepTime());
-            final HtmlPage page = webClient.getPage(houseUrl);
+            final HtmlPage page = getWebClient().getPage(houseUrl);
             Thread.sleep(getSleepTime());
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
@@ -303,7 +301,7 @@ public class HouseSpiderService {
             String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
             Thread.sleep(getSleepTime());
-            final HtmlPage page = webClient.getPage(houseUrl);
+            final HtmlPage page = getWebClient().getPage(houseUrl);
             Thread.sleep(getSleepTime());
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
