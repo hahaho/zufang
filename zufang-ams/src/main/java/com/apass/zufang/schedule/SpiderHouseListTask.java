@@ -1,7 +1,7 @@
 package com.apass.zufang.schedule;
-
 import com.apass.zufang.domain.entity.ZfangSpiderHouseEntity;
 import com.apass.zufang.service.spider.HouseSpiderService;
+import com.apass.zufang.service.spider.ProxyIpHandler;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -13,9 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.List;
-
 /**
  * @author xiaohai
  * @date 2018/4/19.
@@ -27,29 +25,20 @@ import java.util.List;
 @RequestMapping("/noauth/spider")
 public class SpiderHouseListTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpiderHouseListTask.class);
-    /**
-     * 蘑菇房源列表页根路径
-     */
+    //蘑菇房源列表页根路径
     private static final String[] BASE_URLLIST = {"http://www.mogoroom.com/list"
 //        "http://bj.mogoroom.com/list", "http://sz.mogoroom.com/list", "http://hz.mogoroom.com/list",
 //        "http://nj.mogoroom.com/list", "http://cd.mogoroom.com/list", "http://cq.mogoroom.com/list",
 //        "http://xa.mogoroom.com/list", "http://gz.mogoroom.com/list", "http://tj.mogoroom.com/list"
-    }
-        ;
-
-    /**
-     * 蘑菇房源详情页根路径
-     */
+    };
+    //蘑菇房源详情页根路径
     public static final String BASE_URLDETAIL = "http://www.mogoroom.com";
-
-    /**
-     * 要爬的页面
-     */
+    //要爬的页面
     private static final Integer PAGENUM = 50;
-
     @Autowired
     private HouseSpiderService houseSpiderService;
-
+    @Autowired
+    private ProxyIpHandler proxyIpHandler;
     /**
      * 每天00:10分跑此job
      * 思路：1，根据url和page去查对应页数数据，放入数据库存
@@ -64,7 +53,6 @@ public class SpiderHouseListTask {
                 }
 
             }
-
         }catch (Exception e){
             LOGGER.error("获取数据失败！------Exception=====>{}",e);
         }
@@ -76,13 +64,11 @@ public class SpiderHouseListTask {
                 for (int i=0; i<PAGENUM; i++){
                     houseSpiderService.spiderMogoroomPageList(listUrl,i);
                 }
-
             }
         }catch (Exception e){
             LOGGER.error("获取数据失败！------Exception=====>{}",e);
         }
     }
-
     /**
      * 每天04:10跑
      * 初如何蘑菇租房房源详情表
@@ -107,8 +93,18 @@ public class SpiderHouseListTask {
             LOGGER.error("获取数据失败！------Exception=====>{}",e);
         }
     }
-
-
+    /**
+     * 刷新缓存  put代理IP集合INTORedis 
+     * 每半小时执行一次
+     */
+    @Scheduled(cron = "0 0/30 * * * ?")
+    public void initProxyIpList(){
+    	try {
+			proxyIpHandler.putIntoRedis();
+		} catch (Exception e) {
+			LOGGER.error("initProxyIpList FAIL Exception ==>{}",e);
+		}
+    }
     @RequestMapping("/initExtHouseDetail2")
     public void initExtHouseDetail2(){
         List<String> urls = Lists.newArrayList();
@@ -122,7 +118,6 @@ public class SpiderHouseListTask {
 
                 houseSpiderService.batchParseMogoroomHouse(urls);
             }
-
         }catch (Exception e){
             LOGGER.error("获取数据失败------Exception=====>{}",e);
         }
