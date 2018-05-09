@@ -77,14 +77,6 @@ public class PermissionsService {
         permissionsRepository.updateAll(permissionDB);
     }
     /**
-     * 主键加载 旧方法弃用
-     * @param permissionId
-     * @return
-     */
-    public PermissionsDO select(Long permissionId) {
-        return permissionsRepository.select(permissionId);
-    }
-    /**
      * 资源分页   新方法
      * @param paramDO
      * @param page
@@ -127,6 +119,14 @@ public class PermissionsService {
         entity.setUpdatedBy(user);
         permissionsRepository.updateAll(entity);
         return Response.success("资源修改成功！");
+    }
+    /**
+     * 主键加载  新方法
+     * @param permissionId
+     * @return
+     */
+    public PermissionsDO select(Long permissionId) {
+        return permissionsRepository.select(permissionId);
     }
     /**
      * 删除资源ID  新方法

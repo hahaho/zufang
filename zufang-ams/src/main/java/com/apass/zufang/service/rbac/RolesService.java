@@ -120,7 +120,8 @@ public class RolesService {
         rolesRepository.deleteRoleMenusByRoleId(roleId);
         // 插入新数据
         Set<String> menuIds = ListeningCollectionUtils.tokenizeToSet(menus, ",");
-        menuIds.remove("root");
+        menuIds.remove("-1");
+        menuIds.remove("null");
         if (CollectionUtils.isEmpty(menuIds)) {
             return;
         }

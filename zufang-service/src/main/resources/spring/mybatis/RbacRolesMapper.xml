@@ -18,6 +18,7 @@
 			<if test="neId != null and neId != ''">
 				AND ID != #{neId, jdbcType=VARCHAR}
 			</if>
+			AND IS_DELETE = '00'
 		</where>
 	</sql>
 
@@ -191,8 +192,8 @@
 		SELECT A.*, 
 			   CASE WHEN B.ID IS NOT NULL THEN 'Y' ELSE 'N' END CHECKSIGN 
 		 FROM (SELECT ID, TEXT, PARENT_ID parentId FROM 
-			   T_RBAC_MENUS WHERE PARENT_ID = #{parentId} ORDER BY DISPLAY ASC) A 
-			LEFT JOIN T_RBAC_ROLE_MENU B ON A.ID = B.MENU_ID AND B.ROLE_ID = #{roleId}
+			   T_RBAC_MENUS WHERE PARENT_ID = #{parentId} AND IS_DELETE='00' ORDER BY DISPLAY ASC) A 
+			LEFT JOIN T_RBAC_ROLE_MENU B ON A.ID = B.MENU_ID AND B.ROLE_ID = #{roleId} AND B.IS_DELETE='00'
 	]]>
 	</select>
 	

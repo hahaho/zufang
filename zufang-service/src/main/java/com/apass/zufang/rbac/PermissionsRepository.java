@@ -23,7 +23,7 @@ public class PermissionsRepository extends BaseMybatisRepository<PermissionsDO, 
      */
     public void updateRolePermissionsByPermissionId(Long id) {
         String sql = this.getSQL("updateRolePermissionsByPermissionId");
-        this.getSqlSession().delete(sql, id);
+        this.getSqlSession().update(sql, id);
     }
     /**
      * 删除角色权限表中的资源记录
