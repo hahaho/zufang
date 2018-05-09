@@ -1,31 +1,30 @@
 package com.apass.zufang.service.spider;
-
-import com.apass.gfb.framework.utils.HttpClientUtils;
-import com.apass.zufang.domain.dto.ProxyIpJo;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.data.redis.connection.ConnectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import com.apass.gfb.framework.cache.CacheManager;
+import com.apass.gfb.framework.utils.HttpClientUtils;
+import com.apass.zufang.domain.dto.ProxyIpJo;
 /**
  * Created by DELL on 2018/5/9.
  * 获取代理ip，端口
  */
 @Component
 public class ProxyIpHandler {
-
+	@Autowired
+	private CacheManager cacheManager;
+	public static final String ProxyIpList = "Proxy_Ip_List";
     /**
      * 爬取http://www.xicidaili.com/nn/1 代理ip
      * page 默认从1开始
      */
-    public static  List<ProxyIpJo> catchProxyIp(int page) throws Exception{
+    public static List<ProxyIpJo> catchProxyIp(int page) throws Exception{
         List<ProxyIpJo> result = new ArrayList<>();
         String address = "http://www.xicidaili.com/nn/" + page;
         String content = HttpClientUtils.getMethodGetResponse(address);
@@ -58,10 +57,25 @@ public class ProxyIpHandler {
         }
         return result;
     }
-
+    /**
+     * 刷新缓存  put代理IP集合INTORedis
+     * @return
+     * @throws Exception
+     */
+    public List<ProxyIpJo> putIntoRedis() throws Exception{
+    	List<ProxyIpJo> list =catchProxyIp(1);
+    	cacheManager.delete(ProxyIpList);
+    	cacheManager.setObject(ProxyIpList, list);
+    	return cacheManager.getList(ProxyIpList, ProxyIpJo.class);
+    }
+    /**
+     * 获取缓存 获取代理IP集合
+     * @return
+     */
+    public List<ProxyIpJo> getIpListFromRedis(){
+    	return cacheManager.getList(ProxyIpList, ProxyIpJo.class);
+    }
     public static void main(String[] args) throws Exception {
          catchProxyIp(1);
-
     }
-
 }
