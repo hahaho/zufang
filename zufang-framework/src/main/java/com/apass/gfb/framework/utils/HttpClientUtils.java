@@ -244,6 +244,7 @@ public class HttpClientUtils {
 		try {
 //			logger.info("Start Access Address(" + address + ") With Get Request");
 			get.setConfig(config);
+			get.setHeader("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 5.2) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.2.149.27 Safari/525.13");
 			HttpResponse response = client.execute(get);
 			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
 				int code = response.getStatusLine().getStatusCode();
@@ -270,6 +271,7 @@ public class HttpClientUtils {
 				post.setEntity(paramEntity);
 			}
 			post.setConfig(config);
+			post.setHeader("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 5.2) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.2.149.27 Safari/525.13");
 			HttpResponse response = client.execute(post);
 			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
 				int code = response.getStatusLine().getStatusCode();
