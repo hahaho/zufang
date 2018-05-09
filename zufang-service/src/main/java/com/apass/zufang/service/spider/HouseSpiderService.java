@@ -4,6 +4,7 @@ import com.apass.gfb.framework.logstash.LOG;
 import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.gfb.framework.utils.HttpClientUtils;
+import com.apass.gfb.framework.utils.RandomUtils;
 import com.apass.zufang.common.utils.MyStringUtil;
 import com.apass.zufang.domain.common.Geocodes;
 import com.apass.zufang.domain.entity.Apartment;
@@ -35,10 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
@@ -85,6 +83,33 @@ public class HouseSpiderService {
     @Autowired
     private ZfangSpiderHouseEntityMapper spiderHouseMapper;
 
+    /**
+     *获取随机等待时间(毫秒)
+     *1~11 秒
+     */
+    private long getSleepTime(){
+       return RandomUtils.getRandomInt(1000,11000);
+    }
+
+    /**
+     * 通过不同的代理ip,获取WebClient实例
+     */
+    private WebClient getWebClient(){
+        String proxyHost = "";
+        int proxyPort = 0;
+
+        WebClient webClient = new WebClient(BrowserVersion.CHROME,proxyHost,proxyPort);
+        webClient.getOptions().setTimeout(90000);  //Set Connection Timeout to 1.5 minute
+        webClient.setJavaScriptTimeout(45000);     //Set JavaScript Timeout to 0.75 minute
+
+        webClient.getOptions().setCssEnabled(false);//关闭css
+        webClient.getOptions().setJavaScriptEnabled(true);
+//        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        return webClient;
+    }
+
 
 
     public void batchParseMogoroomHouse(List<String> urls){
@@ -107,9 +132,9 @@ public class HouseSpiderService {
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
             log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
-            Thread.sleep(10000);
+            Thread.sleep(getSleepTime());
             final HtmlPage page = webClient.getPage(houseUrl);
-            Thread.sleep(10000);
+            Thread.sleep(getSleepTime());
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
 
@@ -277,9 +302,9 @@ public class HouseSpiderService {
         try {
             String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
-            Thread.sleep(10000);
+            Thread.sleep(getSleepTime());
             final HtmlPage page = webClient.getPage(houseUrl);
-            Thread.sleep(10000);
+            Thread.sleep(getSleepTime());
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
             //当前城市
@@ -338,8 +363,8 @@ public class HouseSpiderService {
     public static void main(String[] args) throws Exception{
 //        HouseSpiderService s = new HouseSpiderService();
 //        s.parseMogoroomHouseDetail("http://www.mogoroom.com/room/712583.shtml?page=list");
-       byte[] bytes = HttpClientUtils.getMethodGetContent("http://www.mogoroom.com/room/6763962.shtml?page=list");
-        System.out.println(new String(bytes));
+//       byte[] bytes = HttpClientUtils.getMethodGetContent("http://www.mogoroom.com/room/6763962.shtml?page=list");
+//        System.out.println(new String(bytes));
 
 //    	String target = "楼层：1/6层";
 //    	List<String> result = new ArrayList<String>();
