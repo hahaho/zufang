@@ -221,6 +221,7 @@
 					ROLE_NAME    ROLENAME
 		  FROM T_RBAC_ROLES WHERE ID NOT IN
 			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
+			  AND is_delete = '00'
 			  ORDER BY CREATED_TIME DESC
 	]]>
 	</select>
@@ -234,6 +235,7 @@
 					ROLE_NAME    ROLENAME
 		  FROM T_RBAC_ROLES WHERE ID IN 
 			  (SELECT ROLE_ID FROM T_RBAC_USER_ROLE WHERE USER_ID = #{value})
+			  AND is_delete = '00'
 			  ORDER BY CREATED_TIME DESC
 	]]>
 	</select>

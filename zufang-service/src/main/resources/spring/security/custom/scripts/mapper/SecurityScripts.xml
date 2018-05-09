@@ -62,7 +62,7 @@
 			AND C.is_delete = '00'
 			AND D.is_delete = '00'
 			AND A.ID = B.USER_ID AND B.ROLE_ID = C.ROLE_ID AND C.MENU_ID = D.ID
-			  AND D.PARENT_ID = 'ROOT' AND A.USER_NAME = ? ORDER BY D.DISPLAY ASC
+			  AND D.PARENT_ID = '-1' AND A.USER_NAME = ? ORDER BY D.DISPLAY ASC
 	]]>
 	</script>
 
