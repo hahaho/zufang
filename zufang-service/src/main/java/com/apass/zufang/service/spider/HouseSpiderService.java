@@ -141,7 +141,17 @@ public class HouseSpiderService {
            WebClient wc =  getWebClient();
            URL url = new URL(houseUrl);
             wc.addRequestHeader("Referer",url.getProtocol() +"://"+ url.getHost() +"/list");
-            final HtmlPage page = wc.getPage(url);
+            HtmlPage page = null;
+            for(int i =0;i<10;i++){
+                try {
+                    page = getWebClient().getPage(url);
+                    if(page != null){
+                        break;
+                    }
+                }catch (Exception e){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e);
+                }
+            }
             Thread.sleep(getSleepTime());
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
@@ -312,7 +322,19 @@ public class HouseSpiderService {
             String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room list,url: {} ,--------", houseUrl);
             Thread.sleep(getSleepTime());
-            final HtmlPage page = getWebClient().getPage(houseUrl);
+            HtmlPage page = null;
+            for(int i =0;i<10;i++){
+                try {
+                    page = getWebClient().getPage(houseUrl);
+                    if(page != null){
+                        break;
+                    }
+                }catch (Exception e){
+                    log.error("----parseMogoroomHouseList Exception -----{}",e);
+                }
+            }
+
+
             Thread.sleep(getSleepTime());
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());

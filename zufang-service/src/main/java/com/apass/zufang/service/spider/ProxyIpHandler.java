@@ -6,6 +6,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.apass.gfb.framework.cache.CacheManager;
@@ -17,6 +19,8 @@ import com.apass.zufang.domain.dto.ProxyIpJo;
  */
 @Component
 public class ProxyIpHandler {
+
+    public static final Logger log = LoggerFactory.getLogger(ProxyIpHandler.class);
 	@Autowired
 	private CacheManager cacheManager;
 	public static final String ProxyIpList = "Proxy_Ip_List";
@@ -65,6 +69,7 @@ public class ProxyIpHandler {
     public List<ProxyIpJo> putIntoRedis() throws Exception{
     	List<ProxyIpJo> list =catchProxyIp(1);
     	cacheManager.delete(ProxyIpList);
+        log.info("add porxyIp into redis...,size:{}",list.size());
     	cacheManager.setObject(ProxyIpList, list);
     	return cacheManager.getList(ProxyIpList, ProxyIpJo.class);
     }
