@@ -22,6 +22,7 @@ import com.apass.zufang.utils.ToolsUtils;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -38,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,9 +105,12 @@ public class HouseSpiderService {
 
         webClient.getOptions().setCssEnabled(false);//关闭css
         webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.getCookieManager().setCookiesEnabled(true);
 //        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
         webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.addRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
+
         return webClient;
     }
 
@@ -132,7 +137,11 @@ public class HouseSpiderService {
         try {
             log.info("-------start visiting mogo room detail,url: {} ,--------",houseUrl);
             Thread.sleep(getSleepTime());
-            final HtmlPage page = getWebClient().getPage(houseUrl);
+            ////设置请求报文头里的User-Agent字段
+           WebClient wc =  getWebClient();
+           URL url = new URL(houseUrl);
+            wc.addRequestHeader("Referer",url.getProtocol() +"://"+ url.getHost() +"/list");
+            final HtmlPage page = wc.getPage(url);
             Thread.sleep(getSleepTime());
             System.out.println(page.asXml());
             Document doc = Jsoup.parse(page.asXml());
@@ -299,6 +308,7 @@ public class HouseSpiderService {
         //Map的key是id,value是url
         List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = Lists.newArrayList();
         try {
+            URL baseHost = new URL(baseUrl);
             String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room list,url: {} ,--------", houseUrl);
             Thread.sleep(getSleepTime());
@@ -318,7 +328,6 @@ public class HouseSpiderService {
                 zfangSpiderHouseEntity.setUpdatedTime(new Date());
                 Date jobTime = DateFormatUtil.mergeHouseAndMinute(new Date(),CRON_HOUSE,CRON_MINUTE);
                 zfangSpiderHouseEntity.setLastJobTime(jobTime);
-                Map<String,String> hrefMap = Maps.newHashMap();
                 Element element = roomConfigs.get(i);
                 //外部房源id
                 String idKey = element.select("a.inner").attr("data-roomid-md");
@@ -326,6 +335,7 @@ public class HouseSpiderService {
                 //外部房源url
                 String hrefValue = element.select("a.inner").attr("href");
                 zfangSpiderHouseEntity.setUrl(hrefValue);
+                zfangSpiderHouseEntity.setHost(baseHost.getProtocol() +"://"+ baseHost.getHost());
                 zfangSpiderHouseEntity.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 
                 zfangSpiderHouseEntities.add(zfangSpiderHouseEntity);
@@ -373,6 +383,7 @@ public class HouseSpiderService {
 //    		result.add(m.group());
 //    	}
 //    	System.out.println(result);
+
     }
 
     public List<ZfangSpiderHouseEntity> listAllExtHouse() {

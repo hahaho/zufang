@@ -10,6 +10,7 @@ public class ZfangSpiderHouseEntity {
     private String city;
 
     private String url;
+    private String host;
 
     private String extHouseId;
 
@@ -91,5 +92,13 @@ public class ZfangSpiderHouseEntity {
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 }

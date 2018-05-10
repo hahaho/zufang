@@ -11,10 +11,11 @@
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
     <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="host" property="host" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, apartment_id, city, url, ext_house_id, last_job_time, created_time, updated_time, 
-    is_delete
+    is_delete, host
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,10 +30,12 @@
   <insert id="insert" parameterType="com.apass.zufang.domain.entity.ZfangSpiderHouseEntity" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_spider_house (apartment_id, city, url, 
       ext_house_id, last_job_time, created_time, 
-      updated_time, is_delete)
+      updated_time, is_delete, host
+      )
     values (#{apartmentId,jdbcType=BIGINT}, #{city,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
       #{extHouseId,jdbcType=VARCHAR}, #{lastJobTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=VARCHAR})
+      #{updatedTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=VARCHAR}, #{host,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.apass.zufang.domain.entity.ZfangSpiderHouseEntity" useGeneratedKeys="true" keyProperty="id" >
     insert into t_zfang_spider_house
@@ -61,6 +64,9 @@
       <if test="isDelete != null" >
         is_delete,
       </if>
+      <if test="host != null" >
+        host,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="apartmentId != null" >
@@ -86,6 +92,9 @@
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="host != null" >
+        #{host,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -116,6 +125,9 @@
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=VARCHAR},
       </if>
+      <if test="host != null" >
+        host = #{host,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -128,7 +140,8 @@
       last_job_time = #{lastJobTime,jdbcType=TIMESTAMP},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=VARCHAR}
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      host = #{host,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
