@@ -95,6 +95,7 @@ public class HouseSpiderService {
         int size = proxyIpJoList.size();
         int random = RandomUtils.getRandomInt(0,size);
         ProxyIpJo proxyIpJo = proxyIpJoList.get(random);
+        log.info("-------current proxyIp:{},port:{}--------",proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
 
         WebClient webClient = new WebClient(BrowserVersion.CHROME,proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
         webClient.getOptions().setTimeout(90000);  //Set Connection Timeout to 1.5 minute
@@ -129,7 +130,7 @@ public class HouseSpiderService {
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void parseMogoroomHouseDetail(String houseUrl){
         try {
-            log.info("-------start visiting mogo room,url: {} ,--------",houseUrl);
+            log.info("-------start visiting mogo room detail,url: {} ,--------",houseUrl);
             Thread.sleep(getSleepTime());
             final HtmlPage page = getWebClient().getPage(houseUrl);
             Thread.sleep(getSleepTime());
@@ -299,7 +300,7 @@ public class HouseSpiderService {
         List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = Lists.newArrayList();
         try {
             String houseUrl = baseUrl+"?page="+pageNum;
-            log.info("-------start visiting mogo room,url: {} ,--------", houseUrl);
+            log.info("-------start visiting mogo room list,url: {} ,--------", houseUrl);
             Thread.sleep(getSleepTime());
             final HtmlPage page = getWebClient().getPage(houseUrl);
             Thread.sleep(getSleepTime());
