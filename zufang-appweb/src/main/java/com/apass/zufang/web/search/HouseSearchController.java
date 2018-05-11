@@ -567,7 +567,7 @@ public class HouseSearchController {
 			return Response.success("附近房源查询成功",resultMap);
 		}catch (Exception e){
 			LOGGER.error("ES查询失败！",e);
-			return Response.fail("ES查询失败");
+			return Response.fail("ES查询失败:"+e.getMessage());
 		}
     }
 
