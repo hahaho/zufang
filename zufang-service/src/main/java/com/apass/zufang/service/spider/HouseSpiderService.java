@@ -53,7 +53,6 @@ import java.util.regex.Pattern;
 @Service
 public class HouseSpiderService {
     public static final Logger log = LoggerFactory.getLogger(HouseSpiderService.class);
-    public static final String baseUrl = "http://www.mogoroom.com";
 
     @Autowired
     private ProxyIpHandler proxyIpHandler;
@@ -90,35 +89,6 @@ public class HouseSpiderService {
        return RandomUtils.getRandomInt(1000,11000);
     }
 
-    /**
-     * 通过不同的代理ip,获取WebClient实例
-     */
-    @Deprecated
-    private WebClient getWebClient()throws Exception{
-        List<ProxyIpJo> proxyIpJoList = proxyIpHandler.getIpListFromRedis();
-        if(CollectionUtils.isEmpty(proxyIpJoList)){
-            proxyIpJoList = proxyIpHandler.putIntoRedis();
-        }
-        int size = proxyIpJoList.size();
-        int random = RandomUtils.getRandomInt(0,size);
-        ProxyIpJo proxyIpJo = proxyIpJoList.get(random);
-        log.info("-------current proxyIp:{},port:{}--------",proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
-
-        WebClient webClient = new WebClient(BrowserVersion.CHROME,proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
-        webClient.getOptions().setTimeout(90000);  //Set Connection Timeout to 1.5 minute
-        webClient.setJavaScriptTimeout(45000);     //Set JavaScript Timeout to 0.75 minute
-
-        webClient.getOptions().setCssEnabled(false);//关闭css
-        webClient.getOptions().setJavaScriptEnabled(true);
-        webClient.getCookieManager().setCookiesEnabled(true);
-//        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.addRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
-
-        return webClient;
-    }
-
     private WebDriver getWebDriver() throws Exception{
         List<ProxyIpJo> proxyIpJoList = proxyIpHandler.getIpListFromRedis();
         if(CollectionUtils.isEmpty(proxyIpJoList)){
@@ -127,7 +97,7 @@ public class HouseSpiderService {
         int size = proxyIpJoList.size();
         int random = RandomUtils.getRandomInt(0,size);
         ProxyIpJo proxyIpJo = proxyIpJoList.get(random);
-        log.info("-------current proxyIp:{},port:{}--------",proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
+        log.info("-------getWebDriver， current proxyIp:{},port:{}--------",proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
         String ip = proxyIpJo.getProxyHost() +":"+proxyIpJo.getProxyPort();
         return PhantomPoolBuilder.getInstance().buildSingleDriver(ip);
     }
