@@ -1,6 +1,7 @@
 package com.apass.gfb.framework.utils;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class RandomUtils {
 	/**
@@ -78,5 +79,9 @@ public class RandomUtils {
 			buffer.append(s.charAt(random.nextInt(s.length())));
 		}
 		return buffer.toString();
+	}
+
+	public static final String getUUID() {
+		return UUID.randomUUID().toString();
 	}
 }

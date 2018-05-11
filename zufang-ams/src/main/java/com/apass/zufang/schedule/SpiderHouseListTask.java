@@ -31,8 +31,6 @@ public class SpiderHouseListTask {
 //        "http://nj.mogoroom.com/list", "http://cd.mogoroom.com/list", "http://cq.mogoroom.com/list",
 //        "http://xa.mogoroom.com/list", "http://gz.mogoroom.com/list", "http://tj.mogoroom.com/list"
     };
-    //蘑菇房源详情页根路径
-    public static final String BASE_URLDETAIL = "http://www.mogoroom.com";
     //要爬的页面
     private static final Integer PAGENUM = 50;
     @Autowired
@@ -78,15 +76,15 @@ public class SpiderHouseListTask {
      */
     @Scheduled(cron = "0 10 4 * * *")
     public void initExtHouseDetail(){
-        List<String> urls = Lists.newArrayList();
         try{
             //去查询spider表，获取其中中的url放入urls中
             List<ZfangSpiderHouseEntity> list = houseSpiderService.listAllExtHouse();
             if(CollectionUtils.isNotEmpty(list)){
                 for(ZfangSpiderHouseEntity entity : list){
-                    urls.add(BASE_URLDETAIL+entity.getUrl());
+                    String linkUrl = entity.getHost() + entity.getUrl();
+                    houseSpiderService.parseMogoroomHouseDetail(linkUrl);
                 }
-                houseSpiderService.batchParseMogoroomHouse(urls);
+
             }
 
         }catch (Exception e){
@@ -107,16 +105,15 @@ public class SpiderHouseListTask {
     }
     @RequestMapping("/initExtHouseDetail2")
     public void initExtHouseDetail2(){
-        List<String> urls = Lists.newArrayList();
         try{
             //去查询spider表，获取其中中的url放入urls中
             List<ZfangSpiderHouseEntity> list = houseSpiderService.listAllExtHouse();
             if(CollectionUtils.isNotEmpty(list)){
                 for(ZfangSpiderHouseEntity entity : list){
-                    urls.add(BASE_URLDETAIL+entity.getUrl());
+                    String linkUrl = entity.getHost() + entity.getUrl();
+                    houseSpiderService.parseMogoroomHouseDetail(linkUrl);
                 }
 
-                houseSpiderService.batchParseMogoroomHouse(urls);
             }
         }catch (Exception e){
             LOGGER.error("获取数据失败------Exception=====>{}",e);

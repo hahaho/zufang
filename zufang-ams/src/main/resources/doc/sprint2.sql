@@ -8,6 +8,7 @@ CREATE TABLE `t_zfang_spider_house` (
   `created_time` datetime NOT NULL COMMENT '创建时间',
   `updated_time` datetime NOT NULL COMMENT '更新时间',
   `is_delete` varchar(2) NOT NULL DEFAULT '00' COMMENT '是否删除(00 默认值,  01 删除)',
+  `host` varchar(255) NOT NULL DEFAULT '' COMMENT '域名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='爬虫房源表';
 
