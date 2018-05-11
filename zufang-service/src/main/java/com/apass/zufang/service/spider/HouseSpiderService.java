@@ -32,6 +32,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +93,7 @@ public class HouseSpiderService {
     /**
      * 通过不同的代理ip,获取WebClient实例
      */
+    @Deprecated
     private WebClient getWebClient()throws Exception{
         List<ProxyIpJo> proxyIpJoList = proxyIpHandler.getIpListFromRedis();
         if(CollectionUtils.isEmpty(proxyIpJoList)){
@@ -114,6 +119,18 @@ public class HouseSpiderService {
         return webClient;
     }
 
+    private WebDriver getWebDriver() throws Exception{
+        List<ProxyIpJo> proxyIpJoList = proxyIpHandler.getIpListFromRedis();
+        if(CollectionUtils.isEmpty(proxyIpJoList)){
+            proxyIpJoList = proxyIpHandler.putIntoRedis();
+        }
+        int size = proxyIpJoList.size();
+        int random = RandomUtils.getRandomInt(0,size);
+        ProxyIpJo proxyIpJo = proxyIpJoList.get(random);
+        log.info("-------current proxyIp:{},port:{}--------",proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
+        String ip = proxyIpJo.getProxyHost() +":"+proxyIpJo.getProxyPort();
+        return PhantomPoolBuilder.getInstance().buildSingleDriver(ip);
+    }
 
 
     public void batchParseMogoroomHouse(List<String> urls){
@@ -134,27 +151,39 @@ public class HouseSpiderService {
      */
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void parseMogoroomHouseDetail(String houseUrl){
+        WebDriver webDriver = null;
         try {
             log.info("-------start visiting mogo room detail,url: {} ,--------",houseUrl);
             Thread.sleep(getSleepTime());
-            ////设置请求报文头里的User-Agent字段
-           WebClient wc =  getWebClient();
-           URL url = new URL(houseUrl);
-            wc.addRequestHeader("Referer",url.getProtocol() +"://"+ url.getHost() +"/list");
-            HtmlPage page = null;
-            for(int i =0;i<10;i++){
+
+
+            String htmlStr = "";
+            for(int i = 0;i<10;i++){
                 try {
-                    page = getWebClient().getPage(url);
-                    if(page != null){
-                        break;
-                    }
-                }catch (Exception e){
+                    webDriver = getWebDriver();
+                    webDriver.get(houseUrl);
+                    WebDriverWait wait = new WebDriverWait(webDriver, 20);
+                    wait.until(ExpectedConditions.presenceOfElementLocated(By.id("roomInfo")));//开始打开网页，等待输入元素出现
+                     htmlStr = webDriver.getPageSource();
+                     if(StringUtils.isNotEmpty(htmlStr)){
+                         break;
+                     }
+                }catch (RuntimeException e){
                     log.error("----parseMogoroomHouseDetail Exception -----{}",e);
+                } catch (Exception e2){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e2);
+                }finally {
+                    if(webDriver != null){
+                        webDriver.quit();
+                    }
                 }
             }
-            Thread.sleep(getSleepTime());
-            System.out.println(page.asXml());
-            Document doc = Jsoup.parse(page.asXml());
+            if(StringUtils.isEmpty(htmlStr)){
+                return ;
+            }
+
+            System.out.println(htmlStr);
+            Document doc = Jsoup.parse(htmlStr);
 
            Elements noHouseEle = doc.select("div.f30.white");
             if(noHouseEle.size() > 0){
@@ -306,6 +335,10 @@ public class HouseSpiderService {
             log.info("-------end visit mogo room,houseId: {}--------",result.get("houseId"));
         }catch (Exception e){
             log.error("parseMogoroomHouseDetail error.......",e);
+        }finally {
+            if(webDriver != null){
+                webDriver.quit();
+            }
         }
     }
 
@@ -316,28 +349,41 @@ public class HouseSpiderService {
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public List<ZfangSpiderHouseEntity> parseMogoroomHouseList(String baseUrl,Integer pageNum) {
         //Map的key是id,value是url
+        WebDriver webDriver = null;
         List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = Lists.newArrayList();
         try {
             URL baseHost = new URL(baseUrl);
             String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room list,url: {} ,--------", houseUrl);
             Thread.sleep(getSleepTime());
-            HtmlPage page = null;
-            for(int i =0;i<10;i++){
+
+            String htmlStr = "";
+            for(int i = 0;i<10;i++){
                 try {
-                    page = getWebClient().getPage(houseUrl);
-                    if(page != null){
+                    webDriver = getWebDriver();
+                    webDriver.get(houseUrl);
+                    WebDriverWait wait = new WebDriverWait(webDriver, 20);
+                    wait.until(ExpectedConditions.presenceOfElementLocated(By.className("box-panel")));//开始打开网页，等待输入元素出现
+                    htmlStr = webDriver.getPageSource();
+                    if(StringUtils.isNotEmpty(htmlStr)){
                         break;
                     }
-                }catch (Exception e){
-                    log.error("----parseMogoroomHouseList Exception -----{}",e);
+                }catch (RuntimeException e){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e);
+                } catch (Exception e2){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e2);
+                }finally {
+                    if(webDriver != null){
+                        webDriver.quit();
+                    }
                 }
             }
+            if(StringUtils.isEmpty(htmlStr)){
+                return  null;
+            }
 
-
-            Thread.sleep(getSleepTime());
-            System.out.println(page.asXml());
-            Document doc = Jsoup.parse(page.asXml());
+            System.out.println(htmlStr);
+            Document doc = Jsoup.parse(htmlStr);
             //当前城市
             String city = doc.select("div.current-city").get(0).text();
             Elements ulElement = doc.select("ul.list-room.add-new-listroom.by-list");
@@ -372,6 +418,10 @@ public class HouseSpiderService {
         } catch (Exception e) {
             log.error("爬取蘑菇租房列表页异常,----Splider Exception -----{}",e);
             return null;
+        } finally {
+            if(webDriver != null){
+                webDriver.quit();
+            }
         }
     }
 
