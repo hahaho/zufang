@@ -139,7 +139,7 @@ public class MobileSmsService {
 			} else if ("2".equals(cacheCode)) {
 				flag = this.sendSms(mobile, msg, "创蓝短信验证码", "25");
 			} else {
-				flag = this.sendSms(mobile, msg, "逐鹿验证码短信", "230");
+				flag = this.sendSms(mobile, msg, "云融正通通知短信", "33");
 			}
 			if (!flag) {
 				throw new BusinessException("短信发送失败,请稍后再试");
@@ -170,7 +170,7 @@ public class MobileSmsService {
 			} else if("3".equals(cacheCode)){
 				flag = this.sendSms(mobile, msg, "云融正通营销短信", "36");
 			}else {
-				flag = this.sendSms(mobile, msg, "云融正通营销短信", "36");
+				flag = this.sendSms(mobile, msg, "云融正通通知短信", "33");
 			}
 			if (!flag) {
 				throw new BusinessException("短信发送失败,请稍后再试.");
