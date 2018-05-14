@@ -196,6 +196,10 @@
 					<groupId>javax.servlet</groupId>
 					<artifactId>servlet-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>google-collections</artifactId>
+					<groupId>com.google.collections</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<!-- LogStash日志运营平台 -->
