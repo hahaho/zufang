@@ -232,7 +232,16 @@ public class HouseSpiderService {
             }
 
             Elements addrEle = doc.select("span.roomInfo-mark");
-            String address = addrEle.get(0).text(); //翰盛家园（上海市浦东新区创新西路195号）
+            String address = "";
+            if(addrEle.size()>0){
+                address = addrEle.get(0).text(); //翰盛家园（上海市浦东新区创新西路195号）
+            }else{
+                String addrMark = "<span class=\"roomInfo-mark\"><i class=\"mark-arrow\"></i>";
+                int i = htmlStr.indexOf(addrMark);
+                int j = htmlStr.substring(i+addrMark.length()).indexOf("）");
+                address = htmlStr.substring(i+addrMark.length()).substring(0,j+1);
+            }
+
 
             //小区名称
             int index = StringUtils.indexOf(address,"（");
