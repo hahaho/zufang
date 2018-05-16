@@ -227,8 +227,11 @@ public class HouseSpiderService {
             String chaoxiang= "";
             if(roomMatesEle != null){
                 Elements curEles = roomMatesEle.select("li.cur-rm");
-                 chaoxiang = curEles.select("li").get(3).text();
+                if(curEles.size() == 0 || curEles.select("li").size() == 0){
 
+                } else{
+                    chaoxiang = curEles.select("li").get(3).text();
+                }
             }
 
             Elements addrEle = doc.select("span.roomInfo-mark");
