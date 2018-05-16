@@ -1,3 +1,4 @@
+
 package com.apass.zufang.service.house;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
@@ -292,22 +293,34 @@ public class HouseService {
 			logger.error("selectCodeByCityName is failed!");
 			throw new BusinessException("查询城市编码失败!");
 		}
-		
-		WorkCityJdParams district = new WorkCityJdParams();
-		district.setDistrict(districtName);
-		district.setParentCode(c.getCode());
-		WorkCityJd d = cityJdMapper.selectCodeByName(district);
-		if(null == d){
+		WorkCityJd d = null;
+		if(StringUtils.isEmpty(districtName)){
+			//第三方对接的房源 该字段可能没有值
+			d = new WorkCityJd();
+		}else{
+
+			WorkCityJdParams district = new WorkCityJdParams();
+			district.setDistrict(districtName);
+			district.setParentCode(c.getCode());
+			d = cityJdMapper.selectCodeByName(district);
+			if(null == d){
 //			logger.error("selectCodeByDistrictName is failed!");
 //			throw new BusinessException("查询区县编码失败!");
-			//蛋壳公寓该字段无法和我们地址库对应
-			d = new WorkCityJd();
+				//蛋壳公寓该字段无法和我们地址库对应
+				d = new WorkCityJd();
+			}
 		}
-		
-		WorkCityJdParams street = new WorkCityJdParams();
-		street.setStreet(streetName);
-		street.setParentCode(d.getCode());
-		WorkCityJd t = cityJdMapper.selectCodeByName(street);
+
+		WorkCityJd t = null;
+		if(d != null){
+			WorkCityJdParams street = new WorkCityJdParams();
+			street.setStreet(streetName);
+			street.setParentCode(d.getCode());
+			t = cityJdMapper.selectCodeByName(street);
+		} else{
+			t = new WorkCityJd();
+		}
+
 		
 		WorkCityJdVo vo = new WorkCityJdVo();
 		
