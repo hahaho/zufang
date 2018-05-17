@@ -126,7 +126,6 @@ public class HouseSpiderService {
      */
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public void parseMogoroomHouseDetail(String houseUrl,String host){
-        WebDriver webDriver = null;
         try {
             log.info("-------start visiting mogo room detail,url: {} ,--------",houseUrl);
             Thread.sleep(getSleepTime());
@@ -320,10 +319,6 @@ public class HouseSpiderService {
             log.info("-------end visit mogo room,houseId: {}--------",result.get("houseId"));
         }catch (Exception e){
             log.error("parseMogoroomHouseDetail error.......",e);
-        }finally {
-            if(webDriver != null){
-                webDriver.quit();
-            }
         }
     }
 
@@ -334,7 +329,6 @@ public class HouseSpiderService {
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
     public List<ZfangSpiderHouseEntity> parseMogoroomHouseList(String baseUrl,Integer pageNum) {
         //Map的key是id,value是url
-        WebDriver webDriver = null;
         List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = Lists.newArrayList();
         try {
             String houseUrl = baseUrl+"?page="+pageNum;
@@ -400,10 +394,6 @@ public class HouseSpiderService {
         } catch (Exception e) {
             log.error("爬取蘑菇租房列表页异常,----Splider Exception -----{}",e);
             return null;
-        } finally {
-            if(webDriver != null){
-                webDriver.quit();
-            }
         }
     }
 
