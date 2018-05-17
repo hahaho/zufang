@@ -1,6 +1,8 @@
 package com.apass.zufang.service.spider;
 
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.xerces.dom.PSVIAttrNSImpl;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -8,6 +10,10 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -55,11 +61,10 @@ public class PhantomPoolBuilder {
      */
     private Map<String, String> headersMap = Maps.newHashMap();
 
-    private PhantomPoolBuilder() {
-        this("D:/develop/phantomjs-2.1.1-windows/bin/phantomjs.exe");
-    }
+    public PhantomPoolBuilder() {
 
-    private PhantomPoolBuilder(String location) {
+    }
+    public PhantomPoolBuilder(String location) {
         this.phantomJsLocation = location;
     }
 
@@ -128,7 +133,6 @@ public class PhantomPoolBuilder {
 
 
     /**
-     * 建议用该方法
      * @return
      */
     public WebDriver buildSingleDriver(String proxyIp) {
@@ -138,10 +142,16 @@ public class PhantomPoolBuilder {
         }else{
             System.setProperty("phantomjs.binary.path", "D:\\\\phantomjs-windows\\\\bin\\\\phantomjs.exe");//设置PhantomJs访问路径
         }
-        DesiredCapabilities capabilities = DesiredCapabilities.iphone();
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         capabilities.setJavascriptEnabled(true);
-        capabilities.setCapability("phantomjs.page.settings.userAgent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
         capabilities.setCapability("phantomjs.page.customHeaders.User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
+        capabilities.setCapability("phantomjs.page.customHeaders.Referer","http://www.mogoroom.com/list");
+        capabilities.setCapability("phantomjs.page.customHeaders.Host","www.mogoroom.com");
+        capabilities.setCapability("phantomjs.page.customHeaders.Proxy-Connection","keep-alive");
+        capabilities.setCapability("phantomjs.page.customHeaders.Cache-Control","max-age=0");
+        capabilities.setCapability("phantomjs.page.customHeaders.Accept-Language","zh-CN,zh;q=0.9");
+
+
         org.openqa.selenium.Proxy proxy = new org.openqa.selenium.Proxy();
         proxy.setProxyType(Proxy.ProxyType.MANUAL);
         proxy.setAutodetect(false);
@@ -150,5 +160,44 @@ public class PhantomPoolBuilder {
         capabilities.setCapability(CapabilityType.PROXY, proxy);
 
         return new PhantomJSDriver(capabilities);
+    }
+
+    public static String getHtmlByPhantomJs(String htmlUrl,String host,String referer,String proxyIp) throws Exception{
+
+        String osname = System.getProperties().getProperty("os.name");
+        String jsPath = PhantomPoolBuilder.class.getResource("/").getPath() +"spider/" + "spider.js";
+        String phantomJs = "";
+        if(osname.equalsIgnoreCase("linux")){
+            phantomJs = "/usr/local/phantomjs/bin/phantomjs";
+        }else{
+            phantomJs = "D:\\phantomjs-windows\\bin\\phantomjs.exe";
+            jsPath = jsPath.substring(1);//去掉第一个"/"
+        }
+        String execStr = null;
+
+        if(StringUtils.isNotEmpty(proxyIp)){
+            execStr = phantomJs + " --proxy="+proxyIp +" "+ jsPath + " " + htmlUrl
+                    + " " +host + " "+referer;
+        }else{
+            execStr = phantomJs  +" "+ jsPath + " " + htmlUrl
+                    + " " +host + " "+referer;
+        }
+
+        Runtime rt = Runtime.getRuntime();
+        Process p = rt.exec(execStr);
+        InputStream is = p.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuffer sbf = new StringBuffer();
+        String tmp = "";
+        while((tmp=br.readLine())!=null) {
+            sbf.append(tmp + "\n");
+        }
+        return sbf.toString();
+    }
+
+    public static void main(String[] args) throws Exception{
+        String proxyIp="";
+        String s = getHtmlByPhantomJs("http://www.mogoroom.com/room/2482348.shtml?","www.mogoroom.com","http://www.mogoroom.com/list",proxyIp);
+        System.out.println(s);
     }
 }

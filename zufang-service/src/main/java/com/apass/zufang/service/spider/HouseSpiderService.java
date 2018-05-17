@@ -293,6 +293,9 @@ public class HouseSpiderService {
             if(roomAcreage != null){
                 houseVo.setRoomAcreage(new BigDecimal(roomAcreage));
             }
+            if(rentAmt.contains("-")){
+                rentAmt = rentAmt.split("-")[0];
+            }
             houseVo.setRentAmt(new BigDecimal(rentAmt));
             houseVo.setLatitude(Double.valueOf(lat));
             houseVo.setLongitude(Double.valueOf(lon));

@@ -95,7 +95,7 @@ public class SpiderHouseListTask {
      * 刷新缓存  put代理IP集合INTORedis 
      * 每半小时执行一次
      */
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0 7 * * ?")
     public void initProxyIpList(){
     	try {
 			proxyIpHandler.putIntoRedis();
