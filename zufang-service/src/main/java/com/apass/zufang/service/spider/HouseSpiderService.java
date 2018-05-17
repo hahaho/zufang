@@ -336,7 +336,7 @@ public class HouseSpiderService {
             Thread.sleep(getSleepTime());
 
             String htmlStr = "";
-            String host = baseUrl.substring(0,"/list".length());
+            String host = baseUrl.substring(0,baseUrl.length() - "/list".length());
             String ref = host + "/index.shtml";
             String headerHost = host.substring("http://".length());
             String proxyIp = null;

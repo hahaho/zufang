@@ -41,8 +41,8 @@ page.onResourceRequested = function(requestData, request) {
 };
 
 page.open(address, settings,function (status) {
-    console.log(system.args)
-    console.log('Status: ' + status);
+    console.log('----system args:' + system.args)
+    console.log('---------Status: ' + status);
     if (status !== 'success') {
 
         console.log('Unable to request url: ' + address);
@@ -50,7 +50,7 @@ page.open(address, settings,function (status) {
 
             phantom.outputEncoding = 'utf8';
 
-            console.log('page html: ' + page.content);//最后返回webkit加载之后的页面内容
+            console.log('--------page html: ' + page.content);//最后返回webkit加载之后的页面内容
 
     }
     phantom.exit();
