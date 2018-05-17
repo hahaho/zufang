@@ -91,6 +91,9 @@ public class PhantomPoolBuilder {
             }
             String start = "<html>";
             String end = "</html>";
+            if(StringUtils.isEmpty(result)){
+                return null;
+            }
             result = result.substring(result.indexOf(start) + start.length(),
                     result.indexOf(end) + end.length());
 
