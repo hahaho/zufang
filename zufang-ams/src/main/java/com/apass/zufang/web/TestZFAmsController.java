@@ -35,7 +35,7 @@ public class TestZFAmsController {
             urls.add("http://www.mogoroom.com/room/3223045.shtml");
             urls.add("http://www.mogoroom.com/room/464375.shtml");
             urls.add("http://www.mogoroom.com/room/1347488.shtml");
-            spiderService.batchParseMogoroomHouse(urls);
+            spiderService.batchParseMogoroomHouse(urls,"http://www.mogoroom.com");
             return Response.successResponse();
         }catch (Exception e) {
             logger.error("batchMogoRoom EXCEPTION --- --->{}", e);

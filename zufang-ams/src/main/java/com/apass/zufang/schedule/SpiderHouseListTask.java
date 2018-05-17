@@ -82,7 +82,7 @@ public class SpiderHouseListTask {
             if(CollectionUtils.isNotEmpty(list)){
                 for(ZfangSpiderHouseEntity entity : list){
                     String linkUrl = entity.getHost() + entity.getUrl();
-                    houseSpiderService.parseMogoroomHouseDetail(linkUrl);
+                    houseSpiderService.parseMogoroomHouseDetail(linkUrl,entity.getHost());
                 }
 
             }
@@ -111,7 +111,7 @@ public class SpiderHouseListTask {
             if(CollectionUtils.isNotEmpty(list)){
                 for(ZfangSpiderHouseEntity entity : list){
                     String linkUrl = entity.getHost() + entity.getUrl();
-                    houseSpiderService.parseMogoroomHouseDetail(linkUrl);
+                    houseSpiderService.parseMogoroomHouseDetail(linkUrl,entity.getHost());
                 }
 
             }

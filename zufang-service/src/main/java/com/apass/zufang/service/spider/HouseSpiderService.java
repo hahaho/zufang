@@ -3,7 +3,6 @@ package com.apass.zufang.service.spider;
 import com.apass.gfb.framework.logstash.LOG;
 import com.apass.gfb.framework.utils.DateFormatUtil;
 import com.apass.gfb.framework.utils.GsonUtils;
-import com.apass.gfb.framework.utils.HttpClientUtils;
 import com.apass.gfb.framework.utils.RandomUtils;
 import com.apass.zufang.common.utils.MyStringUtil;
 import com.apass.zufang.domain.common.Geocodes;
@@ -93,13 +92,25 @@ public class HouseSpiderService {
         ProxyIpJo proxyIpJo = proxyIpJoList.get(random);
         log.info("-------getWebDriver， current proxyIp:{},port:{}--------",proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
         String ip = proxyIpJo.getProxyHost() +":"+proxyIpJo.getProxyPort();
-        return PhantomPoolBuilder.getInstance().buildSingleDriver(ip);
+        return new PhantomPoolBuilder().buildSingleDriver(ip);
     }
 
+    private String  getPorxyIp() throws Exception{
+        List<ProxyIpJo> proxyIpJoList = proxyIpHandler.getIpListFromRedis();
+        if(CollectionUtils.isEmpty(proxyIpJoList)){
+            proxyIpJoList = proxyIpHandler.putIntoRedis();
+        }
+        int size = proxyIpJoList.size();
+        int random = RandomUtils.getRandomInt(0,size);
+        ProxyIpJo proxyIpJo = proxyIpJoList.get(random);
+        log.info("-------getPorxyIp， current proxyIp:{},port:{}--------",proxyIpJo.getProxyHost(),proxyIpJo.getProxyPort());
+        String ip = proxyIpJo.getProxyHost() +":"+proxyIpJo.getProxyPort();
+        return ip;
+    }
 
-    public void batchParseMogoroomHouse(List<String> urls){
+    public void batchParseMogoroomHouse(List<String> urls,String host){
         for(String url : urls){
-            parseMogoroomHouseDetail(url);
+            parseMogoroomHouseDetail(url,host);
         }
     }
 
@@ -114,39 +125,34 @@ public class HouseSpiderService {
      * 【蘑菇租房】解析房源详情页
      */
     @Transactional(value="transactionManager",rollbackFor = { Exception.class,RuntimeException.class})
-    public void parseMogoroomHouseDetail(String houseUrl){
+    public void parseMogoroomHouseDetail(String houseUrl,String host){
         WebDriver webDriver = null;
         try {
             log.info("-------start visiting mogo room detail,url: {} ,--------",houseUrl);
             Thread.sleep(getSleepTime());
 
-
+            String ref = host + "/list";
+            String headerHost = host.substring("http://".length());
             String htmlStr = "";
+            String proxyIp = null;
             for(int i = 0;i<10;i++){
                 try {
-                    webDriver = getWebDriver();
-                    webDriver.get(houseUrl);
-                    WebDriverWait wait = new WebDriverWait(webDriver, 20);
-                    wait.until(ExpectedConditions.presenceOfElementLocated(By.id("roomInfo")));//开始打开网页，等待输入元素出现
-                     htmlStr = webDriver.getPageSource();
-                     if(StringUtils.isNotEmpty(htmlStr)){
-                         break;
-                     }
+                   htmlStr = PhantomPoolBuilder.getHtmlByPhantomJs(houseUrl,headerHost,ref,proxyIp);
+                   if(StringUtils.isNotEmpty(htmlStr)){
+                       break;
+                   }else{
+                       proxyIp =getPorxyIp();
+                   }
                 }catch (RuntimeException e){
                     log.error("----parseMogoroomHouseDetail Exception -----{}",e);
                 } catch (Exception e2){
                     log.error("----parseMogoroomHouseDetail Exception -----{}",e2);
-                }finally {
-                    if(webDriver != null){
-                        webDriver.quit();
-                    }
                 }
             }
             if(StringUtils.isEmpty(htmlStr)){
                 return ;
             }
 
-            System.out.println(htmlStr);
             Document doc = Jsoup.parse(htmlStr);
 
            Elements noHouseEle = doc.select("div.f30.white");
@@ -331,30 +337,27 @@ public class HouseSpiderService {
         WebDriver webDriver = null;
         List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = Lists.newArrayList();
         try {
-            URL baseHost = new URL(baseUrl);
             String houseUrl = baseUrl+"?page="+pageNum;
             log.info("-------start visiting mogo room list,url: {} ,--------", houseUrl);
             Thread.sleep(getSleepTime());
 
             String htmlStr = "";
+            String host = baseUrl.substring(0,"/list".length());
+            String ref = host + "/index.shtml";
+            String headerHost = host.substring("http://".length());
+            String proxyIp = null;
             for(int i = 0;i<10;i++){
                 try {
-                    webDriver = getWebDriver();
-                    webDriver.get(houseUrl);
-                    WebDriverWait wait = new WebDriverWait(webDriver, 20);
-                    wait.until(ExpectedConditions.presenceOfElementLocated(By.className("box-panel")));//开始打开网页，等待输入元素出现
-                    htmlStr = webDriver.getPageSource();
+                    htmlStr = PhantomPoolBuilder.getHtmlByPhantomJs(houseUrl,headerHost,ref,proxyIp);
                     if(StringUtils.isNotEmpty(htmlStr)){
                         break;
+                    }else{
+                        proxyIp =getPorxyIp();
                     }
                 }catch (RuntimeException e){
                     log.error("----parseMogoroomHouseDetail Exception -----{}",e);
                 } catch (Exception e2){
                     log.error("----parseMogoroomHouseDetail Exception -----{}",e2);
-                }finally {
-                    if(webDriver != null){
-                        webDriver.quit();
-                    }
                 }
             }
             if(StringUtils.isEmpty(htmlStr)){
@@ -382,7 +385,7 @@ public class HouseSpiderService {
                 //外部房源url
                 String hrefValue = element.select("a.inner").attr("href");
                 zfangSpiderHouseEntity.setUrl(hrefValue);
-                zfangSpiderHouseEntity.setHost(baseHost.getProtocol() +"://"+ baseHost.getHost());
+                zfangSpiderHouseEntity.setHost(host);
                 zfangSpiderHouseEntity.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
 
                 zfangSpiderHouseEntities.add(zfangSpiderHouseEntity);
@@ -420,22 +423,6 @@ public class HouseSpiderService {
     }
 
 
-    public static void main(String[] args) throws Exception{
-//        HouseSpiderService s = new HouseSpiderService();
-//        s.parseMogoroomHouseDetail("http://www.mogoroom.com/room/712583.shtml?page=list");
-//       byte[] bytes = HttpClientUtils.getMethodGetContent("http://www.mogoroom.com/room/6763962.shtml?page=list");
-//        System.out.println(new String(bytes));
-
-//    	String target = "楼层：1/6层";
-//    	List<String> result = new ArrayList<String>();
-//    	Pattern p = Pattern.compile("([1-9]+[0-9]*|0)(\\.[\\d]+)?");
-//    	Matcher m = p.matcher(target);
-//    	while (m.find()) {
-//    		result.add(m.group());
-//    	}
-//    	System.out.println(result);
-
-    }
 
     public List<ZfangSpiderHouseEntity> listAllExtHouse() {
 
