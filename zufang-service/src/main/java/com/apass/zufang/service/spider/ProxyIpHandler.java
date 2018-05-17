@@ -71,7 +71,7 @@ public class ProxyIpHandler {
     	cacheManager.delete(ProxyIpList);
         log.info("add porxyIp into redis...,size:{}",list.size());
     	cacheManager.setObject(ProxyIpList, list);
-    	return cacheManager.getList(ProxyIpList, ProxyIpJo.class);
+    	return list;
     }
     /**
      * 获取缓存 获取代理IP集合
