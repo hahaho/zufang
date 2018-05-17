@@ -54,7 +54,7 @@ public class PhantomPoolBuilder {
     public static String getHtmlByPhantomJs(String htmlUrl,String host,String referer,String proxyIp) throws Exception{
 
         String osname = System.getProperties().getProperty("os.name");
-        String jsPath = PhantomPoolBuilder.class.getResource("/").getPath() +"spider/" + "spider.js";
+        String jsPath = PhantomPoolBuilder.class.getResource("/").getPath() + "spider/" + "spider.js";
         String phantomJs = "";
         if(osname.equalsIgnoreCase("linux")){
             phantomJs = "/usr/local/phantomjs/bin/phantomjs";
@@ -84,7 +84,17 @@ public class PhantomPoolBuilder {
             while((tmp=br.readLine())!=null) {
                 sbf.append(tmp + "\n");
             }
-            return sbf.toString();
+            String result = sbf.toString();
+            if(result.contains("Unable to request url")){
+                log.error(result);
+                result = null;
+            }
+            String start = "<html>";
+            String end = "</html>";
+            result = result.substring(result.indexOf(start) + start.length(),
+                    result.indexOf(end) + end.length());
+
+            return result;
         }catch (Exception e){
             log.error("--------getHtmlByPhantomJs error :",e);
             return null;
@@ -98,7 +108,7 @@ public class PhantomPoolBuilder {
 
     public static void main(String[] args) throws Exception{
         String proxyIp="";
-        String s = getHtmlByPhantomJs("http://www.mogoroom.com/room/2482348.shtml?","www.mogoroom.com","http://www.mogoroom.com/list",proxyIp);
+        String s = getHtmlByPhantomJs("http://www.mogoroom.com/room/758305.shtml?page=list","www.mogoroom.com","http://www.mogoroom.com/list",proxyIp);
         System.out.println(s);
     }
 }

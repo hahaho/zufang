@@ -28,29 +28,29 @@ var settings = {
         "User-Agent":"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"
     },
 };
-page.onConsoleMessage = function(msg) {
-    console.log(msg);
-};
-
-//css 文件不加载
-page.onResourceRequested = function(requestData, request) {
-    if ((/http:\/\/.+?\.css$/gi).test(requestData['url'])) {
-        console.log('Skipping', requestData['url']);
-        request.abort();
-    }
-};
+// page.onConsoleMessage = function(msg) {
+//     console.log(msg);
+// };
+//
+// //css 文件不加载
+// page.onResourceRequested = function(requestData, request) {
+//     if ((/http:\/\/.+?\.css$/gi).test(requestData['url'])) {
+//         console.log('Skipping', requestData['url']);
+//         request.abort();
+//     }
+// };
 
 page.open(address, settings,function (status) {
-    console.log('----system args:' + system.args)
-    console.log('---------Status: ' + status);
+    // console.log('----system args:' + system.args)
+    // console.log('---------Status: ' + status);
     if (status !== 'success') {
 
-        console.log('Unable to request url: ' + address);
+        console.log('Error Unable to request url: ' + address);
     } else {
 
             phantom.outputEncoding = 'utf8';
 
-            console.log('--------page html: ' + page.content);//最后返回webkit加载之后的页面内容
+            console.log(page.content);//最后返回webkit加载之后的页面内容
 
     }
     phantom.exit();
