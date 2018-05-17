@@ -42,7 +42,7 @@ public class SpiderHouseListTask {
      * 思路：1，根据url和page去查对应页数数据，放入数据库存
      * 2，放之前判断是否已经存在，根据
      */
-    @Scheduled(cron = "0 10 0 * * *")
+    @Scheduled(cron = "0 0 0/8 * * ?")
     public void initExtHouseList(){
         try{
             for(String listUrl : BASE_URLLIST){
