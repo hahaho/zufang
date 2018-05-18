@@ -42,7 +42,7 @@ public class SpiderHouseListTask {
      * 思路：1，根据url和page去查对应页数数据，放入数据库存
      * 2，放之前判断是否已经存在，根据
      */
-    @Scheduled(cron = "0 0 0/8 * * ?")
+    @Scheduled(cron = "0 10 0 * * *")
     public void initExtHouseList(){
         try{
             for(String listUrl : BASE_URLLIST){
@@ -68,13 +68,12 @@ public class SpiderHouseListTask {
         }
     }
     /**
-     * 每天04:10跑
      * 初如何蘑菇租房房源详情表
      * 思路：1，从t_zfang_spider_house表中获取所有未被删除的url，
      * 2，拼接BASE_URLDETAIL爬取相关数据，插入t_zfang_house表中
      * 3，插入成功后，删除t_zfang_spider_house表中对应数据
      */
-    @Scheduled(cron = "0 10 4 * * *")
+    @Scheduled(cron = "0 0 0/8 * * ?")
     public void initExtHouseDetail(){
         try{
             //去查询spider表，获取其中中的url放入urls中
