@@ -73,7 +73,7 @@ public class SpiderHouseListTask {
      * 2，拼接BASE_URLDETAIL爬取相关数据，插入t_zfang_house表中
      * 3，插入成功后，删除t_zfang_spider_house表中对应数据
      */
-    @Scheduled(cron = "0 0 0/8 * * ?")
+    @Scheduled(cron = "0 0 0/12 * * ?")
     public void initExtHouseDetail(){
         try{
             //去查询spider表，获取其中中的url放入urls中
