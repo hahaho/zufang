@@ -84,14 +84,7 @@ public class ApartmentService {
 		}
 		Integer count2 = apartmentMapper.getApartmentListCodeCount(entity2);
 		count2++;
-		String cou = null;
-		if(count2<10){
-			cou = "00"+count2;
-		}else if(count2>9&&count2<100){
-			cou = "0"+count2;
-		}else{
-			cou = count2.toString();
-		}
+		String cou = String.format("%03d", count2);
 		entity.fillAllField(username);
 		entity.setCode(code+cou);
 		if(createEntity(entity)==1){
