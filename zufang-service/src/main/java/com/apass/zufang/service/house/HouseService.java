@@ -289,39 +289,45 @@ public class HouseService {
 		city.setCity(cityName);
 		city.setParentCode(p.getCode());
 		WorkCityJd c = cityJdMapper.selectCodeByName(city);
-		if(null == c){
-			logger.error("selectCodeByCityName is failed!");
-			throw new BusinessException("查询城市编码失败!");
-		}
 		WorkCityJd d = null;
-		if(StringUtils.isEmpty(districtName)){
-			//第三方对接的房源 该字段可能没有值
+		WorkCityJd t = null;
+		if(null == c){
+//			logger.error("selectCodeByCityName is failed!");
+//			throw new BusinessException("查询城市编码失败!");
+			c = new WorkCityJd();
 			d = new WorkCityJd();
-		}else{
+			t = new WorkCityJd();
 
-			WorkCityJdParams district = new WorkCityJdParams();
-			district.setDistrict(districtName);
-			district.setParentCode(c.getCode());
-			d = cityJdMapper.selectCodeByName(district);
-			if(null == d){
+		} else{
+
+			if(StringUtils.isEmpty(districtName)){
+				//第三方对接的房源 该字段可能没有值
+				d = new WorkCityJd();
+			}else{
+
+				WorkCityJdParams district = new WorkCityJdParams();
+				district.setDistrict(districtName);
+				district.setParentCode(c.getCode());
+				d = cityJdMapper.selectCodeByName(district);
+				if(null == d){
 //			logger.error("selectCodeByDistrictName is failed!");
 //			throw new BusinessException("查询区县编码失败!");
-				//蛋壳公寓该字段无法和我们地址库对应
-				d = new WorkCityJd();
+					//蛋壳公寓该字段无法和我们地址库对应
+					d = new WorkCityJd();
+				}
+			}
+
+
+			if(d != null){
+				WorkCityJdParams street = new WorkCityJdParams();
+				street.setStreet(streetName);
+				street.setParentCode(d.getCode());
+				t = cityJdMapper.selectCodeByName(street);
+			} else{
+				t = new WorkCityJd();
 			}
 		}
 
-		WorkCityJd t = null;
-		if(d != null){
-			WorkCityJdParams street = new WorkCityJdParams();
-			street.setStreet(streetName);
-			street.setParentCode(d.getCode());
-			t = cityJdMapper.selectCodeByName(street);
-		} else{
-			t = new WorkCityJd();
-		}
-
-		
 		WorkCityJdVo vo = new WorkCityJdVo();
 		
 		vo.setProvince(p.getProvince());
