@@ -59,7 +59,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-redis</artifactId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 		<!-- Tomcat Plugin -->
 		<dependency>
@@ -247,15 +247,11 @@
 		</dependency>
 
 		<!-- rabbitmq-->
-		<dependency>
-			<groupId>com.rabbitmq</groupId>
-			<artifactId>amqp-client</artifactId>
-			<version>3.5.4</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-rabbit</artifactId>
-			<version>1.5.0.RELEASE</version>
+			<version>2.0.1.RELEASE</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>httpclient</artifactId>
@@ -266,7 +262,7 @@
 		<dependency>
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-amqp</artifactId>
-			<version>1.5.3.RELEASE</version>
+			<version>2.0.1.RELEASE</version>
 		</dependency>
 
 
