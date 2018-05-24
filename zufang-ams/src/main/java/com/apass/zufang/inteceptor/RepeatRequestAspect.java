@@ -66,7 +66,7 @@ public class RepeatRequestAspect {
 		String method = request.getMethod();
 		String uri = request.getRequestURI();
 		String queryString = GsonUtils.toJson(request.getParameterMap());
-		LOG.info("请求开始, 各个参数, url: {}, method: {}, uri: {}, params: {}", url, method, uri, queryString);
+		LOG.info("请求开始, 各个参数, url: {}, method: {}, uri: {}", url, method, uri);
 
 		return joinPoint.proceed();
 //		Class<?> returnType = null;
