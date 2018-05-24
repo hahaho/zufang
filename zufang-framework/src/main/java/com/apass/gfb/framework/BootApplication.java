@@ -2,7 +2,7 @@ package com.apass.gfb.framework;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * 
@@ -42,7 +42,6 @@ public class BootApplication extends SpringBootServletInitializer {
 	 * 
 	 * 
 	 * 
-	 * @see org.springframework.boot.context.web.SpringBootServletInitializer#configure(org.springframework.boot.builder.SpringApplicationBuilder)
 	 */
 	@Override
 	protected SpringApplicationBuilder configure(

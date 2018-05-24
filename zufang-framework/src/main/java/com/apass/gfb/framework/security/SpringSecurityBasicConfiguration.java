@@ -123,6 +123,7 @@ public class SpringSecurityBasicConfiguration {
                       .antMatchers("/data/ws/rest/api/**").permitAll()
                       .antMatchers("/data/ws/rest/producer/**").permitAll()
                       .antMatchers("/data/ws/rest/consumer/**").permitAll()
+                      .antMatchers("/management/**").permitAll()
                       .anyRequest().authenticated()
                 .and().sessionManagement()
                       .maximumSessions(1)
