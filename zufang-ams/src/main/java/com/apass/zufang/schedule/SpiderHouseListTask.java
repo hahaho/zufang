@@ -31,6 +31,19 @@ public class SpiderHouseListTask {
         "http://nj.mogoroom.com/list", "http://cd.mogoroom.com/list", "http://cq.mogoroom.com/list",
         "http://xa.mogoroom.com/list", "http://gz.mogoroom.com/list", "http://tj.mogoroom.com/list"
     };
+    //嗨住租房列表页根路径
+    private static final String[] BASE_HZ_URLLIST = {
+        "http://www.hizhu.com/shanghai/shangquan.html",
+        "http://www.hizhu.com/beijing/shangquan.html",
+        "http://www.hizhu.com/hangzhou/shangquan.html",
+        "http://www.hizhu.com/nanjing/shangquan.html",
+        "http://www.hizhu.com/shenzhen/shangquan.html",
+        "http://www.hizhu.com/guangzhou/shangquan.html",
+        "http://www.hizhu.com/zhengzhou/shangquan.html",
+        "http://www.hizhu.com/suzhou/shangquan.html",
+        "http://www.hizhu.com/wuhan/shangquan.html",
+        "http://www.hizhu.com/tianjin/shangquan.html"
+    };
     //要爬的页面
     private static final Integer PAGENUM = 50;
     @Autowired
@@ -68,7 +81,7 @@ public class SpiderHouseListTask {
         }
     }
     /**
-     * 初如何蘑菇租房房源详情表
+     * 初始化何蘑菇租房房源详情表
      * 思路：1，从t_zfang_spider_house表中获取所有未被删除的url，
      * 2，拼接BASE_URLDETAIL爬取相关数据，插入t_zfang_house表中
      * 3，插入成功后，删除t_zfang_spider_house表中对应数据
@@ -117,4 +130,36 @@ public class SpiderHouseListTask {
             LOGGER.error("获取数据失败------Exception=====>{}",e);
         }
     }
+
+
+    @RequestMapping("/initHZList")
+    public void initHZList(){
+        try{
+            for(String listUrl : BASE_HZ_URLLIST){
+                for (int i=0; i<PAGENUM; i++){
+                    houseSpiderService.spiderHiZhuPageList(listUrl,i);
+                }
+            }
+        }catch (Exception e){
+            LOGGER.error("获取数据失败！------Exception=====>{}",e);
+        }
+    }
+
+
+    @RequestMapping("/initHZExtHouseDetail")
+    public void initHZExtHouseDetail(){
+        try{
+            //去查询spider表，获取其中中的url放入urls中
+            List<ZfangSpiderHouseEntity> list = houseSpiderService.listAllHZExtHouse();
+            if(CollectionUtils.isNotEmpty(list)){
+                for(ZfangSpiderHouseEntity entity : list){
+                    houseSpiderService.parseHiZhuroomHouseDetail(entity.getUrl(),entity.getHost());
+                }
+
+            }
+        }catch (Exception e){
+            LOGGER.error("获取数据失败------Exception=====>{}",e);
+        }
+    }
+
 }

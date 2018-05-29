@@ -2,8 +2,10 @@ package com.apass.zufang.mapper.zfang;
 
 import com.apass.gfb.framework.mybatis.GenericMapper;
 import com.apass.zufang.domain.entity.ZfangSpiderHouseEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author xiaohai
@@ -14,8 +16,10 @@ public interface ZfangSpiderHouseEntityMapper extends GenericMapper<ZfangSpiderH
     /**
      * 查询所有外部房源
      * @return
+     * @param apartmentId
+     * @param paramMap
      */
-    List<ZfangSpiderHouseEntity> listAllExtHouse();
+    List<ZfangSpiderHouseEntity> listAllExtHouse(Map<String, Object> paramMap);
 
     ZfangSpiderHouseEntity selectByExtHouseId(String id);
 

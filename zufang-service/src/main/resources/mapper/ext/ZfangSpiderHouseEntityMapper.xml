@@ -7,6 +7,9 @@
             <if test="extHouseId!=null and extHouseId!=''">
                 AND ext_house_id = #{extHouseId}
             </if>
+            <if test="apartmentId != null">
+                AND apartment_id = #{apartmentId}
+            </if>
         </where>
     </sql>
 

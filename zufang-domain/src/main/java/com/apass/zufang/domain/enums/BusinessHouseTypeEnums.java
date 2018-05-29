@@ -15,16 +15,16 @@ public enum BusinessHouseTypeEnums {
 	HZ_1(1, "整租"),
 	HZ_2(2, "合租"),
 	// 押金类型	'1:押一付三;2:押一付一;.....'
-	YJLX_1(1, "押一付一"),
-	YJLX_2(2, "押一付二"),
-	YJLX_3(3, "押一付三"),
-	YJLX_4(4, "押二付一"),
-	YJLX_5(5, "押二付二"),
-	YJLX_6(6, "押二付三"),
+	YJLX_1(1, "付一押一"),
+	YJLX_2(2, "付二押一"),
+	YJLX_3(3, "付三押一"),
+	YJLX_4(4, "付一押二"),
+	YJLX_5(5, "付二押二"),
+	YJLX_6(6, "付三押二"),
 	YJLX_7(7, "面议"),
 	YJLX_8(8, "半年付"),
 	YJLX_9(9, "半年付不押"),
-	YJLX_10(10, "押一付半年"),
+	YJLX_10(10, "付半年押一"),
 	// 朝向， 1:东 2:南 3:西 4:北
 	CX_1(1, "东"),
 	CX_2(2, "南"),
@@ -154,6 +154,18 @@ public enum BusinessHouseTypeEnums {
 			}
 		}
 		return "0";
+	}
+	/**
+	 * 获取装修类型
+	 */
+	public static String getZXCode(String message){
+		for(int i = 1;i<=4;i++){
+			BusinessHouseTypeEnums e = BusinessHouseTypeEnums.valueOf("ZX_"+i);
+			if(e.getMessage().contains(message)){
+				return e.getCode().toString();
+			}
+		}
+		return "2";
 	}
 
 }

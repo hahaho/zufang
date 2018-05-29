@@ -19,16 +19,14 @@ import com.apass.zufang.service.house.HouseService;
 import com.apass.zufang.utils.ObtainGaodeLocation;
 import com.apass.zufang.utils.ToolsUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +34,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
@@ -56,6 +56,7 @@ public class HouseSpiderService {
      */
     //TODO 生产环境会有改动
     private static final Long APARTMENT_ID = Long.valueOf(100);
+    private static final Long APARTMENT_HZ_ID = Long.valueOf(102);
     /**
      * 最近跑job时间的house和minute:每天00:10跑job
      */
@@ -415,7 +416,279 @@ public class HouseSpiderService {
 
 
     public List<ZfangSpiderHouseEntity> listAllExtHouse() {
+        Map<String,Object> paramMap = Maps.newHashMap();
+        paramMap.put("apartmentId",APARTMENT_ID);
+        return spiderHouseMapper.listAllExtHouse(paramMap);
+    }
 
-        return spiderHouseMapper.listAllExtHouse();
+    public void spiderHiZhuPageList(String baseUrl,Integer page) {
+        List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = parseHiZhuHouseList(baseUrl, page);
+        LOG.info("第{}页添加的房源内容有:{}",page.toString(), GsonUtils.toJson(zfangSpiderHouseEntities));
+
+    }
+
+    private List<ZfangSpiderHouseEntity> parseHiZhuHouseList(String baseUrl,Integer pageNum) {
+        //Map的key是id,value是url
+        List<ZfangSpiderHouseEntity> zfangSpiderHouseEntities = Lists.newArrayList();
+        try {
+            String houseUrl = baseUrl+"?p="+pageNum;
+            log.info("-------start visiting HiZhu room list,url: {} ,--------", houseUrl);
+            Thread.sleep(getSleepTime());
+
+            String htmlStr = "";
+            String host = baseUrl.substring(0,baseUrl.length() - "/shangquan.html".length());
+            String ref = host;
+            String headerHost = host.substring("http://".length(),host.length()-"/shanghai".length());
+            String proxyIp = null;
+            for(int i = 0;i<10;i++){
+                try {
+                    htmlStr = PhantomPoolBuilder.getHtmlByPhantomJs(houseUrl,headerHost,ref,proxyIp);
+                    if(StringUtils.isNotEmpty(htmlStr)){
+                        break;
+                    }else{
+                        proxyIp =getPorxyIp();
+                    }
+                }catch (RuntimeException e){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e);
+                } catch (Exception e2){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e2);
+                }
+            }
+            if(StringUtils.isEmpty(htmlStr)){
+                return  null;
+            }
+
+            System.out.println(htmlStr);
+            Document doc = Jsoup.parse(htmlStr);
+            //当前城市
+            String city = doc.select("span.cur_city").text();
+            Elements roomConfigs = doc.select("div.list_main_data").get(0).select("li.data_list");
+            for(int i=0; i<roomConfigs.size(); i++){
+                ZfangSpiderHouseEntity zfangSpiderHouseEntity = new ZfangSpiderHouseEntity();
+                zfangSpiderHouseEntity.setCity(city);
+                zfangSpiderHouseEntity.setApartmentId(APARTMENT_HZ_ID);
+                zfangSpiderHouseEntity.setCreatedTime(new Date());
+                zfangSpiderHouseEntity.setUpdatedTime(new Date());
+                Date jobTime = DateFormatUtil.mergeHouseAndMinute(new Date(),CRON_HOUSE,CRON_MINUTE);
+                zfangSpiderHouseEntity.setLastJobTime(jobTime);
+                Element element = roomConfigs.get(i);
+                //外部房源url 外部房源id
+                String hrefValue = element.select("a.house_left").attr("href");
+                String idKey = hrefValue.substring((host+"/roomDetail/").length(),hrefValue.length()-".html".length());
+
+                zfangSpiderHouseEntity.setExtHouseId(idKey);
+                zfangSpiderHouseEntity.setUrl(hrefValue);
+                zfangSpiderHouseEntity.setHost(host);
+                zfangSpiderHouseEntity.setIsDelete(IsDeleteEnums.IS_DELETE_00.getCode());
+
+                zfangSpiderHouseEntities.add(zfangSpiderHouseEntity);
+                ZfangSpiderHouseEntity entity = spiderHouseMapper.selectByExtHouseId(idKey);
+                if(entity != null){
+                    continue;
+                }
+                spiderHouseMapper.insertSelective(zfangSpiderHouseEntity);
+            }
+
+            return zfangSpiderHouseEntities;
+        } catch (Exception e) {
+            log.error("爬取嗨住租房列表页异常,----Splider Exception -----{}",e);
+            return null;
+        }
+    }
+
+    public List<ZfangSpiderHouseEntity> listAllHZExtHouse() {
+        Map<String,Object> paramMap = Maps.newHashMap();
+        paramMap.put("apartmentId",APARTMENT_HZ_ID);
+        return spiderHouseMapper.listAllExtHouse(paramMap);
+    }
+
+
+    //TODO 嗨住租房房源详情
+    public void parseHiZhuroomHouseDetail(String houseUrl,String host) {
+        try {
+            log.info("-------start visiting HiZhu room detail,url: {} ,--------",houseUrl);
+            Thread.sleep(getSleepTime());
+
+            String ref = host + "/roomDetail";
+            String headerHost = "www.hizhu.com";
+            String htmlStr = "";
+            String proxyIp = null;
+            for(int i = 0;i<10;i++){
+                try {
+                    htmlStr = PhantomPoolBuilder.getHtmlByPhantomJs(houseUrl,headerHost,ref,proxyIp);
+                    if(StringUtils.isNotEmpty(htmlStr)){
+                        break;
+                    }else{
+                        proxyIp =getPorxyIp();
+                    }
+                }catch (RuntimeException e){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e);
+                } catch (Exception e2){
+                    log.error("----parseMogoroomHouseDetail Exception -----{}",e2);
+                }
+            }
+            if(StringUtils.isEmpty(htmlStr)){
+                return ;
+            }
+
+            Document doc = Jsoup.parse(htmlStr);
+
+            //TODO 已被出租暂未发现标记
+//            Elements noHouseEle = doc.select("div.f30.white");
+//            if(noHouseEle.size() > 0){
+//                String text = noHouseEle.get(0).text();
+//                if(text.contains("已被出租")){
+//                    //该房源已被出租
+//                    return;
+//                }
+//            }
+
+
+            Elements element = doc.select("div#mess");
+            String title = element.select("h3").text(); //标题
+            String rentTypeStr =  title.substring(0,2);//合租方式
+            String zujinTypeStr = "";//租金类型
+            String zhuangxiu = "";//装修情况
+            List<String> textList = element.select("p.label span").eachText();
+            if(CollectionUtils.isNotEmpty(textList)){
+                for(String text: textList){
+                    if(text.contains("装修")){
+                        zhuangxiu = text;
+                    }else if(text.contains("付")){
+                        zujinTypeStr = text;
+                    }
+
+                }
+            }
+            String rentAmt = element.select(".price em").text();//租金
+            Elements housekeeperTelEles = doc.select("p.phone-number");
+
+            //TODO 联系电话为另一弹出页面
+            String housekeeperTel =doc.select(".tel").text();//管家联系方式
+
+            String huxingStr = "";// 6室1厅2卫
+            String floorStr = "";//楼层：1/6层
+            String chaoxiang= "";//朝向
+            String traffic = "";//交通
+            String address = "";//地址
+            String communityName = "";//小区名称
+            List<String> spanList = element.select("ul li").eachText();
+            if(CollectionUtils.isNotEmpty(spanList)){
+                for(String text: spanList){
+                    if(text.contains("朝向")){
+                        chaoxiang = text;
+                    }else if(text.contains("楼层")){
+                        floorStr = text;
+                    }else if(text.contains("小区")){
+                        communityName = text;
+                    }else if(text.contains("户型")){
+                        huxingStr = text;
+                    }else if(text.contains("地址")){
+                        address = text;
+                    }else if(text.contains("交通")){
+                        traffic = text;
+                    }else if(text.contains("更新")){
+
+                    }else if(text.contains("编号")){
+
+                    }
+                }
+            }
+
+            String acreageStr = "";//面积： 28.0㎡/130.0㎡
+            List<String> spans = element.select("p.price span").eachText();
+            if(CollectionUtils.isNotEmpty(spans)){
+                acreageStr = spans.get(spans.size()-1);
+            }
+
+            List<String> huxinglist = getMatcheNum(huxingStr);
+            String room = huxinglist.get(0);
+            String hall = huxinglist.get(1);
+            String wei = huxinglist.get(2);
+            List<String> acreagelist = getMatcheNum(acreageStr);
+            String roomAcreage = null;
+            String acreage = null;
+            if(acreagelist.size()  ==  1){
+                acreage = acreagelist.get(0);
+            }else {
+                roomAcreage = acreagelist.get(0);
+                acreage = acreagelist.get(1);
+            }
+            List<String> floorlist = getMatcheNum(floorStr);
+            String floor = floorlist.get(0);
+            String totalFloor = floorlist.get(1);
+
+
+            //图片url
+            List<String> imgUrls = doc.select(".x-slide").select(".preview .swiper-wrapper div img").eachAttr("src");
+            //房源配置信息
+            List<String> roomConfigStrList = doc.select("div.private_fac").select("ul li").eachText();
+            roomConfigStrList.addAll(doc.select("div.public_fac").select("ul li").eachText());
+
+            SpiderCityUrlsEnum spiderCityUrlsEnum =  SpiderCityUrlsEnum.getEnum(host.substring("http://".length()));
+            String[] titleArray = title.split(" \\· ");
+            address = spiderCityUrlsEnum.getProvince() + spiderCityUrlsEnum.getCity() + titleArray[1] + address;
+            Geocodes geocodes = otainGaodeLocation.getLocationAddress(address);
+            String[] locationArray = StringUtils.split(geocodes.getLocation(),",");
+            String lon = locationArray[0];//经度
+            String lat = locationArray[1];//纬度
+
+            //数据库插入房源信息
+            HouseVo houseVo = new HouseVo();
+            String extHouseId = houseUrl.substring((host+"/roomDetail/").length(),houseUrl.length()-".html".length());
+            houseVo.setExtHouseId(extHouseId);
+            houseVo.setZhuangxiu(Byte.valueOf(BusinessHouseTypeEnums.getZXCode(zhuangxiu)));
+            houseVo.setTraffic(traffic);
+            houseVo.setApartmentId(APARTMENT_HZ_ID);
+            if(acreage != null ){
+                houseVo.setAcreage(new BigDecimal(acreage));
+            }
+            houseVo.setChaoxiang(Byte.valueOf(BusinessHouseTypeEnums.getCXCode(chaoxiang)));
+            houseVo.setCommunityName(communityName);
+            houseVo.setHall(Integer.valueOf(hall));
+            houseVo.setFloor(Integer.valueOf(floor));
+            houseVo.setConfigs(roomConfigStrList);
+            houseVo.setHezuChaoxiang(Byte.valueOf(BusinessHouseTypeEnums.getCXCode(chaoxiang)));
+            houseVo.setHousekeeperTel(housekeeperTel);
+            houseVo.setRoom(Integer.valueOf(room));
+            houseVo.setWei(Integer.valueOf(wei));
+            houseVo.setTotalFloor(Integer.valueOf(totalFloor));
+            houseVo.setRentType(Byte.valueOf(BusinessHouseTypeEnums.getHZCode(rentTypeStr)));
+            houseVo.setZujinType(Byte.valueOf(BusinessHouseTypeEnums.getYJLXCode(zujinTypeStr)));
+            houseVo.setPictures(imgUrls);
+            houseVo.setCity(spiderCityUrlsEnum.getCity());
+            houseVo.setProvince(spiderCityUrlsEnum.getProvince());
+            Apartment part = apartmentMapper.selectByPrimaryKey(houseVo.getApartmentId());
+            houseVo.setCode(ToolsUtils.getLastStr(part.getCode(), 2).concat(String.valueOf(ToolsUtils.fiveRandom())));
+            houseVo.setCreatedTime(new Date());
+            houseVo.setUpdatedTime(new Date());
+            houseVo.setDetailAddr(address);
+            houseVo.setDistrict(geocodes.getDistrict());
+            houseVo.setTitle(title);
+            if(roomAcreage != null){
+                houseVo.setRoomAcreage(new BigDecimal(roomAcreage));
+            }
+            if(rentAmt.contains("-")){
+                rentAmt = rentAmt.split("-")[0];
+            }
+            houseVo.setRentAmt(new BigDecimal(rentAmt));
+            houseVo.setLatitude(Double.valueOf(lat));
+            houseVo.setLongitude(Double.valueOf(lon));
+            houseVo.setCreatedUser("spiderAdmin");
+            houseVo.setUpdatedUser("spiderAdmin");
+            houseVo.setHouseStatus("1");
+            Map<String,Object> result =  houseService.addHouse(houseVo);
+            if(result.get("houseId") != null ) {
+                //把t_zfang_spider_house对应此条数据标记为删除
+                ZfangSpiderHouseEntity entity = new ZfangSpiderHouseEntity();
+                entity.setExtHouseId(houseVo.getExtHouseId());
+                entity.setIsDelete(IsDeleteEnums.IS_DELETE_01.getCode());
+                spiderHouseMapper.updateByExtHouseIdSelective(entity);
+            }
+
+            log.info("-------end visit HiZhu room,houseId: {}--------",result.get("houseId"));
+        }catch (Exception e){
+            log.error("parseHiZhuroomHouseDetail error.......",e);
+        }
     }
 }
