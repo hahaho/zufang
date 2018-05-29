@@ -16,7 +16,16 @@ public enum  SpiderCityUrlsEnum {
     MG_GZ("广东","广州市","gz.mogoroom.com"),
     MG_TJ("天津","天津","tj.mogoroom.com"),
 
-
+    HZ_SH("上海","上海","www.hizhu.com/shanghai"),
+    HZ_BJ("北京","北京","www.hizhu.com/beijing"),
+    HZ_HZ("浙江","杭州市","www.hizhu.com/hangzhou"),
+    HZ_NJ("江苏","南京市","www.hizhu.com/nanjing"),
+    HZ_SZ("广东","深圳市","www.hizhu.com/shenzhen"),
+    HZ_GZ("广东","广州市","www.hizhu.com/guangzhou"),
+    HZ_ZZ("河南","郑州市","www.hizhu.com/zhengzhou"),
+    HZ_SUZ("江苏","苏州市","www.hizhu.com/suzhou"),
+    HZ_WH("湖北","武汉市","www.hizhu.com/wuhan"),
+    HZ_TJ("天津","天津","www.hizhu.com/tianjin")
     ;
 
 

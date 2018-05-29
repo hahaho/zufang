@@ -3,7 +3,7 @@ CREATE TABLE `t_zfang_spider_house` (
   `apartment_id` bigint(20) NOT NULL COMMENT '公寓id',
   city varchar(16) NOT NULL DEFAULT '' COMMENT '城市',
   url varchar(255) NOT NULL DEFAULT '' COMMENT '房源url',
-  ext_house_id varchar(32) NOT NULL DEFAULT '' COMMENT '外部房源id',
+  ext_house_id varchar(64) NOT NULL DEFAULT '' COMMENT '外部房源id',
   last_job_time datetime NOT NULL COMMENT '最近一次跑job时间',
   `created_time` datetime NOT NULL COMMENT '创建时间',
   `updated_time` datetime NOT NULL COMMENT '更新时间',
@@ -12,7 +12,7 @@ CREATE TABLE `t_zfang_spider_house` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='爬虫房源表';
 
-ALTER TABLE t_zfang_house add column ext_house_id varchar(32) NOT NULL DEFAULT '' COMMENT '外部房源id';
+ALTER TABLE t_zfang_house add column ext_house_id varchar(64) NOT NULL DEFAULT '' COMMENT '外部房源id';
 
 
 DROP TABLE IF EXISTS `t_zfang_submit_message`;

@@ -51,6 +51,15 @@ public class PhantomPoolBuilder {
         return new PhantomJSDriver(capabilities);
     }
 
+    /**
+     * 公用方法，爬取html
+     * @param htmlUrl
+     * @param host
+     * @param referer
+     * @param proxyIp
+     * @return
+     * @throws Exception
+     */
     public static String getHtmlByPhantomJs(String htmlUrl,String host,String referer,String proxyIp) throws Exception{
 
         String osname = System.getProperties().getProperty("os.name");
@@ -111,7 +120,8 @@ public class PhantomPoolBuilder {
 
     public static void main(String[] args) throws Exception{
         String proxyIp="";
-        String s = getHtmlByPhantomJs("http://www.mogoroom.com/room/758305.shtml?page=list","www.mogoroom.com","http://www.mogoroom.com/list",proxyIp);
+//        String s = getHtmlByPhantomJs("http://www.mogoroom.com/room/758305.shtml?page=list","www.mogoroom.com","http://www.mogoroom.com/list",proxyIp);
+        String s = getHtmlByPhantomJs("http://www.hizhu.com/shanghai/shangquan.html?p=0","www.hizhu.com","http://www.hizhu.com/shanghai",proxyIp);
         System.out.println(s);
     }
 }
