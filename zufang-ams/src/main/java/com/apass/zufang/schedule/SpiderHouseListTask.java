@@ -56,17 +56,8 @@ public class SpiderHouseListTask {
      * 2，放之前判断是否已经存在，根据
      */
     @Scheduled(cron = "0 10 0 * * *")
-    public void initExtHouseList(){
-        try{
-            for(String listUrl : BASE_URLLIST){
-                for (int i=0; i<PAGENUM; i++){
-                    houseSpiderService.spiderMogoroomPageList(listUrl,i);
-                }
-
-            }
-        }catch (Exception e){
-            LOGGER.error("获取数据失败！------Exception=====>{}",e);
-        }
+    public void initExtHouseListJob(){
+        initExtHouseList2();
     }
     @RequestMapping("/houseList2")
     public void initExtHouseList2(){
@@ -88,20 +79,7 @@ public class SpiderHouseListTask {
      */
     @Scheduled(cron = "0 0 0/12 * * ?")
     public void initExtHouseDetail(){
-        try{
-            //去查询spider表，获取其中中的url放入urls中
-            List<ZfangSpiderHouseEntity> list = houseSpiderService.listAllExtHouse();
-            if(CollectionUtils.isNotEmpty(list)){
-                for(ZfangSpiderHouseEntity entity : list){
-                    String linkUrl = entity.getHost() + entity.getUrl();
-                    houseSpiderService.parseMogoroomHouseDetail(linkUrl,entity.getHost());
-                }
-
-            }
-
-        }catch (Exception e){
-            LOGGER.error("获取数据失败！------Exception=====>{}",e);
-        }
+       initExtHouseDetail2();
     }
     /**
      * 刷新缓存  put代理IP集合INTORedis 
@@ -117,20 +95,24 @@ public class SpiderHouseListTask {
     @RequestMapping("/initExtHouseDetail2")
     public void initExtHouseDetail2(){
         try{
-            //去查询spider表，获取其中中的url放入urls中
+            //去查询spider表查询蘑菇所有房源数据，获取其中中的url放入urls中
             List<ZfangSpiderHouseEntity> list = houseSpiderService.listAllExtHouse();
             if(CollectionUtils.isNotEmpty(list)){
                 for(ZfangSpiderHouseEntity entity : list){
                     String linkUrl = entity.getHost() + entity.getUrl();
                     houseSpiderService.parseMogoroomHouseDetail(linkUrl,entity.getHost());
                 }
-
             }
         }catch (Exception e){
             LOGGER.error("获取数据失败------Exception=====>{}",e);
         }
+
     }
 
+    @Scheduled(cron = "0 30 0 * * ?")
+    public void initHZListJob(){
+        initHZList();
+    }
 
     @RequestMapping("/initHZList")
     public void initHZList(){
@@ -143,6 +125,11 @@ public class SpiderHouseListTask {
         }catch (Exception e){
             LOGGER.error("获取数据失败！------Exception=====>{}",e);
         }
+    }
+
+    @Scheduled(cron = "0 0/20 0 * * ?")
+    public void initHZExtHouseDetailJob(){
+        initHZExtHouseDetail();
     }
 
 
