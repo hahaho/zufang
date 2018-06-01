@@ -93,7 +93,7 @@ public class ZufangButtonJoinColler {
             Long apartmentId = apartmentService.getApartmentByUserId(paramMap.get("userId").toString());
             vo.setApartmentId(apartmentId);
             vo.setLocationId(String.valueOf(location.getId()));
-
+            vo.setCity(CommonService.cityValidation(vo.getCity()));
             if(CommonService.CROWNA_CITY_LIST.contains(vo.getCity())){
                 //直辖市处理
                 vo.setProvince(vo.getCity());
