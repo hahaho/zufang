@@ -5,7 +5,7 @@
         SELECT 
             <include refid="Base_Column_List" />
         FROM t_zfang_house_location
-        WHERE is_delete = '00' AND house_id= #{houseId}
+        WHERE house_id= #{houseId} AND is_delete = '00'
    </select>
    	<!-- init附近房源Bycity -->
     <select id="initHouseByCity" resultType="com.apass.zufang.domain.vo.HouseVo"
