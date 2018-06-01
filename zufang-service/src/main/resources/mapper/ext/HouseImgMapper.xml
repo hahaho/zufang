@@ -16,8 +16,8 @@
             <include refid="Base_Column_List" />
         FROM t_zfang_house_img
         WHERE 
-        	is_delete = '00' 
-        	AND house_id= #{houseId, jdbcType=BIGINT} 
+        	house_id= #{houseId, jdbcType=BIGINT} 
+        	AND is_delete = '00'
         	AND type= #{type, jdbcType=TINYINT} 
    </select>
     <select id="getImgByRealHouseId" resultMap="BaseResultMap">
@@ -25,8 +25,8 @@
             <include refid="Base_Column_List" />
         FROM t_zfang_house_img
         WHERE
-        	is_delete = '00'
-        	AND house_id= #{houseId, jdbcType=BIGINT}
+        	house_id= #{houseId, jdbcType=BIGINT}
+        	AND is_delete = '00'
    </select>
 
    <select id="queryImgInfo" resultMap="BaseResultMap">
