@@ -127,7 +127,7 @@ public class SpiderHouseListTask {
         }
     }
 
-    @Scheduled(cron = "0 0/20 0 * * ?")
+    @Scheduled(cron = "0 0 0/20 * * ?")
     public void initHZExtHouseDetailJob(){
         initHZExtHouseDetail();
     }

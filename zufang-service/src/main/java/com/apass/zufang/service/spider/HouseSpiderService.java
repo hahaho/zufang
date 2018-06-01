@@ -522,9 +522,9 @@ public class HouseSpiderService {
                         proxyIp =getPorxyIp();
                     }
                 }catch (RuntimeException e){
-                    log.error("----parseMogoroomHouseDetail Exception -----{}",e);
+                    log.error("----parseHiZhuHouseDetail Exception -----{}",e);
                 } catch (Exception e2){
-                    log.error("----parseMogoroomHouseDetail Exception -----{}",e2);
+                    log.error("----parseHiZhuHouseDetail Exception -----{}",e2);
                 }
             }
             if(StringUtils.isEmpty(htmlStr)){
