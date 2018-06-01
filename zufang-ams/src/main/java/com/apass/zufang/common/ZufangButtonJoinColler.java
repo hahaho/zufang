@@ -94,6 +94,12 @@ public class ZufangButtonJoinColler {
             vo.setApartmentId(apartmentId);
             vo.setLocationId(String.valueOf(location.getId()));
 
+            if(CommonService.CROWNA_CITY_LIST.contains(vo.getCity())){
+                //直辖市处理
+                vo.setProvince(vo.getCity());
+            }else{
+                vo.setProvince(workCityJdService.getByCityName(vo.getCity()).getProvince());
+            }
             houseService.editHouse(vo);
 
         }catch (Exception e){
