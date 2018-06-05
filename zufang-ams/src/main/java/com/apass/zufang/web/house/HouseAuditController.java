@@ -91,6 +91,7 @@ public class HouseAuditController {
 	@Path("/detail")
 	public Response detailHouse(Map<String,Object> paramMap){
 		try {
+			logger.info("detailHouse paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			Map<String,Object> values = houseService.getHouseDetail(id);
 			return Response.success("获取详情成功!", values);

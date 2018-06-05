@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.mybatis.page.Page;
 import com.apass.gfb.framework.utils.BaseConstants.CommonCode;
+import com.apass.gfb.framework.utils.GsonUtils;
 import com.apass.gfb.framework.utils.RegExpUtils;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.entity.rbac.MenusSettingDO;
@@ -40,7 +41,7 @@ public class RolesController {
     /**
      * 日志
      */
-    private static final Logger LOG = LoggerFactory.getLogger(RolesController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RolesController.class);
     /**
      * role Service
      */
@@ -64,6 +65,7 @@ public class RolesController {
     public ResponsePageBody<RolesDO> handlePageList(Map<String,String> paramMap) {
         ResponsePageBody<RolesDO> respBody = new ResponsePageBody<RolesDO>();
         try {
+        	logger.info("handlePageList map--->{}",GsonUtils.toJson(paramMap));
             String pageNo = paramMap.get("page");
             String pageSize = paramMap.get( "rows");
             Integer pageNoNum = Integer.parseInt(pageNo);
@@ -81,7 +83,7 @@ public class RolesController {
             respBody.setRows(pagination.getDataList());
             respBody.setStatus(CommonCode.SUCCESS_CODE);
         } catch (Exception e) {
-            LOG.error("列表查询失败", e);
+            logger.error("列表查询失败", e);
             respBody.setMsg("列表查询失败");
         }
         return respBody;
@@ -94,6 +96,7 @@ public class RolesController {
     @Path("/save")
     public Response handleSave(Map<String,String> paramMap) {
         try {
+        	logger.info("handleSave map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get("id");
             String roleCode = paramMap.get("roleCode");
             String roleName = paramMap.get("roleName");
@@ -121,10 +124,10 @@ public class RolesController {
             rolesService.save(role);
             return Response.success("success");
         } catch (BusinessException e) {
-            LOG.error(e.getErrorDesc(), e);
+            logger.error(e.getErrorDesc(), e);
             return Response.fail(e.getErrorDesc());
         } catch (Exception e) {
-            LOG.error("保存角色失败", e);
+            logger.error("保存角色失败", e);
             return Response.fail("保存角色记录失败");
         }
     }
@@ -136,6 +139,7 @@ public class RolesController {
     @Path("/delete")
     public Response handleDelete(Map<String,String> paramMap) {
         try {
+        	logger.info("handleDelete map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get("roleId");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
@@ -144,7 +148,7 @@ public class RolesController {
             rolesService.delete(roleId);
             return Response.success("success");
         } catch (Exception e) {
-            LOG.error("删除角色失败", e);
+            logger.error("删除角色失败", e);
             return Response.fail("删除角色记录失败");
         }
     }
@@ -156,6 +160,7 @@ public class RolesController {
     @Path("/load")
     public Response handleLoad(Map<String,String> paramMap) {
         try {
+        	logger.info("handleLoad map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get("roleId");
             if (StringUtils.isBlank(roleId)) {
                 return Response.fail("角色ID不能为空");
@@ -167,10 +172,10 @@ public class RolesController {
             }
             return Response.success("success", rolesDO);
         } catch (BusinessException e) {
-            LOG.error(e.getErrorDesc(), e);
+            logger.error(e.getErrorDesc(), e);
             return Response.fail(e.getErrorDesc());
         } catch (Exception e) {
-            LOG.error("查询角色失败", e);
+            logger.error("查询角色失败", e);
             return Response.fail("查询角色记录失败");
         }
     }
@@ -182,6 +187,7 @@ public class RolesController {
     @Path("/load/rolemenu/settings")
     public Response handleLoadRoleMenuSettings(Map<String,String> paramMap) {
         try {
+        	logger.info("handleLoadRoleMenuSettings map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get("roleId");
             List<MenusSettingDO> menuList = rolesService.selectRoleMenuSettings(roleId);
             for (MenusSettingDO menu : menuList) {
@@ -190,7 +196,7 @@ public class RolesController {
 			}
             return Response.success("success", menuList);
         } catch (Exception e) {
-            LOG.error("加载角色菜单失败", e);
+            logger.error("加载角色菜单失败", e);
             return Response.fail("加载角色菜单失败");
         }
     }
@@ -202,6 +208,7 @@ public class RolesController {
     @Path("/save/rolemenu/settings")
     public Response handleSaveRoleMenuSettings(Map<String,String> paramMap) {
         try {
+        	logger.info("handleSaveRoleMenuSettings map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get("roleId");
             String menus = paramMap.get("menus");
             if (StringUtils.isBlank(roleId)) {
@@ -210,7 +217,7 @@ public class RolesController {
             rolesService.saveRoleMenuSettings(roleId, menus);
             return Response.success("success");
         } catch (Exception e) {
-            LOG.error("角色菜单保存失败", e);
+            logger.error("角色菜单保存失败", e);
             return Response.fail("角色菜单设置失败");
         }
     }
@@ -222,6 +229,7 @@ public class RolesController {
     @Path("/load/available/permissions")
     public Response handleLoadAvailablePermissions(Map<String,String> paramMap) {
         try {
+        	logger.info("handleLoadAvailablePermissions map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get( "roleId");
             if (StringUtils.isBlank(roleId)) {
                 return null;
@@ -229,7 +237,7 @@ public class RolesController {
             List<PermissionsDO> permissionList = rolesService.loadAvailablePermissions(roleId);
             return Response.success("success", permissionList);
         } catch (Exception e) {
-            LOG.error("加载可分配资源失败", e);
+            logger.error("加载可分配资源失败", e);
             return Response.fail("加载可分配资源失败");
         }
     }
@@ -241,6 +249,7 @@ public class RolesController {
     @Path("/load/assigned/permissions")
     public Response handleLoadAssignedPermissions(Map<String,String> paramMap) {
         try {
+        	logger.info("handleLoadAssignedPermissions map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get("roleId");
             if (StringUtils.isBlank(roleId)) {
                 return null;
@@ -248,7 +257,7 @@ public class RolesController {
             List<PermissionsDO> permissionList = rolesService.loadAssignedPermissions(roleId);
             return Response.success("success", permissionList);
         } catch (Exception e) {
-            LOG.error("加载已分配资源失败", e);
+            logger.error("加载已分配资源失败", e);
             return Response.fail("加载已分配资源失败");
         }
     }
@@ -260,6 +269,7 @@ public class RolesController {
     @Path("/save/assigned/permissions")
     public Response handleSaveAssignedPermissions(Map<String,String> paramMap) {
         try {
+        	logger.info("handleSaveAssignedPermissions map--->{}",GsonUtils.toJson(paramMap));
             String roleId = paramMap.get( "roleId");
             String permissions = paramMap.get( "permissions");
             if (StringUtils.isBlank(roleId)) {
@@ -268,7 +278,7 @@ public class RolesController {
             rolesService.saveAssignedPermissions(roleId, permissions);
             return Response.success("success");
         } catch (Exception e) {
-            LOG.error("保存资源分配记录失败", e);
+            logger.error("保存资源分配记录失败", e);
             return Response.fail("保存资源分配记录失败");
         }
     }

@@ -86,7 +86,7 @@ public class PhoneAppointmentController {
 	@Path("/addReserveHouse")
     public Response addReserveHouse(Map<String, Object> map) {
     	try {
-    		LOGGER.info("addApartment map--->{}",GsonUtils.toJson(map));
+    		LOGGER.info("addReserveHouse map--->{}",GsonUtils.toJson(map));
     		String username = SpringSecurityUtils.getCurrentUser();
     		
     		String houseId = CommonUtils.getValue(map, "houseId");
