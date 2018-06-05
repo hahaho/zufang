@@ -57,6 +57,7 @@ public class HouseControler {
 	public Response getHouseList(Map<String,Object> paramMap){
 		ResponsePageBody<HouseBagVo> respBody = new ResponsePageBody<>();
         try {
+        	logger.info("query house paramMap--->{}",GsonUtils.toJson(paramMap));
         	//根据当前登录用户，获取所属公寓的Code
         	String apartmentCode = apartmentService.getApartmentCodeByCurrentUser(SpringSecurityUtils.getCurrentUser());
         	HouseQueryParams dto = (HouseQueryParams) MapEntryOrConverUtils.converMap(HouseQueryParams.class, paramMap);
@@ -106,6 +107,7 @@ public class HouseControler {
 	@Path("/detail/init")
 	public Response detailHouse(Map<String,Object> paramMap){
 		try {
+			logger.info("detailHouse paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			Map<String,Object> values = houseService.getHouseDetail(id);
 			return Response.success("初始化修改页面!", values);
@@ -169,7 +171,7 @@ public class HouseControler {
 	@Path("/downHouse")
 	public Response downHouse(Map<String, Object> paramMap){
     	try {
-    		logger.info("upOrDown house paramMap--->{}",GsonUtils.toJson(paramMap));
+    		logger.info("down house paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "房屋Id为空！");
 			houseService.downHouse(id, SpringSecurityUtils.getCurrentUser());
@@ -187,7 +189,7 @@ public class HouseControler {
 	@Path("/upHouse")
     public Response upHouse(Map<String, Object> paramMap){
     	try {
-    		logger.info("batchUp house paramMap--->{}",GsonUtils.toJson(paramMap));
+    		logger.info("uphouse paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "房屋Id为空！");
 			String message = houseService.upHouse(id, SpringSecurityUtils.getCurrentUser());

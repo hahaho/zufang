@@ -44,6 +44,7 @@ public class BannerController{
 	public Response queryBannerList(Map<String,Object> paramMap){
 		ResponsePageBody<BannerVo> respBody = new ResponsePageBody<>();
 		try {
+			logger.info("queryBannerList map--->{}",GsonUtils.toJson(paramMap));
 			BannerQueryParams dto = (BannerQueryParams) MapEntryOrConverUtils.converMap(BannerQueryParams.class, paramMap);
 			if(dto.getPage() == null || dto.getRows() == null){
         		dto.setPage(1);
@@ -64,7 +65,7 @@ public class BannerController{
 	@Path("/addBanner")
 	public Response addBanner(Map<String, Object> paramMap){
     	try {
-			logger.info("add/edit banner paramMap--->{}",GsonUtils.toJson(paramMap));
+			logger.info("addBanner paramMap--->{}",GsonUtils.toJson(paramMap));
 			BannerVo vo = (BannerVo) MapEntryOrConverUtils.converMap(BannerVo.class, paramMap);
 			
 			ValidateUtils.isNotBlank(vo.getType(), "banner类型不能为空!");
@@ -94,7 +95,7 @@ public class BannerController{
 	@Path("/delBanner")
 	public Response delBanner(Map<String, Object> paramMap){
 		try {
-			logger.info("del banner paramMap--->{}",GsonUtils.toJson(paramMap));
+			logger.info("delBanner paramMap--->{}",GsonUtils.toJson(paramMap));
 			String id = CommonUtils.getValue(paramMap, "id");
 			ValidateUtils.isNotBlank(id, "bannerId为空！");
 			bannerService.deleteBanner(id, SpringSecurityUtils.getCurrentUser());
