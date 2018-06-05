@@ -2,22 +2,23 @@ package com.apass.zufang.service.apartment;
 import java.util.List;
 import java.util.Map;
 
-import com.apass.zufang.domain.entity.rbac.UsersDO;
-import com.apass.zufang.rbac.UsersRepository;
-import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.apass.gfb.framework.exception.BusinessException;
 import com.apass.gfb.framework.utils.BaseConstants;
 import com.apass.zufang.domain.Response;
 import com.apass.zufang.domain.dto.ApprintmentQueryParams;
 import com.apass.zufang.domain.entity.Apartment;
+import com.apass.zufang.domain.entity.rbac.UsersDO;
 import com.apass.zufang.domain.vo.ApartmentVo;
 import com.apass.zufang.mapper.zfang.ApartmentMapper;
+import com.apass.zufang.rbac.UsersRepository;
 import com.apass.zufang.utils.ResponsePageBody;
+import com.google.common.collect.Maps;
 /**
  * 公寓管理
  * @author Administrator
@@ -79,15 +80,14 @@ public class ApartmentService {
 		entity2.setCode(code);
 		entity2.setIsDelete("00");
 		List<ApartmentVo> count1 = apartmentMapper.getApartmentListNameCount(entity2);
-		if(count1!=null&&count1.size()>0){
+		if(count1 != null && count1.size() > 0){
 			return Response.fail("公寓信息新增失败,公寓名称不可重复！");
 		}
 		Integer count2 = apartmentMapper.getApartmentListCodeCount(entity2);
-		count2++;
-		String cou = String.format("%03d", count2);
+		String cou = String.format("%03d", count2 + 1);
 		entity.fillAllField(username);
 		entity.setCode(code+cou);
-		if(createEntity(entity)==1){
+		if(createEntity(entity) == 1){
 			return Response.success("公寓信息新增成功！");
 		}
 		return Response.fail("公寓信息新增失败！");

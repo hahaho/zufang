@@ -6,6 +6,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,10 @@ public class ApartmentController {
         	String name = CommonUtils.getValue(map, "name");
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
+        	if(StringUtils.isBlank(page) || StringUtils.isBlank(rows)){
+        		page = "1";
+        		rows = "10";
+        	}
         	ApprintmentQueryParams entity = new ApprintmentQueryParams();
         	entity.setPage(Integer.parseInt(page));
         	entity.setRows(Integer.parseInt(rows));
@@ -92,23 +98,14 @@ public class ApartmentController {
 			}
 			provinceCode = String.format("%02d",Integer.parseInt(provinceCode));
 			provinceCode = provinceCode.substring(provinceCode.length()-2, provinceCode.length());
-//			provinceCode = provinceCode.length()==1?"0"+provinceCode:provinceCode;
-//			provinceCode = provinceCode.length()>2?provinceCode.substring(provinceCode.length()-2, provinceCode.length()):provinceCode;
 			cityCode = String.format("%02d",Integer.parseInt(cityCode));
 			cityCode = cityCode.substring(cityCode.length()-2, cityCode.length());
-//			cityCode = cityCode.length()==1?"0"+cityCode:cityCode;
-//			cityCode = cityCode.length()>2?cityCode.substring(cityCode.length()-2, cityCode.length()):cityCode;
 			areaCode = String.format("%02d",Integer.parseInt(areaCode));
 			areaCode = areaCode.substring(areaCode.length()-2, areaCode.length());
-//			areaCode = areaCode.length()==1?"0"+areaCode:areaCode;
-//			areaCode = areaCode.length()>2?areaCode.substring(areaCode.length()-2, areaCode.length()):areaCode;
-			String code = provinceCode+cityCode+areaCode;
+			String code = new StringBuffer(provinceCode).append(cityCode).append(areaCode).toString();
 			Apartment entity = (Apartment) FarmartJavaBean.map2entity(new Apartment(), Apartment.class, map);
 			String username = SpringSecurityUtils.getCurrentUser();
 			return apartmentService.addApartment(entity,username,code);
-//		}catch(BusinessException e){
-//			LOGGER.error("addApartment EXCEPTION --- --->{}", e);
-//			return Response.fail("公寓信息新增失败,"+e.getErrorDesc());
 		}catch(Exception e){
 			LOGGER.error("addApartment EXCEPTION --- --->{}", e);
 			return Response.fail("公寓信息新增失败！");

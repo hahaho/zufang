@@ -65,6 +65,10 @@ public class AppointmentJourneyController {
         	BeanUtils.copyProperties(entity, count);
         	String page = CommonUtils.getValue(map, "page");
         	String rows = CommonUtils.getValue(map, "rows");
+        	if(StringUtils.isBlank(page) || StringUtils.isBlank(rows)){
+        		page = "1";
+        		rows = "10";
+        	}
         	entity.setPage(Integer.parseInt(page));
         	entity.setRows(Integer.parseInt(rows));
         	respBody = appointmentJourneyService.getReserveHouseList(entity,count);
