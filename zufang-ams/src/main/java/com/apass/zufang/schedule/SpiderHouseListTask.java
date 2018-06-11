@@ -18,11 +18,11 @@ import java.util.List;
  * @author xiaohai
  * @date 2018/4/19.
  */
-@Component
-@Configurable
-@EnableScheduling
-@Controller
-@RequestMapping("/noauth/spider")
+//@Component
+//@Configurable
+//@EnableScheduling
+//@Controller
+//@RequestMapping("/noauth/spider")
 public class SpiderHouseListTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpiderHouseListTask.class);
     //蘑菇房源列表页根路径
