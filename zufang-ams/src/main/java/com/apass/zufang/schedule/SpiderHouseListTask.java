@@ -55,7 +55,7 @@ public class SpiderHouseListTask {
      * 思路：1，根据url和page去查对应页数数据，放入数据库存
      * 2，放之前判断是否已经存在，根据
      */
-    @Scheduled(cron = "0 10 0 * * *")
+//    @Scheduled(cron = "0 10 0 * * *")
     public void initExtHouseListJob(){
         initExtHouseList2();
     }
@@ -77,14 +77,14 @@ public class SpiderHouseListTask {
      * 2，拼接BASE_URLDETAIL爬取相关数据，插入t_zfang_house表中
      * 3，插入成功后，删除t_zfang_spider_house表中对应数据
      */
-    @Scheduled(cron = "0 0 0/12 * * ?")
+//    @Scheduled(cron = "0 0 0/12 * * ?")
     public void initExtHouseDetail(){
        initExtHouseDetail2();
     }
     /**
      * 刷新缓存  put代理IP集合INTORedis 
      */
-    @Scheduled(cron = "0 0/20 * * * ?")
+//    @Scheduled(cron = "0 0/20 * * * ?")
     public void initProxyIpList(){
     	try {
 			proxyIpHandler.putIntoRedis();
@@ -109,7 +109,7 @@ public class SpiderHouseListTask {
 
     }
 
-    @Scheduled(cron = "0 30 0 * * ?")
+//    @Scheduled(cron = "0 30 0 * * ?")
     public void initHZListJob(){
         initHZList();
     }
@@ -127,7 +127,7 @@ public class SpiderHouseListTask {
         }
     }
 
-    @Scheduled(cron = "0 0 0/12 * * ?")
+//    @Scheduled(cron = "0 0 0/12 * * ?")
     public void initHZExtHouseDetailJob(){
         initHZExtHouseDetail();
     }
