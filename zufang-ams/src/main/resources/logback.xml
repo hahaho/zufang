@@ -39,7 +39,7 @@
 	</root>
 
 	<root level="A">
-		<appender-ref ref="InfoRollingFileA" />
+		<appender-ref ref="InfoRollingFile" />
 	</root>
 	
 </configuration>
