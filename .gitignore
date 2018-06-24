@@ -14,9 +14,8 @@ target/
 bin/  
 .svn  
 .idea
-.gitignore
 *.gitignore
-.iml
+**/*.iml
 
 zufang-ams/target/
 zufang-common/target/
